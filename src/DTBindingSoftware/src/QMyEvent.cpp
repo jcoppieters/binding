@@ -1,0 +1,27 @@
+// QMyEvent.cpp: implementation of the QMyEvent class.
+//
+//////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "timer.h"
+#include "QMyEvent.h"
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char THIS_FILE[]=__FILE__;
+#define new DEBUG_NEW
+#endif
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+QMyEvent::QMyEvent()
+{
+
+}
+
+QMyEvent::~QMyEvent()
+{
+
+}

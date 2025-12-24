@@ -1,0 +1,14 @@
+/*************************************************************************//**
+ * Notes
+ *
+ * @note NOTE-0100
+ * TM_CHANGES_ALARM_ARITECH: Wanneer een project ingeladen wordt met een 
+ * Aritech alarm unit door binding  software versie < 0x0572  zal deze software
+ * foutberichten geven en kunnen de bindings niet getoond worden.
+ * Kan ook voor komen wanneer bindings aangemaakt werden voor een BNO audio 
+ * kamer (als input) en dat deze kamer hergeconfigureerd werd als een gewone
+ * audio kamer.
+ *	
+ *****************************************************************************/
+ * C:\ProgramData\Duotecno Binding Software
+ *****************************************************************************/

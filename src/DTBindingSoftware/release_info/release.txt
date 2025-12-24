@@ -1,0 +1,3914 @@
+﻿/********************************************************************************
+*								Release Info									*
+*********************************************************************************
+
+* SW_VERSION = 0x0100		Date = 05/06/2004	 Beta Version 
+
+// ------------------------------------------------------------------------------
+
+* SW_VERSION = 0x0200		Date = 
+
+	- Classes --> unsigned long ulApplicationFlags ...
+		+ macro : DEFAULT_NAME_OVERRIDDEN !
+		* CBindingUnit			* CCanNode
+		* CBindingOperator		* STRUCT_UNIT
+		* CBindingLink			* CBindingEntry
+	- FileIo Data : Serialization of unsigned log 'ulApplicationFlags'
+		CFileIo_BindingUnit, CFileIo_BindingLink, CFileIo_BindingOperator,
+		CFileIo_BindingEntry,
+		CFileIo_NodeData, CFileIo_UnitData							  
+
+	- Add RT Units to Existing Document node when 
+		RT NODE nrUnits > DOC NODE nrUnits
+
+
+// ------------------------------------------------------------------------------
+	
+* SW_VERSION = 0x0300		Date = 07/07/2004		
+	  ( Compatible with version 0x0200 )
+		  
+	- TM 20040630 : Solved Problems under Windows XP : Showing Last Accessed 
+					Project directory
+	- TM 20040631 : Store Settings in Registry : Com Port + Current working
+					directories
+	- TM 20040701 : Solved Bug Serialization BindingUnit Data.
+!!	- TM 20040706 : Main reason upgrade 0x02 --> 0x03  
+	 			    CBindingOperator -> UlApplicationFlags wrong serialized therefore
+				    timerOperator when load is corrupt ...
+	- TM 20040706 : Added Html Export
+	- TM 20040707 : Solved bug : Browse + Pnp StateMachine :
+					Specific Events for PNP statemachine where also forwarded to
+					Browse StateMachine ...
+
+
+// ------------------------------------------------------------------------------
+
+* SW_VERSION = 0x0301				: NOT RELEASED !!!!!!
+
+	- TM 20040715 : Solved Bug : Browse + Pnp.
+					Ev_NodePhysicalAddress + Ev_PnpPhysicalAddressAssigned 
+					Logical addressed + flags may only change when PNP FSM is active.
+	- TM 20040715 : Node Names : Show only names, no address!
+	- TM 20040726 : Only software version (not revision) is important when loading 
+					older file.
+	- TM 20040726 : Show + Sort bindings f(Name,BindingNr,...)
+					Use same button for bindings and nodes to sort f(TreeView)
+	- TM 20040726 : Menu item - View -> TreeView Submenu's 
+		 
+
+// ------------------------------------------------------------------------------
+
+* SW_VERSION = 0x0302
+							BETA RELEASE : Date = 04/08/2004
+							PACKAGE RELEASE : Date = 05/08/2004
+
+	- TM 20040726 : Start Implementing Automatic Binding Conversion ...
+					Auto Bindings : 
+					- Dimmers on/off + Dim Up/Dn
+					- Dimmers + Relais PIR On/OFF
+					- Relais On/Off
+					- Duoswitch : 1 or 2 inputs 
+					- Bose Room : 1 or 2 inputs
+					- Conditional bindings : DONKER BUITEN = 0xFC,0x03
+											 NA 22H		   = 0xFC,0x04
+					- Controls + Virtuals : 1 or 2 inputs : Mood Puls
+					- Sens : 1 or 2 inputs : Heating / cooling 
+	- TM 20040730 : Update GUI of ADD/NEW/DEL/AUTO buttons f(current binding entry)
+	
+
+// ------------------------------------------------------------------------------
+
+* SW_VERSION = 0x0303
+							PACKAGE RELEASE : Date = 17/08/2004
+
+	- TM 20040817 : SOLVED BUG : Automatic bindings : Moods + Bose ...
+					Forgot to initialise newBindingEntry to ID = 0.
+					therefore bindingEntries were not added to the list but 
+					were overwritten ...
+
+// ------------------------------------------------------------------------------
+
+
+* SW_VERSION = 0x0304
+							PACKAGE RELEASE : Date = 16/11/2004
+
+	- TM 20041113 : Added extended Error-handling routines via Try...Catch Blocks.
+					Added to class CBindingDatabaseInterface
+					Created new Class : CMyException + Added exception strings to resources
+	- TM 20041115 : Solved bug :
+					P-Binding for Sens type only made when sens is not TEMPERATURE CONFIG.
+	- TM 20041115 : Solved Bug :
+					Events van RC5 RX Unit.
+	- TM 20041115 : Included Resource blocks when Copy RT Node properties to Doc. Node.
+					Needed after Software update of node ...
+	- TM 20041115 : Added number of comports + Handle Exceptions.
+				    Don't show setComport Dialog anymore.
+	- TM 20041115 : Use CCanNode::UlApplicationFlags to store if a bindingfile is
+					modified and has to be send when opening project...
+					To Be compatible a projectfile < 0x0304 : all flags are set to modified.
+	- TM 20041115 : Auto Bindings : Condition "Donker Buiten" Makes only 1 Binding.
+					Make 1 Binding : PIR ON 3min, 99%
+	- TM 20041115 : Differently Initialise ptrs in CMainFrame.
+					Ptr's Stay during Programflow the same : NodeDatabase Doc+RT,
+					BindingFiles, BindingEntries.
+	- TM 20041116 : Error handling + Exceptions : Functie HandleFatalError().
+
+
+// ------------------------------------------------------------------------------
+
+* SW_VERSION = 0x0400
+								PACKAGE RELEASE DATE = 
+
+	- TM 20041122 : Start Implementation HC4 Units 
+					Alarm, Videomux, PS2Mouse, AVMatrix and HC4 Audio Room.
+
+	- TM 20041124 : Added UNIT_TYPE_AUDIO_HC4
+	- TM 20041125 : Changed file I/O to support SW_Version 0x0400
+
+	- TM 20041126 : Serialization PropertyUnit Alarm --> TESTEN !!!!!
+	- TM 20041221 : HC4 LCD Screenmapping 
+	- TM 20041221 : Export NodeUnit HTML List.
+	- TM 20050105 : Added LCD Memory dump.
+	- TM 20050105 : Added routines to find certain files in a Folder.
+	- TM 20050105 : Added routines to copy files from source to dest subdirectories.
+	- TM 20050111 : Limited number of allowed Messages in scrollview.
+	- TM 20050112 : Problem with MSCOMM :
+					1) Memory leak : GetInput().	
+					   --> Overcome this problem by receiving VARIANT by ptr to Variant,
+					       and clear the string returned ...
+					2) Possible bug 2 :
+					   CPU-Time is always min 50% after receiving first Char ?
+					   --> When Hyperterminal comes active resources are back to 0 ...
+	- TM 20050124 : Wizards to help user to solve Browse/PNP errors + Database difference.
+				    Pre/Post Browse Errors. Use of CPropertySheetEx & CPropertyDialogEx.
+	- TM 20050124 : Use of MFC component to enable a Splash Screen.
+					Have to Add an additional (::Sleep(...)) Command...
+					--> Font = Arial Bold 12.
+	- TM 20050126 : Memory Backup + Up download bitmaps to multiple LCD's
+	- TM 20050201 : EditCtrl in CMyAddFlowView.
+					Changed functionality in BindingTreeView to edit Current sel. binding.
+					Export HTML Node Unit List.
+	- TM 20050201 : New Progress Ctrl in CDlgBrowse Pnp.
+	- TM 20050207 : Implemented Parsing + sending of MulTi media configuration file.
+	_ TM 20050222 : SetDefaultProjectDirectory - Funtion checks title of document to
+				    create a default directory --> We must check if *.duo extension
+					is visible in title 
+					("Verkenner" --> EXTRA -> MAPOPTIES --> WEERGAVE --> Extensisies verbergen");
+
+
+// ------------------------------------------------------------------------------
+
+* SW_VERSION = 0x0500	(TODO)
+	
+	- TM 20050615 : Macro in stdafx.h	--> BINDING_SOFTWARE
+	- TM 20050615 :	Implement Request For Unit statussen ...
+	- TM 20050615 : TxUnitMessage sources van DTSerialMod component ...
+	- TM 20050616 : Added Request For NodeStatussen in Application FSM.
+	- TM 20050617 : Serialization BYTE : Config van elk unit, unit type.
+					CFileIoData --> CFileIo_UnitSpecs bijgevoegt.
+	- TM 20050620 : BindingUnit Lf48 Bose 
+					Afgeleide DlgBindingUnit + Afgeleide CBindingUnit.
+	- TM 20050621 : AutoBindingTemplates : Bestaande template uitgebreid voor
+					werking met LF48.
+	- TM 20050622 : Optimalisatie + code vereenvoudigd door gebruik te maken van
+					Static ptrs en methods.
+	- TM 20050623 : Automatisch naam verandering bij aanmaken v/e binding.
+					1) Enkel uitvoeren als input = control.
+					2) indien reeds ',' voor naam geen tweede ',' toevoegen.
+				    
+	- TM 20050704 : Bug : Alarm property dialog 
+					Verandering van Type -> Applicatie crasht!
+
+
+// ------------------------------------------------------------------------------
+
+
+* SW_VERSION = 0x0501
+					PACKAGE RELEASE DATE = 
+
+    - TM 20050824 : Screenmapping zoals HC4 LCD + Homemananager.
+	- TM 20050824 : Auto bindings rolluiken :
+					1 Control + meerdere rolluiken : E03 ipv E02 gebruiken ...
+	- TM 20050824 : FSMApplication : Gebruik van PostMessage om recursieve aanroepen te
+					vermijden ...
+	- TM 20050824 : FSMApplication : 
+					Aanpassing beginnen met nieuwe installatie + Mogelijke errors (bv bestand
+					niet geladen, foute selectie, ...)
+	- TM 20050824 : FSMApplication : Close Application ifv Current application state !
+	- TM 20050825 : CMemoryMyBitmap : Inladen van bitmap bijkomende controle dpi + delen door 0
+	- TM 20050825 : Updaten van Progressbar
+					Step up enkel updaten indien voorgaande update van progress reeds gedaan is.
+	- TM 20050825 : Multimedia file editeren via ShellExecute.
+					--> XP instellingen : Configuratiescherm --> MapOpties --> Bestandstypen.
+
+
+// ------------------------------------------------------------------------------
+
+
+* SW_VERSION = 0x0502
+	- TM 20051107 : GDI Leak !!
+					CMyScrollView --> Calling GetDC() without Releasing it ...
+	- TM 20051107 : Solved Bug : 
+					CDlgBindingAudioHC4Unit : AudioRooms --> Destinations 0...3 !
+	- TM 20051107 : Bug : Preconditions all units linked ?
+					CBindingConversion : Line Nr 69 NrOfLinks == (NrOfUnits+NrOfOperators)-1
+	- TM 20051108 : Bug : CBindingUnitXXX
+					ALWAYS OUTPUT UNIT : Dimmer, Switch, DuoSwitch, Basic Audio, HC4 Audio, 
+					IRTX, AVMatrix, VideoMux.	
+					ALWAYS INPUT UNIT : Control, RC5RX, Virtual Bose LF48 unit.
+	- TM 20051108 : Browse/Pnp FSM 
+					* Wrong Events in FSM -> Not always Fire Error, but display warning...
+					* Changed Timeouts ...
+
+// ------------------------------------------------------------------------------
+  
+* SW_VERSION = 0x0503
+	
+	Start Datum:	20060321
+	Eind Datum:		20060418
+	Release Datum:	NOT RELEASED --> BUG !!!!!!
+
+
+	- TM 20060321 : Splash Screen : Use drawtext function to display version info.
+	- TM 20060321 : CApplicationGraphics use via singleton, static allocation pattern
+				    class creates fonts used by application.
+	- TM 20060321 : CDlgUnitsSub : Use MFC CWnd::GetFont() instead of holding pointer 
+				    to defaultfont.
+	- TM 20060321 : Treeview controls: Use font CApplicationGraphics: FONT_TREEVIEW_FIXED	
+	- TM 20060324 : CAppNodeDatabase::GetNodesDocument()
+	- TM 20060324 : CAppNodeDatabase::GetNodesRuntime()
+	- TM 20060326 : CBindingDatabaseApplication
+	- TM 20060326 : CMultimediaInfo
+	- TM 20060328 : Modem Commando's : Reset modem + Status Modem
+	- TM 20060328 : Hide Button's 'Read','Write' & 'Erase' bindings in property dialog.
+	- TM 20060330 : CCommunicationStatus.
+	- TM 20060330 : BindingFileFsm : #145, #191.
+					SetTaskEvent(FSM_EV_SIGNAL_BINDINGTASK_ERROR);
+	- TM 20060330 : CComApplication use as singleton.
+	- TM 20060331 : CBindingsReadWriteFSM - Additional timer to prevent FSM from hanging.
+	- TM 20060331 : CDlgBrowsePnp : Hide 'Cancel' button when executing tasks that can't be cancelled.
+	- TM 20060331 : CComApplication : StartTimer & StopTimer
+	- TM 20060403 : Dialog Proiperties + Child dialog changed calculation dialog size f(borderzize)
+	- TM 20060406 : Screenmaps copieren naar meerdere Nodes + Mogelijkheid versturen naar
+					meerdere nodes.
+	- TM 20060407 : See Naming Conventions !!!
+	- TM 20070407 : Solved Possible Bug --> Child Parent Fsm --> Notification to parent IComApplication,
+					in this notification handling routine the child was destroyed 
+					Solved by posting message to destroy Child !!
+	- TM 20060408 : CComApplication : Use of ClassFactory
+					Engines: Browse PNP, R/W bindings, Memory Dump, ... are created/destroyed
+					when needed ...
+	- TM 20060410 : Implementation ListCtrl, NodesFormview : Sortfunction (Q250614 )		  
+	- TM 20060411 : CModemConnectFSM + Enumeration of possible serial communication ports.
+	- TM 20060411 : CApplicationGlobalSettings
+	- TM 20060411 : Changed Initialiation sequence --> SplashScreen ...
+	- TM 20060413 : Dimmer + Sens Property dialogs: use timer to send absolute values.
+	- TM 20060413 : When bindings are correct send change name of master LCD to current date.
+	- TM 20060414 : Export HTM Files: Use Font classes ".font_h1" instead of "h1".
+	- TM 20060414 : CModemFrame + CRXMessageQueue: changed 
+					CModemFrame has a reference to a message in the queue.			
+	- TM 20060418 : Solved Bug : CBindingFiles::Delete(BYTE bNodeAddress) caused by changes ...
+	- TM 20060418 : Solved Bug : CDlgBindingBoseLf48Unit::OnCmbBoxDataChanged 
+					Default selection for input event was pointing to Bose LF50 Source On event.
+
+
+// ------------------------------------------------------------------------------
+
+* SW_VERSION = 0x0504
+	
+	Start Datum:	20060418
+	Eind Datum:		20060420
+	Release Datum:	20060420
+	
+	  -TM 20060418 : BUG : CBindingDatabaseApplication::DeleteBindingForNodeAddress(...)
+
+
+// ------------------------------------------------------------------------------
+
+
+* SW_VERSION = 0x0505
+	
+	Start Datum:	20060503
+	Eind Datum:		
+	Release Datum:	
+
+	- TM 20060503 : SoftwareVersion.h
+	- TM 20060504 : Solved bug : CMemoryDumpFSM
+					When no tasks are selected memory stays locked.
+	- TM 20060504 : DisplayUploadScreenmapInfo();
+
+
+// ------------------------------------------------------------------------------
+
+
+* SW_VERSION = 0x0510
+	
+	Start Datum:	20060504
+	Eind Datum:		
+	Release Datum:	
+
+	- TM 20060504 : QHSM_APPLICATIONGLOBAL_IMPLEMENTATION = 1					
+					--> Changle Libary : #define TM_QHSM_MYCHAIN 12
+	- TM 20060508 : CCommApplication : Must shutdown all tasks : Exit from Online mode
+	- TM 20060509 : Initialiseren van databases : New Application ...
+	- TM 20060509 : Bitmaps upload only starts if bitmaps are stored in memory.
+	- TM 20060509 : Solved Bug: CTimerDoc::OpenApplicationFile(void)
+	- TM 20060510 : Shutdown sequence in installation mode.
+
+// -------------------------------------------------------------------------------
+
+
+* SW_VERSION = 0x0511
+	
+	Start Datum:	20060511
+	Eind Datum:		
+	Release Datum:	
+
+
+	- TM 20060511 : CBindingsReadWrite : Read all bindings.
+	- TM 20060511 : CApplicationGlobalState : 3 possible modes via CommandLine Options
+					- Engineering Mode : "-Mode:Eng"
+					- Simulation Mode : "-Mode:Sim"
+					- Installation mode : "-Mode:Ins"  (Default).
+	- TM 20060512 : QHSMApplicationGlobal: Engineering mode ...
+					- Browse Physical nodes : Browse PH Nodes + Request for states.
+					- Request For States : Request for states.
+					- Automatic Pnp : Automatic Pnp.
+					- Read All Bindings : ONLY IN ONLINE READY State
+					- Write All Bindings : ONLY IN ONLINE READY State			
+
+
+
+
+  Use Desktop ShortCuts:
+	"C:\Developer\Software\DESKTOP\DUOTECNO\BINDING INSTALLATION SW\Duotecno Binding Software (0x0511)\Release\Timer.exe" -Mode:Eng
+
+
+// -------------------------------------------------------------------------------
+
+  * SW_VERSION = 0x0521
+	
+	Start Datum:	20060515
+	Eind Datum:		20060712
+	Release Datum:	20060714
+
+
+	- TM 20060515 : - OperatorType CBindingOperator::Convert(const char cOperator)
+					- ControlType CBinding2Controls::Convert(const char cControl)
+	
+	- TM 20060517 : CBindingConversionToNodeNormal + all aggregations !!
+
+	- TM 20060608 : CQHSMBindingConversionFromNodes
+
+	- TM 20060613 : Bug in CBindingPropertySensUnit : All property bindings are made 
+					with F86 (FC_UNITREQUESTSWITCHSTATUS) instead of F88 (FC_UNITSENSSET)
+					--> Works fine: node software don't check messagecode in case of P-Binding.
+	
+	- TM 20060627 : QHSMAPPLICATIONGLOBAL uses QMyEvent (Additional LPARAM member)
+
+	- TM 20060706 : Solved bug: CBindingUnit CopyConstructor Base + derivred.
+					Cannot use default copy constructor to upcast from base to derived class!
+
+// -------------------------------------------------------------------------------
+
+   * SW_VERSION = 0x0522
+	- TM 20060719: Configuration Multi media file: Todo Test	
+	
+
+
+
+   * SW_VERSION = 0x0533
+   		Start Datum:	20060719
+		Eind Datum:	20060801	
+		Release Datum: 20060801 (BETA)
+
+	- TM 20060719: Implementatie NODE_PIN_GATEWAY
+	- TM 20060720: Changed transitions to Installation_Online_Error + Installation_Online_Cancelled
+				   via Q_TRAN_DYN instead of Q_TRAN
+	- TM 20060724: Solved bug: 
+					- Cannot use MessageBoxes in QHSM transition chain. (CDlgQhsmApplication) +
+					- Possibility to lock Statemachine when Modal dialog boxes are on top ... (SetLock());
+	- TM 20060725: When CDlgQhsmApplication becomes active, remove CDlgApplicationTask.
+	- TM 20060726: Solved bug: Sending commands hangs TXStatemachine.
+				   - TXStateMachine: APDUHeader.
+	- TM 20060726: Changed MemoryDumpFSM : Added state Done.
+				   - Modem: temporary segmented buffer!
+	- TM 20060728: Convert all Strings to Upper !!!!!
+					--> Check all CString::Replace, CString::Find Operations !!!!
+	- TM 20060731: CBindingEvaluationStringReformat: Remove all brackets to be compatible with old
+				   DDL-Software. Use chain of strategy algoritmes.				    
+				   --> '(!(Ux))*T1(U2)' ==> '!Ux*T1U2'
+				   - 1) RBSO: Remove (Ux) && (Tx) --> Ux && Tx
+				   - 2) RBIO: Remove (!Ux) && (!Tx) --> !Ux && !Tx
+					
+
+	TODO : Convert all Strings to Upper !!!!!
+
+   
+// -------------------------------------------------------------------------------
+
+  
+	* SW_VERSION = 0x0534
+   		Start Datum: 20060816
+		Eind Datum:		
+		Release Datum: 
+	
+	- TM 20060905 : Optimizations using const 
+	- TM 20060905 : Support for gateway: FC_LCDINFODIALOG.		
+
+
+// -------------------------------------------------------------------------------
+
+	* SW_VERSION = 0x0535
+		Start Datum: 20060906
+		Eind Datum:		
+		Release Datum: 
+	
+	 - TM 20060906 : Optimizations CTxNodeMessage.
+	 - TM 20060906 : Gateway Node Object messages.
+	 - TM 20060906 : CPropertyNodePage + Optimizations
+
+
+
+	* SW_VERSION = 0x0536
+		Start Datum: 20060908
+		Eind Datum:		
+		Release Datum: 
+
+
+	- TM 20060908 : CNodeRuntimeStatus + CNodeGatewayRuntimeStatus.
+	- TM 20060908 : CCanNode must be allocated via 'new' to use initialisation
+				    in constructor !
+	- TM 20060908 : IBindingFile --> CBindingFile.
+	- TM 20060909 : CCommApplication, Static table of MessageHandler functions
+	- TM 20060909 : class CMessageError, CMessage_Ev_Init
+
+
+
+	* SW_VERSION = 0x537
+		Start Datum: 20060912
+		Eind Datum:		
+		Release Datum: 
+
+	- TM 20060912 : ModemConnectFSM + ModemStatus Info : Request address of modem/gateway.
+	
+
+
+
+	* SW_VERSION = 0x538
+		Start Datum: 20060925
+		Eind Datum:		
+		Release Datum: 
+
+	- TM 20060925: CRenameNodeUnitsFSMEngine; Solved bug, Nodes with 0 Units stopped FSM.
+	- TM 20060925: CDisplayDevice : Pass String as Reference to const + Optimize !!!
+
+
+	
+
+	* SW_VERSION = 0x0539
+	- TM 20061003: Modem Connect FSM: 
+			 	   Waiting for ack : Ev_Timeout, resend Pininstall_Connect
+
+
+  	* SW_VERSION = 0x0540
+		Start Datum: 20061016
+		Eind Datum:		
+		Release Datum: 
+
+	- TM 20061016: Modem Connect FSM.
+
+
+
+
+  	* SW_VERSION = 0x0541
+		Start Datum: 20061106
+		Eind Datum:		
+		Release Datum: 
+
+	- TM 20061120: CMainFrame::DisplayUploadScreenmapInfo replaced by CScreenmapsUpdateInfo::DumpInfo()
+				   (TODO: Testen)
+	- TM 20061120: CPtrListNodes: CScreenmapsUpdateInfo + CFSMNicErrorsInfo
+				   (TODO: Testen)
+	- TM 20061120: Generic Task FSM Messages : Done,Error,Cancelled
+				   - OnWmGenericTaskDone() :		WM_GENERICTASK_FSM_DONE
+				   - OnWmGenericTaskError();		WM_GENERICTASK_FSM_ERROR
+				   - OnWmGenericTaskCancelled();	WM_GENERICTASK_FSM_CANCELLED
+				   (TODO: Testen)
+	- TM 20061121: CDlgNetworkCanStatus
+	- TM 20061121: Solved bug: index in CMessageError was wrong, displaying wrong error message.
+	- TM 20061121: DestroyApplication()
+	- TM 20061124: CDlgMessageTransfer
+
+
+  
+	* SW_VERSION = 0x0542
+		Start Datum: 20061127
+		Eind Datum:		
+		Release Datum: 
+
+	- TM 20061128: Cleaned up code CComApplication + IComApplication
+				   - Use of NotifyOnTaskDone, NotifyOnTaskError, NotifyTaskCancelled ...
+
+
+  
+	* SW_VERSION = 0x0544
+		Start Datum: 20061129
+		Eind Datum:		
+		Release Datum: 
+
+	- TM 20061204: CDlgMainApplicationTask + 3 * Child Dialogen.
+	- TM 20061204: Show possible warnings when task is completed.
+
+// ------------------------------------------------------------------------------
+
+	* SW_VERSION = 0x0545
+		Start Datum: 20070307
+		Eind Datum:		
+		Release Datum: 
+
+	- TM 20070307: CPropertyNodesSheet_Holder: Solved bug -> OnExit Application crashes ...
+	- TM 20070308: CDlgApplicationStartDialog.
+
+
+// ------------------------------------------------------------------------------
+
+	* SW_VERSION = 0x0546
+		Start Datum: 20070502
+		Eind Datum:		
+		Release Datum: 
+	
+	- TM 20070502: Bug: After showing problemsolve dialog after nodes have been removed the 
+				   program crashes.
+	- TM 20070502: optimize: ShowProblemSolveWizard()
+	- TM 20070503: CModemFrame_Helper
+
+
+
+	* SW_VERSION = 0x0547
+		Start Datum: 20070507
+		Eind Datum:	20070521	
+		Release Datum: 
+	
+	- TM 20070502: 3 Modes: expert, Intermediate & Beginner
+					- BindingFlags + DlgBinding...
+
+
+// ------------------------------------------------------------------------------
+  	* SW_VERSION = 0x0548
+		Start Datum: 20070521
+		Eind Datum: 20070521		
+		Release Datum: 
+
+	- TM 20070521: CApplicationFileAccess !!
+	- TM 20070521: Screenmapping property dialog 
+				   --> OnButton Save -->StoreScreenmapping Choice
+	- TM 20070523: Memory dump : Bitmaps + memory backup --> SetLock()
+
+
+// ------------------------------------------------------------------------------
+
+  	* SW_VERSION = 0x0549
+		Start Datum: 20070927
+		Eind Datum: 20070		
+		Release Datum: 
+
+
+	- TM 20070927: Bug: After showing the problemsolve dialog after nodes have been 
+				   removed and nodes added the program crashes. 
+				   - Changed the sequence to compare Doc & RT databases.
+				   - Catch the Exception in the Main QHSM application
+					  - AreYouSure: Shutdown or restart application ...		
+	- TM 20070927: Problem Solve wizard:
+				   - Incompatible nodes: Added Possibility to remove a node 
+				     from the database.
+					
+	- TM 20070928: Use of classes :
+				   CNodeDatabaseVerify & Handlers to update PropertyPages !!!!!
+
+				   - CPropertyWizardPage0 - CNodeDatabaseVerify_Handlers2
+				   - CPropertyWizardPage7 - CNodeDataBaseVerify_Handlers1
+				   - CPropertyWizardPage8 - CNodeDataBaseVerify_Handlers0
+
+				   - Nodes have been added.
+				   - Nodes have been removed
+				   - Incompatible nodes.
+					
+				   ATTENTION: CANNOT REPLACE THE COMPARENODEDATABASE FUNCTION BECAUSE
+							  VIRTUAL UNITS ARE ADDED TO THE DOCUMENT NODE DATABASE !!
+
+    - TM 20070928: Close Non-Modal dialogs.
+				   - Dlg Engineering
+				   - Dlg MessageTransfer
+				   - Dlg ModemStatus
+				   - Dlg Debug Binding conversion.
+
+  
+				   
+// ------------------------------------------------------------------------------
+
+  	* SW_VERSION = 0x0550
+		Start Datum: 20071025
+		Eind Datum: 20080122		
+		Release Datum: 20070123
+
+	- TM 20071025: BUG: Memorybackup: CMemoryDumpFSM::EvSignalStatusMemoryDumpOk(...)
+				   Dialog that shows "Error ptr to memory pts to NULL".
+				   Dialog is shown but FSM continues.
+				   Changed Error to warning + Only show when FSM is not IDLE and
+				   ptr Cannot be 0.	
+	- TM 20071115: Default settings property unit f(Software version).
+	- TM 20071119: Start Dialog: 
+					- Extended MAX Com Ports to 255.
+					- USB Support: Update list of COM Ports every 1,5 sec.	
+	- TM 20071119: Alarm Binding Dialog: Changed display of ARM groups.
+	- TM 20071119: Added CBindingUnit_State.
+				   Holds state for:
+					- IRTX Unit : IR-Code
+					- RC5 RX Unit: IR-code + Event
+					- Alarm Unit: Zone Nr.
+					- Bose LF48 Unit: All Info.
+					- Audio HC4 Unit: All Info
+	- TM 20071120: Solved Bug: Normalize functions in Binding dialogs
+				   Audio HC4, Videomux, AvMatrix.				   
+	- TM 20071120: TreeNodes: Navigate bindings via arrow up/left/right/down keys.
+	- TM 20071120: ScrollView: Display binding info : inputs, outputs, timers.
+	- TM 20080121: notifyError policy en TCommandShell commando's.
+	- TM 20080121: Standaard eigenschappen van de dimmer unit : 
+				   Speed up = 3, Speed down = 5, Pir Delayed On = 1.
+	- TM 20080121: De huidige directory bepalen bij opstarten en gebruiken voor
+				   het openen van de "BINDING MANUAL EXAMPLES.pdf".
+	- TM 20080121: Na een browse neemt de node in de database de naam van de Runtime node over.
+				   (indien verschillend)		
+	- TM 20080122: Engineering conversion to binding files: De bindingunit moet geconfigureerd
+				   worden met het logisch node en unit adres zodat bij de conversie van de
+				   property bindings de juiste standaard waarden gebruikt worden.
+				   Bij het clonen van een bindingunit moet deze steeds voorzien zijn van het
+				   logische node en unit addressen om zo de juiste standaard waarden te hebben.				   
+
+				   
+// ------------------------------------------------------------------------------
+
+  	* SW_VERSION = 0x0551
+		Start Datum: 20080123
+		Eind Datum: 20080128		
+		Beta Release Datum: 20080128
+
+	- TM 20080123: Bij foute initialisatie van de Addflow en Mscomm componenten. 
+			       De gebruiker er op wijzen dat de instalatie wellicht mislukt is.
+	- TM 20080128: Bug: Send Nak verstuurd een ACK ipv een NAK.
+	- TM 20080128: Gebruik van eigen communicatie routines: zie stdafx.h
+
+// ------------------------------------------------------------------------------
+
+	* SW_VERSION = 0x0552
+		Start Datum: 20080123
+		Eind Datum: 20080128		
+		Beta Release Datum: 20080128
+
+	- TM 20080129: Wanneer er geen plaats meer is om nieuwe berichten op te slaan in
+	               de rx Queue dan mag er geen NAK verstuurd worden !!
+	- TM 20080207: Bij gebruik van de eigen communicatie routines TX Messages beperken
+				   tot maximum 63 karakters. Dit is om problemen te voorkomen met de USB
+				   driver. Bulk mode transfer is meestal beperkt tot datapaketten van 64 
+				   Bytes. De Sleep(1) instructies zorgen ervoor dat de driver de mogelijkheid
+				   heeft om zijn TXBuffer te versturen ...
+
+	- TM 20080311: Browse for Nodes FSM: Bijkomende controle of Unit/Node kan gevonden worden
+				   in de database. Applicatie crashte wanneer een unitstatus wordt ontvangen 
+				   van een niet bestaande unit.
+				
+	- TM 20080304: Timers Browse for nodes & PNP verhoogd.
+				   Send Resources verhoogd : NR_OF_TX_MESSAGES.
+	- TM 20080304: Optimalisatie van de Event handlers:  EV_NODECONFIG en EV_NODEPHYSICALADDRESS
+	- TM 20080304: Klein beetje optimalistatie Browse en PNP FSM's.		
+	- TM 20080304: RetryCount in de PNP FSM.
+				   Bij iedere EV_PNP_TIMEOUT (Browse for physical nodes again ...) wordt het huidig
+				   aantal modules vergeleken met het vorig aantal. 
+				   Indien na 5 tal keer niet OK, zal het algoritme verder gaan.
+    - TM 20080421: DATA directory. Creatie van een Data directory, 
+				   Bij het saven van het project worden alle gegevens die zich in
+				   de 'DATA' dir bevinden mee gekopieerd.
+	- TM 20080421: Bij nieuwe installatie wordt altijd gevraagd of het project mag worden opgeslagen.
+	- TM 20080421: RS232 routines: het max. aantal RS232 poorten = 255.
+	- TM 20080421: Een Factory init uitvoeren via de engineering config dialog:
+				   Extra controle op de ingegeven waarde.
+				
+// ------------------------------------------------------------------------------
+
+  	* SW_VERSION = 0x0553
+		Start Datum: 20080917
+		Eind Datum: 20080917	
+		Beta Release Datum: 20080917
+
+	- TM 20080917: Probleem met het openen van een COM-poort hoger dan 9. (Q115831)
+	- TM 20080917: Gegevens naar het register schrijven bij het afsluiten van de app.
+				   --> De com poort werd verkeerd weergegeven.
+
+// -------------------------------------------------------------------------------
+	* SW_VERSION = 0x0554
+		Start Datum: 20081222
+		Eind Datum: 20081224
+		Beta Release Datum: 20081224
+
+	- TM 20081222: Synchronizatie tss de verschillende threads van de COM poort.
+	- TM 20081222: De readerThread wacht een langere tijd (10s) totdat de mainthread
+				   het bericht verwerkt. Indien binnen deze tijd het bericht niet
+				   verwerkt is zal de HW UART RX Queue gewist worden.
+				   (De data in de Queue gaat verloren, maar dit kunnen enkel retries
+				    van de modem zijn.)
+				   --> Indien we deze berichten laten staan in de rxQueue worden deze
+				       beantwoord met een ACK.(Dit is zeker verkeerd.)
+				   --> Bij een delay van 10s kunnen er max 5 berichten in de HW Queue staan.
+				   --> Worst case kunnen hier ACK berichten verloren gaan.
+	- TM 20081222: Mouse cursor aanpassen wanneer lange tijd nodig is om de UI up te daten.
+	- TM 20081223: De ReaderThread: Het uitlezen van data uit de UART RX Queue beperken tot
+				   64 BYTES. Het USB protocol beperkt de frame groote tot 64Bytes en de
+				   RS232 ATMEGA modem stuurt Byte per Byte.
+	- TM 20081223: Gebruik van Iterators.
+				   - CBindingEntries::Iterator
+				   - CBindingUnits::Iterator
+				   - CBindingFiles::Iterator
+				   - CNodeIterator.
+				   - CUnitIterator.
+	- TM 20081224: DRAWING_DISABLE_CTRL + Helper template.
+				   - De Controls tijdens het bijwerken tijdelijk onzichtbaar maken.
+	- TM 20081224: Code Optimalisatie:
+				   - CMyTreeNodes::OnBindingdatabaseUpdate + iteratie via een callback
+				     functie.
+	- TM 20081224: PropertyPage voor het inladen van Bitmaps.
+				   De eerste maal wordt een boolean gezet zodat bij het tonen van de
+				   filedialoog altijd het pad van de bitmaps wordt getoond.
+				   Zolang in deze dialog blijft het pad ongewijzigd en moet de gebruiker
+				   niet navigeren naar de directory HC4/BASIC ...
+	- TM 20081224: ListView en treeView: Node namen altijd 15 karakters + 0 karakter.
+	- TM 20081224: CompareNodeDatabases(): solved Bug.
+				   Indien vroeger een installatie met een gateway node zonder units en
+				   de gateway wordt vervangen door gateway met nodes > 0 werd een
+				   Database exceptie geworpen.
+
+// -------------------------------------------------------------------------------
+	* SW_VERSION = 0x0555
+		Start Datum: 20090106
+		Eind Datum: 20090106
+		Beta Release Datum: 20090106
+
+	- TM 20080106: Solved bug zie bug rapport
+
+*****************************************************************************/
+
+/*************************************************************************//**
+	* SW_VERSION = 0x0560
+		Start Datum: 20090422
+		Eind Datum: 20100316
+		Beta Release Datum: 20100316
+
+	- TM 20090422: Diverse aanpassingen a/d external config klassen en FSM.
+	- TM 20090429: Implementaties voor het versturen van unit en mood configuraties.
+	- TM 20090430: IRTXUnit en RC5RX unit worden TX en RX unit.
+				   Iconen en de HTML export strings veranderd. 
+	- TM 20090430: Configuratie bestanden worden opgeslaan onder "Config" directory.
+				   @see	Document Configuratie van de homeserver en LCD.
+	- TM 20090430: "&Tools" menu niet meer zichtbaar in installatie mode.
+				   Multimedia configuratie via de Node property pages.
+				   NIC Network status opvragen onder menu "Network".
+	- TM 20090604: Solved Bug, Bij het versturen van het FC_LCDINFODIALOG bericht,
+				   de lengte van de string+1 om ook het '\0' karakter mee te sturen.
+	- TM 20090604: Het versturen van gesegmenteerde berichten geoptimaliseerd :
+				   FC_LCDINFODIALOG, FC_WRITEMEMORYDATA, FC_EXTERNALCONFIG.
+	- TM 20090716: Solved Bug (Zie bug rapport).
+				   Versturen van de external config lukte niet altijd.
+	- TM 20090921: Probleem met het doorsturen van external config berichten.
+	- TM 20091217: Multimedia configuratie voor nodes v65.
+				   Bij nodes V65 wordt er een extra config done bericht verstuurd.
+				   Nodes v64 en v65 zijn niet compatible, dus de send all knop
+				   werkt niet voor deze node types.
+	- TM 20100201: export van nodeconfigInfo.txt bestand.
+	- TM 20100222: Screenmapping onderscheid tussen V64 en V65.
+				   V65 Basic LCD heeft ook screenmapping.
+	- TM 20100316: Gateway node voorlopig geen multimedia bestand versturen.
+
+	- TODO: (05/06/2009)
+		- testen: External config van de multimedia file.
+		- testen: External config van de gateway (sferen en units).
+		- testen: Memory dump: uploaden van geheugen en bitmaps.
+		- testen: Multimedia config, send to all v64 en v65 in zelfde installatie.
+				  Momenteel zijn beide node types compatible. !!!
+
+	- TODO (18/12/2009)
+		- Multimedia configuratie v65 extra velden voor de volumes ??
+		  In dit geval zijn V64 en V65 NIET meer compatible.
+
+*****************************************************************************/
+
+/*************************************************************************//**
+	* SW_VERSION = 0x0561
+		Start Datum: 20100324
+		Eind Datum: 20100324
+		Beta Release Datum: 20100324
+
+  	- TM 20100324: Bug zie TM20100326.
+				   Door deze aanpassing konden geen multimedia bestand versturen
+				   naar de lcds versie v65.
+
+*****************************************************************************/
+
+/*************************************************************************//**
+	* SW_VERSION = 0x0562
+		Start Datum: 20100316
+		Eind Datum: 
+		Beta Release Datum: 
+
+	- TM 20100317: CDlgDebugGeneral: een algemene dialoog om te debuggen.
+	- TM 20100317: NodeMess.h nieuwe protocol berichten.
+	- TM 20100317: CTXNodeFTPFileControl klasse.
+	- TM 20100317: CCommApplication: Handlers voor de FTP berichten.
+	- TM 20100317: RS232 - CWriterThread, Clear_TxBuffer( ) functie aanroepen.
+	- TM 20100407: Make compatible nodes. (PropertyWizardPage8).
+				   Mogelijkheid om LCD nodes compatible te maken. Bvb nieuwe TS
+				   heeft geen sensor.		
+	- TM 20100409: nieuw bericht + handler: EV_FTPFILECONTROLDATA.
+	- TM 20100415: Network menu optie bijgevoegd, Engineer CAN FTP + dialoog.
+				   macro: SUPPORT_FTP_DIALOG
+	- TM 20100419: Nieuwe berichten + handler FC_DATABASEMANAGMENT en EV_DATABASEMANAGMENT
+	- TM 20100420: CConfigIRTX + CConfigBitmaps configuratie klasse. 
+				   Deze maken gebruik van CConfigCANFTP en hebben bijkomende functies via
+				   callback functies.
+	- TM 20100421: Opvragen van de modem software versie + revisie nummer.
+				   Deze software versies bepalen of de nieuwe configuratie functies
+				   (IRTX en Bitmap) kunnen uitgevoerd worden.
+	- TM 20100502: Bij het afsluiten de dialogen CAN FTP en Debug general dialoog 
+				   verwijderen.
+***********************************************************************************/
+
+/******************************************************************************//**
+	* SW_VERSION = 0x0563
+		Start Datum: 2010511
+		Eind Datum: 
+		Beta Release Datum: 
+
+	- TM 20100511: Interpocess communicatie via windows message loop.
+				   via macro: SUPPORT_PLUGIN_DTCONFIGURATOR.
+	- TM 20100517: Controle of bestanden aanwezig zijn, anders worden de controls
+				   niet getoond : Binding examples, multimedia bestand, dtConfigurator.
+***********************************************************************************/
+
+/******************************************************************************//**
+
+  	* SW_VERSION = 0x0564
+		Start Datum: 20100728
+		Eind Datum: 20100728
+		Release Datum: 20100728
+
+	- TM 20100728: Solved bug zie BUG_RODE_PIJL_20100727.
+
+**********************************************************************************/
+
+
+/******************************************************************************//**
+	* SW_VERSION = 0x0565
+		Start Datum: 20100623
+		Eind Datum: 20100812
+		Beta Release Datum: 20100812
+		
+	- TM 20100623: Interprocess communicatie: (TM20100623)
+				   Indien de extensie "*.duo" gekend is en door instelling van de
+				   mapopties wordt deze extensie niet weergegeven in verkenner, 
+				   wordt er telkens een nieuwe instantie geopend van de configurator.
+				   De window naam is verkeerd (zonder de *.duo extensie.).
+	- TM 20100624: Solved bug Screenmapping:
+				   CScreenmap::NormalizeString( ) bijgevoegd.
+				   Bij het veranderen van de screenmapping moet er na de laatste 
+				   entry altijd een enter bijgevoegd worden.
+				   De functie CScreenmap::NormalizeString( ) voegt deze erbij wanneer
+				   deze niet aanwezig is.
+	- TM 20100624: Bose LF48: Source on en source off commando voor de afzonderlijke
+				   kamers enablen in de basic view mode.
+	- TM 20100624: Interprocess communicatie:
+				   REFRESH commando = algoritme (upload,download) voltooid, cancelled, 
+				   error is.
+				   EXPORT commando = export HTML aangevraagd.
+	- TM 20100624: Screenmaps property dialoog:
+				   Button nummer en Line nummer tellen vanaf 0.
+	- TM 20100624: Macros verwijderd: SUPPORT_BITMAP_CONFIG en SUPPORT_IRTX_CONFIG.
+	- TM 20100719: Screenmaps property dialoog.
+				   Button Nr en Line NR tellen terug vanaf 1.
+	- TM 20100719: Bose property dialoog toont het type Bose. (LF50, LF48 of V35).
+	- TM 20100720: Start Implementatie Bose V35.
+	- TM 20100723: Nieuwe protocol berichten FC_NODEGETTEXTSTRING, FC_NODETESTSTRING en
+				   EV_NODETEXTSTRING.
+				   --> Moeten nog geïmplementeerd worden.
+	- TM 20100812: Interprocess communicatie: (TM20100812).
+				   Wanneer op config wordt gedrukt moet eerst de *.txt bestanden 
+				   gesaved worden zodat de config tool nieuwe database heeft.
+				   Dit is vnl van belang wanneer er namen veranderd werden.
+					
+
+***********************************************************************************/
+
+/********************************************************************************//**
+
+	* SW_VERSION = 0x0566
+		Start Datum: 2010812
+		Eind Datum: 20100823
+		Beta Release Datum: 20100823
+
+	- TM 20100812: CDlgSwitchProp::RequestRuntimeProperties( ).\n
+				   Er wordt teveel info opgevraagd waardoor de status verkeerd is van
+				   een relais die pir-timed is.
+	- TM 20100812: CDlgDimmerProp::RequestRuntimeProperties( ).\n
+				   Er werd teveel info opgevraagd.
+	- TM 20100823: Solved Bug:\n
+				   SendedBitmaps_xx subdirectory wordt niet aangemaakt.
+	- TM 20100823: Export HTML files: Bestanden worden gekopieerd onder de nieuwe project 
+				   directory.
+	- TM 20100823: Solved Bug: Bose V35.
+				   Weergave van de Button source functie was niet OK.
+
+		
+*************************************************************************************/
+
+
+/********************************************************************************//**
+
+	* SW_VERSION = 0x0567
+		Start Datum: 2010823
+		Eind Datum: 2010914 
+		Beta Release Datum: 20100914 
+
+	- TM 20100914: Solved bug BUG-0100.\n
+				   CBindingFileEntryOperations::Normalize( ).
+				   CBindingFile::Save( ): De binding strings hoofdletter gevoelig opslaan.
+				   CBindingFileFSM: Bij het doorsturen de binding string eerst omzetten
+				   zodat deze hoofdletter gevoelig is.
+	- TM 20100914: CNodeCreateDynUnits_Util::getSupportedTypes( ).\n
+				   LCD,TFT: Toelaten Audiokamers aanmaken.\n
+				   Gateway: Indien NrOfUnits > 0 --> Toelaten virtuals aanmaken.
+				  
+*************************************************************************************/
+
+
+/********************************************************************************//**
+
+	* SW_VERSION = 0x0568
+		Start Datum: 20100914
+		Eind Datum: 20101007
+		Beta Release Datum: 20101007
+
+	- TM 20100917; Solved bug BUG-0101.
+	- TM 20101007: Make compatible optie:\n
+				   CAppNodeDatabase::possibleToUpgradeIncompatibleUnits.
+				   LCD kan vervangen worden door een TFT maar de audiokamers moeten 
+				   op dezelfde plaats zitten.
+	- TM 20101007: Solved bug BUG-0102.
+
+  
+
+/********************************************************************************//**
+
+	* SW_VERSION = 0x0569
+		Start Datum: 20101007
+		Eind Datum: 20101119
+		Beta Release Datum: 20101119
+
+	- TM 20101119: Solved bug BUG-0103.
+	- TM 20101119: Solved bug BUG-0101. (Was blijkbaar nog niet opgelsot.)
+
+/********************************************************************************//**
+
+	* SW_VERSION = 0x0570
+		Start Datum: 20101119
+		Eind Datum: 20101203
+		Beta Release Datum: 20101203
+
+	- TM 20101203: Solved Bug BUG-0104
+
+*************************************************************************************/
+
+/*********************************************************************************//**																				   
+
+	* SW_VERSION = 0x0571
+		Start Datum: 20110208
+		Eind Datum: 
+		Beta Release Datum: 
+
+	- TM 20110208: Screenmapping code opgekuist.
+	- TM 20110221: Screenmapping property page.
+	- TM 20110221: macro SUPPORT_PLUGIN_DTCONFIGURATOR verwijderd.
+	- TM 20110301: Solved BUG-0105: zie CConfigExternalHelper klasse.
+	- TM 20110301: VK_F1 = Auto binding add.
+
+*************************************************************************************/
+
+/*********************************************************************************//**																				   
+
+	* SW_VERSION = 0x0572
+		Start Datum: 20110505
+		Eind Datum: 20110525
+		Beta Release Datum: 20110525
+
+	- TM 20110505: Implementatie Aritech alarm centrale. (Zie TM_CHANGES_ALARM_ARITECH)
+	- TM 20110506: Solved BUG-0107 en BUG-0108.
+	- TM 20110509: Workaround voor BUG-0106
+	- TM 20110525: Solved BUG-0109.
+
+
+  	- Oppassen Indien nieuwe firmware BECK moeten CNodeCreateDynUnits_Util aanpassen.
+
+*************************************************************************************/
+
+
+/*********************************************************************************//**	
+
+	SW_VERSIONS 0x0573 en 0x0574 reserveren voor Microsoft Visual studio 6.0
+	SW_VERSIONS 0x0575 = Visual studio 2008
+
+
+*************************************************************************************/
+
+/*********************************************************************************//**																				   
+
+	* SW_VERSION = 0x0575
+		Start Datum: 20110523
+		Eind Datum: 
+		Beta Release Datum: 
+
+	- TM 20110525: Porteren naar Visual studio 2008.
+	  zie macros: CHANGES_MVS_2008, CHANGES_MVS_2008_WARNINGS.
+    - TM 20110526: Solved BUG-0120
+	- TM 20110526: macro CHANGES_MVS_2008_SSCANF en CHECKED_SSCANF_OK: 
+	  Moeten integers gebruiken om hex waarden en afzonderlijke karakters te parsen.
+	- TM 20110526: macro CHANGES_MVS_2008_CSTRING: (LPCTSTR) ipv CString::GetBuffer().	
+	- TM 20110601: Unitspecs initialiseren bij het inladen van de database.
+	  Bij Windows 7 worden de members niet geinitialiseerd waardoor de statussen van
+	  de units aan stonden.
+    - TM 20110601: Solved BUG-0121
+	- TM 20110614: Solved BUG-0122, BUG-0123, BUG-0124
+	- TM 20110705: Solved BUG-0125
+
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0576
+		Start Datum: 20110706
+		Eind Datum: 
+		Beta Release Datum: 
+
+	- TM 20110707: Audio HC4 Binding unit als input gebruiken.
+	  zie macro: TM_AUDIOHC4_BINDING_INPUT
+    - TM 20110707: Speciale Audio HC4 Bno unit.
+	  zie macro: TM_AUDIOHC4_BNO
+	- TM 20110708: TMUpdateNodesWithRTSpecs( ): Aangepast.
+	  bConfig velden van Audio HC4 unit copieren.
+	- TM 20110708: TMUpgradeBindingUnitTypes( ): 
+	  Nodig om ifv de bConfig de binding unit types aan te passen. (Audio HC4 unit).
+	  Oppassen: Wanneer bindings aangemaakt werden voor een Bno kamer en deze audiokamer wordt 
+	  een standaard type krijgen we foutmelding en kunnen de bindings niet juist getoond worden.
+    - TM 20110711: Ifv het type matrix unit kunnen er ingangs bindings aangemaakt worden.
+	  zie macro TM_AVMATRIX_INPUT.
+    - TM 20110714: Start implementatie meerdere AVMatrix types.
+	  zie macro TM_MULTIPLE_AVMATRIX
+    - TM 20110719: Multimedia configuratie bestand: Het aantal bronnen vermeerderd.
+	  Hierdoor zijn V64 en V65 niet meer compatible.
+	  Wanneer er meer dan 8 bronnen aanwezig zijn kan het bestand niet meer naar LCDs
+	  verstuurd worden.
+	- TM 20110720: Solved BUG-0126
+	- TM 20110808: AVMatrix unit Object Macro bijgevoegd + MAX en MIN waarden van inputs, volumes 
+	  aangepast
+    - TM 20110808: Bij het maken van bindings voor de dimmer unit start de dimmerwaarde
+	  altijd vanaf 75 ipv 25.
+    - TM 20110809: Extra veld 'szMatrixName' in Multimedia AVMatrix config.
+	  Is enkel nodig voor de configuration tool.
+    - TM 20110818: Multimedia configuratie via de configuration tool.
+    - TM 20110818: Multimedia config: Wanneer dest en source Matrixinput en output niet ingevuld 
+	  zijn wordt dit standaard 0xFF ipv 0.
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0577
+		Start Datum: 20111018
+		Eind Datum: 20111123
+		Beta Release Datum: 20111123
+
+	- TM20111018: Gateway als master.
+	  Mogelijkheid om multimedia configuratie te versturen.
+	  IRTX codes werden niet doorgestuurd.
+	- TM20111019: Gateway als master: Icoon M.
+	- TM20111019: ApplicationGuiUnit.cpp: algemene aanpassingen.
+	- TM20111108: TCP/IP als master - onderscheid Basic en Extended audio unit.
+	- TM20111108: Tekst format doorsturen van bindings. Node adres altijd 0x%02x.
+	- TM20111123: Configurator tool aanroepen om multimedia configuratie.
+	
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0578
+		Start Datum: 20120319
+		Eind Datum: 
+		Beta Release Datum: 20120319
+
+	- TM20120319: Aanpassingen max en min temperaturen -40°C tem 125°C
+	- TM20120319: Engineer Configuratie mode.
+				  Controle op het geven van een Logisch adres.
+				 
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0600
+		Start Datum: 20120402
+		Eind Datum: 20120406 
+		Beta Release Datum: 20120406
+
+	- TM20120402: Sensor property dialoog aangepast: CSpinButtonCtrl verbeterd
+	- TM20120402: Sensor property dialoog: Offset Measured Value bijgevoegd.
+	- TM20120403: Solved BUG-0128
+	- TM20120404: Extended unit properties dialoog.
+	- TM20120406: Switch en Duoswitch property dialoog: CSpinButtonCtrl weergave.
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0610
+		Start Datum: 20120415
+		Eind Datum: 20120503
+		Beta Release Datum: 20120503
+
+	- TM20120416: Start implementatie Audio room smap.
+	- TM20120418: Oppassen aanpassingen aan de screenmap config. 
+				  (zie macro: CHANGES_SCREENMAP_VIRTUAL_ROOMS)
+
+- Oppassen Indien nieuwe firmware BECK moeten CNodeCreateDynUnits_Util aanpassen.
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0612
+		Start Datum: 20120713
+		Eind Datum: 20120717
+		Beta Release Datum: 20120717
+
+	- TM20120713: Implementatie ANB Bibus alarm centrale: TM_CHANGES_ALARM_ANB.
+
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0620
+		Start Datum: 20120817
+		Eind Datum: 20121105
+		Beta Release Datum: 20121105
+	
+    - TM20120821: Gateway universele configuratie uploaden.
+	- TM20120821: TmAlgoritmesCfg aangemaakt: Deze bevat algoritmes voor het up en downloaden
+				  van configuratie.
+    - TM20120821: System log bestand downloaden van target.
+				  Oppassen: wnr het bestand niet aanwezig is er een FSM fout optreedt.
+				  (Dit is mogelijk geval bij het backup bestand.)
+	- TM20120829: Listview: Rechter dubbele muisklik op de node toont ook de node properties.
+	- TM20120830: Weergeven van de IRTX codes van de configurator. (twee manieren.)				  
+				  View menu: View IRTX Codes.
+				  In de Binding dialoog van de IRTX unit wordt enkel de functie naam weergeven.
+				  (De installer moet ervoor zorgen dat hij de device naam toekend aan de IRTX unit naam...)
+				  Indien IRTX.dat niet aanwezig is weergave zoals vroeger en is 
+				  menu item niet zichtbaar.
+				  Bestand wordt herladen bij: Open van de IRTX binding dialoog,
+				  sluiten van de propertysheet 0xFC en openen van de IRTX view dialoog.
+				  Bij openen van een nieuwe installatie wordt de IRTX view dialoog afgesloten.
+    - TM20120830: Treeview van de nodes.
+				  Dubbele linker muisklik op een unit of een binding toont automatisch het bindings werkblad.
+    - TM20120831: zie macro: SOLVE_BUG_FTP_CONFIG.
+				  Oppassen: Alle FTP operaties extra testen.
+				  (!!!!!!!!!!!!!! Wanneer voldoende getest deze macro dan wegdoen !!!!!!!!!!!!!!!!!!!)		
+	- TM20120906: Configuratie van virtuele temperatuur kamers.				 
+    - TM20120917: Namen Virtuele A/V configuratie veranderd naar virtuele room configuratie.
+    - TM20120917: Configuratie van extra binding voor de sensor unit.
+				  Oppassen: enkel in View mode Expert.
+    - TM20121024: Solved BUG-0130
+	- TM20121025: Node config info: Gateway node config.
+				  Wanneer er reeds units aanwezig zijn verschillend van de virtual & audio.
+	- TM20121025: Aanmaken van extra units.
+				  Wanneer er reeds units aanwezig zijn mogen er bijgemaakt worden van dit type.
+				
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0625
+		Start Datum: 20130115
+		Eind Datum: 20130205
+		Beta Release Datum: 20130205
+
+	- TM20130115: Typo: Excisting veranderd in Existing.
+	- TM20130115: Typo: Puls veranderd in Pulse.
+	- TM20130116: Configuratie van de a/v voor de OLED room controller.
+	- TM20130118: Hysteris & offset waarden voor software versies > 0x90 zijn 0.
+
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0630
+		Start Datum: 20130207
+		Eind Datum: 20130214
+		Beta Release Datum: 20130214
+
+	- TM20130207: Typo: Excists veranderd in Unit is already used.
+	- TM20130208: Vereenvoudigen External config algoritme buttons.
+				  CConfigAlgView klassen.				 
+    - TM20130213: Screenmapping via de configurator				 
+	- TM20130213: Property Resources/Errors + Network status dialoog.
+				  Onderscheid tss fouten CAN & Netwerk.
+				  
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0635
+		Start Datum: 20130322
+		Eind Datum: 20130329
+		Beta Release Datum: 20130329
+
+	- TM20130329: Implementatie Texecom Alarm.
+				  zie macro TM_CHANGES_ALARM_TEXECOM
+	- TM20130329: oplossing BUG-0134
+	- TM20130329: oplossing BUG-0135
+
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0636
+		Start Datum: 20130411
+		Eind Datum: 20130416 
+		Beta Release Datum: 20130416
+
+	- TM20130411: Opkuisen bestanden.
+	- TM20130412: Macros verwijderd: 
+	   - SUPPORT_FTP_DIALOG
+	   - CHANGES_SCREENMAP_VIRTUAL_ROOMS
+    - TM20130416: BUG-0136, 
+	   Oppassen roepen expliciet CBindingEntry::SetID(0) aan omdat de functie 
+	   CBindingEntry::Clear() nog in andere routines aangeroepen wordt.
+
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0637
+		Start Datum: 20130502
+		Eind Datum: 20130513
+		Beta Release Datum: 20130513
+
+	- TM20130502: Premier 44 veranderd naar Premier 48
+	- TM20130510: In de gateway node mogen er AVMatrix & IRTX units aangemaakt worden.
+
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0638
+		Start Datum: 20130607
+		Eind Datum: 20130607
+		Beta Release Datum: 20130607
+
+	- TM20130607: Multimedia bestand ook doorsturen naar homeservers als slave.
+		Moeten wel een node/unit database hebben anders heeft deze een foutmelding.
+		Dit was een probleem bij de Modbus gateway (en KNX gateway).
+		Controle doen op 'INCLUDE_UPDATE_DATABASE' vlag.
+
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0639
+		Start Datum: 20131211
+		Eind Datum: 20140204
+		Beta Release Datum: 20140204
+
+	- TM20131211: Extra debug code om probleem met USB modem op te sporen.
+	  Code is enkel enabled wanneer in debug mode. Debug Dialoog.
+    - TM20140204: Solved BUG-0137, Solved BUG-0138
+	- TM20140204: IPC met UpdateMgr via UDP socket
+	- TM20140204: Mitsubishi airco: weergave van de swing angle via positions
+	- TM20140204: Solved BUG-0139
+	- TM20140204: Sensor units V84 hebben hysterisis offset waarden van 0.
+
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0640
+		Start Datum: 20140218
+		Eind Datum: 20140408
+		Beta Release Datum: 20140408
+
+	- TM20140218: Start Implementatie Energy measurement unit (Zie macro IMPLEMENT_UNIT_ENERGY).
+				  TODO: Binding mechanisme --> Binding unit...
+	- TM20140218: CFSMUnitStatusAudioHC4,CFSMUnitStatusControl,CFSMUnitStatusDim,CFSMUnitStatusSens,
+				  CFSMUnitStatusDuoSwitch,...
+				  ook aangepast.
+				  TODO: Aanpassingen voor alle klassen...
+  	- TM20140221: Combobox units extended properties: Werd in windows 8 niet goed weergegeven.
+	- TM20140303: Aanpassingen Bugs & typos.
+	- TM20140305: Aanpassingen energy measurement berichten.
+	- TM20140404: Implementatie DALI: Weergave lamp defect.
+
+*************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0641
+		Start Datum: 20140417
+		Eind Datum: 20140417
+		Beta Release Datum: 20140417
+
+	- TM20140417: DALI & DMX dimmer: Binding property defaults aangepast.
+
+ *************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0642
+		Start Datum: 20140423
+		Eind Datum: 20140602
+		Beta Release Datum: 20140602
+
+	- TM20140423: CApplicationFileSettings ctor.
+				  Opzoeken van program files directory via SHGetFolderPath( ).
+	- TM20140423: Help bestand voor conversie sensor modbus functions.
+				  !! Oppassen: Bestand toegevoegd aan de installer - controleren of
+				  deze aanwezig is na installatie.
+    - TM20140423: Namen van de Modbus functies om bindings te maken vereenvoudigd.
+				  Het is de bedoeling dat het help bestand gebruikt wordt.
+    - TM20140507: zie BUG-0140.
+	- TM20140509: Probleem met het aantal parameters in sscanf().
+				  Er werden telkens 5 ipv 4 parameters gegeven.
+				  zie macro CHANGES_SSCANF_PARAM_4
+	- TM20140509: Probleem met het aantal parameters in printf() omdat de strings
+				  ook via comma van elkaar gescheiden waren.
+				  zie macro CHANGES_PRINTF_PARAM_TYPOS
+
+ *************************************************************************************/
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0643
+		Start Datum: 20140611
+		Eind Datum: 20140811
+		Beta Release Datum: --
+
+	- TM20140611: CBindingPropertyDimUnit::MakeConfigBinding().
+	              Indien solid state mag de Delayed On/Off niet aanliggen, hebben anders een vertraging bij
+				  het uitschakelen van de dimmer.
+    - TM20140710: Bose V535: extra functies: Rood, groen, geel & blauw.
+	- TM20140728: Support voor configuratie van moods & scheduling in de firmware nodes v90:
+				  Oppassen: Momenteel enkel voor Healthcare box (wnr virtuals & min 1 sensor aanwezig is.)			  
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0700
+		Start Datum: 20140811
+		Eind Datum: 20140812
+		Beta Release Datum: 20140812
+
+	- TM20140811: Ondersteuning meerdere resource blocks.
+				  File Io Data: 2 extra resource blocks laden en opslaan.
+    - TM20140811: Product Healthcare/Smartbox: 
+				  bepalen of moods & scheduling ondersteund wordt.
+	- TM20140811: CCommApplication: Optimalisatie van de handlers.
+	- TM20140812: MessageHandler_EV_NODEPHYSICALADDRESS Betere fout melding wanneer
+				  een node niet kan worden toegevoegd.
+    - TM20140812: Extra veld in "nodeconfiginfo.txt":
+				  Het veld "usConfigScheduletype" bepaalt welke scheduling type.
+				  Geen, Normaal of lite.
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0701
+		Start Datum: 20140908
+		Eind Datum: 20140909
+		Beta Release Datum: --
+
+	- TM20140908: Sample intervals van de temp units ifv de idx. 
+				  Voor alle nodes met software versie > 0x90
+
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0800
+		Start Datum: 20140909
+		Eind Datum: 20141125
+		Beta Release Datum: 20141125
+
+	- TM20140909: Typos.
+	- TM20140909: CHANGES_ACTIVATION_LICENSE_CODE
+				  Implementatie activatie licentie code.				  
+	- TM20140911: Solved BUG-0141.				  
+    - TM20140922: Solved BUG-0142
+	- TM20141117: CHANGES_REQUEST_UNITSTATUS:
+				  Extra statussen van de units opvragen zodat na een physical browse for nodes 
+				  de statussen van de units correct getoond worden.		
+    - TM20141118: CHANGES_COMPORT_CONNECT
+				  Connectie FSM aangepast om communicatie te maken met de USB-modem.
+				  Vroeger wanneer de poort niet kon geopend worden moest de binding software 
+				  afgesloten worden om opnieuw te kunnen connecteren.
+				  Probleem met de aanroep StartTimer in de connectie FSM.
+	- TM20141119: CHANGES_BINDINGS_REFERENCES
+				  Bepalen van het aantal references in een binding file. Controle of
+				  de binding kan/mag toegevoegd worden.
+				  Oppassen: Indien een reference 2 maal voorkomt in dezelfde bindingstriong 
+				  dan telt deze maar 1 keer !!		
+	- TM20141119: CHANGES_BINDINGS_ERRORMESSAGES
+				  Foutmeldingen uniform en uitgebreider gemaakt.
+	- TM20141120: CHANGES_INCOMPATIBLE_VERSION
+				  Opvangen fout bij inladen van een bestand met een incompatible versie.
+				  Vroeger werd gewoon een melding gegeven + werd er verder gebrowsed.
+				  Nu wordt gevraagd om af te sluiten of opnieuw te proberen via startdialoog.
+    - TM20141120: Nieuwe fout melding bij inladen van een foutieve of corrupte project file.
+	- TM20141120: CHANGES_BINDINGS_CONDITIONLENGTH
+				  Controle op de C-Binding conditie lengte. 
+	- TM20141121: CHANGES_CALCULATE_NROFSTRINGS
+				  Optimalisatie controle op het aantal binding strings aanwezig in een binding
+				  file.
+    - TM20141125: Optimalistatie GUI Statusbar indicators.
+	- TM20141125: CHANGES_BINDINGENTRYADD_FAILED
+				  Wanneer een bestaande binding aangepast wordt en deze kan niet toegevoegd worden
+				  in de binding database. Ook de Views updaten zodat de binding daar verwijderd 
+				  wordt.				  
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0801
+		Start Datum: 20150105
+		Eind Datum: 20150105
+		Beta Release Datum: 20150105
+
+	- TM20150105: Solved BUG-0143
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0802
+		Start Datum: 20150320
+		Eind Datum: 20150423
+		Beta Release Datum: 20150423
+
+	- TM20150320: Start Implementatie Integra alarm (TM_CHANGES_ALARM_INTEGRA)
+	- TM20150326: Bose soundtouch serializable configuratie.
+	- TM20150402: Zie TM_CHANGES_BUG_0144
+	- TM20150403: zie TM_CHANGES_NODE_0xFF:
+				  Tijdelijke oplossing, beter is deze fout op te vangen in de PNP FSM.
+				  Zal nu telkens een messagebox tonen wanneer een ongeldig LA-adres 
+				  gevonden wordt.
+				  Gaat gewoon door met browsen, zal in de problem solve wizard zeggen
+				  dat er een module verwijderd is --> restoreasindatabase kiezen...
+	- TM20150407: CHANGES_BUG_PARSEVALUES					
+	- TM20150407: Parsen van de cfg file Bose soundtouch: TM_CHANGES_MAKE_UPPER
+	- TM20150421: Integra alarm centrale - Remote code
+				  De remote code bestaat uit 8 digits. Idx is een digit en geen
+				  lengte.
+
+/********************************************************************************//**
+	* SW_VERSION = 0x0803
+		Start Datum: 20150428
+		Eind Datum: 20150505
+		Beta Release Datum: 20150505
+
+	- TM20150428: Implementatie alarm bindings voor status armed & status 
+				  burglary. Enkel mogelijk in expert mode.
+				  Zie macro TM_CHANGES_BINDINGS_ALARM
+
+/********************************************************************************//**
+
+	* SW_VERSION = 0x0804
+		Start Datum: 20150805
+		Eind Datum: 
+		Beta Release Datum: 
+
+	- TM20150805: Start implementatie LED configuratie.
+	- TM20150812: LED feedback configuratie ook voor oled hotel versie.
+	- TM20150818: Extra veld 'productID' in nodeconfiginfo.txt bestand.
+	- TM20150818: Product id weergeven als string resource in de resource property dialoog.
+
+/********************************************************************************//**
+
+	* SW_VERSION = 0x0805
+		Start Datum: 20150907
+		Eind Datum: 
+		Beta Release Datum: 
+
+	- TM20150907: Start versie nummers & string resources.
+	- TM20150916: Start Implementatie export file inputs.
+	- TM20151015: Testen functie MapWindowPoints( ).
+				  zie macro: CHANGES_USE_MAPWINDOWPOINTS
+
+/********************************************************************************//**
+
+	* SW_VERSION = 0x0806
+		Start Datum: 20160112
+		Eind Datum: 20160113
+		Beta Release Datum: 20160113
+
+	- TM 20160112: Ondersteuning busdrukknop 1V,2V & 8V
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0807
+		Start Datum: 20160204
+		Eind Datum: 20160204
+		Release datum: 20160204
+
+	- TM 20160204: Ondersteuning Sonos cfg destinations.
+				   Zie macro: CHANGES_SONOS_CFG
+
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0808
+		Start Datum: 20160218
+		Eind Datum: 20160315
+		Release Datum: -
+
+	- TM 20160218: Start configuratie Sonos Cfg bronnen.
+				   Het ASCII cfg bestand wordt via CAN-ftp verstuurd naar het 
+				   embedded device. Het wordt verstuurd als "srccfg.tmp". Het
+				   embedded device hernoemt dit bestand naar "srccfg.dat".
+				   Oppassen: Wanneer het algoritme mislukt zal de oude configuratie
+				   nog aanwezig zijn...
+
+
+/***********************************************************************************
+	* SW_VERSION = 0x0900
+		Start Datum: 20160315
+		Eind Datum: 20160324
+		Release datum: 20160329
+
+	- TM 20160315: Major versie nummer aangepast omdat het inladen van de delegation
+				   properties voor de binding property sens unit bijgevoegd 
+				   werden.
+	- TM 20160324: Sensor unit delegation via property bindings.
+				   Aanmaken van een delegate & delegator binding.
+				   Diverse algoritmes voor controleren of er een buddy is.
+
+/***********************************************************************************
+	* SW_VERSION = 0x0901
+		Start Datum: 20160330
+		Eind Datum: 20160330
+		Release datum: 20160330
+
+	- TM 20160330: Aanpassing naam/tekst bij het doorsturen/inladen van de Bose &
+				   Sonos configuratie.
+
+/******************************************************************************//**		
+
+/***********************************************************************************
+	* SW_VERSION = 0x0902
+		Start Datum: 20160405
+		Eind Datum: 20160412
+		Release datum: 20160412
+
+	- TM 20160405: Aanpassing voor het inladen van een bindingfile.
+				   Logfile met errors "logfiles\bindingfiles errors.txt".
+    - TM 20160405: Bij CBindingFile::Save() een foutmelding geven wanneer de 
+				   fprintf() mislukt.
+    - TM 20160406: Mbv het *.duo bestand de binding bestanden opnieuw aanmaken.
+	- TM 20160408: CDlgAppBindingsVerify + FSM om de bindings & bestanden te controleren.
+	- TM 20160412: Manuele bindings via zelde principe controleren.
+				   Indien manuele binding gevonden werden dan worden ze in een 
+				   logfile gedumped.
+/***********************************************************************************
+
+	* SW_VERSION = 0x0A00		= Version 10.00
+		Start Datum: 20160421
+		Eind Datum: 20160426
+		Release datum: 20160426
+
+	- TM 20160421: CDlgAppBindingsVerify timer van 10 naar 100 msec verhoogd.
+	- TM 20160421: AVMatrix Bose Soundtouch: Start implementatie zone group & ungroup.
+	- TM 20160426: Software versie wordt vanaf nu decimaal weergegeven.
+				   Aanpassingen in Splash Screen & in de about dialog.
+		Moeten hier een hoger major versie nummer aanmaken omdat de nieuwe bindings
+		niet herkend worden in de oude 0x090x versie.
+
+
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0A01		= Version 10.01
+		Start Datum: 20160512
+		Eind Datum: 20160512
+		Release datum: 20160512
+
+	- TM 20160512: Zie BUG-0146.
+				   Kunnen dit eenvoudig oplossen door fprintf( ) te vervangen door fputs( ).
+				   Zie CHANGES_0X0A01_USE_FPUTS
+
+
+/********************************************************************************//**
+
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0B00		= Version 11.00
+		Start Datum: 20160523
+		Eind Datum: 20160527
+		Release datum: 20160527
+
+	- TM 20160523: Zie BUG-0147.
+				   FSM hangt wanneer er lege namen doorgestuurd worden.
+				   CompareDatabases functie aangepast zodat er geen naam verschillen 
+				   gedetecteerd worden.
+    - TM 20160524: DALI Device & Group.
+				   Toont het slave & group address.
+				   Configuratie van een Dali device die bij de groep behoort.
+    - TM 20160527: Bindings voor DALI groepen reconversie.
+
+
+/***********************************************************************************
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0B01		= Version 11.01
+		Start Datum: 20160608
+		Eind Datum: 20160616
+		Release datum: 20160616	
+
+	- TM 20160608: Downloaden van de system log bestanden.
+				   Moeten volledig pad geven voor de lokale bestandsnamen.
+				   Als het bak bestand niet gevonden wordt dan wordt er geen foutmelding
+				   meer gegeven.
+				   Functionaliteit is nu enabled voor alle NXP producten. 
+				   Firmware >= V90
+	- TM 20160609: Leds configuratie: 
+				   Klassen initialiseren met standaard waarden zoals in de firmware. 
+				   Dit is nodig wanneer general settings niet ingeladen wordt.
+	- TM 20160609: Syslog bestanden van alle nodes downloaden.
+				   Zie: TMDownloadAllSystemLog( )
+				   Probleem als er een bestand ontbreekt (bak bestand) dan stopt de FSM.
+				   Implementatie is dus nog NIET ok !!!
+				   Enige optie: CAN FTP FSM aanpassen en eerst controleren of het bestand 
+				   aanwezig is.
+    - TM 20160609: Propertypage node control.
+				   Reset & download syslog buttons enkel enabled wanneer online.
+				   Offline->online moet de dialoog afgesloten worden.
+    - TM 20160613: Implementatie dimmer unit forward bindings.
+				   Oppassen: CDlgBindingDimmerInputProp ipv CDlgBindingDimmerProp
+				   Ondersteunding voor dimmer units Sbox+ vanaf firmware v90.16.00
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0C00		= Version 12.00
+		Start Datum: 20160608
+		Eind Datum: 20160608
+		Release datum: 20160608
+
+	- TM 20160616: Software versie verhoogd naar V12.00. (v11.01 niet gereleased)
+				   Reden dat anders de forward bindings niet herkend worden.
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0C01		= Version 12.01
+		Start Datum: 20160617
+		Eind Datum: 20160621
+		Release datum: 20160621
+
+	- TM 20160617: Ondersteuning voor forward bindings voor de relais & Duoswitch 
+				   units.
+				   Momenteel enkel voor units in Sbox+ vanaf firmware v90.16.00			   
+	- TM 20160620: Als een binding unit aangemaakt wordt op het werkblad moet deze de std
+				   in/output property hebben van de unit.
+				   Vroeger werd een unit die geen links had altijd als een input unit getoond.
+				   Bij de units die forward bindings ondersteunen: Relais,dimmer, rolluik is dit
+				   niet gewenst omdat deze 99% van de gevallen als een output unit gebruikt worden.
+				   Zie PM_INOUTTYPE_UNDEFINED + functie CBindingGuiComponent::ShowPropDlg aangpast. 
+	- TM 20160620: Binding constants refactoring
+	- TM 20160621: Bij het linken van de bindings controleren als een bindingunit meerdere keren voorkomt
+				   of deze mag gekoppeld worden.
+
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0C02		= Version 12.02
+		Start Datum: 20160621
+		Eind Datum: 20160628
+		Release datum: 20160628
+
+	- TM 20160622: Implementatie van de autobindings voor de oleds.
+				   Bij de smarttouch oled: De eerste 4 inputs worden gezien als een 
+				   input.
+				   Bij de Room-e: De eerste 2 inputs worden gezien als een input.
+    - TM 20160624: Auto bindings voor de Audio extended.
+				   Twee mogelijke templates.
+	- TM 20160624: Forward bindings ook ondersteund door de DMX & DALI nodes.
+	- TM 20160627: Auto bindings voor de Forward bindings van een dimmer naar een
+				   relais.
+    - TM 20160628: Tonen van de software revisie van een node indien aanwezig is.
+				   Sorteer functie aangepast zodat ook de revisie meetelt.
+
+/***********************************************************************************
+				   
+	* SW_VERSION = 0x0C03		= Version 12.03
+		Start Datum: 20161025
+		Eind Datum: 20161031
+		Release datum: 20161031
+
+	- TM20161025: Ondersteuning Modbus sensor unit die een gemeten waarde opvraagt
+				  van een andere sensor.
+				  Modbus sensor unit: Ondersteuning vanaf firmware versie V65.54.04		
+    - TM20161028: Solved BUG-0149.
+				  Oplossing is enkel van toepassing als de firmware van de modules
+				  > versie V65.54.04
+
+/***********************************************************************************
+				   
+	* SW_VERSION = 0x0C04		= Version 12.04
+		Start Datum: 20161109
+		Eind Datum: 20161114
+		Release datum: 20161114
+
+	- TM20161109: Aanpassingen aan CfgInfoUnitSens::getSupportedFlags().
+				  Aanpassingen aan bindingpropertyunitalg_upgrade()				  
+				  Vanaf firmware versie 0x9017 kan de smarttouch oled en de 
+				  touchbuttons ook delegation ondersteunen.
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0C05		= Version 12.05
+		Start Datum: 20161122
+		Eind Datum: 20161201
+		Release datum: 20161201
+
+	- TM20161122: Implementatie mogelijkheid om een sensor unit te screenmappen.
+	- TM20161122: Zie USE_SENSORDIALOG_NEWMODES
+    - TM20161123: Solved BUG-0150: Visualisatie Delegate & Delegator.
+	- TM20161129: CConfigExternalFile::load() aangespast.
+				  Regels die beginnen met 0x0D worden overgeslagen.
+    - TM20161129: CConfigExternalFile::save( ) aangemaakt.
+				  Opslaan van de configuratie.
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0C06		= Version 12.06
+		Start Datum: 20170510
+		Eind Datum: 20170510
+		Release datum: 20170510
+
+	- TM20170510: Probleem met de NXP modules V90.
+				  De bindings die uitgelezen worden via ReadBindings algoritme bevatten
+				  geen underscore tussen het binding nummer en het binding type.
+				  Wanneer deze opnieuw doorgestuurd worden zonder de underscore worden
+				  ze niet correct geparsed waardoor ze niet goed uitgevoerd worden.
+				  Daarom wordt de functie: CBindingFileEntryOperations::Upgrade( ) aangeroepen
+				  in de functie CBindingFileEntryOperations::Normalize( ).
+				  Deze wordt aangeroepen bij het opslaan van de binding file (= ook na het uitlezen) 
+				  en wordt deze functie ook nog eens aangeroepen voor iedere binding 
+				  verstuurd wordt.
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0D00		= Version 13.00
+		Start Datum: 20170717
+		Eind Datum: 20170816
+		Release datum: 20170816
+
+	- TM20170717: Solved BUG-0151: Bindings voor increment/decrement dimmer waarde.
+	- TM20170719: Solved BUG-0152.
+	- TM20170728: Opkuisen van code die afh. was van de macro: USE_NODECONFIG_SENSOR_SMAP
+				  Dwz Screenmap lite cfg voor de oleds standaard code is.
+	- TM20170728: Opkuisen van de code die afh was van de macro: USE_SENSORDIALOG_NEWMODES
+				  Deze macro werd gebruikt voor de uitbreiding van delegation zodat ook
+				  de modbus sensor kon gebruikt worden.
+	- TM20170731: Dimmer bindings: Increment/decrement onder basic view mode geplaatst
+				  ipv enkel onder expert mode.
+    - TM20170731: Sensor unit: Mogelijkheid om via een binding het sample interval aan
+				  te passen. Misschien handig in combinatie met een lux-regeling.
+				  Deze optie staat onder expert mode.
+    - TM20170731: Melding aangepast incompatible nodes.
+				  Nu worden de software versies decimaal weergegeven ipv hex.
+
+/***********************************************************************************
+	* SW_VERSION = 0x0E00		= Version 14.00
+		Start Datum: 20180514
+		Eind Datum: 20180516
+		Release datum: 20180517
+
+	- TM20180514: Sensor unit: Setpoint min & max range.
+	- TM20180515: Integratie van de easy touch oled.
+
+/***********************************************************************************
+
+	* SW_VERSION = 0x0E01		= Version 14.01
+	- TM20180517: Ondersteuning van forward bindings voor de 6ch duoswitch en 
+				  12ch relais module. getBindingsForwardSupported( ).
+				  PRODUCT_ID_STD_12SWITCH en PRODUCT_ID_STD_6DUOSWITCH
+
+	* SW_VERSION = 0x0E02		= Version 14.02
+	- TM20180614: Integratie nieuwe touchscreen V66
+	- TM20180619: Screenmapping myhome nieuw bestandstype.
+
+	* SW_VERSION = 0x0E03		= Version 14.03
+	- TM20181003: Nieuwe touchscreen V66 - MMAV Speechdevoutdoor struct.
+	- TM20181003: MMAV: Uitbreiden van bronnen, dest & speechdevoutdoor devices.
+
+			TODO: Testen zijn aantal uitgebreid 128/128/16 ?
+			Oppassen: Indien de nieuwe speechdevoutdoor velden aanwezig zijn en
+					  binding software is een oudere versie dan zal een foutmelding
+					  geven tijdens doorsturen.
+
+	* SW_VERSION = 0x0E04		= Version 14.04
+	- TM20181003: MMAV SpeechDevOutdoor: Cfg voor de extra deur moet ook geparsed 
+				  worden in de MMAV cfg bestand. Nodig wanneeer een V65 node de 
+				  master is.
+
+/***********************************************************************************
+	
+	* SW_VERSION = 0x0E05		= Version 14.05
+		Start Datum: 20181108
+		Eind Datum: 20181203
+		Release datum: 20181203
+
+	- TM20181108: AVSettings bestand configurator + doorsturen via binding software.
+	- TM20181108: External settings - Graphics optie.
+				  Niet mogelijk om bitmaps door te sturen maar wel nodig om de cfg'er
+				  te openen.
+
+/***********************************************************************************
+
+* SW_VERSION = 0x0E06		= Version 14.06
+		Start Datum: 20190102
+		Eind Datum: 20190103
+		Release datum: 20190103
+
+	- TM20190102: Screenmapping van de sferen op de hoofdpagina.
+				  Per pagina: 20 buttons * 3 functies.   
+
+/***********************************************************************************
+
+* SW_VERSION = 0x0E07		= Version 14.07
+		Start Datum: 20190107
+		Eind Datum: 20190207
+		Release datum: 20190207
+
+	- TM20190107: Screenmap done bericht versturen naar de nodes software versie==0x66		
+	- TM20190206: Screenmapping nieuwe touchscreen - Cfg bestanden zijn 0 bytes indien er
+			      geen smap aanwezig is. zie CHANGE_SCREENMAP_LOAD
+				  Indien er geen bestand aanwezig is:
+				   - Er wordt een melding getoond - worden geinitialiseerd naar standaards.
+				  Indien het een leeg bestand is:
+				   - wordt doorgestuurd met lege screenmapping.
+	- TM20190207: Node memory backup voor nieuwe Touchscreen.
+				  zie NODEBACKUP_CONFIG_TYPE_V66
+				  --> PROBLEEM: PROPERTIES PAGINA TOONT NU 
+    - TM20190207: Zie BUG-0157. 
+				  Initialisatie van alle var in ctor.
+				  zie USE_IMPLEMENTATION_SOLVE_BUG_0157
+				  Wellicht is deze bug niet opgelost !!!!
+ 
+/***********************************************************************************
+
+* SW_VERSION = 0x0E08		= Version 14.08
+		Start Datum: 20190509
+		Eind Datum: 20190509
+		Release datum: 20190509
+
+	- TM20190509: Combobox - Sensor delegate scrollbar tonen
+				  WS_VSCROLL toevoegen aan de combobox style.
+    - TM20190509: V66 TFT node: label aangepast "Graphics & sounds config"
+	- TM20190509: Configurator uit tools menu verwijderen:
+				  Heb volledige Tools menu verwijderd.
+    - TM20190509: Pir Delayed Off tekst veranderd naar (Pir) delayed off.
+	- TM20190509: MyHome: Virtuele audio kamers werden niet doorgestuurd.
+
+/***********************************************************************************
+
+* SW_VERSION = 0x0E09		= Version 14.09
+		Start Datum: 20190708
+		Eind Datum: 20190708
+		Release datum: 20190708
+
+	- TM20190708: Multimedia configuration:
+				  V65: sources, destinations & speechoutdoor units verhogen.
+				  dest: 32 naar 128 
+				  src: 64 naar 128 
+				  dev-outdoor: 4 naar 16 
+	- TM20190708: Multimedia configuratie doorsturen SendToAll
+				  Versturen naar nodes V65 en V66.
+
+
+/***********************************************************************************
+
+* SW_VERSION = 0x0E10		= Version 14.10
+		Start Datum: 20191028
+		Eind Datum: 20191029
+		Release datum: 20191029
+
+	- TM20191028: Multimedia config: zie BUG_SOLVE_0158
+				  Crashte wanneer aan het doorsturen waren en er wordt nogmaals gevraagd om door te sturen.
+				  Idem voor de Moods, scheduling configuratie & MyHome screenmapping.
+    - TM20191028: Touchscreen V66: 
+				  - Screenmapping devices ook de rolluik toelaten. 
+			      - Screenmapping rolluiken ook devices toelaten.				  
+				  Configuratie kan enkel manueel gebeuren, Cfg'er toont deze die manueel ingevoegd werden.
+	- TM20191028: IRTX Config (zie BUG-1009 touchscreen).
+				  Foutmelding/warning geven wanneer de IRTX config niet kan gesaved/herladen worden.
+    - TM20191029: Tijdens het doorsturen van bindings worden de knoppen ADD, DELETE & AUTO disabled.
+				  
+/************************************************************************************
+
+
+* SW_VERSION = 0x0E11		= Version 14.11
+		Start Datum: 20191122
+		Eind Datum: 20191202
+		Release datum: 20191202
+
+	- TM20191122: PRODUCT_ID_STD_6DIM: Ondersteuning van Forward bindings.
+	- TM20191202: Release
+
+/************************************************************************************
+
+
+* SW_VERSION = 0x0E12		= Version 14.12
+		Start Datum: 20200205
+		Eind Datum: 20200212
+		Release datum: 20200212
+
+	- TM20200205: Opkuisen macro USE_TOUCHSCREEN_V66
+	- TM20200205: Analoge 8sens 16 controls: Setpoint range instellen. (TODO testen.)
+	- TM20200205: Alle nodes met software versie kunnen systemlog downloaden.
+	- TM20200205: Zie BUG-0159: unitconfig met naam '%-': Bij het openen/doorsturen van
+				  dit bestand crashte de software.	
+				  Zie ook BUG-0160
+	- TM20200210: Rolluik units v90.24.00 mogelijkheid om de stoptijd op 0 te zetten.
+				  Op deze manier blijft de relais van de rolluik continue gestuurd.
+				  Stoptijd aangepast: 60 msec tem 2 minuten in interval 60msec.
+				  Verder gaan in interval van 1 minute: 3 tem 57 minuten.					
+
+/*************************************************************************************
+
+* SW_VERSION = 0x0E13		= Version 14.13
+		Start Datum: 20200304
+		Eind Datum: 20200304
+		Release datum: 20200304
+
+	- TM20200304: DT13-ANA instellen van de setpoint range.
+				  zie WORKAROUND_DT13_ANA
+				  Probleem deze firmware versie verstuurd geen product code.
+				  Daarom ook toelaten wanneer een module met 8sens+12virt gedetecteerd wordt.
+				  Workaround detectie: Node software versie >= 90 && nrofunits == 20 &&
+				  physical address begint altijd met 0x13xxxx
+				  Probleem: Firmware versies lager dan V90.21 zal ook de mogelijkheid tonen
+				  maar is niet mogelijk...
+
+/*************************************************************************************
+
+* SW_VERSION = 0x0F00		= Version 15.00
+		Start Datum: 20200304
+		Eind Datum: 20200305
+		Release datum: 2020305
+
+	- TM20200304: Audac audio interface: Mogelijkheid instellen van de reeks: MTX of M2.
+	- TM20200305: Niet alle av-matrix units moeten een child propertiessubdialoog tonen.
+				  Hiervoor aanpassingen aan alle subdialogen voor instellen van de property bindings.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F01		= Version 15.01
+		Start Datum: 20200310
+		Eind Datum: 20200310
+		Release datum: 20200310
+
+	- TM20200310: Oplossing probleem: Bij een bestaande installatie wanneer de modules 
+				  sbox+ en/of 6ch Duoswitch upgedate werden kan de stop tijd niet op
+				  "continue drive" gezet worden. De installatie moet eerst eens opgeslagen 
+				  worden. Oplossing: bindingpropertyunitalg_upgrade( )
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F02		= Version 15.02
+		Start Datum: 20200507
+		Eind Datum: 20200612
+		Release datum: 20200612
+
+	- TM20200507: Integratie van de universele AV interface.		
+				  Export van de node vlaggen voor de configurator.
+				  Vanuit de Nodeproperty sheet wordt de cfg'er geopend voor de cfg van
+				  units, av-matrix & triggers. Alle data wordt via de cfg'er doorgestuurd.
+				  zie CHANGES_AV_UNIVERSAL
+	- TM20200610: Room-e vanaf firmware versie ook externe smap van de sensor toelaten.
+				  Na het doorsturen van de smaplite configuratie wordt er gecontroleerd op de 
+				  product code. Bij een Smarttouch wordt er een extra melding gegeven dat er eerst
+				  via de master een update database moet gebeuren. Bij de Room-e is deze melding 
+				  niet nodig.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F03		= Version 15.03
+		Start Datum: 20210111
+		Eind Datum: 20210118
+		Release datum: 20210118
+
+	- TM20210111: Export nodeconfig info voor de V65 homeserver.
+				  Mogelijkheid om virtuele dimmer & switch units aan te maken.
+    - TM20210111: Application task dialog.
+				  De 'Close' button verwijderd zodat de dialoog enkel kan afgesloten worden 
+				  via de 'cancel' button.
+				  Wannneer deze dialoog afgesloten werd terwijl er een taak bezig was bleef
+				  de timer lopen en werd om de 5seconden de focus naar de verdwenen dialoog 
+				  gebracht. Hierdoor konden er geen andere menu's geopend worden.
+				  zie macro: MFC_GUI_REMOVE_CLOSEBUTTON & MFC_GUI_HANDLE_CLOSEBUTTON
+	- TM20210111: Modbus sensor unit: Ondersteuning UTY-VMGX systeem.
+				  Uitbreiding fanspeed: speed 1 tem speed 6 & speed auto
+				  Uitbreiding swingmodes: Vroeger On/Off - Nu uitgebreid naar 5 modes.
+    - TM20210111: Modbus sensor unit: Documentatie upgedate.
+				  Bestand opnenen via het menu "help".
+    - TM20210111: Incompatible nodes:
+				  Mogelijkheid om een tcp/ip als master up te graden door een touchscreen.
+				  Voorwaarde dat het touchscreen minstens evenveel (en dezelfde) units heeft.
+				  zie macro: USE_UPGRADE_TCPIP_MASTER				  
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F04		= Version 15.04
+		Start Datum: 20210315
+		Eind Datum: 20210321
+		Release datum: 20210321
+
+	- TM20210315: Touchscreen en tcp/ip module sedert v66.04.00:
+				  - Ondersteuning van forward bindings voor de virtuele units (dimmer, switch, rolluik).
+				  - Sensor unit: Sensor Koppelen waar de gemeten waarde van opgevraagd wordt.
+				  - Virtuele units aanmaken: dim,switch,duoswitch,sens,av-matrix,ir-tx.
+    - TM20210315: Touchscreen sedert v66.03.xx:
+				  - Ondersteuning configuratie van triggers en actions.
+    - TM20210315: Tcp/Ip module v66.xx.xx 
+				  - Ondersteuning configuratie van triggers en actions + andere...
+    - TM20210315: Tcp/ip module V65.xx: Gateway config wordt momenteel enkel gebrukt voor de modbus sensor.
+				  Indien het product id een homeserver is dan is er geen gateway config mogelijk.				    
+				  Indien het product id niet gekend is (of is een modbus gateway): als er sens units aanwezig 
+				  zijn dan gateway config toelaten. (Modbus heeft altijd sensor units.)
+    - TM20150315: Er is geen licentie code nodig voor meerdere smartboxen.
+				  Vroeger was een licentie code nodig vanaf 3 smartboxen in dezelfde installatie.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F05		= Version 15.05
+		Start Datum: 20210419
+		Eind Datum: 20210517
+		Release datum: 20210517
+	
+	- TM20210419: Ondersteuning voor de tcp/ip module V66.
+				  - Multimedia configuratie.
+    - TM20210502: Config vlaggen voor http config support							
+				  Nodeconfiginfo.txt - nieuw veld: 'ulConfigSupporthttpApi'		
+    - TM20210517: IRTX configuratie voor een tcp/ip module als master.			
+	- TM20210517: Deze versie is nodig voor de configuratie van de tcp/ip module V66
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F06		= Version 15.06
+		Start Datum: 20210517
+		Eind Datum: 20210913
+		Release datum: 20210913
+
+	- TM20210517: Solved BUG-0162.
+				  Probleem met doorsturen van de screenmapping wanneer er onbekende 
+				  units aanwezig zijn bij de audiokamers in combinatie met virtuele 
+				  audio kamers.
+    - TM20210517: Solved BUG-0163 
+				  Screenmapping: Wanneer de laatste entry van het verkeerde type was 
+				  dan werd deze niet verwijderd.
+    - TM20210906: Zie USE_DIMMER_PBINDINGS_MINVALUE
+				  Bij een nieuw project of wanneer er dimmer modules (atmega) of smartbox+
+				  bijgevoegd worden dan worden er P-Bindings aangemaakt om de minimum 
+				  waarde op 20% te zetten.	
+				  Oppassen: De bindings worden niet automatisch doorgestuurd.
+				  Ze worden pas doorgestuurd wanneer:
+				  - De eerste keer de bindings doorgestuurd worden.
+				  - Er na de browe programmeerverschillen in de nodes aanwezig is.
+    - TM20210906: Configuratie van de Duotecno App Config.
+				  Opnenen van de Duotecno configurator.
+				  Weergeven bij touchscreens van V66.05.00 & bij de TCP/IP Homeserver V66.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F07		= Version 15.07
+		Start Datum: 20210913
+		Eind Datum: 20210913
+		Release datum: 20210913
+
+	- TM20210913: Installer: Probleem met versie nummer.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F08		= Version 15.08
+		Start Datum: 20210927
+		Eind Datum: 20210927
+		Release datum: 20210927
+
+	- TM20210927: External configuratie.
+				  Sferen en scheduling moeten nu standaard via de configurator via het 
+				  HTTP protocol verstuurd worden.
+				  Wanneer een module niet geconnecteerd is met het ethernet netwerk 
+				  dan moet het ook nog mogelijk zijn om de cfg via de CAN-bus door 
+				  te sturen.
+				  Mogelijkheid om via een checkbox deze standaard te overriden.
+    - TM20210927: AV-Matrix Integra.
+				  Aanmaken van een property binding voor de verschillende types AV-Matrix.
+				  De volume sturing is verschillend voor de types...
+				  type: DRX-2 & DRX-3 = gewone volume sturing.
+				  type: DRX-4 , DRX-5 & DRX-7 = volume scaling x2
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F09		= Version 15.09
+		Start Datum: 20211020
+		Eind Datum: 20211020
+		Release datum: 20211020
+
+	- TM20211020: Duoswitch unit:
+				  Vanaf V90.25.02 is de standaard switch waarde 1200 msec ipv 120 msec.
+    - TM20111020: Duoswitch property unit dialoog:
+				  Weergave van de stop en switch tijd aangepast. 
+				  Aantal msec tot 3 cijfers na de komma.
+				  1200 msec wordt weergegeven als 1,200 sec
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F0A		= Version 15.10 (+ AppRemoteCfg V1.2)
+		Start Datum: 20211020
+		Eind Datum: 20211028
+		Release datum: 20211028
+
+	- TM20211020: Opkuisen van de referentie naar de directory libraries.
+	- TM20211020: Extra menu "tools": Van hieruit kunnen we Remote Config selecteren.
+				  Disablen door de macro IMPLEMENT_APPREMOTE_CFG op 0 te zetten.
+	- TM20211027: Library: poort 8081 gebruikt geen SSL meer.
+				  Paswoord encrypt/decrypt via een eigen secret key.
+				  Connecteren op de juiste versie firmware !
+    - TM20211028: Eerste testversie: Erase bindings, write bindings, upload backup.
+				
+/**************************************************************************************
+
+* SW_VERSION = 0x0F0B		= Version 15.11 (+ AppRemoteCfg V1.3)
+		Start Datum: 20211020
+		Eind Datum: 20211118
+		Release datum: 20211118
+
+	- TM20211028: App remote cfg: Verify doen op de library versie.
+	- TM20211104: App remote cfg: Bij een authorization fout tijdens uitvoeren van een
+				  algoritme opnieuw het wachtwoord vragen.
+    - TM20211117: Taak: Write all names.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F0B		= Version 15.12 (+ AppRemoteCfg V1.4)
+		Start Datum: 20211118
+		Eind Datum: 20211119
+		Release datum: 20211119
+
+	- TM20211119: App remote library: 
+				  Solved bug: Upload van de backup moet via absolute path gebeuren 
+				  ipv relatief path.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F0C		= Version 15.13 (+ AppRemoteCfg V1.5)
+		Start Datum: 20211119
+		Eind Datum: 20211214
+		Release datum: 20211214
+
+	- TM20211206: Warnings aangpast bij compileren onder VC2015.
+				  sscanf("%c") --> Char ipv int.
+	- TM20211206: Bij een nieuw project of wanneer er modules bijgevoegd worden dan 
+				  worden er extra P-Bindings aangmaakt.				 		
+				  - Sensoren van de Oleds & drukknop interfaces: Offset measured value -2°C 
+				    zie macro USE_SENSOR_PBINDINGS_OFFSETVALUE
+				  - Rolluik unit wanneer de firmware < V90.25.
+				    De switch tijd wordt 1.2 sec.
+					Zie macro USE_DUOSWITCH_PBINDINGS_SWITCHTIME: Deze staat op 0 !
+	- TM20211207: Dialoog Tools app remote: Optie 'secure login'.
+	- TM20211207: App remote library: HTTP log info.
+				  Ontvangen Json data converteren van UTF-8 charset naar ANSI charset.
+				  Deze is nodig zodat de namen correct weergegeven worden.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F0D		= Version 15.14 (+ AppRemoteCfg V1.6)
+		Start Datum: 20211214
+		Eind Datum: 20211216
+		Release datum: 20211216
+
+	- TM20211215: Remote Config: Servers Config + bijhouden per project file.
+	- TM20211215: Remote cfg: Connectie maken via een lijst van servers. 
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0F0F		= Version 15.15 (+ AppRemoteCfg V1.7)
+		Start Datum: 20211216
+		Eind Datum: 20220322
+		Release datum: 20220322
+
+	- TM20220216: ICommunicationObject en ICommunicationFrame.
+	- TM20220322: Nodes V66 TCP/IP Homeserver configuratie screenmapping toelaten.
+	- TM20220322: Bij een "save-as" de Json App config subdirectory copieren.
+
+
+/**************************************************************************************
+
+* SW_VERSION = 0x01000		= Version 16.00 (+ AppRemoteCfg V1.7)
+		Start Datum: 20220322
+		Eind Datum: 20220412
+		Release datum: 20220412
+	
+	- TM20220329:  zie BUG-0164
+	  AvMatrix unit Property binding aanmaken enkel wanneer type niet onbekend is (= wanneer integra/audac)
+	  Anders wordt het geconfigureerd type van de universele av-matrix overschreven.
+	  Bij de universele audio interface wordt het type overschreven en bij de SonosCloud kunnen er geen
+	  Toestellen / bronnen geconfigureerd worden.		---> TODO: TESTEN...
+	- TM20220321: Implementatie van de Sensor PID controller. (zie USE_SENSOR_PIDCONTROL).
+	  Sensor PID Controller voor alle sensor units met versie nummer V90.25 en hoger.
+
+
+/**************************************************************************************
+
+* SW_VERSION = 0x01001		= Version 16.01 (+ AppRemoteCfg V1.7)
+		Start Datum: 20220412
+		Eind Datum: 20220421
+		Release datum: 20220421
+
+	- TM20220413: Oplossing BUG: Gebruiken een verkeerde product code voor de DT13-ANA module.
+	  Nodig voor de instelling van de setpoint min/max range en de PID controller.
+  	  zie ook zie WORKAROUND_DT13_ANA: Door deze workaround was het al mogelijk om de setpoint
+	  range in te stellen.
+	- TM20220413: Voor de nieuwe tcp/ip module is er configuratie van de screenmapping nodig voor de Duotecno Pro-App.
+	  Deze wordt niet verstuurd via de CAN-bus maar enkel via de Duotecno Pro App config (Json files upload).
+	- TM20220421: PID Regelaar: Combobox voor de selectie van de dimmer units.
+	  Wanneer er meerdere items aanwezig zijn dan pijlen rechts tekenen.
+	- TM20220421: DT-13ANA mogelijkheid voor configuratie van de PID regeling.
+				
+
+/**************************************************************************************
+* SW_VERSION = 0x01002		= Version 16.02 (+ AppRemoteCfg V1.7)
+		Start Datum: 20220421
+		Eind Datum: 20220513
+		Release datum: 20220513
+
+
+	- TM20220511: Aanpassing typo "upload" ipv "uload".
+	- TM20220511: Expert mode: Dimmer unit: Min & max range aanpassen via een gewone binding.
+	              zie DIMMER_CHANGES_RANGE
+    - TM20220512: Expert mode: Sensor unit PID regeling.
+				  PID Control unit disable / unit toekennen.
+				  PID Control parameters aanpassen.
+
+	
+/**************************************************************************************
+
+* SW_VERSION = 0x01003		= Version 16.03 (+ AppRemoteCfg V1.7)
+		Start Datum: 20220513
+		Eind Datum: 20220622
+		Release datum: --> Geen release enkel versie nummer verhoogd.
+
+	- TM20220601: Mogelijkheids weergave van de property dialogen op 2 scherm	
+				  zie macro SUPPORT_MULTIPLE_MONITORS
+	- TM20220601: Instellen van de PID control enkel mogelijk in expert view mode (en wanneer ondersteund door de 
+				  firmware.)
+    - TM20220601: Bij het ontvangen van een EV_INIT de tijd & datum weergeven.
+	- TM20220601: Mogelijkheid om tooltips toe te voegen.
+				  zie macro: USE_TOOLTIP_CONTROLS
+				  Momenteel disabled.
+				  Moeten nog nakijken of we de handles moeten opkuisen of dit automatisch gebeurd.
+				  evt de handles bijhouden in een lijst en bij afsluiten van de dialoog alle handles closen ?
+    - TM20220622: Meebezig Communicatie via tcpip socket.
+												
+
+/**************************************************************************************
+
+* SW_VERSION = 0x01004		= Version 16.04 (+ AppRemoteCfg V1.7)
+		Start Datum: 20220622
+		Eind Datum: 20220705
+		Release datum: 20220705
+
+	- TM20220624: Nieuwe start dialoog om te connecteren via USB of via TCP/IP met de homeserver pro.
+				 
+	- TM20220624: Tools RemoteCfg verwijderd van het menu.
+				  Zie macro: USE_TOOLS_APPREMOTECFG
+    - TM20220704: Firmware upgrade button onder de "Control" property sheet.
+
+
+/**************************************************************************************
+
+* SW_VERSION = 0x01005		= Version 16.05 (+ AppRemoteCfg V1.7)
+		Start Datum: 20220705
+		Eind Datum: 20220707
+		Release datum: 20220707
+
+	- TM20220707: Aanpassingen aan de GUI om meer Windows compatible te zijn.
+				  - Nodes & units form view: 
+					- Dubbele rechtermuisklik vervangen door enkele context pop-up menu bij de rechter muis klik.
+				  - Nodes & units tree view:
+					- Dubbele rechtermuisklik vervangen door enkele context pop-up menu bij de rechter muis klik.
+					- Slepen van de unit naar de bindings view: 
+						- Bij een sleep beweging + Rechtermuis button direct starten met het slepen.
+						- Bij een rechtermuisklik down: Na 1 seconde mogelijkheid om te slepen.
+					- Probleem: Konden via de standaard Rechter muisklik geen naam meer aanpassen. 
+					  Oplossing zie WORKAROUND_LABEL_EDIT
+				  - Bindings tree view:
+					- Context pop-up menu bij een rechterklik.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x01006		= Version 16.06 (+ AppRemoteCfg V1.7)
+		Start Datum: 20220707
+		Eind Datum: 20220713
+		Release datum: 20220713
+
+	- TM20220713: Wanneer we connecteren via IP en de connectie is met een tcp/ip als master dan 
+			      kunnen we master taken uitvoeren (pnp, browse, update nodedatabase).				 
+				  Later deze functie ook uitwerken wanneer de master een andere touchscreen of 
+				  tcp/ip module is.
+
+
+/**************************************************************************************
+
+* SW_VERSION = 0x01007		= Version 16.07 (+ AppRemoteCfg V1.7)
+		Start Datum: 20220713
+		Eind Datum: 20220714
+		Release datum: 20220714
+
+	- TM20220713: Menu Modem status enkel enablen wanneer we geconnecteerd zijn met de usb modem.
+				  niet wanneer via tcp/ip.
+	- TM20220713: Wanneer we verbinden met de tcp/ip socket de progressbar in de taakdialoog 
+				  verhogen wanneer er een bericht verstuurd ipv wanneer er ene ontvangen wordt.
+				  Reden: Na een reset ontvangt de tcpip module constant CAN-berichten door de 
+				  update van de nodedatabase. Hierdoor werd er een verkeerde indicatie gegeven 
+				  van de progress van de huidige taak.
+    - TM20220714: Wanneer de verbinding met de server verbroken wordt door een socket fout 
+				  dan een melding geven en de toestand veranderen naar disconnect.
+				  Er wordt een error messagebox getoond dat de connectie verbroken werd.
+				
+/**************************************************************************************
+
+* SW_VERSION = 0x01008		= Version 16.08 (+ AppRemoteCfg V1.7)
+		Start Datum: 20220714
+		Eind Datum: 20220805
+		Release datum: 20220805
+
+	- TM20220728: EV_NODECONFIG en EV_NODEPHYSICALADDRESS messagehandlers controle doen op het nodetype.
+	              Indien een ongelgig node type dan niet toevoegen aan de node database.
+    - TM20220729: Solved BUG-0165: Context pop up menu: selectie Node configuration bij een touchscreen springt 
+				  naar de eerste pagina.
+    - TM20220803: Master taken via de homeclient tcp/ip.
+				  - V66 modules voorzien van een tcp/ip homeclient verbinding.
+				  - V65 TCP/IP als homeserver.
+	- TM20220804: Master taken via de homeclient tcp/ip.
+	              Moeten een andere instantie aanmaken van de homeclient.
+				  Kunnen niet deze hergebruiken van de tcp/ip communication object.
+
+
+/**************************************************************************************
+
+* SW_VERSION = 0x01009		= Version 16.09 (+ AppRemoteCfg V1.7 - Wordt gebruikt in de startdialoog.)
+		Start Datum: 20220805
+		Eind Datum: 20220922
+		Release datum: 20220922
+
+	- TM20220805: Bij het sluiten van de socket connectie ook de keep-alive timer stoppen.
+	- TM20220913: Export van de units is niet ok wanneer we een ongeldig physical node adres hebben.
+				  zie CExportGenerateNodeTable::Generate_NodeTable().
+				  Physical node address beperken tot een 24bits waarde.
+	- TM20220914: Bij het manueel geven van een node address opnieuw de tekst
+	              "Assigned logical address ..." displayen.				
+    - TM20220914: Oplossing probleem: Wanneer de binding software een unit property dialoog opent die 
+	              niet volledig op het beeldscherm kan dan werd deze niet getoond.
+				  Probleem doet zich voor wanneer er 2 instanties van de binding software open staan op 
+				  het beeldscherm en de rechtse wilt een dialoog openen.
+				  zie Code SUPPORT_MULTIPLE_MONITORS.
+	- TM20220921: Start dialoog + opslaan & inladen van de project inlog gegevens.				
+				  --> Ook aanpassingen aan de Applicatie fsm.
+
+/**************************************************************************************
+
+* SW_VERSION = 0x0100A		= Version 16.10 (+ AppRemoteCfg V1.8)
+		Start Datum: 20220922
+		Eind Datum: 20220930
+		Release datum: 20220930
+
+	- TM20220928: Node Services: een lijst bijhouden van de nodes en de services die ze aanbieden.
+	              Deze data wordt ingeladen/opgeslagen in "projectnodeservices.dat".
+				  Is een gecodeerd json bestand.
+				  De info van deze wordt gebruikt voor de master (tcp/ip-service) voor het uitvoeren 
+				  van de master taken via de homeclient tcp/ip protocol.
+				  zie library: AppRemoteCfg - klasse AppRemoteCfgNodes
+    - TM20220929: Bij het starten van een nieuwe applicatie de functie initNewApplicationData( ) aanroepen.
+				  Deze zorgt ervoor dat alle data gewist is.
+				  Deze was nodig wanneer we een project inladen en daarna een cencel uitvoeren om een 
+				  nieuuw project te starten.
+				  Moeten ervoor zorgen dat alle data van de databases, server cfg info gewist is + 
+				  na het browsen moet er gevraagd worden om het project te saven.
+
+
+/**************************************************************************************
+* SW_VERSION = 0x0100B		= Version 16.11 (+ AppRemoteCfg V1.8)
+		Start Datum: 20220930
+		Eind Datum: 20221020
+		Release datum: 20221020
+
+	- TM20221011: Oplossing BUG-0166.
+				  Bij het starten van een nieuw project wordt na het opslaan van het project 
+ 				  telkens na het uitvoeren van een taak opnieuw gevraagd om eerst het 
+				  project op te slaan.
+
+/**************************************************************************************
+* SW_VERSION = 0x0100C		= Version 16.12 (+ AppRemoteCfg V1.8)
+		Start Datum: 20221020
+		Eind Datum: 20221102
+		Release datum: 20221102
+	
+	- TM20221025: Code opkuisen. 
+				  Virtuele sensor kamers standaard in de code, niet meer via een macro.
+    - TM20221025: Virtuele units/kamers voor het weergeven van gemeten waarden.
+
+/**************************************************************************************
+* SW_VERSION = 0x0100D		= Version 16.13 (+ AppRemoteCfg V1.8) (+Udp Lan config V1.4)
+		Start Datum: 20221102
+		Eind Datum: 20221208
+		Release datum: 20221208
+
+	- TM20221124: Integratie mechanische push & switch buttons.
+				  - Productnaam.
+				  - Er worden std property bindings aangemaakt voor de sensor: Offset waarde van -2°C
+				  - Taak als delegate: Deze sensor doet de meting + sturing.
+					De smartbox is de delegator: Bediening + weergave van de sensor van de touchbutton.
+				  - Ondersteuning van de PID regeling.
+				  - Instellen van min & max waarde.
+	- TM20221130: Start implementatie UDP config tool.
+				  zie macro: USE_UDPCONFIG_LIBRARY (--> Gebruiken UDP Lan cfg bibliotheek V4.0)
+				  - Weergave in de nodes form view: NXP modules & RPI modules vanaf V66.10.00
+
+/**************************************************************************************
+* SW_VERSION = 0x0100E		= Version 16.14 (+ AppRemoteCfg V1.8) (+Udp Lan config V1.4)
+		Start Datum: 20221208
+		Eind Datum: 20221227
+		Release datum: 20221227 - Geen release - Tetsversie.
+
+	- TM20221208: implementatie UDP config tool - meebzig. (zie macro: USE_UDPCONFIG_LIBRARY)
+    - TM20221227: Aanpassingen parsen van de commandline.		
+	- TM20221227: Wanneer 'enable_tcp' aanwezig is in de commandline dan is er ook configuratie 
+				  mogelijk via de touchscreen. 
+				  NOTE: Wordt niet bijgehouden per project. Wanneer opgestart wordt via batch bestand 
+				  dan blijft deze enabled tot de binding software afgesloten wordt.							  
+				  Inhoud batch file:
+				  "Duotecno binding software.exe" -enable_tcp
+	- TM20221227: Aanpassingen aan de property dialogen van de nodes.
+				  Soms een probleem op de PC van Mario dat de property dialogen van de nodes 
+				  niet kortstondig open/Sluiten.
+				  Aanpassingen:
+				  - De geselecteerd pagina (firstpage) niet meer in de ctor van CPropertySheet 
+				    meegeven maar in de OnInitDialog() + extra controle.
+					Mogelijke reden bij een ongeldige pagina dat de create() mislukt.
+				  - Extra controle op de create( ) functie. Wanneer deze niet lukt dan de instantie 
+				    van de dialoog wissen + Extra controle of een windows handle hebben.
+				  - CPropertyPage::Construct aanroepen voor we de pagina toevoegen aan de AddPages( )			
+
+/**************************************************************************************
+* SW_VERSION = 0x0100F		= Version 16.15 
+		Start Datum: 20221227
+		Eind Datum: 20230118
+		Release datum: 20230118
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.0
+			- SSH Firmware update Library V1.1
+
+	- TM20221227: implementatie UDP config tool - meebzig. (zie macro: USE_UDPCONFIG_LIBRARY)
+	- TM20221227: TCP/IP connectie fsm.
+				  Afhankelijk van het node type van de server de tekst weergeven.
+			      Melding: TCP/IP homeserver of TCP/IP touchscreen.
+    - TM20221228: Tcp/Ip connectie.
+				  Bijhouden in de server info of we connecteren in een locaal netwerk via 
+				  ip-address of we connecteren via een remote netwerk via dns.
+				  De info wordt doorgegeven a.d.h.v. de instellingen van de gebruiker.
+				  Todo: Deze info later gebruiken voor de GUI + info doorgeven aan de configurator.
+    - TM20230117: Integratie Firmware update dialoog.
+				  Openstaande punten:
+					- TODO_FIRMWARE_SSH_UPDATE_INSTANCE
+					- TODO_FIRMWARE_SSH_UPDATE_MEMORYLEAKS
+					- TODO_FIRMWARE_SSH_UPDATE_MOUSECURSOR
+					- TODO_FIRMWARE_SSH_UPDATE_TOOLS
+					- TODO_FIRMWARE_SSH_UPDATE_LOCALFILE
+					- TODO_FIRMWARE_SSH_UPDATE_RECOVERY
+					- TODO_FIRMWARE_SSH_UPDATE_APPREMOTECFGTASKS
+/**************************************************************************************
+* SW_VERSION = 0x01010		= Version 16.16 
+		Start Datum: 20230118
+		Eind Datum: 20230207
+		Release datum: 20230208
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.0
+			- SSH Firmware update Library V1.1
+
+	- TM20230118: implementatie UDP config tool - meebzig. (zie macro: USE_UDPCONFIG_LIBRARY)
+	- TM20230120: Aanpassing aan de code 'CLogFileConversionFromNodes'.
+				  Porteren naar VS2015 crasht hierop.
+	- TM20230124: Zie macro USE_DIALOG_SYSTEMFONTS
+				  Om te testen - Problemen met de fonts wanneer we de applicatie compileren op vs2015 (windows 10)				
+				  TODO: Moeten deze toepassen op alle dialogen !!!!
+	- TM20230124: Zie macro USE_CHANGES_IMAGELISTS - Zie USE_IMAGELIST_SMALL_BITMAPS.
+				  De 32x32 iconen worden gescaled naar 16x16 om gebruikt te worden in de treeview.
+				  Op windows 10 is deze scalling niet ok.
+				  Moeten andere iconen/images gebruiken voor deze imagelist met resolutie 16x16
+				  TODO: EXTRA ICONEN.
+						- Rolluik op/neer : OK
+						- Relais on/off/pir : OK
+						- ...
+	- TM20230126: Property dialoog new app.
+				    - gebruik nieuwe fonts.
+	- TM20230126: Problem solve wizard: Volledig herwerkt
+	- TM20230126: Problem solve wizard: Als er nodes niet gevonden of toegevoegd werden proberen het
+				  probleem op te lossen zonder telkens opnieuw te moeten browsen.
+	- TM20230203: Oplossing BUG-0167
+				  Wanneer de bestandsnaam te lang is wordt het *.duo bestand niet altijd correct opgeslaan.
+				  Werd beperkt in lengte en de *.duo ontbreekte soms.
+    - TM20230207: zie NOTE_SETPATHNAME: Probleem met het compileren van de code op visual studio 2015.
+
+
+/**************************************************************************************
+ * SW_VERSION = 0x01011		= Version 16.17
+		Start Datum: 20230208
+		Eind Datum: 20230217
+		Release datum: 20230217
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.0
+			- SSH Firmware update Library V1.1
+
+	- TM20230208: implementatie UDP config tool - meebzig. (zie macro: USE_UDPCONFIG_LIBRARY)
+	- TM20230214: Probleem met opslaan van het project.
+				  Zie BUG-0168 - Probleem sedert V16.16.
+				  Wanneer we het project opslaan onder een bestaande projectdirectory (en naam).
+    - TM20230214: Problem solve wizard.
+	              Property page wizard pagina 0: Horizontale scrollbar.
+				  Watermark bitmap moeten aanpassen.
+    - TM20230214: Problem solve wizard.
+				  Aanpassing aan de teksten.
+	- TM20230214: Bij een nieuwe installatie worden er automatisch conditie bindings aangemaakt 
+				  in de master.
+				  zie klasse: CBindingConversionAuto2
+    - TM20220215: Autobinding condities met PIR.
+				  Twilight (0xfc,0x02) wordt op dezelfde manier gebruikt als de Dark outside (0xfc,0x03).
+  	- TM20230214: Bij een nieuwe installatie worden er automatisch forward bindings aangemaakt van de twilight 
+				  module naar de condities van de master (Twilight & Dark).
+				  zie klasse: CBindingConversionAuto2
+    - TM20230215: Probleem dat de property node dialogen soms niet openen / kortstonding na het openen 
+				  afsluiten. (zie BUG-0169)
+				  Diverse aanpassingen: 
+					- BUG_0169_CHANGES_DIALOG_DESTROY: geheugen dealloceren in de PostNcDestroy() functie.
+					  Momenteel deze code nog niet activeren. macro staat op 0 !!!
+					- BUG_0169_CHANGES_PROPERTY_NODESSHEET: Na dealoocatie opnieuw openen via een PostMessage( ) 
+					  en wanneer de create mislukt opnieuw proberen via een retryCounter.
+				    - BUG_0169_CHANGES_PROPERTY_NODESSHEET_POSTMESSAGE: Dialogen openen via PostMessage( ) ipv
+					  via SendMessage( )
+	- TM20230216: Zie BUG-0170: Wanneer een bestaande binding ge-editeerd wordt op een verkeerde manier (bvb.
+	              omdat niet alle units geconnecteerd waren) dan werd deze binding verwijderd uit de GUI treeviews 
+				  maar was wel nog aanwezig in de binding bestanden.
+				  zie BUG_0170_CHANGES_SOLVE
+				
+
+
+/**************************************************************************************
+ * SW_VERSION = 0x01012		= Version 16.18
+		Start Datum: 20230217
+		Eind Datum: 20230224
+		Release datum: 20230224
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.0
+			- SSH Firmware update Library V1.1
+
+	- TM20230217: implementatie UDP config tool - meebzig. (zie macro: USE_UDPCONFIG_LIBRARY)
+	- TM20230221: Probleem met de installer - De vorige versie werd niet overschreven.
+
+
+
+
+/**************************************************************************************
+ * SW_VERSION = 0x01013		= Version 16.19
+		Start Datum: 20230224
+		Eind Datum: 20230321
+		Release datum: 20230321
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.1
+			- SSH Firmware update Library V1.1
+
+
+	- TM20230224: implementatie UDP config tool - meebzig. (zie macro: USE_UDPCONFIG_LIBRARY)
+	- TM20230315: Export van de login info: PROJECTDIR\config\projectLoginInfo.json
+				  Deze info kan de configurator gebruiken om te bepalen via welke API (8080 of beveiligde)
+				  er moet geconnecteerd worden.
+				  De DNS en het paswoord kan in 99,9% van de gevallen gebruikt worden voor de server info 
+				  voor de beveiligde API (enkel de poort is anders.)
+
+
+
+/**************************************************************************************
+ * SW_VERSION = 0x01014		= Version 16.20
+		Start Datum: 20230321
+		Eind Datum: 20230404
+		Release datum: 20230404
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.1
+			- SSH Firmware update Library V1.1
+
+	- TM20230224: implementatie UDP config tool - meebzig. (zie macro: USE_UDPCONFIG_LIBRARY)
+	- TM20230323: Integratie van de nieuwe USB modem.
+				  zie checkModemSoftwareVersion()
+    - TM20230323: Aanpassingen voor de nieuwe USB-modem. zie MODEM_USB_DELAYS.
+				  Deze zorgt ervoor dat er minstens 1 msec gewacht wordt bij de communcatie 
+				  met de USB-Modem. Dit was reeds bij het versturen/ontvangen van data.
+				  Nu ook bij het opvragen/zetten van de USB LineCoding + USB Line state.			
+    - TM20230329: MAX_NR_RX_MESSAGES verhoogd van 10 naar 30 berichten.
+    - TM20230329: Engineer CAN Logger.
+				  Enkel mogelijk met de nieuwe versie van de modem V90.xx.
+	- TM20230330: Engineer tools enkel tonen in expert mode:
+				  - Engineer CAN FTP.
+				  - Engineer Manual transfer.
+				  - Engineer CAN Logger.
+	- TM20230403: Engineer CAN logger: Log to file.
+				  Bestand wordt opgeslagen onder PROJECT_DIR\data\canlog.txt
+
+/**************************************************************************************
+ * SW_VERSION = 0x01015		= Version 16.21
+		Start Datum: 20230404
+		Eind Datum: 20230413
+		Release datum: 20230413
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.1
+			- SSH Firmware update Library V1.1
+
+	- TM20230405: Firmware updater Audio RPI V66.07.01.
+				  Bij deze versie is er nog geen platform info beschikbaar maar is de enige 
+				  versie die gereleased werd onder de RPI1. (Er bestaat geen release voor 
+				  de RPI3 voor deze versie).
+				  Als we een universele audio interface als CM3 V66.07.01 zien dan wordt 
+				  het platform automatisch aangepast naar een RPI1.
+				  zie USE_WORKAROUND_AUDIO_RPI1
+    - TM20230413: Screenmapping van de energy measurement units.
+				  Een aparte menu optie voor het screenmappen van virtuele energie management 
+				  units. Wordt ondersteund door de firmware V66.11.00.
+				  zie macro USE_SMAP_ENERGYMEASURE.
+    - TM20230413: Oplossing probleem:
+	              Bij de screenmaps MyHome, MainPage & Virtuele kamers werd de 'Upload to all' getoond 
+				  maar deze functies zijn niet geintegreerd.
+				  Opnieuw de knoppen gedisabled.
+
+
+/**************************************************************************************
+ * SW_VERSION = 0x01016		= Version 16.22
+		Start Datum: 20230413
+		Eind Datum: 20230418
+		Release datum: 20230418
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.1
+			- SSH Firmware update Library V1.1
+
+	 - TM20230418: Nieuw versie nummer om advanced installer/updater te testen.
+	 
+/**************************************************************************************
+ * SW_VERSION = 0x01017		= Version 16.23
+		Start Datum: 20230418
+		Eind Datum: 20230418
+		Release datum: 20230418
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.1
+			- SSH Firmware update Library V1.1
+
+	 - TM20230418: Nieuw versie nummer om advanced installer/updater te testen.
+	 
+	 	 
+/**************************************************************************************
+ * SW_VERSION = 0x01018		= Version 16.24
+		Start Datum: 20230418
+		Eind Datum: 20230502
+		Release datum: 20230502
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.2
+			- SSH Firmware update Library V1.1
+
+	- TM20230418: Software updater: Bij het opstarten controleren of er updates
+			      beschikbaar zijn.											
+	- TM20230421: Project DevOps (git).
+	- TM20230424: Software updater: Herwerken dmv registry entries.	
+	- TM20230425: Software updater: Dialoog view options.				 
+				  Mogelijkheid selectie van "Beta updates" + zoeken naar updates bij het
+				  opstarten.
+	- TM20230427: Software updater: Dialoog om software updates uit te voeren + 
+				  zoeken naar extra software packages.
+	- TM20230427: Dialoog options wordt ook getoond in basic view mode.
+				  De optie "Search at startup" kan enkel gewijzigd worden in expert 
+				  view mode.
+	- TM20230428: Duotecno software updater wordt niet meer gebruikt. 
+			      Vroeger werd er via een UDP socket een bericht verstuurd waardoor 
+			      de updater een notify kreeg om te controleren op software updates.
+			      Deze code disabled + De Win32 socket initialisatie verplaatst naar 
+			      CMainFrame.
+	- TM20230428: Software updater: Wanneer we de code uitvoeren in DEBUG mode bevinden 
+				  de txt info bestanden zich op een andere plaatst in de cloud.
+				  In de url is er een extra 'test' subpath bijgevoegd.
+				  zie USE_CLOUDVERSIONS_TEST
+	- TM20230428: Software updater: Max 10 seconden wachten op een antwoord van het 
+				  process van de updater.
+														 	 	 	 	 	 	 
+
+/**************************************************************************************
+ * SW_VERSION = 0x01019		= Version 16.25
+		Start Datum: 20230502
+		Eind Datum: 20230510
+		Release datum: 20230510
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.2
+			- SSH Firmware update Library V1.1
+		
+	- TM20230504: Oplossing BUG-0171: Screenmapping virtuele kamers.
+ 				  Wanneer de index van de virtuele kamers niet op elkaar volgen dan wordt de data 
+ 				  corrupt doorgestuurd naar de touchscreens.									
+	- TM20230504: Mogelijkheid van een dialoog bij het opstarten die zoekt naar tcp/ip devices
+				  in het lokaal netwerk.
+				  Zie TODO_PROPERTYPAGE_NEWAPPPAGE4
+				  Momenteel de code disablen door de macros op 0 te zetten.
+				  USE_PROPERTYPAGE_NEWAPPPAGE4 = 0
+				  DEBUG_TEST_SHOW_PROPERTYPAGE_NEWAPPPAGE4 = 0 (om te debuggen.)
+				  
+				  				
+				  				
+/**************************************************************************************
+ * SW_VERSION = 0x0101A		= Version 16.26
+		Start Datum: 20230510
+		Eind Datum: 20230530
+		Release datum: 20230530
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.2
+			- SSH Firmware update Library V1.1
+									
+	- TM20230525: Dialoog opstarten herwerkt.
+				  Mogelijkheid zoeken in het LAN netwerk en configuren van een TCP/IP device.
+	- TM20230525: USE_WORKAROUND_MESSAGEERROR_ABSORBE
+				  Bij het configureren van de tcp/ip module naar een ander logisch address wordt 
+				  er een EV_MESSAGEERROR ontvangen. Dit bericht wordt weergeven in de scrollview.
+				  De gebruiker zal hierdoor denken dat er iets fout gelopen is.
+				  Om dit te voorkomen wordt na het versturen van een assign logical address 
+				  de eerste keer dat er EV_MESSAGEERROR + MESSAGE_ERROR_CAN_TX_PROTOCOL_TIMEOUT 
+				  ontvangen wordt geen weergave getoond in de scrollview.				  				 
+	- TM20230526: Implementatie van de 'Connect' mbv de start dialoog.
+			      Keuzemogelijkheid hoe te connecteren + mogelijkheid om te zoeken in het
+			      LAN netwerk.
+			      
+			      
+/**************************************************************************************
+ * SW_VERSION = 0x0101B		= Version 16.27
+		Start Datum: 20230530
+		Eind Datum: 20230613
+		Release datum: 20230613
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.2
+			- SSH Firmware update Library V1.1
+								
+	- TM20230530: Start nieuwe versie V16.27.
+	- TM20230530: Code opkuisen: Macro USE_UDPCONFIG_LIBRARY verwijderen.
+				  Code standaard aanwezig.										      	
+	- TM20230607: UDP LAN Config. 
+	              Nieuwe include bestanden (en library) voor de enum vlaggen voor audio interface 
+	              secured API poort 8081 (zie DUOTECNO::SUPPORTED_FLAG_API)				      
+	- TM20230607: UDP LAN Configuratie.
+				  Nieuwe optie in het Context pop-up menu die geopend wordt bij het klikken op een node 
+				  tree view & form view. De optie is enkel beschikbaar wanneer de node de laatste keer 
+				  gevonden werd in de scan.
+	- TM20230609: UDP LAN Configuratie.
+				  Overzicht van alle modules in het LAN netwerk.
+				  			
+				  			
+				  			
+/**************************************************************************************
+ * SW_VERSION = 0x0101C		= Version 16.28
+		Start Datum: 20230613
+		Eind Datum: 20230621
+		Release datum: 20230621
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.3 (** nieuwe versie **)
+			- SSH Firmware update Library V1.1
+							  														
+	- TM20230613: Start nieuwe versie V16.28
+				  Gebruikt een nieuwe versie van de AppRemoteCfg library.
+	- TM20230615: Node device services uitgebreid.				  	
+				  De lijst werd uitgebreid met de info van de UDP LAN configuratie en wordt upgedate 
+				  wanneer er veranderingen gebeuren. Deze gegevens worden gebruikt om automatisch de login
+				  gegevens in te vullen en aan te passen.
+				  Dit wordt gebruikt bij de login Master tasks / login configuratie via DT18-PRO /
+				  automatisch invullen van de IP-addressen voor een firmware update.
+				  Bij het opslaan en bij het openen van de Duotecno Configurator wordt er 
+				  een Json (export) bestand (ProjectMap\projectnodeservices.json) opgeslagen.
+				  Dit bestand kan door de configurator gebruikt worden.
+	- TM20230615: Menu item "View options" hernoemd naar “Software update options”.
+	- TM20230616: Login project info (dat & json) bestand uitgebreid met het logisch en fysisch adres van 
+				  de DT18-PRO server. Dit is nodig om de inlog gegevens automatisch up-te-daten bij 
+				  veranderingen in de UDP configuratie.
+	- TM20230616: Oplossing BUG-0172.
+				  Bij een saveAs() werden de nieuwe projectnodeservices en projectLoginInfo vervangen 
+				  door de oude bestanden. (Reden CopyDirectory( )).		
+	- TM20230620: Er worden logbestanden weggeschreven onder:
+				  c:\ProgramData\Duotecno binding software\...
+				  Er worden max 20 logbestanden bijgehouden. De logbestanden die eerst aangemaakt werden 
+				  worden eerst verwijderd.
+	- TM20230620: BUG-0169 is nog steeds eenn probleem in V16.27.
+				  Diverse aanpassingen gedaan om het probleem te vinden/oplossen.
+				  Warnings en Errors worden in het logbestand geschreven.		  									 																																			
+										
+									
+/**************************************************************************************
+ * SW_VERSION = 0x0101D		= Version 16.29
+		Start Datum: 20230621
+		Eind Datum: 20230823
+		Release datum: 20230823
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.3 
+			- SSH Firmware update Library V1.1
+			
+	- TM20230621: Start V16.29	
+	- TM20230808: DT18-PRO: Mogelijkheid om de camera instellingen door te sturen.
+				  De DT18-PRO moet minimaal firmware versie V66.11 zijn.			
+	- TM20230809: Configurator info export.
+	              Een nieuw veld 'usConfigAVSettingstype' in nodeconfiginfo.txt bestand.
+	              Dit veld bevat vlaggen waardoor de configurator weet welke configuratie 
+	              er ondersteund wordt.
+	              De configurator kan dit gebruiken om de GUI aan te maken.			
+	- TM20230816: Resource blocks 3 bevat extra product info.
+	              Momenteel wordt dit enkel gebruikt door de DT18-PRO om te bepalen 
+	              of de camera server aanwezig is op de target.	  	  				  									  					
+	- TM20230823: Invoegen van de handleidingen van de cursus in het help menu.
+				  Openen / zoeken van de handleidingen modbus & binding examples herwerkt.
+	- TM20230823: Engineer CAN-Logger verwijderd uit het Network menu.
+				
+															
+/**************************************************************************************
+ * SW_VERSION = 0x0101E		= Version 16.30
+		Start Datum: 20230823
+		Eind Datum: 20231019
+		Release datum: 20231019
+		Depedencies:
+			- Udp Lan config Library V1.4
+			- AppRemoteCfg Library  V2.3 
+			- SSH Firmware update Library V1.1
+						
+	- TM20231011: Start vereenvoudigen van de melding van EV_MESSAGEEEROR.
+				  Enkel de foutberichten die van toepassing zijn op de configurator worden nog 
+				  in de scrollview + pop-up dialoog getoond.
+				  Alle foutberichten worden in de communicatie tracer getoond.
+				  Weergave van de foutberichten vereenvoudigd.
+	- TM20231012: Communicatie tracer aangepast.
+				  - Layout aangepast.
+			      - Tweede listbox aangemaakt. Deze bevat alle foutberichten.
+	              - Gesegmenteerde datapakketten: Enkel de eerste 6 databytes dumpen.	              	              
+	- TM20231012: Binding configuratie via de DT18-PRO mislukt soms.
+				  Reden: Timer expiry in de Binding Configuratie FSM.
+				  Wanneer de DT18-PRO bezig is met andere communicatie op de CAN-bus (+evt een 
+				  probleem wanneer er nodes/units niet antwoorden.) dan krijgen we te laat 
+				  een antwoord op de binding configuratie berichten.
+				  Oplossing: Timer waarde verhoogd van 5 naar 15sec +
+				  wanneer we reeds antwoord gekregen hebben van een node deze tijd verhogen via
+				  een retry counter.
+	- TM20231016: Firmware update dialoog.
+	              Tijdens het updaten van de module de "Ok"-button disablen.
+				  Wanneer er op de "Close" gedrukt wordt tijdens het updaten dan een extra messagebox 
+				  tonen om te vragen om process te stoppen.
+	- TM20231016: Opvragen van de node NIC network statussen.
+			      Tijd dat er gewacht wordt op een antwoord van 5 naar 8 sec verhoogd.
+				  Retry mechanisme wanneer een module niet antwoord binnen de tijd. 2 herkansingen.
+				  Melding geven in de scrollview wanneer een node niet antwoord en er een herkansing verstuurd wordt.
+				  Oplossing probleem: Wanneer het opvragen van 1 node netwerk status mislukt werden de 
+				  andere nodes ook als fout gezien.
+	- TM20231016: FSM van de node LCD screenmaps.
+				  - Timer response verhoogd van 5 naar 10 sec.
+				  - Wanneer er een antwoord op een entry te laat ontvangen wordt. Via een retry mechanisme de timer 
+				    herstarten. Principe enkel toepassen bij het doorsturen van de entries.
+	- TM20231017: Configuratie timers verhoogd. Nodig voor de DT18-PRO.
+	              - Response timer Rename node/unit verhoogd van 8 naar 12 sec.
+	              - Response timer Multimedia config verhoogd van 10 naar 15 sec.
+	              - Response timer opvragen van de unit statussen verhoogd van 5 naar 10 sec.
+	              - Response timer external config verhoogd van 10 naar 15 sec.
+	              - Response timer memory dump verhoogd van 5 naar 10 sec.
+	- TM20231018: PNP & Browse for nodes.
+				  - PNP response timer verhoogd in functie van het aantal gevonden nodes.
+				  - Browse for nodes response timer aangepast in functie van het aantal nodes 
+				    in de runtime nodedatabase. In kleinere installaties iets vlugger.
+				    In grotere installaties timer waarde verhhogd.
+				    
+	             
+	             
+/**************************************************************************************
+ * SW_VERSION = 0x0101F	= Version 16.31
+		Start Datum: 20231019
+		Eind Datum: 20240102
+		Release datum: 20240102
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+			- SSH Firmware update Library V1.1
+						
+	- TM20231024: Export info voor de configurator.
+				  veld 'ulConfigSupporthttpApi' in nodeconfiginfo was niet correct voor de DT10-AU.
+				  Units config vlag ontbreekte.
+	- TM20231030: UDP Lan configuratie van de DynDns.
+			      Gebruik van de nieuwe UDP library V4.4.
+				  Controleren van de resultcode.			
+				  Wanneer de lengte van de gegevens te lang is kan het bericht niet meer in een UDP data 
+				  bericht. Vroeger werd er geen foutmelding gegeven.
+				  Oplossing bug in de library: Bij het aanmaken van een UDP pakketje werd buiten de array 
+				  index gegaan. Mogelijke crash van de applicatie.
+	- TM20231030: UDP Lan configuratie van de DynDns.
+				  Extra controle op de lengte van de gegegevens.	
+	- TM20240102: PNP: Enkel wanneer een physical node nog niet geantwoord heeft wordt deze als correct antwoord
+				  gezien. PNP FSM: Lijst van physical node addressen bijgevoegd.
+	- TM20240102: PNP: Er wordt minimum 3 keer een physical browse for nodes uitgevoerd.
+		          Na de tweede physical browse for nodes worden het aantal gevonden nodes weergegeven in de 
+		          scroll view.
+	- TM20240102: PNP & Browse for nodes. Extra warning berichten wanneer er data ontvangen wordt die niet 
+				  correct lijkt.
+	- TM20240102: Release V16.31
+	
+	
+/**************************************************************************************
+ * SW_VERSION = 0x01020	= Version 16.32
+		Start Datum: 20240102
+		Eind Datum: 20240201
+		Release datum: 20240201
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+			- SSH Firmware update Library V1.1
+			
+	- TM20240102: Start Versie V16.32 
+	- TM20240119: Nieuwe product code voor de smartbox ultra toegevoegd.
+				  zie PRODUCT_ID_HC_BOX_ULTRA
+	- TM20240124: Smartbox ultra: Mogelijkheid configuratie via tcp/ip.
+	- TM20240124: Smartbox ultra: Weergave van de product naam onder de resources property page.
+	- TM20240124: Smartbox ultra: Configuratie opties dezelfde als de DT18-PRO.
+	- TM20240124: Oplossing BUG-0173:
+				  Wanneer een node niet gevonden werd via de physical browse for nodes
+ 				  dan werd deze later verkeerd ingevoegd via de Browse for nodes.
+ 				  Hierdoor wordt er tijdens de browse for nodes telkens extra nodes
+ 				  gevonden waardoor deze telkens opnieuw de browse for nodes uitvoert.
+	- TM20240124: Extra info/Melding: Zie BUG-0173.
+				  Wanneer een node niet via de pnp kon toegevoegd worden maar wel via de 
+				  browse for nodes dan wordt deze weergegeven met physical node address 0xfffff.
+				  Configuratie is mogelijk zoals anders, enkel het physical address wordt als 0xfffff 
+				  weer gegeven.
+	- TM20240124: Physical browse for nodes. PNP response timers verhoogd.
+				  Wanneer een node niet gevonden wordt via de Physical browse for nodes (en later toegevoegd wordt) via
+				  de gewone browse for nodes dan heeft hij physical node address 0xfffff.
+				  Dit komt af een toe eens voor + omdat de timerwaarden te kort waren was probleem BUG-0173 aanwezig.
+	- TM20240125: Autobindings klasse 'CBindingAutoTemplate' refactoring.
+	- TM20240125: Oplossing BUG-0174:
+				  Autobinding forward binding van een dimmer naar een relais wordt
+ 				  soms aangemaakt met een rode ipv een zwarte pijl.
+	- TM20240125: Refactoring CCanNode Xor en Nr Of Bindings.	
+	- TM20240125: Applicatie logging: Add extra Info 
+	- TM20240125: Browse for nodes: Een afzonderlijke toestand aangemaakt voor het opvragen van de binding file info.
+	- TM20240125: Probleem binding configuratie verschillen.
+				  Wanneer de XOR/Nr of bindings van de database node veranderd zijn dan de doc modified vlag zetten.
+				  zie functie UpdateNodeWithRTSpecs( )
+				  Dit is om te voorkomen dat een project niet opgeslagen wordt na het doorsturen van de bindings.
+	- TM20240125: Oplossing BUG-0175: Probleem binding configuratie verschillen.
+				  In de mode (offline -> online) werd na het doorsturen van bindings de database node niet upgedate 
+				  met de nieuwe XOR en NrOfBindings. Hierdoor wanneer er de volgende keer online gegaan werd werden 
+				  er configuratie verschillen gedetecteerd.
+				  OPM: Installaties waarvan de bindings op deze manier doorgerstuurd werden zullen met deze versie
+				  ook nog de configuratie verschillen hebben bij het online gaan.
+				  Daarna zal het probleem zich niet voordoen...				   		
+	- TM20240125: Oplossing BUG-0176: Property dialogen worden soms getoond met de vorige geselekteerde node.
+				  Wanneer in de treeview het context menu geopend wordt voor het tonen van de node properties werd soms 
+				  nog de vorige node getoond. Voornamelijk een probleem na het editeren van de naam of wanneer
+ 				  de selectie via het tekst label ipv via het icoon gebeurd.			   	
+ 	- TM20240125: Oplossing BUG-0177: Wanneer de verbinding verbroken wordt tijdens het versturen van 
+ 				  bindings dan zijn de 'Add', 'Auto' en 'Delete' niet meer zichtbaar.
+ 				  Moet de software opnieuw opstarten (of opnieuw de bindings doorsturen om het probleem te verhelpen.
+ 	- TM20240201: Versie nummer verhoogd naar 16.0.32.0 ipv 16.0.0.32
+ 					   											   								   					   					 					 										
+
+/**************************************************************************************
+ * SW_VERSION = 0x01021	= Version 16.33	(16.0.33.0)
+		Start Datum: 20240201
+		Eind Datum: 20240424
+		Release datum: 20240424
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+		
+		
+	- TM20240201: Start Versie V16.33 (16.0.33.0).
+	- TM20240215: Integratie smartbox ultra.
+				  Sensor property dialoog voor de interne smartbox sensor units.
+				  Mogelijkheid instellen setpoint range + PID control.
+				  Setpoint range default waarden: 12 - 30°C
+				  Measure interval default: 20sec
+	- TM20240215: Integratie smartbox ultra.
+				  Dimmer property dialoog voor de interne dimmer units.
+				  Standaard Delayed up aktief.
+				  Min speed = 3, Max speed=5.
+	- TM20240215: Integratie smartbox ultra.
+				  Wanneer de smartbox ultra niet ingesteld staat als master dan
+				  wordt de gewone CPropertyPageNodeControl dialoog getoond ipv
+				  de CPropertyPageNodeControlGateway dialoog.
+				  De functies om de database te wissen + toestand van de nodedatabse 
+				  zijn op de deze dialoog niet aanwezig.
+				  Een sbox ultra niet ingesteld als master heeft geen nodedatabase enkel
+				  zijn eigen node/units zijn van belang.
+	- TM20240221: Integratie smartbox ultra.
+			      Sensor property binding unit was niet ok -> Typo.
+    - TM20240228: Integratie smartbox ultra.
+				  Sensor property binding unit was niet ok bij het browsen op een bestaand project.
+				  reden: bindingpropertyunitalg_upgrade( ) moet ook aangepast worden. 
+	- TM20240423: Integratie DALI Configuratie voor de smartbox ultra.
+				  - Er is een nieuw item toegevoegd in de Configuratie property page van de smartbox ultra
+				    om de DALI configuratie uit te voeren.
+			      - De binding software opent de configurator met "VIEW=DALI".
+			      - In het bestand "/config/nodeconfiginfo.txt" is het veld "ulConfigFlags" aangepast.
+			        Indien bit18 actief is in het veld ulConfigFlags dan is DALI config voor deze node mogelijk.
+			        vb: ulConfigFlags=0x0701ff;		
+			      - In het bestand "/config/nodeconfiginfo.txt" is het veld "ulConfigSupporthttpApi" aangepast.
+			        Indien bit6 actief is in het veld ulConfigSupporthttpApi dan is DALI config via HTTP voor deze node mogelijk.			        
+					vb: ulConfigSupporthttpApi=0x00006f;	
+	- TM20240424: Smartbox ultra integeren in de firmware updater.
+			      - Knop enabled om de firmware up te daten: zie CNodeFirmware_Util::isSupported
+			      - Firmware updater product id=PRODUCT_SMARTBOX_ULTRA, productName="Smartbox ultra"
+	- TM20240424: Nieuwe handleiding toegevoegd aan de installer.
+									
+/**************************************************************************************
+ * SW_VERSION = 0x01022	= Version 16.34	(16.0.34.0)
+		Start Datum: 20240424
+		Eind Datum: 20240612
+		Release datum: 20240612
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+				
+	- TM20240424: Start Versie V16.34 (16.0.34.0).		
+	- TM20240612: Integratie smartbox ultra.
+				  Bij een smartbox ultra moeten we voor de DALI integratie control units 
+				  kunnen bijmaken. Voor de smartbox ultra wordt in het 'nodeconfiginfo.txt' 
+				  info bestand de param 'ulConfigUnitCreate' uitgebreid met een vlag voor de  
+				  control units.
+				  																				  			 					
+				
+/**************************************************************************************
+ * SW_VERSION = 0x01023	= Version 16.35	(16.0.35.0)
+		Start Datum: 20240612
+		Eind Datum: 20240731
+		Release datum: 20240731
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+				
+	- TM20240612: Start Versie V16.35 (16.0.35.0).		
+	- TM20240628: TCP/IP CAN-Bus configuratie berichten hernoemen/herwerken zodat deze ook
+				  kunnen hergebruikt worden voor DALI berichten.				  				  
+	- TM20240703: HomeClient TCP/IP socket ondersteuning van meerdere observers.							
+	- TM20240701: zie USE_TCPIP_DALI
+				  Versturen/ontvangen van DALI berichten via het TCP/IP open protocol.
+				  Bezig met DALI Configuratie zoeken naar devices.
+				  Momenteel via de debug dialoog.
+					test1: connect.
+					test2: subscribe
+					test3: search devices.
+	- TM20240725: Oplossing BUG-0178. (zie BUG-0176 /  BUG-0169)
+				  Bij het openen van de properties config/screenmapping wordt de verkeerde node geopend.
+				  Code herwerkt zodat het node address van de geselecteerde node bij gehouden wordt ipv 
+				  de HTREEITEM handle. Bij de bindings/units wordt de 32bit item dataValue bijgehouden.
+	- TM20240730: Via het menu 'VIEW' de configurator openen voor de configuratie van de EnergyManagement.
+	- TM20240731: Homeclient TCP/IP socket integratie DALI berichten.
+			      De instanties van de sockets worden bijgehouden in een map (key=nodeAddress).
+			      Bij het aanmaken van de socket worden de opties bepaald ifv de node.
+			      Bij de Smartbox ultra wordt er een extra subscribe for DALI msg meegestuurd.
+			      De Smartbox ultra gebruikt ook de secured login.
+	- TM20240731: Release
+		
+		
+		
+/**************************************************************************************
+ * SW_VERSION = 0x01024	= Version 16.36	(16.0.36.0)
+		Start Datum: 20240731
+		Eind Datum: 20240806
+		Release datum: 20240806
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+			
+	- TM20240731: Start Versie V16.36 (16.0.36.0).		
+	- TM20240731: Herwerken dialogen die gebruik maken van de homeClient socket.
+	- TM20240801: Integratie van de propertypages om de DALI sub-bus te configureren.
+	- TM20240805: DALI Subbus configuratie.
+				  Na het zoeken naar devices op de DALI bus wordt de configuratie 
+				  opgeslagen onder de CONFIG directory.
+				  Bestandsnaam: 'dalibus_%02X.json'	(vb:'dalibus_FC.json')
+	- TM20240805: HomeClient master tasks + DALI sub bus configuratie.
+	              Aanpassingen status disconnect event. 
+	              Vroeger werd deze enkel door connect fsm verstuurd. Nu wordt het event 
+	              van de socket naar de homeclient observers verstuurd.
+	              Aanpassing is nodig om de GUI up te daten wanneer dezelfde socket gebruikt
+	              wordt voor de homeclient en DALI bus.
+	- TM20240806: Release testversie:
+				  - Mogelijkheid om de devices op de DALI-bus te zoeken.
+				  - Ondersteund 1 smartbox ultra.
+				  - export van de info onder de project directory.
+				  
+	              
+/**************************************************************************************
+ * SW_VERSION = 0x01025	= Version 16.37	(16.0.37.0)
+		Start Datum: 20240806
+		Eind Datum: 20240823
+		Release datum: 20240823
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+			
+	- TM20240806: Start Versie V16.37 (16.0.37.0).	
+	- TM20240806: DALI-Bus search for devices.
+				  Oplossing probleem wanneer er geen control gear aanwezig is.
+				  Wanneer er geen control gear aanwezig was bleef de FSM hangen en 
+				  werd er verder niet gezocht naar control input devices.
+	- TM20240808: DALI-Bus search for devices.
+				  FSM herwerkt voor het zoeken naar control gear devices via helper FSM klassen ipv 
+				  direct in de fsm.
+	- TM20240808: FSM code vereenvoudigd dmv helper functies.
+	- TM20240820: Broadcast test commandos Off, min level, max level.
+	- TM20240823: Mogelijkheid om addressering uit te voeren voor control gear & control devices.
+				  Control devices input instances worden automatisch ingesteld met nodige addressering 
+				  schema + event filters.
+				  Na de addressering worden de properties van de DALI devices opgevraagd.
+				  Na het opvragen wordt er een export gedaan in een json bestand.				  
+				  
+		        				  				  				  				        				  				  				  				  				 																																
+/**************************************************************************************
+ * SW_VERSION = 0x01026	= Version 16.38	(16.0.38.0)
+		Start Datum: 20240823
+		Eind Datum: 20240904
+		Release datum: 20240904
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 			
+			
+	- TM20240823: Start Versie V16.38 (16.0.38.0).	
+	- TM20240823: Smartbox DALI. Afhandelen system bus failure.
+				  Wanneer een taak niet kan uitgevoerd worden omdat de DALI bus in systeem fout staat 
+				  een melding geven.
+	- TM20240823: Identify van de DALI devices (=tabblad DALI devices).
+				  Control gear: Toggle aan/uit device.
+				  Control input devices: Identify commando wordt verstuurd naar het device.
+	- TM20240826: Het aantal devices die een adres hebben gekregen worden bijgehouden in de context.
+	- TM20240827: Bij het addresseren / zoeken naar de devices worden deze weergeven in een listbox.
+				  Gegevens: Adres, type, serienummer + nieuw (= nieuw geaddresseerd)
+	- TM20240829: Weergave van de eigenschappen van de control devices & control gear.
+	- TM20240902: Mogelijkheid vervangen van een smartbox plus door een smartbox ultra. (indien ingesteld als slave.)
+				  Bij de controle van incompatible nodes is het bij de smartbox plus / smartbox ultra toegelaten om een verschillende node type te hebben.
+				  Bij het copieren van de Node runtime specs wordt ook het node type gekopieerd. (zie updateNodeDatabaseInfo() --> UpdateNodesWithRTSpecs())
+	- TM20240903: Smartbox ultra: P-Binding aanmaken voor de dimmer units.
+			      Bij een nieuwe installatie of wanneer er een module bijgevoegd wordt worden er P-Bindings aangmaakt voor de dimmers.
+			      De P-Bindings zorgen ervoor dat de minimum waarde begrensd is op 20 procent.
+	- TM20240904: Smartbox ultra: TCP/IP homeclient socket connectie voor de DALI config.
+			      Connectie toelaten wanneer de node geen master is.				
+			      			       				  												
+										
+/**************************************************************************************
+ * SW_VERSION = 0x01027	= Version 16.39	(16.0.39.0)
+		Start Datum: 20240904
+		Eind Datum: 20241002
+		Release datum: 20241002
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 			
+					
+	- TM20240926: DALI auto configuratie van de DALI input devices.
+				  Wanneer een input device instances bevat gaan we de application controller disablen.	
+	- TM20241001: Property page nwk devices. Listview uitgebreid.
+		          Weergave van het aantal gevonden DALI devices + GTIN.
+	- TM20241001: DALI configuratie: Ondersteuning meerdere smartbox ultra.
+				  Op de welcome pagina kan er via de combobox een Smartbox ultra gekozen worden.				  
+	- TM20241002: DALI configuratie: Oplossing probleem extend/continue installation.
+			      Enkel de devices die geen adres hebben krijgen een nieuw DALI adres.
+	- TM20241002: DALI-BUS configuratie: GUI network.
+				  Adressering/Commisioning: Messagebox tonen met info van de taak.
+				  Extra bevesting vragen aan de gebruiker om de taak uit te voeren.
+	
+	
+/**************************************************************************************
+ * SW_VERSION = 0x01028	= Version 16.40	(16.0.40.0)
+		Start Datum: 20241002
+		Eind Datum: 20241129
+		Release datum: 20241129
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 				
+			      				      				      				      	
+	- TM20241002: Mogelijkheid om control input devices te lokaliseren dmv het weergeven van 
+				  de ontvangen DALI-2 events in een listbox.
+				  Indien het DALI device aanwezig is in de database (en herkennen het type
+				  event) wordt er een beschrijving van event toegevoegd.				 
+				  Enkel ondersteund sedert RPI Firmware V66.13.06.
+	- TM20241002: DALI configuratie: Propery page DALI netwerk.
+				  Overzichtsweergave van het aantal gevonden devices.
+	- TM20241004: DALI configuratie: Automatisch configuratie van de input devices enkel 
+			      voor de input devices die nieuw zijn in de installatie. 
+			      Een input device wordt als nieuw beschouwd wanneer we tijdens de addressering 
+			      een short adres aan het device toegekend hebben.				  				  				  				  							   			      						      										
+	- TM20241007: DALi configuratie: Zoeken naar DALI control gear.
+				  Afhandelen wanneer er meerdere devices antwoorden op een broadcast QUERY CONTROL GEAR PRESENT.																							
+				  Er wordt een frame error ontvangen ipv een geldig response.
+	- TM20241007: DALI configuratie: Read Control gear memory map 
+		  	      Adres 0x0001 = Reserved locatie.
+				  Control gear mag hier op antwoorden met een no response. (=standaard gedrag.)
+	- TM20241008: Aanpassing DALI Property page devices.
+				  Weergave short address van het geselcteerde device + In de treeview wordt het device in bold 
+				  weer getoond.				  
+	- TM20241009: DALI Configuratie: Control gear groepen aanmaken.
+				  Weergave: Configuratie per device in een tabblad + 
+				  een afzonderlijke property dialoog voor de configuratie per groep.
+				  De veranderingen aan de groep configuratie worden direct doorgstuurd op de DALI bus.
+				  Wanneer er veranderingen zijn aan de database (device properties) word deze automatisch 
+				  opgeslagen in het json bestand.				  
+	- TM20241009: DALI configuratie: Wanneer er wijzigingen zijn aan het DALI export configuratie bestand 
+			      dan wordt er een IPC Windows bericht verstuurd naar de Duotecno configurator.
+				  SYNTAX: "CMD=LOAD;NAME={PROJECTFILE};VIEW=DALI;LA={NODEADDRESS};"
+				  Bedoeling is wanneer de configurator open staat op de DALI configuratie van deze node de 
+				  gegevens opnieuw importeert en de configuratie controleert en/of veranderd.
+				  bvb: 
+					- Wanneer er nieuwe DALI devices toegevoegd werden. 
+					- Wanneer er groepen opnieuw geconfigureerd worden.
+					- Wanneer een DALI device een ander DALi adres krijgt.
+	- TM20241011: Oplossing probleem naam verschillen.
+				  Wanneer er een naam gewijzigd word door de gebruiker de modified vlag zetten.
+				  Bij het afsluiten wordt er gevraagd om de data op te slaan. 
+				  Vroeger werd deze melding niet getoond bij het veranderd van de namen.
+	- TM20241015: Oplossing probleem naam verschillen.				    
+				  Bij het inladen van de unit configuratie alle namen controleren met de namen 
+				  van de node database. Indien de unit aanwezig is in de node database dan de 
+				  naam nemen vanuit de node database.
+				  Reden: Het unitconfig_xx bestand wordt aangemaakt door de configurator. De namen 
+				  in het bestand worden enkel upgedate met deze van de node database wanneer de 
+				  configurator geopend wordt.				  				  
+	- TM20241015: DALI configuratie: Oplossing probleem.
+	              Bij het aanmaken van een nieuwe installatie bleef de groep configuratie van groep 0 aanwezig.							    				    				 				    
+	- TM20241018: DALI configuratie - Meebezig.
+			      Sub dialoog bij het overzicht van de devices.
+				  Mogelijkheid om een DALI device te verwijderen of een ander short address toe te kennen.
+				  Wanneer het algoritme lukt dan wordt de database + GUI aangepast + export van het json bestand.
+	- TM20241021: Clean up code.
+	- TM20241022: DALI Devices offline database. (Nodig voor het bijhouden van de namen van de DALI devices.)
+				  Inladen bij het aanmaken van een CAppDali instantie. 
+				  Na het zoeken op de DALI-bus de gevonden devices mergen met de offline database.				  
+	- TM20241023: Namen editeren en bijhouden in de database (json export.)				 
+				  Gui Property page DALI locate:
+				   - Namen toekennen aan de ingangen van de input devices.
+				   - De Listbox toont de naam in het event.
+				  Gui Property page DALI Devices:
+				   - Namen kunnen aangepast worden in de treeview + edit control box.				  
+	- TM20241028: Control gear devices overzicht van de groepen.
+			      De naam van het device wordt weer gegeven + Controle wanneer een device reeds aanwezig is in een groep.
+	- TM20241031: Control gear device basic properties uploaden naar de DALI-bus.
+	- TM20241105: Control gear test dialoog: Opvragen en versturen van het actual level.
+	- TM20241106: Control gear configuratie van de DALI sferen.
+	- TM20241108: Aanpassing project structuur. 
+				  Alle dialogen onder de "views" directory.
+				  Alle custom GUI controls onder de "uicontrols" directory.
+	- TM20241112: Weergave device info uitgebreid: DALI versie, firmware versie, device type.
+	- TM20241113: Input control device: Overview van de instances.
+			      Mogelijkheid instance enable/disable + wijzigen van de naam.
+	- TM20241120: DALI configuratie: Afhandelen dubbele addressen. 
+			      Weergave in de GUI + Property dialogen met extra info ivm de problemen.
+				  Mogelijkheid manueel te veranderen + verwijderen van devices uit de database.
+	- TM20241121: DALI configuratie: Dialogen aangepast met extra info + waarschuwingsmeldingen.
+	- TM20241127: Afhandelen van de FSM fouten op een andere manier.
+				  Onderscheid tussen fatale fouten die de taak stoppen en fouten die er 
+				  op wijzen dat er dubbele addressen aanwezig zijn.
+	- TM20241129: Test release aanmaken.
+				  				  		
+				  				  				  				 
+																 
+/**************************************************************************************
+ * SW_VERSION = 0x01029	= Version 16.41	(16.0.41.0)
+		Start Datum: 20241129
+		Eind Datum: 20241231
+		Release datum: 20241231
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 			
+			
+	- TM20241129: Start versie V16.41
+	- TM20241203: DALI Property page Welcome screen.
+				  Aanpassing aan de GUI: Oplossing probleem overlapping icon met de info tekst.
+	- TM20241203: zie USE_WORKAROUND_IGNORE_TXDONE_EVENT_IDENTIFY_BUSY
+				  Het algotitme voor het manueel addresseren / verwijderen van een device moet het TX-Done 
+				  event negeren. Mogelijk is het identify algoritme ook aktief tijdens het uitvoeren van dit algoritme.
+				  Het TX-Done event kan afkomstig zijn van het Identify bericht.
+	- TM20241203: De identify commandos enkel uitvoeren wanneer er geen algoritme bezig is.
+	- TM20241203: DALI Property page Locate.
+				  Weergave van de events: Extra kolom met de naam van het instance type + weergave van het event 
+				  vereenvoudigd.
+				  Liveview: Extra display opties om bepaalde events niet weer te geven in de liveview.
+				  Mogelijkheid om de liveview te pauseren + selectie laatste event altijd top index.
+	- TM20241203: Extra automatische configuratie van de instance types.
+				  Oplossing probleem: Alle instances werden geconfigureerd volgens het type van de eerste instance
+				  van het device.
+				  - Aanwezigheids + bewegingsmelder: Alle event filters enablen.
+				    De report timer wordt automatisch ingesteld op een ander interval (tussen 50 en 33 seconden).
+				    De gebruiker kan deze tijd verlengen (bvb wanneer de PIR functie maar om de 3 minuten uitgevoerd wordt
+				    dan kan deze tijd aangepast worden.)
+				    Oppassen: Om de Occupancy timers te veranderen moet de DALI config commandos 2x doorgestuurd worden.
+				    zie NXP firmware.
+				  - Licht sensor: Instance type disablen.				
+	- TM20241205: DALI FSM algoritmes uitgebreid met een extra timer.
+			      Wanneer er geen antwoord ontvangen wordt van de smartbox ultra/DALI-bus wordt er een foutmelding 
+			      getoond en worden de algoritmes gecanceled.
+			      Mogelijke reden: DALI bus voeding, Smartbox ultra niet meer aan het draaien.
+	- TM20241206: DALI groups overview dialoog: Extra tekst info voor de test commandos.
+	- TM20241206: DALI Locate dialoog: Weergave van de status offline via een extra icoon + tekst weergave.
+				  De listcontrol waar de events in weer gegeven worden blijft enabled. Op deze manier kunnen 
+				  er ook namen aangepast worden in offline mode.
+	- TM20241206: DALI welcome dialoog: Wanneer er addressering bezig is de knop van de Duotecno/Dali bridge 
+				  configuratie disablen + tekst melding.
+	- TM20241206: DALI: Bij het starten van een nieuwe installatie ook de offline device database wissen.
+			      Oplossing: Kregen anders een foutmelding tijdens de merge van de database dat er devices 
+			      niet gevonden werden.			      			     	
+	- TM20241210: DALI: Configuratie van de control input device instances.
+	- TM20241210: DALI: Configuratie restore defaults + undo buttons.
+	- TM20241213: Oplossing BUG: Applicatie crash bij het opnieuw starten van een nieuwe applicatie wanneer we 
+				  de tweede keer de DALI configuratie openen. Probleem dat de CAppDaliManager instantie die 
+				  de eerste keer meegeven wordt aan de CAppDlgDaliWorker niet meer geldig is. 
+	- TM20241213: Interactie met de configurator na het browsen op een bestaande installatie:
+				  - export van de configuratie info (nodedatabase.txt, ...)
+				  - versturen van een "REFRESH" commando naar de configurator.
+	- TM20241224: V66.13 Sensor unit standaard properties aangepast.
+				  Nodig voor de smartbox ultra: Hysteris offset waarden op 0,5 ipv 1 graad.
+				  Sensor interval aangepast naar 100 en 102 sec.
+	- TM20241224: Oplossing BUG-0180
+				  Wanneer we een nieuwe installatie starten met een smartbox ultra en er waren al 
+				  DALI dimmer units aanwezig in de module werden er voor alle units standaard 
+				  P-binding aangemaakt om de min waarde op 20% te beperken.	
+	- TM20241224: Dali configuratie GUI.
+				  Scrolldown van de combo boxes van de groepen, sferen, addressen grotere gemaakt zodat 
+				  er meer/alle gegevens zichtbaar zijn.
+	- TM20241230: DALI locate dialoog: Namen van de instances werden niet altijd upgedate in de list control.
+	- TM20241230: DALI Devices: Identify: Wanneer er een ander device geselecteerd wordt de identify stoppen.
+	- TM20241231: Smartbox ultra: De extra (DALI) control input units moeten hun naam behouden wanneer deze gebruikt 
+				  worden in een binding. (zie TMSetControlUnitsDefaultNameOverridden()).
+				  				  				  							  				  		         			  				  			  				  				  				  				  				  				  				 				  				  				  				  				  				  				  							  				  				  				  				  				  				  				  				  				  				  				  				  				  													
+							
+/**************************************************************************************
+ * SW_VERSION = 0x0102A	= Version 16.42	(16.0.42.0)
+		Start Datum: 20241231
+		Eind Datum: 20250109
+		Release datum: 20250109
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+												
+	- TM20241231: Binding unit & Unit property dialoog: Extra veld met info.				  
+				  - Smartbox ultra: Interne units krijgen het label zoals op de sticker.		
+				  - Touchbuttons,Serenity en velocity buttons: TopLeft,BottomLeft,...				  				  				  
+	- TM20250102: Mogelijkheid om de DALI groepen en sferen een naam te geven.  
+				  Deze naam kan gebruikt worden voor de DALI-Duotecno bridge configuratie.
+	- TM20250103: Property sheet DALI errors: Visibility afhankelijk maken van de parent dialoog.
+			      Wanneer het venster van de binding software geminimaliseerd wordt ook deze dialoog 
+			      minimaliseren.			      								  		  				  
+	- TM20250106: zie USE_DEALLOC_DIALOGS
+				  Child property pages dealloceren wanneer deze niet meer nodig zijn.
+	- TM20250106: Dali Fsm timer wordt enkel gestart wanneer er een taak bezig is.
+	- TM20250107: DALI GUI property pages + child dialogen: 
+				  Ondersteunen van meerdere smartbox DALI configuraties.
+	- TM20250108: DALI-2 Pushbutton-instantie
+				  Het 'Button Stuck'-event toevoegen aan het standaard evenfilter.
+				  Door middel van deze toevoeging kan een DALI-2 Pushbutton-instantie ook gebruikt worden voor 
+				  deur- of magneetcontacten (ism firmwareversie V66.13.07).	
+	- TM20250108: DALI-2 input auto configuratie.
+				  Wanneer een DALI input device een licht sensor bevat dan is dit meestal een DALI-2
+				  bewegings detector. Sommige van deze detectoren bevatten Push button instance types.				
+				  Om te voorkomen dat de Duotecno Dali bridge configuratie een extra unit aanmaakt voor deze 
+				  ongebruikte ingangen wordt de push button instances van dit device standaard disabled.
+			
+			
+/**************************************************************************************
+ * SW_VERSION = 0x0102B	= Version 16.43	(16.0.43.0)
+		Start Datum: 20250109
+		Eind Datum: 20250205
+		Release datum: 20250205
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+						
+	- TM20250121: Browse/Refresh voor een afzonderlijke node
+				  Er is een nieuwe optie toegevoegd aan het contextmenu van de tree- en listview van de nodes: 
+				  de mogelijkheid om een afzonderlijke node te browsen. Wanneer er units aan een node zijn toegevoegd, 
+				  kunnen deze nu direct via deze optie in de bindingssoftware worden opgenomen. 
+				  (Voorheen moest het project opnieuw worden geopend en een nieuwe zoekactie voor nodes worden uitgevoerd.)
+				  Na het browsen wordt de GUI automatisch bijgewerkt met de nieuw gevonden units.
+				  Als de offline database node niet compatibel is met de runtime node, wordt een foutmelding weergegeven en 
+				  wordt de runtime node hersteld op basis van de eigenschappen van de offline database node.
+	- TM20250121: Communicatie tracer: Oplossing probleem: Volgorde van de TX berichten was niet correct.
+	- TM20250121: PNP Algoritme: Aanpassing om te voorkomen dat de buffers van de modem en DT18-PRO vol komen.
+				  Vroeger werd bij het ontvangen van een EV_NODEPHYSICALADDRESS direct een FC_PNPPHYSADRACK terug gestuurd.
+				  Bij de DT18-PRO wordt de FC_PNPPHYSADRACK bij de transmit ook nog eens ontvangen en terug gestuurd naar 
+				  de binding software. (Bij de usb modem is dit minder/geen probleem.)
+				  Om ervoor te zorgen dat alle fysische addressen ontvangen worden als antwoord op een FC_BROWSEFORPHYSICALNODES 
+				  gaan we een tijd wachten om deze te beantwoorden.
+				  Aanpassingen:
+					- Na het versturen van de FC_BROWSEFORPHYSICALNODES een lijst bijhouden van de nodes die antwoorden 
+					  met hun fysiek adres. Tijd TIMER_PNP_POLL_INITIAL_RELOAD_VALUE_MSEC (=1500 msec) wachten om deze
+					  te antwoorden met een FC_PNPPHYSADRACK.
+					  Wanneer de modules geen FC_PNPPHYSADRACK ontvangen binnen de 2.4sec gaan deze opnieuw hun physical
+					  address op de bus plaatsen.
+					- De lijst van de addressen die een FC_PNPPHYSADRACK antwoord moet krijgen wordt gepolled via de 
+					  tijd TIMER_PNP_POLL_RELOAD_VALUE_MSEC. (=10msec).					  				  
+	- TM20250122: Request for states: Single node.
+			      Na een single browse for nodes moeten ook de statussen van de node opgevraagd worden.
+				  De unitspecs properties worden volledig gecopieerd van de runtime naar de document node.
+				  De bConfig van de units (momenteel enkel de alarmunit) is belangrijk om te bepalen welk 
+				  binding unit type er moet aangemaakt worden.
+	- TM20250123: Request for states: All nodes + single node.
+				  Geen Cancel mogelijk tijdens het opvragen van de statussen van de nodes/units.
+				  De knop weggelaten (omdat deze in de software nog niet aanwezig is.)
+				  Wanneer het algoritme mislukt worden de units van de node geskipt. Momenteel 
+				  wordt dit afgehandeld alsof alles correct verlopen is.
+	- TM20250124: Weergave van tooltips voor de toolbar. (Send all bindings, modified bindings, ...)
+	- TM20250129: PNP Engine: Broadcast timer waarde hersteld naar de timer waarden die gebruikt werden in V16.30.
+	- TM20250204: Na het doorsturen van de units via de CAN-bus wordt er gevraagd om op de module te browsen en 
+			      de units te refreshen.
+	- TM20250205: Via Window messages een bericht ontvangen van de Duotecno configurator. Wanneer de units 
+			      doorgestuurd werden via de HTTP API dezelfde melding tonen als wanneer deze doorgestuurd werden via de 
+			      CAN-bus.			      
+			         			    	
+/**************************************************************************************
+ * SW_VERSION = 0x0102C	= Version 16.44	(16.0.44.0)
+		Start Datum: 20250205
+		Eind Datum: 20250211
+		Release datum: 20250211
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+			
+	- TM20250206: Inbedrijfstelling van een Smartbox Ultra via de CAN-bus (Wanneer er nog geen LAN-netwerk beschikbaar is.)
+				  Tijdens de PNP-scan worden nodes met het 0xFE-adres gedetecteerd. Als er geen master wordt gevonden:
+				  - Touchscreen gedetecteerd met 0xFE-adres: Een informatiemelding wordt weergegeven met de suggestie om dit touchscreen als master in te stellen.
+				  - Smartbox Ultra gedetecteerd met 0xFE-adres: Als er nog geen master is toegewezen, verschijnt een informatiemelding. 
+				    De Smartbox Ultra kan vervolgens via de Problem Solve Wizard als master worden ingesteld.
+					(Smartbox ultra: Ondersteund vanaf firmware V66.13.08.)
+	- TM20250207: Problem solve wizard: Header in de dialoog.
+	- TM20250210: Inbedrijfstelling van een Smartbox Ultra via de CAN-bus (Wanneer er nog geen LAN-netwerk beschikbaar is.)
+				  Detectie smartbox ultra d.m.v. de fysische adressen.
+				  Range1: 0x0B0000 - 0x0BFFFF
+				  Range2: 0x1B0000 - 0x1BFFFF
+	- TM20250211: Physical Browse for Nodes + Plug and Play
+				  De algoritmes zijn verbeterd om te voorkomen dat modules niet worden gedetecteerd tijdens de Physical Browse for Nodes.
+				  Bij installaties met meer dan 50 modules wordt een extra zoekproces uitgevoerd om specifiek LCD- en Gateway-nodes op te sporen.
+				  Niet-gedetecteerde modules worden in de software weergegeven met het fysieke adres 0xFFFFFF.
+				  																																			
+		
+		
+/**************************************************************************************
+ * SW_VERSION = 0x0102D	= Version 16.45	(16.0.45.0)
+		Start Datum: 20250211
+		Eind Datum: 20250225
+		Release datum: 20250225
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 
+						
+	- TM20250212: DALI Control Gear Groepen.
+				  De configuratie- en testmogelijkheden zijn uitgebreid.
+				  In deze versie is het mogelijk om de eigenschappen van een groep aan te passen, 
+				  waardoor automatisch de eigenschappen van alle leden binnen die groep worden gewijzigd.
+	- TM20250217: DALI Control Gear Groepen.
+			      Bij verandering van de groepen moeten we ook de weergave van de eigenschappen van de 
+				  groep aanpassen ifv het eerste device in de groep.
+	- TM20250217: DALI configuratie.
+			      Wanneer de database in fout toestand is en er worden devices gewist dan controleren 
+				  of het probleem opgelost is. Wanneer de database niet meer in fout toestand staat 
+				  wordt er geen fout melding meer getoond + kan de DALI-Duotecno bridge config uitgevoerd worden.
+	- TM20250219: Integratie van control input ABS device. (Sedert firmware V66.13.09)
+				  - Dali locate dialoog: Weergave van de events van een Control ABS input device.
+				  - Bij het toekennen van een DALI adres automatiche configuratie van de nodige eventfilters.
+				  - Mogelijkheid weergave + instellen van de eventfilters.
+	- TM20250220: Extra tekst weergave bij warning icoon via een tooltip control.
+	- TM20250220: Sensor Unit Dialog: Fijnafstelling voor het nauwkeurig instellen van het setpoint.	
+	- TM20250221: DALI-2 Control Input Devices: Ozuno Universele Interface (GTIN=9355691000015)
+				  Herstellen van het instance type naar een 'push-button' instance. 
+				  Dit is momenteel een tijdelijke/snelle oplossing.
+				  Reden: Het wijzigen van het instance type is alleen mogelijk in de specifieke 
+				  manufacturing operating mode via de Rapix-configuratiesoftware. Het is onwaarschijnlijk dat dit 
+				  per ongeluk naar een ander instance type wordt gewijzigd.
+			      Let op: Na het wijzigen van het instance type moeten het adres-eventschema en 
+			      de eventfilters opnieuw worden ingesteld.			
+	- TM20250225: Aanpassingen "Browse for Nodes":
+			      - Extra controle op node- en unitadres bij het verwerken van ontvangen data.
+				  - Oplossing voor het probleem waarbij in grote installaties soms nodes zonder units werden gevonden.
+				  - Verbetering bij het opvragen van de namen van nodes en units, met extra controle op de ontvangen data.
+	- TM20250225: Aanpassingen "Physical Browse for Nodes":
+				  Bij installaties met meer dan 65 modules wordt een extra zoekproces uitgevoerd om standaard nodes op te sporen.				 
+				  Niet-gedetecteerde modules worden in de software weergegeven met het fysieke adres 0xFFFFFF.
+				  				  
+				
+				
+/**************************************************************************************
+ * SW_VERSION = 0x0102E	= Version 16.46	(16.0.46.0)
+		Start Datum: 20250225
+		Eind Datum: 20250321
+		Release datum: 20250321
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 												
+				  				  	
+	- TM20250228: DALI configuratie: Mogelijkheid om twee DALI devices van adres te wisselen.
+	- TM20250303: DALI configuratie: Treeview van de devices sorteren.
+	- TM20250305: Integratie van DALI Bridge Configuratiedata
+				  De DALI bridge configuratie, aangemaakt via de Duotecno Configurator, bevindt zich in de config-map 
+				  en koppelt Duotecno-units aan DALI-devices.
+				  Hiermee wordt onderscheid gemaakt tussen standaard units en units op de DALI-bus.
+				  De configuratie wordt ingeladen bij een bestaand project en vernieuwd na het doorsturen van de DALI bridge config.
+				  DALI-units krijgen een uniek icoon en extra tekstlabel met hun DALI-adres.
+			      Bij dimmer-units gekoppeld aan een DALI-device is de eigenschappen-dialoog niet zichtbaar.
+	- TM20250306: User interface: Optimalisatie boomstructuur van de node/units updaten voor 1 afzonderlijke node.
+				  Na het updaten wordt er nog een sort uitgevoerd (hierdoor lijkt het alsof alle items upgedate werden.)
+				  Deze functie is nodig voor het browsen single node / updaten van de DALI bridge configuratie.
+	- TM20250310: User interface: Unit property dialogen. 
+			      Afhandelen OnClose() functie.
+	- TM20250310: DALI control gear (Device type 6) Property dimming curve. Ondersteuning vanaf CAN-NIC firmware V90.31.00
+				  - Opvragen van de property + export in het json bestand.
+				  OPPASSEN: Oude CAN-NIC versies ondersteunen deze query niet en gaan met een TX-done antwoorden ipv een backward response. 
+				  Bij deze CAN-NIC versies kan de dimming curve niet opgevraagd/ingesteld worden.				  
+	- TM20250312: User interface: Weergave van tooltips.
+				  - Boomstructuur van de nodes/units: Unit info: Naam van de unit + adres + extra info.
+				  - Bindings view: Naam van de unit + adres
+				  - Toolbar: Binding operators + acties (new,add,delete,auto).
+	- TM20250312: User interface: Venster boomstructuur breder gemaakt zodat alle tekts zichtbaar is en er geen scrollbar komt.
+	- TM20250313: User interface: Weergave van tooltips.
+				  - Bindings view: Weergave van de functie.
+	- TM20250314: User interface: Verwijderen tabblad templates.
+	- TM20250317: Oplossing probleem: Wanneer een unit voorheen gekoppeld was aan een DALI unit dan moet ook het tekstlabel 
+				  gewist worden.
+	- TM20250317: User interface TreeNodes & TreeBindings: Cursor veranderen bij lange taken.
+	- TM20250318: Communicatie instellingen TCP/IP (IP poort) master tasks en DALI overnemen van de UDP configuratie instellingen.
+			      Bij veranderingen UDP instellingen worden deze automatich gewijzigd.
+	- TM20250319: DALI Configuratie: Control gear properties, groeps, scenes en DALI dimming curve.
+				  Mogelijkheid om de configuratie uit te lezen via de read-knop.
+	- TM20250319: DALI configuratie: Control device overview instances.
+			      Layout veranderd + instance namen beperken tot 2 char.
+			      Wanneer de timer verloopt naar de volgende instance naam springen zodat de nieuwe naam
+			      (beperkt tot 2 char) in de editbox geplaatst worden.
+	- TM20250320: DALI configuratie: Oplossing probleem groepsoverview niet altijd up-to-date.
+				  Extra optimalisatie: User interface wordt enkel upgedate bij veranderingen.
+	- TM20250320: Bij het opslaan van een nieuw project de bestandsnaam expliciet meegeven aan de naam/title van het document.
+				  Deze title wordt weergegeven in het hoofdvenster (met een extra " - Duotecno").
+				  Wanneer we dit niet doen is er soms een probleem dat de "*.duo" niet in de naam van het venster zit.
+				  Deze "*.duo" extensie wordt wel doorgegeven aan de configurator via de bestandsnaam.
+				  De configurator gebruikt de bestandsnaam (met de extra "*.duo") om het venster te zoeken.
+	- TM20250320: Na de browse single node de DALI bridge configuratie inladen.
+				  Mogelijk werden er nieuwe units bijgevoegd die gekoppeld zijn in de DALI bridge configuratie.
+				  				  
+				  							      
+			      				
+/**************************************************************************************
+ * SW_VERSION = 0x0102E	= Version 16.47	(16.0.47.0)
+		Start Datum: 20250321
+		Eind Datum: 20250409
+		Release datum: 20250409
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 			
+			
+	- TM20240402: zie CHANGES_UPLOAD_UNITS: 
+				  Automatich herstellen van de unit configuratie voor de runtime nodes met een 0xFE adres.	
+				  Bij het vervangen van een module voorkomen dat we na de browse for nodes incompatible nodes hebben omdat de unit configuratie
+				  verschillend is. 			     			 
+				  Wanneer een node in het netwerk met een 0xFE hersteld wordt met het origineel node address dan ook automatisch de units doorsturen.
+				  Na het afsluiten van de problem solve wizard worden de units automatisch doorgestuurd.	
+				  Toegepast in de problem solve wizard en het startscherm.
+	- TM20250402: Problem solve wizard: Replace node.	
+				  Na het vervangen van een node: 
+				  - Er wordt een melding getoond dat de node vervangen werd.
+				  - Automatich herstellen van de unit configuratie.
+	- TM20250402: Problem solve wizard: Restore addresses as in database.
+				  - Tijdens het uitvoeren van het algoritme worden de bedieningsknoppen gedisabled.
+				  - Automatich herstellen van de unit configuratie voor de runtime nodes met een 0xFE adres.				  
+	- TM20250402: Problem solve wizard: Master toekennen wanneer er config gebeurd via de modem.
+				  - Automatich herstellen van de unit configuratie.
+	- TM20250403: Startscherm connectie maken via TCP/IP.
+				  - Er wordt geen extra melding meer gegeven bij het toekennen van een adres wanneer de fysische adressen dezelfde zijn.
+				  - Automatich herstellen van de unit configuratie wanneer de module waarmee we connecteren een 0xFE adres had.				   						     				      				      
+	- TM20250404: DALI configuratie. 
+				  Oplossing probleem na het verwijderen van niet gevonden devices blijft de dialoog met de gevonden fouten actief.
+	- TM20250408: DALI configuratie.
+				  Bij veranderingen in de DALI configuratie wordt bij het afsluiten van de configuratie een melding gegeven dat de
+				  DALi bridge configuratie geopend zal worden. Vroeger kon de gebruiker het openen van de DALI bridge configuratie 
+				  negeren.				  				  
+	- TM20250408: Configuratie via TCP/IP. Zoeken naar duplicates.
+				  Negeren van 2 opeenvolgende berichten waarvan de tijd < 10 msec.
+				  zie macro USE_CHANGES_CHECK_DUPLICATES
+				  Momenteel de macro op 0 plaatsen. 
+				  Mogelijks kan hetzelfde principe toegepast worden in de RPI firmware.
+	- TM20250408: DALI configuratie: Oplossing probleem: Zie BUG-0181
+				  Opslaan van de database en IPC notify naar de configurator enkel wanneer dit nodig is.
+				  - Vroeger werd de database opgeslagen na het uitvoeren van ieder algoritme (inclusief opvragen van het
+				    actual level van een control gear device.)
+				    Nu: Na het uitvoeren van een algoritme wordt de data enkel opgeslagen bij veranderingen.
+				  - Vroeger werd na het openen van de configurator de data niet direct opgeslagen. Wanneer er gegevens gewijzigd 
+				    waren dan werd dit opgeslagen in de polling + werd er een IPC bericht verstuurd naar de configurator.
+				    Nu: De data wordt opgeslagen bij het openen van de configurator.
+				  				  
+				  				  							  				  					  				  				  		
+/**************************************************************************************
+ * SW_VERSION = 0x01030	= Version 16.48	(16.0.48.0)
+		Start Datum: 20250409
+		Eind Datum: 20250514
+		Release datum: 20250514
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 		
+			
+	- TM20250411: DALI-configuratie:
+				  Bij het openen van de DALI-configuratie wordt gecontroleerd of IP-communicatie-instellingen aanwezig zijn.
+				  Indien er nog geen TCP/IP-instellingen beschikbaar zijn, ontvangt de gebruiker een melding en wordt automatisch 
+				  de UDP-configuratie geopend. Na het invullen van de benodigde gegevens is communicatie mogelijk.
+				  zie CHANGES_DALI_TCPIP_COMMUNICATION_SETTINGS				  
+	- TM20250415: DALI-configuratie: 
+				  Een DALI control gear device kan meerdere device types ondersteunen.
+				  Bij het opvragen van de contolgear devices worden de verschillende device types opgevraagd.
+				  Bij een DT6 object wordt extra de dimmerCurve instelling opgevraagd. (reeds aanwezig in de vorige versie.)
+				  Bij een DT8 object wordt extra de color type features opgevraagd.
+				  In de json export is er een veld "deviceTypes" en "colorFeatures" bijgekomen.
+				  - veld "deviceTypes" is een int-array van de verschillende device types die het control gear device ondersteund.
+				    Wanneer er maar 1 device type ondersteund wordt dan is deze array leeg en telt het veld "deviceType".
+				    Wanneer er maar dan 1 device type ondersteund wordt bevat dit array de types en is "deviceType" : 255.
+				    zie NOTE_DALI_DEVICE_TYPES
+				  - veld "colorFeatures" is een integer die bepaalt welke color types het DT8 device ondersteund.
+				    De waarde is -1 wanneer er geen types ondersteund worden, andere waarden zie documentatie.
+	- TM20250423: DALI-configuratie: DT8 DALI control gear.
+			      DT8 DALI control gear devices. Bij het opvragen van de DALI scenes wordt ook de kleur instellingen opgevraagd.
+	- TM20250425: DALI-configuratie: DT8 Dali control gear.
+				  In de database bijhouden van de DT8 DALI control gear scene info + serialisatie Json bestand.
+				  Via de 'active' vlag van de kleur informatie kan de configurator bepalen of er een sfeer moet aangemaakt worden + 
+				  of de control gear bij de members moet ingevoegd worden.
+	- TM20250507: DALI-configuratie: DT8 Dali control gear: Weergave en instellen van de DALI scenes.
+	- TM20250507: DALI-configuratie: Control gear test dialoog uitgebreid om eenvoudig DALI sferen te testen.
+	- TM20250509: DALI-configuratie: Alle dialogen uitgebreid met tooltips.	
+	- TM20250512: Vanaf firmware NXP modules V90.31 aanpassing aan de default hysteris waarden.
+				  De hysteriswaarden verlaagd van 1 naar 0.5C.
+	- TM20250513: DALI-Configuratie: Single scene configuratie mogelijkheid via broadcast.
+
+					  		
+			
+/**************************************************************************************
+ * SW_VERSION = 0x01100	= Version 17.00	(17.0.0.0)
+		Start Datum: 20250605
+		Eind Datum: 20250613
+		Release datum: 20250613
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 	
+			
+						
+	- TM20250605: Major software versie verhoogd.
+				  Nodig voor opslaan/inladen van het aantal binding entries.
+				  Vanaf deze versie worden het aantal bindings per node bijgehouden als een unsigned short ipv een BYTE.
+	- TM20250606: Aantal bindings per node verhoogd: Mogelijkheid om meer dan 256 per node aan te maken.
+				  - Ontvangen berichten van de bindingfile(entries) worden gecontroleerd op de datalengte.
+				    Wanneer het aantal bindings kleiner is dan 256 dan blijft alles zoals vroeger. En worden het 
+				    aantal binding entries in de module verstuurd als 1 byte.
+				    Wanneer een module meer dan 256 bindings heeft dan wordt het aantal binding entries verstuurd
+				    dmv 2 bytes. Dit kan gecontroleerd worden door de lengte van het datapacket.
+	              - De resources van de nodes worden opgevraagd en bijgehouden dmv een extra resource block.
+	                Deze nieuwe blocks bevatten de MSB waarden. De bestaande blokken bevatten de LSB waarden.
+	              - Commandos voor het uitlezen & wissen van de bindings: Bij deze commandos moet de index van de binding verstuurd worden.
+	                Wanneer de index kleiner is dan 256 wordt deze verstuurd als 1 bytes (zoals vroeger.)
+	                Wanneer deze hoger is dan wordt deze verstuuurd als 2 bytes.
+	                De ontvanger doet controle op de lengte van het bericht. 
+	                Firmware die deze functionaliteit niet ondersteund kan niet meer dan 255 bindings bevatten en zal dus altijd 
+	                commandos ontvangen met 1 byte (= zoals vroeger).
+	              - Binding file FSM aangepast zodat er meer dan 255 bindings kunnen uitgelezen/verstuurd worden.	                
+																													
+						
+						
+/**************************************************************************************
+ * SW_VERSION = 0x01101	= Version 17.01	(17.0.1.0)
+		Start Datum: 20250613
+		Eind Datum: 20250618
+		Release datum: 20250618
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 	
+														
+		- TM20250606: Oplossing BUG-0182
+		  - Problem solve wizard: Tijdens het uitvoeren van de acties de muis cursor in de wacht toestand plaatsen + de navigatie knoppen disablen.	 
+		    Op deze manier kan de dialoog enkel afgesloten worden via de 'Cancel'-knop.
+		    Toegepast in de dialogen:
+			- Toekennen van de master via de CAN-bus. (CPropertyWizardPage13)		   
+			- Toekenen van de slave/master via het TCP/IP protocol (CPropertyPageNewAppPage8).
+			- Replace van de nodes (CPropertyWizardPage5).
+			- Herstellen van de addressen zoals in het configuratie bestand (CPropertyWizardPage2).		
+
+
+/**************************************************************************************
+ * SW_VERSION = 0x01102	= Version 17.02	(17.0.2.0)
+		Start Datum: 20250618
+		Eind Datum: 20250716
+		Release datum: 20250716
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 														
+
+		- TM20250619: Bindings read/write configuratie.
+					  Er zijn aanpassingen doorgevoerd om een probleem op te lossen dat zich soms voordoet bij 
+					  het doorsturen van bindings via een DT18-PRO.	  
+						- Code opgekuist + FSM herwerkt.		  
+						- Extra controle toegevoegd op het node-adres bij het ontvangen van EV_NODEBINDINGENTRY en EV_NODEBINDINGSFILECONTROL. 
+						  Deze controle zorgt ervoor dat binding-events alleen naar de FSM worden gestuurd wanneer het bericht afkomstig is van de 
+						  node waarmee de communicatie actief is.		
+						- Bindings write FSM: De timer wordt nu opnieuw geactiveerd telkens wanneer we een DATA_WRITTEN-acknowledgement ontvangen van de remote node. 
+						  Voorheen werd de timer alleen opnieuw ingesteld bij het versturen van een nieuwe bindingstring (WRITE_DONE-acknowledgement).										
+		- TM20250619: CDialog helper en debug klassen voor de layout van de dialogen. 
+					  zie DEBUG_DIALOG_LAYOUT.
+		- TM20250624: GUI layout: Migratie naar VS2015: Aanpassing aan de property sheets.
+					  Oplossing probleem VS2015: verkeerde weergave van de "Return" en "Exit" knop.
+		- TM20250624: GUI Layout: Migratie naar VS2015: Aanpassing aan de unit property dialogen.
+					  De rechterkant van de dialogen breder gemaakt (de breedte van de border in rekening gebracht.)
+					  Oplossing probleem VS2015: Niet alle controls werden in de client area van de dialoog getoond.
+		- TM20250624: GUI Layout: Migratie naar VS2015: Unit property dialogen optimalisatie.
+					  Aanpassingen mbt weergave van de child dialoog + weergave op een 2de scherm.
+		- TM20250624: GUI Layout: Migratie naar VS2015: Code clean-up.
+		- TM20250624: Project Layout: Migratie naar VS2015.					
+		- TM20250625: Migratie naar VS2015: Solution + project bestand voor VS2015.
+		- TM20250625: Migratie naar VS2015: Extra instellingen.
+				      - Release build: Warning disablen ontbreken van debug info in de libraries.
+					    Project Properties → Configuration Properties → Linker → Command Line: /IGNORE:4099
+					  - Debug build: Enable Edit and Continue.
+					    Configuration Properties → Linker → Advanced → Image Has Safe Exception Handlers: No (/SAFESEH:NO)					    
+		- TM20250625: Migratie naar VS2015: Probleem edit and continue werkt niet. 
+			          Lukt enkel om de precompiled headers optie te disablen.
+					  Enkel een probleem op Windows8, Windows 10 wel OK.
+		- TM20250716: Compilatie en release via VS2015.
+		              Runtime gebruik van Visual C++ Redistributable for Visual Studio 2015.
+
+				
+				
+/**************************************************************************************
+ * SW_VERSION = 0x01103	= Version 17.03	(17.0.3.0)
+		Start Datum: 20250716
+		Eind Datum: 20250910
+		Release datum: 20250910
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 	
+										
+		- TM20250821: Zie BUG-0178: Probleem nog steeds niet opgelost.
+				      Aanpassingen:
+						- Bepalen van de node via het geselecteerde item (indien null dan ifv de hitTest()).
+						  Probleem bij de hittest wanneer de muis pointer ondertussen een ander item aanwijst wordt hiervoor 
+						  de property dialoog geopend.
+						- Bij de selectie van een item extra control op de hitTest of de muis het item (label+icoon) aanwijst.
+						- SendMessage() ipv PostMessage() voor het openen van de property dialoog.				
+		- TM20250825: Zie BUG-0183: Oplossing voor het probleem met autobindings
+					  Voorkomen dat autobindings worden aangemaakt tussen twee units met hetzelfde adres.
+					  Een binding van dezelfde units die naar elkaar verwijzen kunnen een loop veroorzaken.
+		- TM20250903: Nieuwe functionaliteit: TCP/IP remote communicatie via cloudserver (POC) (zie CHANGES_CLOUDBRIDGE_POC / TODO_CLOUDBRIDGE)
+				      Huidige implementatie kan gebruikt worden om het principe te testen.					  
+						- Commandline-optie: `-enable_tcp_cloud`
+						- Bij inschakeling verloopt remote TCP/IP-communicatie via de cloudserver i.p.v. direct via DNS.
+						- Verbinding registreert zichzelf met DNS-naam en poortnummer.
+						- Registratie wordt verstuurd zodra de socket succesvol is verbonden.
+						- server: "ws.duotecno.eu:5099" / "connect.duotecno.eu:5099"
+						- Voorbeeld registratie token:
+							- dns: mitchelltom.duotecno-ip.be
+							- remote port: 9001
+							- token: "[mitchelltom.duotecno-ip.be:9001]"
+						- Weergave van alle verbindingen: 
+							- http://ws.duotecno.eu:5098/
+		- TM20250904: TCP/IP heartbeat mechanisme herwerkt.
+				      Deze aanpassing is nodig voor de communicatie over de cloud server.
+					  Wanneer de socket verbroken was kregen we vroeger een fout bij het versturen van de heartbeat.
+					  Bij communicatie over de cloud server is het mogelijk dat de socket tussen binding software en cloudserver nog 
+					  aktief is maar dat de connectie tss de bridge(=IOT device) en de cloud server verbroken is.
+					  Bij het versturen van de heartbeat krijgen we geen socket fout maar moeten we controleren of de homeserver het 
+					  bericht ontvangen heeft en deze beantwoord met een hearbeat response.
+					  Principe:
+					  - Wanneer er 10 seconden geen data ontvangen wordt via de socket dan wordt er een hearbeat request bericht 
+					    verstuurd naar de homeserver. Op dit bericht moet de homeserver antwoorden met een heartbeat response.
+					  - Wanneer er 30 seconden geen data ontvangen wordt dan wordt de socket automatisch gesloten.	
+					  										 		  		 		  		  		  		  										
+				
+
+/**************************************************************************************
+ * SW_VERSION = 0x01104	= Version 17.04	(17.0.4.0)
+		Start Datum: 20250910
+		Eind Datum: 20251029
+		Release datum: 20251029
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 	
+
+		- TM20251028: DALI control gear addressering.
+					  Niet alle oudere DALI control gear-apparaten ondersteunen broadcast-adresseringscommando's.
+					  - Zoeken naar apparaten:
+						Wanneer er geen apparaten worden gevonden na het versturen van een broadcast DEVICE_PRESENT-commando, 
+						wordt de query opnieuw individueel naar elk apparaat gestuurd. Zodra er een antwoord wordt ontvangen, zijn er control gear-apparaten aanwezig.
+					  - Wissen van adressen:
+						Na het versturen van het broadcast-commando wordt dit ook individueel naar elk control gear-apparaat verzonden.
+						NOTE: Apparaten die broadcast-adresseringscommando's niet ondersteunen, behouden hun groepsinformatie.
+					    Het wissen van deze groepsinformatie per individueel apparaat zou te veel extra dataverkeer vereisen.
+		- TM20251029: DALI control input device addressering.
+					  - Zoeken naar apparaten: Idem als bij de control gear devices.
+					    Wanneer de devices niet antwoorden op een broadcast 'DEVICE_STATUS' nog eens alle devices afzonderlijk proberen te 
+						vinden.
+
+
+
+/**************************************************************************************
+ * SW_VERSION = 0x01105	= Version 17.05	(17.0.5.0)
+		Start Datum: 20251029
+		Eind Datum: 20251112
+		Release datum: 20251112
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 	
+
+
+		- TM20251103: DALI configuratie - Oplossing BUG-0184
+					  Namen die aangepast werden in de edit box werden niet altijd correct upgedate in de overview pagina 
+					  van de DALI groepen.
+		- TM20251103: DALI configuratie:
+				      Wanneer de treeView van de devices (opnieuw) aangemaakt wordt altijd het eerste item als huidige selectie
+					  weergeven.
+		- TM20251104: Paswoord & host adres velden: Verwijderen van Spaties op het begin en het einde
+		- TM20251104: DALI Configuratie - Oplossing BUG-0185
+					  De selectie lokaal/remote connectie werd niet altijd juist ingelezen hierdoor was het niet altijd mogelijk 
+					  om connectie te maken met het netwerk.				
+		- TM20251104: Wizard instellen homeserver paswoord instellingen van DT18-PRO en smartbox ultra.	
+					  Controle default paswoord niet meer hoofdletter gevoelig.
+		- TM20251104: UDP configuratie: Instellen van het homeserver paswoord: Verwijderen van Spaties op het begin en het einde.
+
+
+					  
+/**************************************************************************************
+ * SW_VERSION = 0x01106	= Version 17.06	(17.0.6.0)
+		Start Datum: 20251112
+		Eind Datum: 20251218
+		Release datum: 20251218
+		Depedencies:
+			- Udp Lan config Library V4.4 (Upgrade versie Library).
+			- AppRemoteCfg Library  V2.3 	
+
+		- TM20251218: DALI configuratie - Oplossing BUG-0186
+				      DALI Control Gear – Memory Map Verificatie
+					  Bij sommige (oudere) DALI-apparaten die niet volledig volgens de specificaties werken, kon de configuratie stoppen bij het verifiëren van de geheugenmap.
+					  Wijziging: Het proces gaat nu door, ook als de controle mislukt, waardoor parameters alsnog opgevraagd worden. 
+					  Let op: GTIN of serienummer kan mogelijk niet correct in de software worden weergegeven.			
+
+
+
+			--> Moeten de dialogen aanpassen met font.
+				FONT 9, "Segoe UI"			
+						      				     
+		zie TODO_CHANGES_UPLOAD_UNITS
+									      				      								  
+		TODO: Afhandelen van fouten.
+			CAppDaliFsmHelperRequestPropertiesControlGear::onFsmEventResponse						 				  				  				 																						 	
+																 						    		   		    		 		
+		Nog extra nakijken in software:
+		-------------------------------
+			- Browse single node: 
+			  Bij een incompaible nodes wordt er een messagebox getoond.
+			  Mag dit?			  			  
+			  			  																						
+							  				  	  																						  																		  														  																																																																																																					  													
+		// TODO: Aanwezigheidsmelder de repeat timer verhogen naar 50 sec.				  					
+
+															
+																		              				  				  				  							  																																																														  																	
+	- Oppassen: Visual studio 2015.
+			- Linker aanpassen om de 2015 bibliotheken te gebruiken.
+			- Moeten de applicatie compileren als DPI Awareness = NONE.
+				- Manifest tool --> Input and Output.
+			- Project bestand aanpassen. Manueel bestand aanpassen.
+			  Timer.vcxproj
+				<ProjectName>Duotecno Binding Software</ProjectName>
+				
+/***************************************************************************************
+	--> Probleem: Sedert de integratie van de Curl & Zip libraries kan de applicatie niet meer
+	    uitgevoerd worden op Windows7 & Windows Xp.
+		TODO: Testen of deze in compactibiliteits mode nog ok is.
+		Evt de libraries dynamiswch inladen (ifv het windows os.)
+
+/**************************************************************************************
+
+
+	--> Todo:
+		--> Filefind pathname moeten de win32 functie gebruiken want er zit
+			een bug in de MFC versies.
+
+	@attention
+		Bug gevonden in de modem software v65.02\n
+		zie PROBLEM_BUG_MODEM_v6502
+		Gesegmenteerde berichten waarvan de lengte kleiner is dan 52 bytes
+		wordt aanzien als een basic bericht.
+		Bij het doorsturen van namen moeten misschien leading spaties 
+		invoegen ??\n
+		DIT IS MOGELIJK EEN PROBLEEM BIJ HET VERSTUREN VAN GESEGMENTEERDE
+		BERICHTEN: MEMORY + BITMAPS UPLOAD.
+
+
+******************************************************************************/

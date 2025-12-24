@@ -1,0 +1,44 @@
+Binding software migratie vs2015
+--------------------------------
+
+*) Moeten de libraries VS2015 gebruiken.	
+----------------------------------------
+	- Alle bibliotheken compileren voor VS2015.
+	- Deze gebruiken in de linker settings:
+		debug/lib/vs2015;%(AdditionalLibraryDirectories)
+
+
+*) Problemen met de target name.
+----------------------------------
+
+	C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1189,5): warning MSB8012: TargetPath(D:\developer\sw\DTBinding (0x1010)_VS2008\.\Debug\Binding Software.exe) does not match the Linker's OutputFile property value (D:\developer\sw\DTBinding (0x1010)_VS2008\Debug\Duotecno binding software.exe). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+	C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(1191,5): warning MSB8012: TargetName(Binding Software) does not match the Linker's OutputFile property value (Duotecno binding software). This may cause your project to build incorrectly. To correct this, please make sure that $(OutDir), $(TargetName) and $(TargetExt) property values match the value specified in %(Link.OutputFile).
+
+
+	Aanpassingen:
+		project file.
+			<ProjectName>Duotecno Binding Software</ProjectName>
+	
+	
+	
+	
+*) Moeten de Addflow.ocx in de project Debug Directory zetten omdat deze anders niet geregistreerd is.
+-------------------------------------------------------------------------------------------------------
+	*) Dit is wanneer de target naam anders is dan de originele.
+	   AddFlow.ocx was niet meer geregistreerd...
+
+
+*) Problemen code:
+--------------------
+	*) UDP Client --> Moeten de juiste library compileren...		
+	*) Dialogen zijn groter dan bij de VS2008 build.
+	*) Fonts zijn groter dan bij de VS2008 build.
+		--> Moeten voor alle dialogen dezelfde font gebruiken	--> FONT 8, "MS Sans Serif"
+			*) zie TMGetGraphics()->GetFont(FONT_TREEVIEW_FIXED)	?
+			*) Moeten deze toekennen aan de dialogen ?
+					
+	
+*) Probleem udp config library:
+----------------------------------
+
+	

@@ -1,0 +1,49 @@
+Sources:
+	ref: https://github.com/libssh2/libssh2
+	
+		
+dependencies:
+	- opsenssl.
+	- ziplib.
+		
+----------------------------------------------
+	
+*) Settings library (debug).
+	General:
+		compile:
+			- Include: ..\win32,..\include;$(SOLUTIONDIR)\3rdparty\include
+			
+	Debug library:	
+		- Code generation: Multi-threaded Debug (/MTd)
+		
+	Release library:		
+		- Code generation: Multi-threaded (/MT)
+
+			
+*) Settings console (debug).
+	
+	General:
+		compile:
+			- include: $(SOLUTIONDIR)\libraryssh2\include
+			
+	Debug:
+	    compile:
+			- Code generation: Multi-threaded Debug (/MTd)
+	
+		Linker:
+			- Ignore specifiek libraries: LIBCMT		
+			- libs: ws2_32.lib Wldap32.lib libsslMT.lib libcryptoMT.lib crypt32.lib ziplib.lib libssh2d.lib		
+			- Paths: $(SOLUTIONDIR)\3rdparty\debug_lib\;$(SOLUTIONDIR)\libraryssh2\win32\Debug_lib\
+		
+	Release 
+		compile:		
+			- Code generation: Multi-threaded (/MT)
+				
+		Linker:			
+			- libs: ws2_32.lib Wldap32.lib libsslMT.lib libcryptoMT.lib crypt32.lib ZipLib.lib libssh2.lib			
+			- Paths: $(SOLUTIONDIR)\3rdparty\Release_lib\;$(SOLUTIONDIR)\libraryssh2\win32\Release_lib\
+			
+-------------------------------------------------------------------
+	
+
+			

@@ -1,0 +1,20 @@
+App Remote Cfg libraries updaten
+--------------------------------
+
+	--> Kan via een scriptje.	PROJECT_DIR\script.
+
+1) AppremoteCfgLibrary.
+	1.1) Versie nummer minor verhogen.
+	1.2) Project is verschillend voor VS2008 & VS2015.
+			--> De Juiste solution inladen.
+	1.3) Compileren in VS2008.
+	
+2) Bestanden copieren.
+	Libraries:
+		Debug\lib\vs2008				<-- De debug van 2008
+		Release\lib\vs2008				<-- De release van 2008
+		
+	Include bestanden:
+		\libraries\dtapprcfgmfclib\	
+		
+		

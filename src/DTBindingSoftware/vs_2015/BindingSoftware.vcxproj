@@ -1,0 +1,1617 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>Duotecno Binding software</ProjectName>
+    <ProjectGuid>{367B593D-163D-45F7-B513-5E6EDA134129}</ProjectGuid>
+    <RootNamespace>Binding Software</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <TargetName>Duotecno binding software</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.25431.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Release/BindingSoftware.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(solutiondir); ../libraries; ../libraries/dtapprcfgmfclib; ../libraries/json-c-lib; ../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS; DTUDPCONFIGSTATIC_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\Release/BindingSoftware.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <WarningLevel>Level1</WarningLevel>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0413</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>Qf_win32.lib;libcurl_a.lib;json_c_lib.lib;dtapprcfgmfclib.lib;Wldap32.lib;libsslMT.lib;libcryptoMT.lib;crypt32.lib;ZipLib.lib;dtudpconfigLIB.lib;FirmwareUpdateLib.lib;libssh2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Release/Duotecno binding software.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>..\Release_lib\vs2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <ProgramDatabaseFile>.\Release/Duotecno binding software.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>.\Release/Duotecno binding software.map</MapFileName>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalOptions>/IGNORE:4099 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/BindingSoftware.bsc</OutputFile>
+    </Bscmake>
+    <Manifest>
+      <EnableDpiAwareness>false</EnableDpiAwareness>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/BindingSoftware.tlb</TypeLibraryName>
+      <HeaderFileName />
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(solutiondir); ../libraries; ../libraries/dtapprcfgmfclib; ../libraries/json-c-lib; ../src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;DTUDPCONFIGSTATIC_LINK;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\Debug\BindingSoftware.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0809</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>qf_win32.lib;dtapprcfgmfclib.lib;libcurl_a_debug.lib;ws2_32.lib;Wldap32.lib;json_c_lib.lib;libsslMT.lib;libcryptoMT.lib;crypt32.lib;ziplib.lib;dtudpconfigLIB.lib;FirmwareUpdateLib.lib;libssh2d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>Debug/Duotecno binding software.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <AdditionalLibraryDirectories>../Debug_lib/vs2015;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>LIBCMT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug\Duotecno binding software.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <FullProgramDatabaseFile>true</FullProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/BindingSoftware.bsc</OutputFile>
+    </Bscmake>
+    <Manifest>
+      <EnableDpiAwareness>false</EnableDpiAwareness>
+    </Manifest>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libraries\AddFlow\addflow1.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\font.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\link1.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\linkpoint1.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\linkpoints1.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\links1.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\node1.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\nodes1.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\picture.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\pictures.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\sellinks1.cpp" />
+    <ClCompile Include="..\libraries\AddFlow\selnodes1.cpp" />
+    <ClCompile Include="..\libraries\RS232\BuildingBlocks\Kernel\ThreadSyncPolicy.cpp" />
+    <ClCompile Include="..\libraries\RS232\BuildingBlocks\Queue\QueueErrorPolicy.cpp" />
+    <ClCompile Include="..\libraries\RS232\ComPort.cpp" />
+    <ClCompile Include="..\libraries\RS232\KERNEL\CriticalSectionObj.cpp" />
+    <ClCompile Include="..\libraries\RS232\KERNEL\Event.cpp" />
+    <ClCompile Include="..\libraries\RS232\KERNEL\Mutex.cpp" />
+    <ClCompile Include="..\libraries\RS232\ReaderThread.cpp" />
+    <ClCompile Include="..\libraries\RS232\Thread2.cpp" />
+    <ClCompile Include="..\libraries\RS232\WriterThread.cpp" />
+    <ClCompile Include="..\src\AppCommandLineInfo.cpp" />
+    <ClCompile Include="..\src\appdlgdaliworker.cpp" />
+    <ClCompile Include="..\src\appdlgtasks.cpp" />
+    <ClCompile Include="..\src\appdlgtasks_base.cpp" />
+    <ClCompile Include="..\src\AppFirmwareUpdateWorker.cpp" />
+    <ClCompile Include="..\src\ApplicationDlgAppearance.cpp" />
+    <ClCompile Include="..\src\ApplicationGraphics.cpp" />
+    <ClCompile Include="..\src\ApplicationGuiUnit.cpp" />
+    <ClCompile Include="..\src\ApplicationViewManager.cpp" />
+    <ClCompile Include="..\src\AppLogging.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\Api\bindingconv2nodes_api.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingConv2Nodes\BindingConversionToNodes.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingConv2Nodes\BindingConversionToNodesNormal.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingConv2Nodes\BindingConversionToNodesProperty.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingConv2Nodes\BindingConversionToNodes_Utils.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationString.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringConvertAlg.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringConvertAlgRBIO.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringConvertAlgRBSO.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringLevel.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringOperations.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringOperationsInfo.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringParser.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringReformat.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringSeperator.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringSeperatorAlg.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringSeperatorAlg1.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringSeperatorAlg2.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstruct.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFactory.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatter.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterBC.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterBCN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterBG.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterBGN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterB_H.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterI.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterN_H.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstruction.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructLinksAlg.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructOperatorsAlg.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParser.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserBC.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserBCN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserBG.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserBGN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserB_H.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserI.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserN_H.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserP.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntry.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatter.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterB.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterC.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterCN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterG.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterGN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterI.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterNN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterP.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryInfo.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryOperations.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryOperationsVerify.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParser.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserB.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserC.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserCN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserFactory.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserG.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserGN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserI.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserNN.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserP.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyFactory.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnit.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitConvert.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitDefault.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitDefaultFactory.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitOperations.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitSens_Utils.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnit_alg.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingdata.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunit.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitalarm.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitaudiobasic.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitaudiohc4.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitavmatrix.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitboself48.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitbosers.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitbosev35.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitcontrol.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitdim.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitduoswitch.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitIRTX.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitRC5RX.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitrelais.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitsens.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitvideomux.cpp" />
+    <ClCompile Include="..\src\app\AppBindings\AppbindingUnit\bindingunitvirtual.cpp" />
+    <ClCompile Include="..\src\app\AppBrowsePnp\AppBrowseForNodesFSM.cpp" />
+    <ClCompile Include="..\src\app\AppBrowsePnp\AppBrowsePnp.cpp" />
+    <ClCompile Include="..\src\app\AppBrowsePnp\AppPlugAndPlayFSM.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgView.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewAVMatrix.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewAVSettings.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewBitmaps.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewBoseST.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewDALI.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewFactory.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewGateway.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewIRRX.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewIRTX.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewLedsCfg.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewMM.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewMobileApp.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewMoods.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewRoomCtrlAV.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSchedule.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSmapAVRoom.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSmapMain.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSmapMyHome.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSmapUnits.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSonosSrc.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewTriggers.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewUnits.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgAVSettings\ConfigAVSettings.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBase\ConfigExternalFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBase\ConfigExternalFSM.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBase\ConfigExternalFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBase\ConfigExternalHelper.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBitmaps\configBitmaps.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBoseST\ConfigBoseStCfgFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBoseST\ConfigBoseSTCfgInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBoseST\ConfigBoseStFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBoseST\ConfigBoseStRenderClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgBrowse\AppCfgBrowseInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp_File.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp_FSM.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp_Info.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp_notifier.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgGatewayU\ConfigGatewayUClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgGatewayU\ConfigGatewayUFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgGatewayU\ConfigGatewayUFsmMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgGatewayU\ConfigGatewayUInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgInfo\cfgInfoBindingUnit.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgInfo\cfgInfoNode.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgInfo\cfgInfoUnit.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgIRRX\ConfigIRRXClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgIRRX\ConfigirrxFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgIRRX\ConfigirrxFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgIRRX\ConfigIRRXInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgIRTX\configIRTX.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgIRTX\ConfigIRTXFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgIRTX\ConfigIRTXFileInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgIRTX\ConfigIRTXFileInfo_util.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFileFactory.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFile_V64.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFile_V65.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFile_V66.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFSM.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFSMInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMoods\ConfigMoodClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMoods\ConfigMoodCreateFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMoods\ConfigMoodFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgMoods\ConfigMoodInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgRoomCtrlAV\ConfigRoomCtrlAVClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgRoomCtrlAV\ConfigRoomCtrlAVFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgRoomCtrlAV\ConfigRoomCtrlAVFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgRoomCtrlAV\ConfigRoomCtrlAVInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSchedule\ConfigScheduleClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSchedule\ConfigScheduleFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSchedule\ConfigScheduleFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSchedule\ConfigScheduleInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmapLite\AppCfgSmapLiteClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmapLite\AppCfgSmapLiteFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmapLite\AppCfgSmapLiteFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmapLite\AppCfgSmapLiteInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapMenuClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapMenuFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapMenuFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapMenuInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapPageInfoClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapPageInfoFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapPageInfoFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapPageInfoInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapSmapInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapSmapInfoClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapSmapInfoFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapVRoomClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapVRoomFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapVRoomFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapVRoomInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSonosSrc\ConfigSonosSrcItems.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgSonosSrc\ConfigSonosSrcItemsFileInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgUICtrl\ConfigAppUiCtrlClasses.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgUICtrl\ConfigAppUiCtrlFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgUICtrl\ConfigAppUiCtrlFsmMaster.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgUICtrl\ConfigAppUiCtrlInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitCreateClass.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitCreateFile.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitCreateInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitFSMInfo.cpp" />
+    <ClCompile Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitFSMMaster.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdali.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdalibridge.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdalidevices.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdalidevices_t.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdalifsm.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdalifsm_helper.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdalijson.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdalimanager.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdalimsg_utils.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdalitransmitter.cpp" />
+    <ClCompile Include="..\src\app\AppDali\appdali_common.cpp" />
+    <ClCompile Include="..\src\app\AppFileIoSerC\AppFileIoSerCLicActCode.cpp" />
+    <ClCompile Include="..\src\app\AppFileIoSer\AppFileIoSer.cpp" />
+    <ClCompile Include="..\src\app\AppFileIoSer\AppFileIoSerLicActCode.cpp" />
+    <ClCompile Include="..\src\app\AppFileIO\AppFileIoActLicCode.cpp" />
+    <ClCompile Include="..\src\app\AppFileIO\AppFileIoAPI.cpp" />
+    <ClCompile Include="..\src\app\AppFileIO\FileIoData.cpp" />
+    <ClCompile Include="..\src\app\AppFileLog\appfilelogapi.cpp" />
+    <ClCompile Include="..\src\app\AppIPC\AppIPCAdvInstUpdater\AppIPCAdvInstUpdater.cpp" />
+    <ClCompile Include="..\src\app\AppIPC\AppIPCCfgTool\plugincommunications.cpp" />
+    <ClCompile Include="..\src\app\AppIPC\AppIPCCfgTool\pluginconfigtoolapp.cpp" />
+    <ClCompile Include="..\src\app\AppIPC\AppIPCUpdateMgr\updatemgripc.cpp" />
+    <ClCompile Include="..\src\app\AppLicActCode\AppLicActCode.cpp" />
+    <ClCompile Include="..\src\app\AppLicActCode\AppLicActCodeAlg.cpp" />
+    <ClCompile Include="..\src\app\AppLicActCode\AppLicActCodeAPI.cpp" />
+    <ClCompile Include="..\src\app\AppLicActCode\AppLicActCodeNodeDbase.cpp" />
+    <ClCompile Include="..\src\app\AppNodeDbase\AppNodeDbase.cpp" />
+    <ClCompile Include="..\src\app\AppNodeDbase\AppNodeDbase_Test.cpp" />
+    <ClCompile Include="..\src\app\AppNodeDbase\AppNodeDbase_Util.cpp" />
+    <ClCompile Include="..\src\app\AppRemoteCfg\AppRemoteCfg.cpp" />
+    <ClCompile Include="..\src\app\AppRemoteCfg\AppRemoteCfgNodes.cpp" />
+    <ClCompile Include="..\src\app\AppRemoteCfg\AppRemoteCfgUtils.cpp" />
+    <ClCompile Include="..\src\app\AppSettings\ApplicationCommunicationSettings.cpp" />
+    <ClCompile Include="..\src\app\AppSettings\ApplicationDisplaySettings.cpp" />
+    <ClCompile Include="..\src\app\AppSettings\ApplicationFileSettings.cpp" />
+    <ClCompile Include="..\src\app\AppSettings\ApplicationGlobalSettings.cpp" />
+    <ClCompile Include="..\src\app\AppState\AppState.cpp" />
+    <ClCompile Include="..\src\app\AppUDPCfgServer\AppUDPServerCfg.cpp" />
+    <ClCompile Include="..\src\app\AppUDPCfgServer\AppUDPServerCfgWrapper.cpp" />
+    <ClCompile Include="..\src\Binding2Controls.cpp" />
+    <ClCompile Include="..\src\BindingConnections.cpp" />
+    <ClCompile Include="..\src\BindingConversion.cpp" />
+    <ClCompile Include="..\src\BindingConversionAuto.cpp" />
+    <ClCompile Include="..\src\BindingConversionAuto2.cpp" />
+    <ClCompile Include="..\src\BindingConversionFromNodesOperations.cpp" />
+    <ClCompile Include="..\src\BindingConversionToGui.cpp" />
+    <ClCompile Include="..\src\BindingConversionToGui2.cpp" />
+    <ClCompile Include="..\src\BindingConvertHelper.cpp" />
+    <ClCompile Include="..\src\BindingDatabaseApplication.cpp" />
+    <ClCompile Include="..\src\BindingDatabaseDirector.cpp" />
+    <ClCompile Include="..\src\BindingEntries.cpp" />
+    <ClCompile Include="..\src\BindingEntriesOperations.cpp" />
+    <ClCompile Include="..\src\BindingEntry.cpp" />
+    <ClCompile Include="..\src\BindingEntryFactory.cpp" />
+    <ClCompile Include="..\src\BindingEntryInfo.cpp" />
+    <ClCompile Include="..\src\BindingEntryOperations.cpp" />
+    <ClCompile Include="..\src\BindingEntry_Helper.cpp" />
+    <ClCompile Include="..\src\BindingFile1.cpp" />
+    <ClCompile Include="..\src\BindingFileFSM.cpp" />
+    <ClCompile Include="..\src\BindingFileInfo.cpp" />
+    <ClCompile Include="..\src\BindingFileOperations.cpp" />
+    <ClCompile Include="..\src\BindingFiles.cpp" />
+    <ClCompile Include="..\src\BindingFilesOperations.cpp" />
+    <ClCompile Include="..\src\BindingFileWorker.cpp" />
+    <ClCompile Include="..\src\BindingGuiComponent.cpp" />
+    <ClCompile Include="..\src\BindingLink.cpp" />
+    <ClCompile Include="..\src\BindingLinkFactory.cpp" />
+    <ClCompile Include="..\src\BindingLinkOperations.cpp" />
+    <ClCompile Include="..\src\BindingLinks.cpp" />
+    <ClCompile Include="..\src\BindingLinksOperations.cpp" />
+    <ClCompile Include="..\src\BindingOperator.cpp" />
+    <ClCompile Include="..\src\BindingOperatorFactory.cpp" />
+    <ClCompile Include="..\src\BindingOperatorOperations.cpp" />
+    <ClCompile Include="..\src\BindingOperators.cpp" />
+    <ClCompile Include="..\src\BindingOperatorsOperations.cpp" />
+    <ClCompile Include="..\src\BindingSoftware.cpp" />
+    <ClCompile Include="..\src\BindingSoftwareDoc.cpp" />
+    <ClCompile Include="..\src\BindingsReadWriteFSM.cpp" />
+    <ClCompile Include="..\src\BindingUIElement.cpp" />
+    <ClCompile Include="..\src\BindingUIElements.cpp" />
+    <ClCompile Include="..\src\BindingUnitFactory.cpp" />
+    <ClCompile Include="..\src\BindingUnitOperations.cpp" />
+    <ClCompile Include="..\src\BindingUnits.cpp" />
+    <ClCompile Include="..\src\BindingUnitsOperations.cpp" />
+    <ClCompile Include="..\src\BindingUnitState.cpp" />
+    <ClCompile Include="..\src\CanNode.cpp" />
+    <ClCompile Include="..\src\ComApplication.cpp" />
+    <ClCompile Include="..\src\ComApplicationFactory.cpp" />
+    <ClCompile Include="..\src\CommunicationLogfile.cpp" />
+    <ClCompile Include="..\src\communication\base\communicationserverinfo.cpp" />
+    <ClCompile Include="..\src\communication\base\icommunicationframe.cpp" />
+    <ClCompile Include="..\src\communication\communication.cpp" />
+    <ClCompile Include="..\src\communication\communicationconnectfsm.cpp" />
+    <ClCompile Include="..\src\communication\communicationsettings.cpp" />
+    <ClCompile Include="..\src\communication\communicationstatus.cpp" />
+    <ClCompile Include="..\src\communication\serial\modemconnectfsm.cpp" />
+    <ClCompile Include="..\src\communication\serial\modemframe.cpp" />
+    <ClCompile Include="..\src\communication\serial\serialcanmodem.cpp" />
+    <ClCompile Include="..\src\communication\serial\serialcommobject.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\homeclient\itcpsockethomeclient_util.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\homeclient\tcpsockethomeclient.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketbase.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketcmn.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketcommframe.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketconnectfsm.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmessages.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmessages_api.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmsgformatter.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmsgqueue.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketoptions.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketwin.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketcommobject.cpp" />
+    <ClCompile Include="..\src\communication\tcpsocket\tcpsocketmsgapduheader.cpp" />
+    <ClCompile Include="..\src\ExceptionDatabase.cpp" />
+    <ClCompile Include="..\src\ExportGenerateTables.cpp" />
+    <ClCompile Include="..\src\ExportHtmlFiles.cpp" />
+    <ClCompile Include="..\src\ExportHtmlFiles2.cpp" />
+    <ClCompile Include="..\src\ExportHtmlFilesApp.cpp" />
+    <ClCompile Include="..\src\ExportTextFilesApp.cpp" />
+    <ClCompile Include="..\src\FactoryDlgBindingUnit.cpp" />
+    <ClCompile Include="..\src\FactoryDlgUnitChildProp.cpp" />
+    <ClCompile Include="..\src\FactoryDlgUnitProp.cpp" />
+    <ClCompile Include="..\src\FactoryNodeLCDScreenmaps.cpp" />
+    <ClCompile Include="..\src\FSMNicErrors.cpp" />
+    <ClCompile Include="..\src\FSMNicErrorsInfo.cpp" />
+    <ClCompile Include="..\src\FSMNodeNicErrors.cpp" />
+    <ClCompile Include="..\src\FSMUnitStatus.cpp" />
+    <ClCompile Include="..\src\helperconvert.cpp" />
+    <ClCompile Include="..\src\HtmlFontClass.cpp" />
+    <ClCompile Include="..\src\IBindingEvaluationStringParserListener.cpp" />
+    <ClCompile Include="..\src\IPropertyPageNode.cpp" />
+    <ClCompile Include="..\src\Log.cpp" />
+    <ClCompile Include="..\src\LogFile.cpp" />
+    <ClCompile Include="..\src\LogFileConversionConstruct.cpp" />
+    <ClCompile Include="..\src\LogFileConversionFromNodes.cpp" />
+    <ClCompile Include="..\src\LogFileConversionFromNodesErrors.cpp" />
+    <ClCompile Include="..\src\LogMessage.cpp" />
+    <ClCompile Include="..\src\MainFrm.cpp" />
+    <ClCompile Include="..\src\MemoryBitmapInfo.cpp" />
+    <ClCompile Include="..\src\MemoryDumpFSM.cpp" />
+    <ClCompile Include="..\src\MemoryDumpInfo.cpp" />
+    <ClCompile Include="..\src\MemoryDumpMasterFSM.cpp" />
+    <ClCompile Include="..\src\MemoryDumpNodeInfo.cpp" />
+    <ClCompile Include="..\src\MemoryMyBitmap.cpp" />
+    <ClCompile Include="..\src\MessageError.cpp" />
+    <ClCompile Include="..\src\Message_EV_INIT.cpp" />
+    <ClCompile Include="..\src\MyException.cpp" />
+    <ClCompile Include="..\src\NodeDatabase.cpp" />
+    <ClCompile Include="..\src\NodeDatabaseOperations.cpp" />
+    <ClCompile Include="..\src\NodeDatabaseVerify.cpp" />
+    <ClCompile Include="..\src\NodeDatabaseVerify_Handlers.cpp" />
+    <ClCompile Include="..\src\NodeDatabase_Util.cpp" />
+    <ClCompile Include="..\src\NodeLCDScreenmapFSM.cpp" />
+    <ClCompile Include="..\src\NodeLCDScreenmapFSMInfo.cpp" />
+    <ClCompile Include="..\src\nodelcdscreenmapfsmmaster.cpp" />
+    <ClCompile Include="..\src\NodeLcdScreenmaps.cpp" />
+    <ClCompile Include="..\src\NodeLCDScreenmaps_Util.cpp" />
+    <ClCompile Include="..\src\NodeRuntimeStatus.cpp" />
+    <ClCompile Include="..\src\nodescheduleinfo.cpp" />
+    <ClCompile Include="..\src\nodescreenmapinfo.cpp" />
+    <ClCompile Include="..\src\PtrListNodes.cpp" />
+    <ClCompile Include="..\src\QHSMApplicationGlobal.cpp" />
+    <ClCompile Include="..\src\QHSMBindingConversionFromNodes.cpp" />
+    <ClCompile Include="..\src\QHSMCompositeTask.cpp" />
+    <ClCompile Include="..\src\QHSMGenericTask.cpp" />
+    <ClCompile Include="..\src\QHSMTaskBuilder.cpp" />
+    <ClCompile Include="..\src\RenameNodeUnitsEngine.cpp" />
+    <ClCompile Include="..\src\RequestForNodeStatus.cpp" />
+    <ClCompile Include="..\src\RXMessageQueue.cpp" />
+    <ClCompile Include="..\src\screenmaps.cpp" />
+    <ClCompile Include="..\src\SoftwareVersion.cpp" />
+    <ClCompile Include="..\src\StdAfx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\src\TMAlgoritmesCfg.cpp" />
+    <ClCompile Include="..\src\TMConvience.cpp" />
+    <ClCompile Include="..\src\TMGlobals.cpp" />
+    <ClCompile Include="..\src\TXMessageQueue.cpp" />
+    <ClCompile Include="..\src\TXNodeMessage.cpp" />
+    <ClCompile Include="..\src\TXUnitMessage.cpp" />
+    <ClCompile Include="..\src\uicontrols\controls\MyButton.cpp" />
+    <ClCompile Include="..\src\uicontrols\controls\MyComboBox.cpp" />
+    <ClCompile Include="..\src\uicontrols\controls\MyEditCtrl.cpp" />
+    <ClCompile Include="..\src\uicontrols\controls\MyProgressCtrl.cpp" />
+    <ClCompile Include="..\src\uicontrols\controls\UnitButton.cpp" />
+    <ClCompile Include="..\src\uicontrols\panels\MySplitterWnd.cpp" />
+    <ClCompile Include="..\src\uicontrols\utils\dlghelper.cpp" />
+    <ClCompile Include="..\src\utils\app\appjson.cpp" />
+    <ClCompile Include="..\src\utils\app\DisplayDevice.cpp" />
+    <ClCompile Include="..\src\utils\mfc\ArrayErrors.cpp" />
+    <ClCompile Include="..\src\utils\mfc\ColorPreviewStatic.cpp" />
+    <ClCompile Include="..\src\utils\mfc\Combobox_util.cpp" />
+    <ClCompile Include="..\src\utils\mfc\Controls_util.cpp" />
+    <ClCompile Include="..\src\utils\mfc\DebugDialogLayout.cpp" />
+    <ClCompile Include="..\src\utils\mfc\DialogLayoutHelper.cpp" />
+    <ClCompile Include="..\src\utils\mfc\ToolTipCtrl.cpp" />
+    <ClCompile Include="..\src\utils\win32\NotifyError.cpp" />
+    <ClCompile Include="..\src\utils\win32\ShellFunctions.cpp" />
+    <ClCompile Include="..\src\utils\win32\win32filefind.cpp" />
+    <ClCompile Include="..\src\views\apptasks\DlgChildAppTaskInfo.cpp" />
+    <ClCompile Include="..\src\views\apptasks\DlgChildAppTaskLog.cpp" />
+    <ClCompile Include="..\src\views\apptasks\DlgChildAppTaskStatus.cpp" />
+    <ClCompile Include="..\src\views\apptasks\DlgMainApplicationTask.cpp" />
+    <ClCompile Include="..\src\views\apptasks\DlgQHSMApplication.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingAlarmProp.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingAudioBasicUnit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingAudioHC4BnoUnit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingAudioHC4Unit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingAVMatrixInput.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingAVMatrixProp.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingBoseLf48Unit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingBoseRsUnit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingBoseV35Unit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingControlUnit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingDimmerInputProp.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingDimmerProp.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingDuoSwitchUnit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingDuoswitchUnitInput.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingIRTXUnit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingOperator.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingRC5Unit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingSensUnit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingSwitchUnit.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingSwitchUnitInput.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingUnitProp.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingVideomuxProp.cpp" />
+    <ClCompile Include="..\src\views\bindingprops\DlgBindingVirtualUnit.cpp" />
+    <ClCompile Include="..\src\views\bindings\DlgAppBindingsVerify.cpp" />
+    <ClCompile Include="..\src\views\bindings\DlgBindingsNotFound.cpp" />
+    <ClCompile Include="..\src\views\bindings\DlgConversionFromNodes.cpp" />
+    <ClCompile Include="..\src\views\common\DlgNodeServicesCfg.cpp" />
+    <ClCompile Include="..\src\views\comm\DlgCanFTP.cpp" />
+    <ClCompile Include="..\src\views\comm\DlgCommCanLog.cpp" />
+    <ClCompile Include="..\src\views\comm\DlgCommTracer.cpp" />
+    <ClCompile Include="..\src\views\comm\DlgEngineeringRS232.cpp" />
+    <ClCompile Include="..\src\views\comm\DlgMessageTransfer.cpp" />
+    <ClCompile Include="..\src\views\comm\DlgModemStatus.cpp" />
+    <ClCompile Include="..\src\views\comm\DlgNetworkCanStatus.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDali.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliAddressing.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliControlDevice.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliControlDeviceOverview.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliControlgearExtra.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliControlgearGroups.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliControlgearProperties.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliControlgearScenes.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliControlgearTest.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliDeviceErrors.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliGroupsOverviewBase.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliGroupsOverviewGroups.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliGroupsOverviewProperties.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgChildDaliInstances.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgDaliControlGearChildDT8.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgDaliControlGearChildDT8_RGBWAF.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgDaliControlGearChildDT8_TC.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgDaliControlGearChildDT8_XY.cpp" />
+    <ClCompile Include="..\src\views\dali\DlgDaliControlGearDT8Scene.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliBaseClass.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliDevices.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliErrorsBaseClass.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliErrorsDetail.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliErrorsOverview.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliGroupsOverview.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliGroupsOverview2.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliLocate.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliNwk.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertyPageDaliWelcome.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertySheetDali.cpp" />
+    <ClCompile Include="..\src\views\dali\PropertySheetDaliErrors.cpp" />
+    <ClCompile Include="..\src\views\debug\DlgDebugBindingConversion.cpp" />
+    <ClCompile Include="..\src\views\debug\DlgDebugGeneral.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertyPageNewApp.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertyPageNewAppPage1.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertyPageNewAppPage2.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertyPageNewAppPage3.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertyPageNewAppPage4.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertyPageNewAppPage5.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertyPageNewAppPage6.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertyPageNewAppPage7.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertyPageNewAppPage8.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertySheetNewApp.cpp" />
+    <ClCompile Include="..\src\views\intro\PropertySheetNewAppContext.cpp" />
+    <ClCompile Include="..\src\views\intro\Splash.cpp" />
+    <ClCompile Include="..\src\views\main\BindingSoftwareView.cpp" />
+    <ClCompile Include="..\src\views\main\MyAddFlowSheet.cpp" />
+    <ClCompile Include="..\src\views\main\MyFormView.cpp" />
+    <ClCompile Include="..\src\views\main\MyFrameWnd.cpp" />
+    <ClCompile Include="..\src\views\main\MyNodeUnitListCtrl.cpp" />
+    <ClCompile Include="..\src\views\main\MyScrollView.cpp" />
+    <ClCompile Include="..\src\views\main\MyTreeBindings.cpp" />
+    <ClCompile Include="..\src\views\main\MyTreeNodes.cpp" />
+    <ClCompile Include="..\src\views\main\MyTreeTemplates.cpp" />
+    <ClCompile Include="..\src\views\main\MyView.cpp" />
+    <ClCompile Include="..\src\views\main\NodesFormView.cpp" />
+    <ClCompile Include="..\src\views\main\NodeTreeView.cpp" />
+    <ClCompile Include="..\src\views\main\UnitsFormView.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyNodesSheet.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeBackup.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeBindings.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeBitmaps.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeBitmapsBasic.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeBitmapsHC4.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeBitmapsHC5.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeConfig.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeConfigV2.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeControl.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeControlGateway.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeHomeClientMaster.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeResources.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeScreenmap.cpp" />
+    <ClCompile Include="..\src\views\nodeprops\PropertyPageNodeSmapLite.cpp" />
+    <ClCompile Include="..\src\views\remotecfg\DlgEnterPassword.cpp" />
+    <ClCompile Include="..\src\views\remotecfg\DlgManageServers.cpp" />
+    <ClCompile Include="..\src\views\remotecfg\DlgToolsRemoteCfg.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizard.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage0.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage1.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage10.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage11.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage12.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage13.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage2.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage3.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage4.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage5.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage6.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage7.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage8.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPage9.cpp" />
+    <ClCompile Include="..\src\views\solver\PropertyWizardPageBase.cpp" />
+    <ClCompile Include="..\src\views\subsystems\DlgFirmwareUpdate.cpp" />
+    <ClCompile Include="..\src\views\subsystems\DlgMultimedia.cpp" />
+    <ClCompile Include="..\src\views\subsystems\DlgUnitExtProp.cpp" />
+    <ClCompile Include="..\src\views\subsystems\DlgViewIRTXCodes.cpp" />
+    <ClCompile Include="..\src\views\SWUpdate\DlgOptions.cpp" />
+    <ClCompile Include="..\src\views\SWUpdate\DlgSoftwareUpdate.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgChildUDPBase.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgChildUDPDns.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgChildUDPDynDns.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgChildUDPHomeserver.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgChildUDPNTP.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgChildUDPNwk.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgChildUDPSystemMode.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgChildUDPTcpIp.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgUDPLanConfig.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgUDPLanDevices.cpp" />
+    <ClCompile Include="..\src\views\udpcfg\DlgUDPLANSettings.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgAlarmChildProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgAlarmProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgAudioBasicProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgAudioHC4Prop.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgAvMatrixChildProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgAVMatrixProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgBoseChildProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgBosersProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgControlProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgDimmerChildProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgDimmerProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgDuoSwitchChildProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgDuoSwitchProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgEnergyMeasureProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgIRTXProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgMouseProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgRC5RXProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgSensPropChild.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgSensPropDlg.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgSwitchProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgSwitchPropChild.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgUnitChildProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgUnitProp.cpp" />
+    <ClCompile Include="..\src\views\unitprops\DlgVideomuxProp.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\libraries\AddFlow\addflow1.h" />
+    <ClInclude Include="..\libraries\AddFlow\AddflowConst.h" />
+    <ClInclude Include="..\libraries\AddFlow\font.h" />
+    <ClInclude Include="..\libraries\AddFlow\link1.h" />
+    <ClInclude Include="..\libraries\AddFlow\linkpoint1.h" />
+    <ClInclude Include="..\libraries\AddFlow\linkpoints1.h" />
+    <ClInclude Include="..\libraries\AddFlow\links1.h" />
+    <ClInclude Include="..\libraries\AddFlow\node1.h" />
+    <ClInclude Include="..\libraries\AddFlow\nodes1.h" />
+    <ClInclude Include="..\libraries\AddFlow\picture.h" />
+    <ClInclude Include="..\libraries\AddFlow\pictures.h" />
+    <ClInclude Include="..\libraries\AddFlow\sellinks1.h" />
+    <ClInclude Include="..\libraries\AddFlow\selnodes1.h" />
+    <ClInclude Include="..\libraries\QF\Include\Qactive.h" />
+    <ClInclude Include="..\libraries\QF\Include\Qepool.h" />
+    <ClInclude Include="..\libraries\QF\Include\Qequeue.h" />
+    <ClInclude Include="..\libraries\QF\Include\Qevent.h" />
+    <ClInclude Include="..\libraries\QF\Include\Qf.h" />
+    <ClInclude Include="..\libraries\QF\Include\Qfsm.h" />
+    <ClInclude Include="..\libraries\QF\Include\Qf_win32.h" />
+    <ClInclude Include="..\libraries\QF\Include\Qhsm.h" />
+    <ClInclude Include="..\libraries\QF\Include\Qtimer.h" />
+    <ClInclude Include="..\libraries\RS232\BuildingBlocks\Kernel\DefaultThreadSyncPolicy.h" />
+    <ClInclude Include="..\libraries\RS232\BuildingBlocks\Kernel\TCriticalSections.h" />
+    <ClInclude Include="..\libraries\RS232\BuildingBlocks\Kernel\ThreadSyncPolicy.h" />
+    <ClInclude Include="..\libraries\RS232\BuildingBlocks\Queue\QueueErrorPolicy.h" />
+    <ClInclude Include="..\libraries\RS232\BuildingBlocks\Queue\QueueSimpleCirc.h" />
+    <ClInclude Include="..\libraries\RS232\BuildingBlocks_Include.h" />
+    <ClInclude Include="..\libraries\RS232\ComPort.h" />
+    <ClInclude Include="..\libraries\RS232\ComPort_FWD.h" />
+    <ClInclude Include="..\libraries\RS232\KERNEL\CriticalSectionObj.h" />
+    <ClInclude Include="..\libraries\RS232\KERNEL\Event.h" />
+    <ClInclude Include="..\libraries\RS232\KERNEL\Mutex.h" />
+    <ClInclude Include="..\libraries\RS232\Kernel_Include.h" />
+    <ClInclude Include="..\libraries\RS232\Qassert.h" />
+    <ClInclude Include="..\libraries\RS232\ReaderThread.h" />
+    <ClInclude Include="..\libraries\RS232\Thread.h" />
+    <ClInclude Include="..\libraries\RS232\Thread2.h" />
+    <ClInclude Include="..\libraries\RS232\WriterThread.h" />
+    <ClInclude Include="..\src\AppCommandLineInfo.h" />
+    <ClInclude Include="..\src\appdlgdaliworker.h" />
+    <ClInclude Include="..\src\appdlgtasks.h" />
+    <ClInclude Include="..\src\appdlgtasks_base.h" />
+    <ClInclude Include="..\src\AppFirmwareUpdateWorker.h" />
+    <ClInclude Include="..\src\ApplicationDlgAppearance.h" />
+    <ClInclude Include="..\src\ApplicationGraphics.h" />
+    <ClInclude Include="..\src\ApplicationGuiUnit.h" />
+    <ClInclude Include="..\src\ApplicationViewManager.h" />
+    <ClInclude Include="..\src\AppLogging.h" />
+    <ClInclude Include="..\src\app\AppBindings\Api\bindingconv2nodes_api.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingConv2Nodes\BindingConversionToNodes.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingConv2Nodes\BindingConversionToNodesNormal.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingConv2Nodes\BindingConversionToNodesProperty.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingConv2Nodes\BindingConversionToNodes_Utils.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationString.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringConvertAlg.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringConvertAlgRBIO.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringConvertAlgRBSO.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringLevel.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringOperations.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringOperationsInfo.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringParser.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringReformat.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringSeperator.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringSeperatorAlg.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringSeperatorAlg1.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingEvalString\BindingEvaluationStringSeperatorAlg2.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstruct.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFactory.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatter.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterBC.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterBCN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterBG.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterBGN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterB_H.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterI.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructFormatterN_H.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstruction.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructLinksAlg.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructOperatorsAlg.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParser.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserBC.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserBCN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserBG.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserBGN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserB_H.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserI.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserN_H.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileConstruct\BindingFileConstructParserP.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntry.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatter.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterB.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterC.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterCN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterG.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterGN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterI.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterNN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryFormatterP.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryInfo.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryOperations.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryOperationsVerify.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParser.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserB.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserC.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserCN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserFactory.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserG.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserGN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserI.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserNN.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingFileEntry\BindingFileEntryParserP.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyFactory.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyStrings.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnit.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitConvert.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitDefault.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitDefaultFactory.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitOperations.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnitSens_Utils.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppBindingProperty\BindingPropertyUnit_alg.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingdata.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunit.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitalarm.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitaudiobasic.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitaudiobasic_def.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitaudiohc4.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitavmatrix.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitboself48.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitboself48_def.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitbosers.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitbosers_def.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitbosev35.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitbosev35_def.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitcontrol.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitdim.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitdim_def.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitduoswitch.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitIRTX.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitIRTX_def.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitRC5RX.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitrc5rx_def.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitrelais.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitsens.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitsens_def.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitvideomux.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunitvirtual.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunit_api.h" />
+    <ClInclude Include="..\src\app\AppBindings\AppbindingUnit\bindingunit_def.h" />
+    <ClInclude Include="..\src\app\AppBrowsePnp\AppBrowseForNodesFSM.h" />
+    <ClInclude Include="..\src\app\AppBrowsePnp\AppBrowsePnp.h" />
+    <ClInclude Include="..\src\app\AppBrowsePnp\AppBrowsePnp_common.h" />
+    <ClInclude Include="..\src\app\AppBrowsePnp\AppPlugAndPlayFSM.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgView.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewAVMatrix.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewAVSettings.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewBitmaps.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewBoseST.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewDALI.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewFactory.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewGateway.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewIRRX.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewIRTX.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewLedsCfg.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewMM.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewMobileApp.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewMoods.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewRoomCtrlAV.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSchedule.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSmapAVRoom.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSmapMain.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSmapMyHome.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSmapUnits.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewSonosSrc.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewTriggers.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAlgView\ConfigAlgViewUnits.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgAVSettings\ConfigAVSettings.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBase\ConfigExternalClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBase\ConfigExternalFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBase\ConfigExternalFSM.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBase\ConfigExternalFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBase\ConfigExternalHelper.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBase\ConfigStateInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBitmaps\ConfigBitmaps.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBoseST\ConfigBoseStCfgFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBoseST\ConfigBoseSTCfgInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBoseST\ConfigBoseStFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBoseST\ConfigBoseStRenderClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgBrowse\AppCfgBrowseInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp_def.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp_File.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp_FSM.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp_Info.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgCanFtp\ConfigCanFtp_notifier.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgCanFtp\IConfigCanFtp_notifier.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgGatewayU\ConfigGatewayUClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgGatewayU\ConfigGatewayUFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgGatewayU\ConfigGatewayUFsmMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgGatewayU\ConfigGatewayUInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgInfo\cfgInfoBindingUnit.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgInfo\cfgInfoNode.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgInfo\cfgInfoProductID_def.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgInfo\cfgInfoUnit.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgIRRX\ConfigIRRXClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgIRRX\ConfigirrxFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgIRRX\ConfigirrxFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgIRRX\ConfigIRRXInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgIRTX\ConfigIRTX.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgIRTX\ConfigIRTXFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgIRTX\ConfigIRTXFileInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgIRTX\ConfigIRTXFileInfo_Util.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFileFactory.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFile_V64.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFile_V65.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFile_V66.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFSM.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFSMInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMM\ConfigMultiMediaStructs.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMoods\ConfigMoodClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMoods\ConfigMoodCreateFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMoods\ConfigMoodFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgMoods\ConfigMoodInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgRoomCtrlAV\ConfigRoomCtrlAVClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgRoomCtrlAV\ConfigRoomCtrlAVFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgRoomCtrlAV\ConfigRoomCtrlAVFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgRoomCtrlAV\ConfigRoomCtrlAVInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSchedule\ConfigScheduleClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSchedule\ConfigScheduleFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSchedule\ConfigScheduleFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSchedule\ConfigScheduleInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmapLite\AppCfgSmapLiteClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmapLite\AppCfgSmapLiteFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmapLite\AppCfgSmapLiteFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmapLite\AppCfgSmapLiteInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapMenuClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapMenuFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapMenuFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapMenuInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapPageInfoClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapPageInfoFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapPageInfoFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapPageInfoInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapSmapInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapSmapInfoClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapSmapInfoFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapVRoomClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapVRoomFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapVRoomFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSmap\ConfigSmapVRoomInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSonosSrc\ConfigSonosSrcItems.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgSonosSrc\ConfigSonosSrcItemsFileInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgUICtrl\ConfigAppUiCtrlClasses.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgUICtrl\ConfigAppUiCtrlFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgUICtrl\ConfigAppUiCtrlFsmMaster.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgUICtrl\ConfigAppUiCtrlInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitCreateClass.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitCreateFile.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitCreateInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitFSMInfo.h" />
+    <ClInclude Include="..\src\app\AppCfg\AppCfgUnits\ConfigUnitFSMMaster.h" />
+    <ClInclude Include="..\src\app\AppDali\appdali.h" />
+    <ClInclude Include="..\src\app\AppDali\appdalibridge.h" />
+    <ClInclude Include="..\src\app\AppDali\appdalidevices.h" />
+    <ClInclude Include="..\src\app\AppDali\appdalidevices_t.h" />
+    <ClInclude Include="..\src\app\AppDali\appdalifsm.h" />
+    <ClInclude Include="..\src\app\AppDali\appdalifsm_helper.h" />
+    <ClInclude Include="..\src\app\AppDali\appdalijson.h" />
+    <ClInclude Include="..\src\app\AppDali\appdalimanager.h" />
+    <ClInclude Include="..\src\app\AppDali\appdalimsg_utils.h" />
+    <ClInclude Include="..\src\app\AppDali\appdaliprotocol_def.h" />
+    <ClInclude Include="..\src\app\AppDali\appdalitransmitter.h" />
+    <ClInclude Include="..\src\app\AppDali\appdali_common.h" />
+    <ClInclude Include="..\src\app\AppDali\appdali_def.h" />
+    <ClInclude Include="..\src\app\AppDali\appdali_fwd.h" />
+    <ClInclude Include="..\src\app\AppFileIoSerC\AppFileIoSerCLicActCode.h" />
+    <ClInclude Include="..\src\app\AppFileIoSer\AppFileIoSer.h" />
+    <ClInclude Include="..\src\app\AppFileIoSer\AppFileIoSerLicActCode.h" />
+    <ClInclude Include="..\src\app\AppFileIO\AppFileIoActLicCode.h" />
+    <ClInclude Include="..\src\app\AppFileIO\AppFileIoAPI.h" />
+    <ClInclude Include="..\src\app\AppFileIO\FileIoData.h" />
+    <ClInclude Include="..\src\app\AppFileLog\appfilelogapi.h" />
+    <ClInclude Include="..\src\app\AppIPC\AppIPCAdvInstUpdater\AppIPCAdvInstUpdater.h" />
+    <ClInclude Include="..\src\app\AppIPC\AppIPCCfgTool\ipluginconfigtoolapp.h" />
+    <ClInclude Include="..\src\app\AppIPC\AppIPCCfgTool\plugincommunications.h" />
+    <ClInclude Include="..\src\app\AppIPC\AppIPCCfgTool\pluginconfigtoolapp.h" />
+    <ClInclude Include="..\src\app\AppIPC\AppIPCUpdateMgr\updatemgripc.h" />
+    <ClInclude Include="..\src\app\AppLicActCode\AppLicActCode.h" />
+    <ClInclude Include="..\src\app\AppLicActCode\AppLicActCodeAlg.h" />
+    <ClInclude Include="..\src\app\AppLicActCode\AppLicActCodeAPI.h" />
+    <ClInclude Include="..\src\app\AppLicActCode\AppLicActCodeAPI2.h" />
+    <ClInclude Include="..\src\app\AppLicActCode\AppLicActCodeDef.h" />
+    <ClInclude Include="..\src\app\AppLicActCode\AppLicActCodeNodeDbase.h" />
+    <ClInclude Include="..\src\app\AppNodeDbase\AppNodeDbase.h" />
+    <ClInclude Include="..\src\app\AppNodeDbase\AppNodeDbase_Test.h" />
+    <ClInclude Include="..\src\app\AppNodeDbase\AppNodeDbase_Util.h" />
+    <ClInclude Include="..\src\app\AppRemoteCfg\AppRemoteCfg.h" />
+    <ClInclude Include="..\src\app\AppRemoteCfg\AppRemoteCfgNodes.h" />
+    <ClInclude Include="..\src\app\AppSettings\ApplicationCommunicationSettings.h" />
+    <ClInclude Include="..\src\app\AppSettings\ApplicationDisplaySettings.h" />
+    <ClInclude Include="..\src\app\AppSettings\ApplicationFileSettings.h" />
+    <ClInclude Include="..\src\app\AppSettings\ApplicationGlobalSettings.h" />
+    <ClInclude Include="..\src\app\AppState\AppState.h" />
+    <ClInclude Include="..\src\app\AppUDPCfgServer\AppUDPServerCfg.h" />
+    <ClInclude Include="..\src\app\AppUDPCfgServer\AppUDPServerCfgWrapper.h" />
+    <ClInclude Include="..\src\Binding2Controls.h" />
+    <ClInclude Include="..\src\BindingAppCommon.h" />
+    <ClInclude Include="..\src\BindingConnections.h" />
+    <ClInclude Include="..\src\BindingConstants.h" />
+    <ClInclude Include="..\src\BindingConversion.h" />
+    <ClInclude Include="..\src\BindingConversionAuto.h" />
+    <ClInclude Include="..\src\BindingConversionAuto2.h" />
+    <ClInclude Include="..\src\BindingConversionFromNodesOperations.h" />
+    <ClInclude Include="..\src\BindingConversionToGui.h" />
+    <ClInclude Include="..\src\BindingConversionToGui2.h" />
+    <ClInclude Include="..\src\BindingConvertHelper.h" />
+    <ClInclude Include="..\src\BindingDatabaseApplication.h" />
+    <ClInclude Include="..\src\BindingDatabaseDirector.h" />
+    <ClInclude Include="..\src\BindingEntries.h" />
+    <ClInclude Include="..\src\BindingEntriesOperations.h" />
+    <ClInclude Include="..\src\BindingEntry.h" />
+    <ClInclude Include="..\src\BindingEntryFactory.h" />
+    <ClInclude Include="..\src\BindingEntryInfo.h" />
+    <ClInclude Include="..\src\BindingEntryOperations.h" />
+    <ClInclude Include="..\src\BindingEntry_Helper.h" />
+    <ClInclude Include="..\src\BindingFile1.h" />
+    <ClInclude Include="..\src\BindingFileFSM.h" />
+    <ClInclude Include="..\src\BindingFileInfo.h" />
+    <ClInclude Include="..\src\BindingFileOperations.h" />
+    <ClInclude Include="..\src\BindingFiles.h" />
+    <ClInclude Include="..\src\BindingFilesOperations.h" />
+    <ClInclude Include="..\src\BindingFileWorker.h" />
+    <ClInclude Include="..\src\BindingGuiComponent.h" />
+    <ClInclude Include="..\src\BindingLink.h" />
+    <ClInclude Include="..\src\BindingLinkFactory.h" />
+    <ClInclude Include="..\src\BindingLinkOperations.h" />
+    <ClInclude Include="..\src\BindingLinks.h" />
+    <ClInclude Include="..\src\BindingLinksOperations.h" />
+    <ClInclude Include="..\src\BindingOperator.h" />
+    <ClInclude Include="..\src\BindingOperatorFactory.h" />
+    <ClInclude Include="..\src\BindingOperatorOperations.h" />
+    <ClInclude Include="..\src\BindingOperators.h" />
+    <ClInclude Include="..\src\BindingOperatorsOperations.h" />
+    <ClInclude Include="..\src\BindingSoftware.h" />
+    <ClInclude Include="..\src\BindingSoftwareDoc.h" />
+    <ClInclude Include="..\src\BindingsReadWriteFSM.h" />
+    <ClInclude Include="..\src\BindingUIElement.h" />
+    <ClInclude Include="..\src\BindingUIElements.h" />
+    <ClInclude Include="..\src\BindingUnitFactory.h" />
+    <ClInclude Include="..\src\BindingUnitOperations.h" />
+    <ClInclude Include="..\src\BindingUnits.h" />
+    <ClInclude Include="..\src\BindingUnitsOperations.h" />
+    <ClInclude Include="..\src\BindingUnitState.h" />
+    <ClInclude Include="..\src\CanNode.h" />
+    <ClInclude Include="..\src\CBindingFileInfo.h" />
+    <ClInclude Include="..\src\ComApplication.h" />
+    <ClInclude Include="..\src\ComApplicationFactory.h" />
+    <ClInclude Include="..\src\CommunicationLogfile.h" />
+    <ClInclude Include="..\src\communication\base\communicationserverinfo.h" />
+    <ClInclude Include="..\src\communication\base\communication_def.h" />
+    <ClInclude Include="..\src\communication\base\icommunicationconnectfsm.h" />
+    <ClInclude Include="..\src\communication\base\icommunicationframe.h" />
+    <ClInclude Include="..\src\communication\base\icommunicationobject.h" />
+    <ClInclude Include="..\src\communication\communication.h" />
+    <ClInclude Include="..\src\communication\communicationconnectfsm.h" />
+    <ClInclude Include="..\src\communication\communicationsettings.h" />
+    <ClInclude Include="..\src\communication\communicationstatus.h" />
+    <ClInclude Include="..\src\communication\serial\iserialcommobject.h" />
+    <ClInclude Include="..\src\communication\serial\iserialmodemconnectfsm.h" />
+    <ClInclude Include="..\src\communication\serial\modemconnectfsm.h" />
+    <ClInclude Include="..\src\communication\serial\modemframe.h" />
+    <ClInclude Include="..\src\communication\serial\modemframe_def.h" />
+    <ClInclude Include="..\src\communication\serial\serialcanmodem.h" />
+    <ClInclude Include="..\src\communication\serial\serialcommobject.h" />
+    <ClInclude Include="..\src\communication\serial\serialcommobject_def.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\homeclient\itcpsockethomeclient.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\homeclient\itcpsockethomeclient_util.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\homeclient\tcpsockethomeclient.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\homeclient\tcpsockethomeclientcmn.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\itcpsocketcommobject.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\itcpsocketbase.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketbase.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketbase_def.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketcmn.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketcommframe.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketconnectfsm.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmessages.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmessages_api.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmessages_def.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmsgformatter.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmsgqueue.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketmsgtokenizer.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketoptions.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\tcpsocketwin.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketbase\TEventListeners.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketcommobject.h" />
+    <ClInclude Include="..\src\communication\tcpsocket\tcpsocketmsgapduheader.h" />
+    <ClInclude Include="..\src\DebugMacros.h" />
+    <ClInclude Include="..\src\DisplayDevice.h" />
+    <ClInclude Include="..\src\ExceptionDatabase.h" />
+    <ClInclude Include="..\src\ExportGenerateTables.h" />
+    <ClInclude Include="..\src\ExportHtmlFiles.h" />
+    <ClInclude Include="..\src\ExportHtmlFiles2.h" />
+    <ClInclude Include="..\src\ExportHtmlFilesApp.h" />
+    <ClInclude Include="..\src\ExportTextFilesApp.h" />
+    <ClInclude Include="..\src\factoryDlgBindingUnit.h" />
+    <ClInclude Include="..\src\FactoryDlgUnitChildProp.h" />
+    <ClInclude Include="..\src\FactoryDlgUnitProp.h" />
+    <ClInclude Include="..\src\FactoryNodeLCDScreenmaps.h" />
+    <ClInclude Include="..\src\FSMNicErrors.h" />
+    <ClInclude Include="..\src\FSMNicErrorsInfo.h" />
+    <ClInclude Include="..\src\FSMNodeNicErrors.h" />
+    <ClInclude Include="..\src\FSMUnitStatus.h" />
+    <ClInclude Include="..\src\helperconvert.h" />
+    <ClInclude Include="..\src\HtmlFontClass.h" />
+    <ClInclude Include="..\src\iappdlgtasks.h" />
+    <ClInclude Include="..\src\IBindingEvaluationStringParserListener.h" />
+    <ClInclude Include="..\src\IComApplication.h" />
+    <ClInclude Include="..\src\IPropertyPageNode.h" />
+    <ClInclude Include="..\src\Log.h" />
+    <ClInclude Include="..\src\LogFile.h" />
+    <ClInclude Include="..\src\LogFileConversionConstruct.h" />
+    <ClInclude Include="..\src\LogFileConversionFromNodes.h" />
+    <ClInclude Include="..\src\LogFileConversionFromNodesErrors.h" />
+    <ClInclude Include="..\src\LogMessage.h" />
+    <ClInclude Include="..\src\MainFrm.h" />
+    <ClInclude Include="..\src\MemoryBitmapInfo.h" />
+    <ClInclude Include="..\src\MemoryDumpFSM.h" />
+    <ClInclude Include="..\src\MemoryDumpInfo.h" />
+    <ClInclude Include="..\src\MemoryDumpMasterFSM.h" />
+    <ClInclude Include="..\src\MemoryDumpNodeInfo.h" />
+    <ClInclude Include="..\src\MemoryMyBitmap.h" />
+    <ClInclude Include="..\src\MessageError.h" />
+    <ClInclude Include="..\src\Message_EV_INIT.h" />
+    <ClInclude Include="..\src\MyDefinitions.h" />
+    <ClInclude Include="..\src\MyException.h" />
+    <ClInclude Include="..\src\MyWindowMessages.h" />
+    <ClInclude Include="..\src\MyWindowTimers.h" />
+    <ClInclude Include="..\src\NodeDatabase.h" />
+    <ClInclude Include="..\src\NodeDatabaseOperations.h" />
+    <ClInclude Include="..\src\NodeDatabaseVerify.h" />
+    <ClInclude Include="..\src\NodeDatabaseVerify_Handlers.h" />
+    <ClInclude Include="..\src\NodeDatabase_Util.h" />
+    <ClInclude Include="..\src\nodegenestructs.h" />
+    <ClInclude Include="..\src\NodeLCDScreenmapFSM.h" />
+    <ClInclude Include="..\src\NodeLCDScreenmapFSMInfo.h" />
+    <ClInclude Include="..\src\nodelcdscreenmapfsmmaster.h" />
+    <ClInclude Include="..\src\NodeLcdScreenmaps.h" />
+    <ClInclude Include="..\src\NodeLCDScreenmaps_Util.h" />
+    <ClInclude Include="..\src\nodemess.h" />
+    <ClInclude Include="..\src\NodeRuntimeStatus.h" />
+    <ClInclude Include="..\src\nodescheduleinfo.h" />
+    <ClInclude Include="..\src\nodescreenmapinfo.h" />
+    <ClInclude Include="..\src\NotifyError.h" />
+    <ClInclude Include="..\src\PtrListNodes.h" />
+    <ClInclude Include="..\src\QHSMApplicationGlobal.h" />
+    <ClInclude Include="..\src\QHSMBindingConversionFromNodes.h" />
+    <ClInclude Include="..\src\QHSMCompositeTask.h" />
+    <ClInclude Include="..\src\QHSMGenericTask.h" />
+    <ClInclude Include="..\src\QHSMTaskBuilder.h" />
+    <ClInclude Include="..\src\QMyEvent.h" />
+    <ClInclude Include="..\src\RenameNodeUnitsEngine.h" />
+    <ClInclude Include="..\src\RequestForNodeStatus.h" />
+    <ClInclude Include="..\src\Resource.h" />
+    <ClInclude Include="..\src\RXMessageQueue.h" />
+    <ClInclude Include="..\src\screenmapid.h" />
+    <ClInclude Include="..\src\screenmaplistid.h" />
+    <ClInclude Include="..\src\screenmaps.h" />
+    <ClInclude Include="..\src\screenmaptypes.h" />
+    <ClInclude Include="..\src\ShellCommands.h" />
+    <ClInclude Include="..\src\ShellFunctions.h" />
+    <ClInclude Include="..\src\SoftwareVersion.h" />
+    <ClInclude Include="..\src\StdAfx.h" />
+    <ClInclude Include="..\src\TimerView.h" />
+    <ClInclude Include="..\src\TListIterator.h" />
+    <ClInclude Include="..\src\TMAlgoritmesCfg.h" />
+    <ClInclude Include="..\src\TMConvenience.h" />
+    <ClInclude Include="..\src\TMFCControlsHelper.h" />
+    <ClInclude Include="..\src\TMGlobals.h" />
+    <ClInclude Include="..\src\TPtrListIterator.h" />
+    <ClInclude Include="..\src\TXMessageQueue.h" />
+    <ClInclude Include="..\src\TXNodeMessage.h" />
+    <ClInclude Include="..\src\TXUnitMessage.h" />
+    <ClInclude Include="..\src\uicontrols\controls\MyButton.h" />
+    <ClInclude Include="..\src\uicontrols\controls\MyComboBox.h" />
+    <ClInclude Include="..\src\uicontrols\controls\MyEditCtrl.h" />
+    <ClInclude Include="..\src\uicontrols\controls\MyProgressCtrl.h" />
+    <ClInclude Include="..\src\uicontrols\controls\UnitButton.h" />
+    <ClInclude Include="..\src\uicontrols\panels\MySplitterWnd.h" />
+    <ClInclude Include="..\src\uicontrols\utils\dlghelper.h" />
+    <ClInclude Include="..\src\UnitButton.h" />
+    <ClInclude Include="..\src\utils\app\appjson.h" />
+    <ClInclude Include="..\src\utils\app\DisplayDevice.h" />
+    <ClInclude Include="..\src\utils\mfc\ArrayErrors.h" />
+    <ClInclude Include="..\src\utils\mfc\ColorPreviewStatic.h" />
+    <ClInclude Include="..\src\utils\mfc\Combobox_util.h" />
+    <ClInclude Include="..\src\utils\mfc\Controls_util.h" />
+    <ClInclude Include="..\src\utils\mfc\DebugDialogLayout.h" />
+    <ClInclude Include="..\src\utils\mfc\DialogLayoutHelper.h" />
+    <ClInclude Include="..\src\utils\mfc\IDisplayDevice.h" />
+    <ClInclude Include="..\src\utils\mfc\IReportError.h" />
+    <ClInclude Include="..\src\utils\mfc\ITimerControl.h" />
+    <ClInclude Include="..\src\utils\mfc\mfcCollections.h" />
+    <ClInclude Include="..\src\utils\mfc\ToolTipCtrl.h" />
+    <ClInclude Include="..\src\utils\mfc\TPtrList.h" />
+    <ClInclude Include="..\src\utils\win32\NotifyError.h" />
+    <ClInclude Include="..\src\utils\win32\ShellCommands.h" />
+    <ClInclude Include="..\src\utils\win32\ShellFunctions.h" />
+    <ClInclude Include="..\src\utils\win32\win32filefind.h" />
+    <ClInclude Include="..\src\views\apptasks\DlgChildAppTaskInfo.h" />
+    <ClInclude Include="..\src\views\apptasks\DlgChildAppTaskLog.h" />
+    <ClInclude Include="..\src\views\apptasks\DlgChildAppTaskStatus.h" />
+    <ClInclude Include="..\src\views\apptasks\DlgMainApplicationTask.h" />
+    <ClInclude Include="..\src\views\apptasks\DlgQHSMApplication.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingAlarmProp.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingAudioBasicUnit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingAudioHC4BnoUnit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingAudioHC4Unit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingAVMatrixInput.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingAVMatrixProp.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingBoseLf48Unit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingBoseRsUnit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingBoseV35Unit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingControlUnit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingDimmerInputProp.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingDimmerProp.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingDuoSwitchUnit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingDuoswitchUnitInput.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingIRTXUnit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingOperator.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingRC5Unit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingSensUnit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingSwitchUnit.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingSwitchUnitInput.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingUnitProp.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingVideomuxProp.h" />
+    <ClInclude Include="..\src\views\bindingprops\DlgBindingVirtualUnit.h" />
+    <ClInclude Include="..\src\views\bindings\DlgAppBindingsVerify.h" />
+    <ClInclude Include="..\src\views\bindings\DlgBindingsNotFound.h" />
+    <ClInclude Include="..\src\views\bindings\DlgConversionFromNodes.h" />
+    <ClInclude Include="..\src\views\common\DlgNodeServicesCfg.h" />
+    <ClInclude Include="..\src\views\comm\DlgCanFTP.h" />
+    <ClInclude Include="..\src\views\comm\DlgCommCanLog.h" />
+    <ClInclude Include="..\src\views\comm\DlgCommTracer.h" />
+    <ClInclude Include="..\src\views\comm\DlgEngineeringRS232.h" />
+    <ClInclude Include="..\src\views\comm\DlgMessageTransfer.h" />
+    <ClInclude Include="..\src\views\comm\DlgModemStatus.h" />
+    <ClInclude Include="..\src\views\comm\DlgNetworkCanStatus.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDali.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliAddressing.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliControlDevice.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliControlDeviceOverview.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliControlgearExtra.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliControlgearGroups.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliControlgearProperties.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliControlgearScenes.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliControlgearTest.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliDeviceErrors.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliGroupsOverviewBase.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliGroupsOverviewGroups.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliGroupsOverviewProperties.h" />
+    <ClInclude Include="..\src\views\dali\DlgChildDaliInstances.h" />
+    <ClInclude Include="..\src\views\dali\DlgDaliControlGearChildDT8.h" />
+    <ClInclude Include="..\src\views\dali\DlgDaliControlGearChildDT8_RGBWAF.h" />
+    <ClInclude Include="..\src\views\dali\DlgDaliControlGearChildDT8_TC.h" />
+    <ClInclude Include="..\src\views\dali\DlgDaliControlGearChildDT8_XY.h" />
+    <ClInclude Include="..\src\views\dali\DlgDaliControlGearDT8Scene.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliBaseClass.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliDevices.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliErrorsBaseClass.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliErrorsDetail.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliErrorsOverview.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliGroupsOverview.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliGroupsOverview2.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliLocate.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliNwk.h" />
+    <ClInclude Include="..\src\views\dali\PropertyPageDaliWelcome.h" />
+    <ClInclude Include="..\src\views\dali\PropertySheetDali.h" />
+    <ClInclude Include="..\src\views\dali\PropertySheetDaliErrors.h" />
+    <ClInclude Include="..\src\views\debug\DlgDebugBindingConversion.h" />
+    <ClInclude Include="..\src\views\debug\DlgDebugGeneral.h" />
+    <ClInclude Include="..\src\views\intro\PropertyPageNewApp.h" />
+    <ClInclude Include="..\src\views\intro\PropertyPageNewAppPage1.h" />
+    <ClInclude Include="..\src\views\intro\PropertyPageNewAppPage2.h" />
+    <ClInclude Include="..\src\views\intro\PropertyPageNewAppPage3.h" />
+    <ClInclude Include="..\src\views\intro\PropertyPageNewAppPage4.h" />
+    <ClInclude Include="..\src\views\intro\PropertyPageNewAppPage5.h" />
+    <ClInclude Include="..\src\views\intro\PropertyPageNewAppPage6.h" />
+    <ClInclude Include="..\src\views\intro\PropertyPageNewAppPage7.h" />
+    <ClInclude Include="..\src\views\intro\PropertyPageNewAppPage8.h" />
+    <ClInclude Include="..\src\views\intro\PropertySheetNewApp.h" />
+    <ClInclude Include="..\src\views\intro\PropertySheetNewAppContext.h" />
+    <ClInclude Include="..\src\views\intro\Splash.h" />
+    <ClInclude Include="..\src\views\main\BindingSoftwareView.h" />
+    <ClInclude Include="..\src\views\main\MyAddFlowSheet.h" />
+    <ClInclude Include="..\src\views\main\MyFormView.h" />
+    <ClInclude Include="..\src\views\main\MyFrameWnd.h" />
+    <ClInclude Include="..\src\views\main\MyNodeUnitListCtrl.h" />
+    <ClInclude Include="..\src\views\main\MyScrollView.h" />
+    <ClInclude Include="..\src\views\main\MyTreeBindings.h" />
+    <ClInclude Include="..\src\views\main\MyTreeNodes.h" />
+    <ClInclude Include="..\src\views\main\MyTreeTemplates.h" />
+    <ClInclude Include="..\src\views\main\MyView.h" />
+    <ClInclude Include="..\src\views\main\NodesFormView.h" />
+    <ClInclude Include="..\src\views\main\NodeTreeView.h" />
+    <ClInclude Include="..\src\views\main\UnitsFormView.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyNodesSheet.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNode.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeBackup.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeBindings.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeBitmaps.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeBitmapsBasic.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeBitmapsHC4.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeBitmapsHC5.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeConfig.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeConfigV2.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeControl.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeControlGateway.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeHomeClientMaster.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeResources.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeScreenmap.h" />
+    <ClInclude Include="..\src\views\nodeprops\PropertyPageNodeSmapLite.h" />
+    <ClInclude Include="..\src\views\remotecfg\DlgEnterPassword.h" />
+    <ClInclude Include="..\src\views\remotecfg\DlgManageServers.h" />
+    <ClInclude Include="..\src\views\remotecfg\DlgToolsRemoteCfg.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizard.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage0.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage1.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage10.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage11.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage12.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage13.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage2.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage3.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage4.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage5.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage6.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage7.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage8.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPage9.h" />
+    <ClInclude Include="..\src\views\solver\PropertyWizardPageBase.h" />
+    <ClInclude Include="..\src\views\subsystems\DlgFirmwareUpdate.h" />
+    <ClInclude Include="..\src\views\subsystems\DlgMultimedia.h" />
+    <ClInclude Include="..\src\views\subsystems\DlgUnitExtProp.h" />
+    <ClInclude Include="..\src\views\subsystems\DlgViewIRTXCodes.h" />
+    <ClInclude Include="..\src\views\SWUpdate\DlgOptions.h" />
+    <ClInclude Include="..\src\views\SWUpdate\DlgSoftwareUpdate.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgChildUDPBase.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgChildUDPDns.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgChildUDPDynDns.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgChildUDPHomeserver.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgChildUDPNTP.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgChildUDPNwk.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgChildUDPSystemMode.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgChildUDPTcpIp.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgUDPLanConfig.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgUDPLanDevices.h" />
+    <ClInclude Include="..\src\views\udpcfg\DlgUDPLANSettings.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgAlarmChildProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgAlarmProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgAudioBasicProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgAudioHC4Prop.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgAvMatrixChildProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgAVMatrixProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgBoseChildProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgBosersProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgControlProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgDimmerChildProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgDimmerProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgDuoSwitchChildProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgDuoSwitchProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgEnergyMeasureProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgIRTXProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgMouseProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgRC5RXProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgSensPropChild.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgSensPropDlg.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgSwitchProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgSwitchPropChild.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgUnitChildProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgUnitProp.h" />
+    <ClInclude Include="..\src\views\unitprops\DlgVideomuxProp.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\src\BindingSoftware.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\src\res\Alarm.ico" />
+    <Image Include="..\src\res\Audio.ico" />
+    <Image Include="..\src\res\bitmap1.bmp" />
+    <Image Include="..\src\res\bitmap4.bmp" />
+    <Image Include="..\src\res\bitmap5.bmp" />
+    <Image Include="..\src\res\bitmap6.bmp" />
+    <Image Include="..\src\res\bitmap8.bmp" />
+    <Image Include="..\src\res\bitmap_n.bmp" />
+    <Image Include="..\src\res\bitmap_node1.bmp" />
+    <Image Include="..\src\res\bitmap_node2.bmp" />
+    <Image Include="..\src\res\bitmap_node3.bmp" />
+    <Image Include="..\src\res\bitmap_undefined.bmp" />
+    <Image Include="..\src\res\bitmap_w.bmp" />
+    <Image Include="..\src\res\bmp00001.bmp" />
+    <Image Include="..\src\res\Bose.ico" />
+    <Image Include="..\src\res\Control.ico" />
+    <Image Include="..\src\res\Dim.ico" />
+    <Image Include="..\src\res\dimmer_Dim_dn.ico" />
+    <Image Include="..\src\res\dimmer_Dim_up.ico" />
+    <Image Include="..\src\res\DIM_PIR.ico" />
+    <Image Include="..\src\res\Duoswitch.ico" />
+    <Image Include="..\src\res\Duo_dn.ico" />
+    <Image Include="..\src\res\Duo_up.ico" />
+    <Image Include="..\src\res\Header.bmp" />
+    <Image Include="..\src\res\ico00001.ico" />
+    <Image Include="..\src\res\ico00002.ico" />
+    <Image Include="..\src\res\ico00003.ico" />
+    <Image Include="..\src\res\ico00004.ico" />
+    <Image Include="..\src\res\ico00005.ico" />
+    <Image Include="..\src\res\ico00006.ico" />
+    <Image Include="..\src\res\ico00007.ico" />
+    <Image Include="..\src\res\ico00008.ico" />
+    <Image Include="..\src\res\ico00009.ico" />
+    <Image Include="..\src\res\ico00010.ico" />
+    <Image Include="..\src\res\ico00011.ico" />
+    <Image Include="..\src\res\ico00012.ico" />
+    <Image Include="..\src\res\ico00013.ico" />
+    <Image Include="..\src\res\ico00014.ico" />
+    <Image Include="..\src\res\ico00015.ico" />
+    <Image Include="..\src\res\ico00016.ico" />
+    <Image Include="..\src\res\ico00017.ico" />
+    <Image Include="..\src\res\ico00018.ico" />
+    <Image Include="..\src\res\ico00019.ico" />
+    <Image Include="..\src\res\ico00020.ico" />
+    <Image Include="..\src\res\ico00021.ico" />
+    <Image Include="..\src\res\ico00022.ico" />
+    <Image Include="..\src\res\ico00023.ico" />
+    <Image Include="..\src\res\ico00024.ico" />
+    <Image Include="..\src\res\ico00025.ico" />
+    <Image Include="..\src\res\ico00026.ico" />
+    <Image Include="..\src\res\ico00027.ico" />
+    <Image Include="..\src\res\ico00028.ico" />
+    <Image Include="..\src\res\ico00029.ico" />
+    <Image Include="..\src\res\ico00030.ico" />
+    <Image Include="..\src\res\ico00031.ico" />
+    <Image Include="..\src\res\ico00032.ico" />
+    <Image Include="..\src\res\ico00033.ico" />
+    <Image Include="..\src\res\ico00034.ico" />
+    <Image Include="..\src\res\ico00035.ico" />
+    <Image Include="..\src\res\ico00036.ico" />
+    <Image Include="..\src\res\ico00037.ico" />
+    <Image Include="..\src\res\ico00038.ico" />
+    <Image Include="..\src\res\ico00039.ico" />
+    <Image Include="..\src\res\ico00040.ico" />
+    <Image Include="..\src\res\ico00041.ico" />
+    <Image Include="..\src\res\ico00042.ico" />
+    <Image Include="..\src\res\ico00043.ico" />
+    <Image Include="..\src\res\ico00044.ico" />
+    <Image Include="..\src\res\ico00045.ico" />
+    <Image Include="..\src\res\ico00046.ico" />
+    <Image Include="..\src\res\ico00047.ico" />
+    <Image Include="..\src\res\ico00048.ico" />
+    <Image Include="..\src\res\ico00049.ico" />
+    <Image Include="..\src\res\ico00050.ico" />
+    <Image Include="..\src\res\Icon H Moon.ico" />
+    <Image Include="..\src\res\Icon H sun.ico" />
+    <Image Include="..\src\res\Icon Moon.ico" />
+    <Image Include="..\src\res\Icon Sun .ico" />
+    <Image Include="..\src\res\icon1.ico" />
+    <Image Include="..\src\res\icon2.ico" />
+    <Image Include="..\src\res\iconview.ico" />
+    <Image Include="..\src\res\icon_bin.ico" />
+    <Image Include="..\src\res\icon_dim_ec.ico" />
+    <Image Include="..\src\res\icon_duo.ico" />
+    <Image Include="..\src\res\icon_lcd.ico" />
+    <Image Include="..\src\res\icon_mod.ico" />
+    <Image Include="..\src\res\icon_nod.ico" />
+    <Image Include="..\src\res\icon_tab.ico" />
+    <Image Include="..\src\res\idr_myad.ico" />
+    <Image Include="..\src\res\idr_node.ico" />
+    <Image Include="..\src\res\idr_unit.ico" />
+    <Image Include="..\src\res\IRRX.ico" />
+    <Image Include="..\src\res\IRTX.ico" />
+    <Image Include="..\src\res\LOGO DUOTECNO.bmp" />
+    <Image Include="..\src\res\logo_120x120.bmp" />
+    <Image Include="..\src\res\Matrix.ico" />
+    <Image Include="..\src\res\Operator_And.ico" />
+    <Image Include="..\src\res\Operator_Or.ico" />
+    <Image Include="..\src\res\Operator_Timer.ico" />
+    <Image Include="..\src\res\Operator_XOR.ico" />
+    <Image Include="..\src\res\PS2Mouse.ico" />
+    <Image Include="..\src\res\Relais.ico" />
+    <Image Include="..\src\res\RELAIS_PIR.ico" />
+    <Image Include="..\src\res\Sens.ico" />
+    <Image Include="..\src\res\small_16x16\Duo_small_down.bmp" />
+    <Image Include="..\src\res\small_16x16\Duo_small_idle.bmp" />
+    <Image Include="..\src\res\small_16x16\Duo_small_up.bmp" />
+    <Image Include="..\src\res\small_16x16\Relais_small.bmp" />
+    <Image Include="..\src\res\small_16x16\Relais_small_on.bmp" />
+    <Image Include="..\src\res\small_16x16\Relais_small_pir.bmp" />
+    <Image Include="..\src\res\small_32x32\control_dali.ico" />
+    <Image Include="..\src\res\small_32x32\control_dali_on.ico" />
+    <Image Include="..\src\res\small_32x32\dimmer_dali_error.ico" />
+    <Image Include="..\src\res\small_32x32\dimmer_dali_off.ico" />
+    <Image Include="..\src\res\small_32x32\dimmer_dali_on.ico" />
+    <Image Include="..\src\res\small_32x32\dimmer_dali_pir.ico" />
+    <Image Include="..\src\res\small_32x32\Virtual_dali.ico" />
+    <Image Include="..\src\res\small_32x32\virtual_dali_on.ico" />
+    <Image Include="..\src\res\splash.bmp" />
+    <Image Include="..\src\res\Splsh16.bmp" />
+    <Image Include="..\src\res\Splsh16_Eng.bmp" />
+    <Image Include="..\src\res\Timer.ico" />
+    <Image Include="..\src\res\TimerDoc.ico" />
+    <Image Include="..\src\res\Toolbar.bmp" />
+    <Image Include="..\src\res\toolbar1.bmp" />
+    <Image Include="..\src\res\Videomux.ico" />
+    <Image Include="..\src\res\Virtual.ico" />
+    <Image Include="..\src\res\watermark.bmp" />
+    <Image Include="..\src\sdi.ico" />
+    <Image Include="res\Duo_idle_small.bmp" />
+    <Image Include="res\icon_dali_dim_ec.ico" />
+    <Image Include="res\icon_dali_dim_off.ico" />
+    <Image Include="res\icon_dali_dim_on.ico" />
+    <Image Include="res\icon_dali_dim_pirtimed.ico" />
+    <Image Include="res\icon_dim_ec.ico" />
+    <Image Include="res\small_16x16\Duo_small_down.bmp" />
+    <Image Include="res\small_16x16\Duo_small_idle.bmp" />
+    <Image Include="res\small_16x16\Duo_small_up.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\src\res\cursor1.cur" />
+    <None Include="..\src\res\Timer.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+    <Text Include="..\release_info\buglist.txt" />
+    <Text Include="..\release_info\notes.txt" />
+    <Text Include="..\release_info\release.txt" />
+    <Text Include="..\release_info\todo.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="BindingSoftware.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

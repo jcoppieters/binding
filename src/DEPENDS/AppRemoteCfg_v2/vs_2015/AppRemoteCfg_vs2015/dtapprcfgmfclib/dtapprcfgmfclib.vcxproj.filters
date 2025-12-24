@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{696981dc-08c6-4d0a-9e3f-454bc13cd804}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\apprcfg">
+      <UniqueIdentifier>{8ff77623-a062-4000-88cd-f0411c0e4b00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\httprcfg">
+      <UniqueIdentifier>{569dafdf-9f3a-45b3-85e0-90843b40f341}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\win32">
+      <UniqueIdentifier>{ee7565f2-54d8-43d5-897c-1d999d801d42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\appremotecfg">
+      <UniqueIdentifier>{be0c4788-2c3c-48f1-a0fd-449ff5f88715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\json">
+      <UniqueIdentifier>{3d5cae2d-bd9f-42fc-a1fe-f382b05519db}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\apprcfg\apprcfg.cpp">
+      <Filter>src\apprcfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\apprcfg\apprcfgtasks.cpp">
+      <Filter>src\apprcfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_api.cpp">
+      <Filter>src\httprcfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_base64.cpp">
+      <Filter>src\httprcfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_classes.cpp">
+      <Filter>src\httprcfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_cmn.cpp">
+      <Filter>src\httprcfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_http.cpp">
+      <Filter>src\httprcfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_json.cpp">
+      <Filter>src\httprcfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\win32\dtfilefindwin32.cpp">
+      <Filter>src\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\win32\dtthreadwin32.cpp">
+      <Filter>src\win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgCtx.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgFsm.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgMediator.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgUtils.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgApi.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgCmn.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgApi_tests.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\json\jsonbase.cpp">
+      <Filter>src\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\json\jsonserverscfg.cpp">
+      <Filter>src\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgServers.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgLoginInfo.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\json\jsonlogininfo.cpp">
+      <Filter>src\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\json\jsonservernodes.cpp">
+      <Filter>src\json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgNodeService.cpp">
+      <Filter>src\appremotecfg</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\apprcfg\apprcfg.h">
+      <Filter>src\apprcfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\apprcfg\apprcfgtasks.h">
+      <Filter>src\apprcfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_api.h">
+      <Filter>src\httprcfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_base64.h">
+      <Filter>src\httprcfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_classes.h">
+      <Filter>src\httprcfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_cmn.h">
+      <Filter>src\httprcfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_http.h">
+      <Filter>src\httprcfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_json.h">
+      <Filter>src\httprcfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\win32\dtfilefindwin32.h">
+      <Filter>src\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\win32\dtthreadwin32.h">
+      <Filter>src\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgCmn.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgCtx.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgFsm.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgMediator.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgUtils.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgApi.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\IAppRemoteCfgApi.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\win32\threadbase.h">
+      <Filter>src\win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\json\jsonbase.h">
+      <Filter>src\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\json\jsonserverscfg.h">
+      <Filter>src\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgServers.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgLoginInfo.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\json\jsonlogininfo.h">
+      <Filter>src\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\json\jsonservernodes.h">
+      <Filter>src\json</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgNodeService.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgDef.h">
+      <Filter>src\appremotecfg</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

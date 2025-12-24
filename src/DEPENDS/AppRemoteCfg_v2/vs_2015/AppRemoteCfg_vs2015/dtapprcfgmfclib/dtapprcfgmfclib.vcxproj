@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{02FA0D04-246A-4622-9D0D-640E38FCBC41}</ProjectGuid>
+    <RootNamespace>dtapprcfgmfclib</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.25431.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)../../src/dtapprcfgmfclib;$(SolutionDir)../../src/3rdparty/json-c-lib;$(SolutionDir)../../src/3rdparty/zip-lib;$(SolutionDir)../../src/3rdparty-lib/curl-7.78.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(SolutionDir)../../src/dtapprcfgmfclib;$(SolutionDir)../../src/3rdparty/json-c-lib;$(SolutionDir)../../src/3rdparty/zip-lib;$(SolutionDir)../../src/3rdparty-lib/curl-7.78.0\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;CURL_STATICLIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\apprcfg\apprcfg.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\apprcfg\apprcfgtasks.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgApi.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgApi_tests.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgCmn.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgCtx.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgFsm.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgLoginInfo.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgMediator.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgNodeService.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgServers.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgUtils.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_api.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_base64.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_classes.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_cmn.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_http.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_json.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\json\jsonbase.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\json\jsonlogininfo.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\json\jsonservernodes.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\json\jsonserverscfg.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\win32\dtfilefindwin32.cpp" />
+    <ClCompile Include="..\..\..\src\dtapprcfgmfclib\win32\dtthreadwin32.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\apprcfg\apprcfg.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\apprcfg\apprcfgtasks.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgApi.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgCmn.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgCtx.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgDef.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgFsm.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgLoginInfo.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgMediator.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgNodeService.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgServers.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\AppRemoteCfgUtils.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\appremotecfg\IAppRemoteCfgApi.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_api.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_base64.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_classes.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_cmn.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_http.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\httprcfg\httprcfg_json.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\json\jsonbase.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\json\jsonlogininfo.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\json\jsonservernodes.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\json\jsonserverscfg.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\win32\dtfilefindwin32.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\win32\dtthreadwin32.h" />
+    <ClInclude Include="..\..\..\src\dtapprcfgmfclib\win32\threadbase.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

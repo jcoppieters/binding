@@ -1,0 +1,48 @@
+/*************************************************************************//**
+ * @todo TODO_FIRMWARE_SSH_UPDATE_INSTANCE
+ *  prio: Normaal.
+ *  Instantie aanmaken van deze klasse voor de ganse applicatie.
+ *	Nu wordt er telkens een instantie aangemaakt voor iedere update...
+ *  zie ook: TODO_FIRMWARE_SSH_UPDATE_MEMORYLEAKS (waar zitten de leaks ?)
+ *
+ * @todo TODO_FIRMWARE_SSH_UPDATE_MEMORYLEAKS
+ *  prio: Hoog	<------------------------------------------------------------		!!! PRIO !!!
+ *  Bij het afsluiten van de applicatie detectie van memory leaks in de 
+ *  curl en de  ssh bibliotheek.
+ *
+ * @todo TODO_FIRMWARE_SSH_UPDATE_MOUSECURSOR
+ *	prio: Normaal.
+ *  GUI dialoog: status van de muis pointer is niet altijd correct.
+ *  De muis pointer blijft in de toestand wachten - na beweging van de muis 
+ *  pointer herstelt de cursor.
+ *  Kunnen we deze verhelpen door InvalidateRect() of moeten we principe 
+ *  herwerken met BeginWaitCursor( ) en EndWaitCursor( ).
+ *
+ * @todo TODO_FIRMWARE_SSH_UPDATE_TOOLS
+ *	prio: Normaal.
+ *  De GUI dialoog van de updater kunnen openen via een 'tools' menu optie.
+ *
+ * @todo TODO_FIRMWARE_SSH_UPDATE_LOCALFILE
+ *	prio: Normaal.
+ *  Nu wordt bij de firmware update deze altijd eerst gedownload van de 
+ *  cloud naar de pc. Moglijkheid om te controleren of deze al aanwezig is
+ *  op de pc. Indien ja dan niet meer downloaden maar de lokale versie gebruiken.
+ *  
+ * @todo TODO_FIRMWARE_SSH_UPDATE_RECOVERY
+ *	prio: Normaal.
+ *  Via de updater een recovery herstel punt aan te maken. Mogelijk ?
+ *  Principe: De Applicatie en zijn bestanden copieren onder een backup 
+ *  directory. Deze backup in de opstart zetten. Uitvoeren van de updater.
+ *  Als deze correct uitgevoerd werd opstart opties naar de nieuwe versie.
+ *  Als de installatie mislukt is dan de oude backup applicatie gebruiken.
+ *  Nadeel: Updater zal veel langer duren (+moeten alle scripts copieren).
+ *
+ * @todo TODO_FIRMWARE_SSH_UPDATE_APPREMOTECFGTASKS
+ *	prio: Normaal.
+ *  Code van de bibliotheek opkuisen.
+ *  Nu is er voor een taak altijd een hostaddress en poort nummer nodig.
+ *  De taken voor het downloaden van de versie info / firmware versies van
+ *  de cloud zijn volgens een ander principe.
+ *  Mogelijkheid om een algemene taak aan te maken.
+ *
+ ****************************************************************************/

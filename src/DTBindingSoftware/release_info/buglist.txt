@@ -1,0 +1,839 @@
+/*************************************************************************//**
+ * Bug Rapport:
+ *
+ * @bug
+ *	Autobinding voor sferen 0--> 100 --> 200 geeft een Internal Error.\n
+ *	Probleem: Lokale variabele cnt was niet geïnitialiseerd op 0 in de 
+ *			  functie: GetInputs( ).
+ *	Sedert: v0554
+ *	Status: opgelost in versie v0555.
+ *	oplossing: functie GetInputs( ), lokale variable cnt
+ *	nota: versie v0554 werd niet uitgeleverd naar klanten was altijd Beta.
+ *
+ * @bug	
+ *	versturen van FC_LCDINFODIALOG.\n
+ *	Probleem: FC_LCDINFODIALOG werd verstuurd zonder het 0 karakter.		
+ *	Sedert: Alle releases
+ *	Status: Opgelost in versie 0x0560.
+ *	Oplossing: zie TxNodeMessages.
+ *			
+ * @bug
+ *	Connectie met communicatie poort.\n
+ *	Probleem: Als de eerste maal bij het connecteren een verkeerde COM poort wordt
+ *	ingevuld, kan niet meer connecteren op de juiste poort.\n
+ *	De applicatie moet opnieuw opgestart worden.
+ *  Sedert: v0555
+ *	Status: Testen Solved ?
+ *	
+ * @bug
+ *	External configuratie werkt enkel in DEBUG mode en niet in 
+ *	release mode.
+ *	Probleem: Overflow van het array bij het invoegen van een '\0' karakter.
+ *	Sedert: v0560
+ *	Status: v0560 opgelost: Blijven opvolgen.
+ *
+ * @bug
+ *	External multimedia configuratie werkt niet voor een enkele node +
+ *	bron configuratie werd niet doorgestuurd.
+ *	Probleem: zie TM20091001
+ *  Sedert: v0560
+ *	Status: v0560 opgelost: Blijven opvolgen.
+ *		
+  * @bug	
+ *  Auto bindings voor de sferen 0-100-200 worden in sommige gevallen via
+ *	een rode pijl aangemaakt.
+ *	Dit is te wijten aan ControlUnitProp die niet geïnitaliseerd werd bij
+ *  het maken van de templates.
+ *  Probleem: zie BUG_RODE_PIJL_20100727 
+ *  Sedert: Altijd
+ *	Status: v0564 opgelost
+ *
+ * @bug
+ *	Configurator opent telkens een nieuwe instantie wanneer er op de config 
+ *	knop wordt gedrukt.
+ *	Probleem: zie TM20100623
+ *	Sedert: 0x0563
+ *	Status: v0565 opgelost.
+ *
+ * @bug	
+ *  Configurator toont niet welke bitmaps er reeds verstuurd zijn.
+ *	Probleem: Zie TM 20100823:\n
+ *	Het verplaatsen van de bitmaps mislukte omdat de map SendedBitmaps_xx
+ *  nog niet bestond. 
+ *  Sedert: Altijd.
+ *  Status: v0566 opgelost.
+ *	
+ * @bug
+ *	Bose v35: weergave van de button source functie was niet OK.
+ *  Probleem: Zie TM 20100823
+ *  Sedert: v0565
+ *  Status: v0566 opgelost.
+ * 
+ * @bug
+ *	referentie: BUG-0100
+ *	Timers verdwijnen uit de modules na een reset.
+ *	Probleem: De timers in de binding string zijn hoofdletter gevoelig en 
+ *	moeten als 'Te' ipv 'TE' doorgestuurd worden.\n
+ *	Bij het aanmaken van een binding is dit OK maar bij het inladen en 
+ *  reconvert wordt de volledige binding string naar hoofdletters omgevormd
+ *	om bewerkingen uit te voeren.
+ *	Sedert: Alle versies.
+ *  Status: v0567 opgelost.
+ *
+ * @bug
+ *	referentie: BUG-0101  
+ *	Probleem: Unit create configuratie verstuurd de ';' mee in de naam.
+ *	Sedert: Alle versies sinds configuratie.
+ *  Status: v0568 opgelost.
+ *
+ * @bug
+ *	referentie: BUG-0102
+ *	Probleem: Als er naam verschillen zijn kunnen de namen van de units 
+ *  van een network node naar een database node gekopieerd worden.
+ *	De namen van de nodes werden niet gekopieerd waardoor na de browse
+ *	opnieuw naam verschillen waren.
+ *
+ * @bug
+ *	referentie: BUG-0103
+ *	Probleem: Unit create vlaggen: Audio units mogen enkel aangemaakt worden
+ *	in de master LCD.
+ *
+ * @bug
+ *	referentie: BUG-0104
+ *	Probleem: Wanneer een gateway node met 0 units vervangen wordt door een
+ *	gateway met 32 units worden de units niet bijgevoegd.
+ *	Moeten de node eerst verwijderen uit de installatie en dan opnieuw de
+ *  nieuwe gateway node invoeren.
+ *	
+ * @bug	
+ *	referentie: BUG-0105
+ *	Probleem: Inlezen van de configuratie bestanden:
+ *	Als een naam 'Kamer 1' noemt en we gebruiken scanf(..."%s") dan zal de 1
+ *  verwijderd worden uit de naam.
+ *	Het is wel in orde wanneer de naam aan mekaar is of wanneer een underscore.
+ *  Sedert: Alle versies.
+ *  status: Solved v0571
+ *
+ * @bug
+ *	referentie: BUG-0106
+ *  Probleem: NodeDatabase.txt is corrupt wanneer er "<<" en ">>" namen van
+ *  de units voorkomen.
+ *  Reden: CExportGenerateUnitsTable gebruikt '<' en '>' als seperator karakters.
+ *  Sedert: Alle versies.
+ *	Solved: Tijdelijke workaround (zie WORKAROUND_BUG_0106).
+ *  Karakters '>' en '<' worden vervangen door '?'
+ *
+ * @bug	
+ *	referentie: BUG-0107
+ *	Probleem: Als er lege screenmap bestanden zijn krijg de melding dat er
+ *	sommige screenmap bestanden niet kunnen gevonden worden en worden deze
+ *  telkens opnieuw geinitialiseerd.
+ *	Reden: Type fout: GetSize ipv GetSize( ).
+ *  Sedert: v0571
+ *  Solved: v0572
+ *
+ * @bug
+ *	referentie: BUG-0108
+ *	Probleem: Als er lege screenmap bestanden zijn: krijgen de melding 
+ *	"ConvertArrayToStructs Failed".
+ *	Reden: Type fout: GetSize ipv GetSize( ).
+ *  Sedert: v0571
+ *	Solved: v0572
+ *	
+ * @bug
+ *	referentie: BUG-0109
+ *	Probleem: *.txt bestanden worden niet gekopieerd bij het opslaan via 
+ *	Save as.
+ *	Reden: Enkel *.Bin bestanden.
+ *  Sedert : v0571
+ *  Solved : v0572
+ *
+ * @bug
+ *	referentie: BUG-0120
+ *	Probleem: De applicatie crasht wanneer een binding toegevoegd wordt.
+ *	Reden: Geheugen is corrupt in de functie CApplicationViewManager::GetEditControlBindingName( ).
+ *	Wijzigen CString via de referentie naar pbData. Dit geheugen is in gebruik door een ander.
+ *  Sedert: Alle versies maar crashte enkel wanneer gecompileerd met Vs2008
+ *  Solved: v0572
+ *
+ * @bug	
+ *	referentie: BUG-0121
+ *  Probleem: was enkel een probleem bij Windows 7. (gecompileerd met MSVS2008)
+ *	Project werd onder een verkeerde directory opgeslaan. Het werd altijd onder
+ *	de huidige directory (waar het exe bestand zich bevond) opgeslaan en niet
+ *  onder de directory van CFileDialog.
+ *	Reden: In de vorige versies kon de huidige directory opgevraagd worden via
+ *	GetCurrentDirectory( ). Nu moeten we CFileDialog::GetPathName( ) gebruiken
+ *	en de bestandsnaam hiervan verwijderen.
+ *  Sedert: v0575
+ *	Solved: v0575
+ *
+ * @bug	
+ *	referentie: BUG-0122
+ *	probleem: Bij het opslaan werd een verkeerd path aangemaakt waardoor het 
+ *	project niet kon gesaved worden.
+ *	Reden: Probleem bewerking van strings. Lower en uppercase strings werden
+ *	door elkaar gebruikt.
+ *	sedert: v0575
+ *	Solved: v0575
+ *
+ * @bug	
+ *	referentie: BUG-0123
+ *	probleem: Opslaan als: Wanneer huidige en vorige directory dezelfde waren
+ *  werd geprobeerd om de bestanden te kopieren. Dit gaf een foutmelding.
+ *	reden: Probleem bewerking van strings. Lower en uppercase strings werden
+ *	door elkaar gebruikt.
+ *	sedert: v0575
+ *  solved: v0575
+ *
+ * @bug	
+ *	referentie: BUG-0124
+ *	probleem: Bij het afsluiten van de applicatie blijft de comport soms 
+ *  nog in gebruik.
+ *	reden: Compoort niet gesloten ?
+ *  sedert: v0572
+ *  solved: v0575 ?
+ *
+ * @bug	
+ *	referentie: BUG-0125
+ *	probleem: Windows 7: Bitmaps kunnen niet ingeladen worden.
+ *  reden: Moeten CFileDialog::GetPathName( ) ipv GetFileName( ) gebruiken.
+ *	sedert: v0572
+ *  solved: v0575
+ *
+ * @bug
+ *	referentie: BUG-0126
+ *  probleem: Wanneer Myhome doorgestuurd wordt en er is geen data aanwezig in
+ *	het bestand 'Scrmap_fc_names.txt' crasht de applicatie.
+ *	Oppassen: Deze oplossing zorgt ervoor dat de applicatie niet crasht maar de 
+ *	FSM zal door de gebruiker zelf moeten gecancelled worden. (Zie BUG-0127)
+ *  reden: pointer die niet aanwezig was.
+ *  sedert: v0572
+ *  solved: v0576
+ *
+ * @bug
+ *  referentie: BUG-0127 (zie ook BUG-0126)
+ *  probleem: Wanneer de bestanden 'Scrmap_fc_names.txt' en 'Scrmap_fc_info.txt'
+ *  aanwezig zijn maar leeg dan stopt de FSM met het doorsturen.
+ *  De gebruiker moet manueel cancel uitvoeren.
+ *  reden:
+ *  sedert: v0572
+ *  solved: PENDING
+ *
+ * @bug
+ *  referentie: BUG-0128
+ *	probleem: Temperatuur waarden in bereik -0.9 tem -0.1 worden positief 
+ *	weer gegeven.
+ *	reden: De temp waarden worden in een short (x10) bijgehouden.
+ *	Wanneer de waarden -9 tem -1 gedeeld worden door 10 is de MSB altijd 0
+ *	waardoor er geen - teken wordt getoond.
+ *  sedert: Alle versies.
+ *	solved: v0x0600
+ * 
+ * @bug 
+ *	referentie: BUG-0129
+ *	probleem: Doorsturen van FTP configuratie gaf een probleem wanneer het laatste
+ *  Char bereikt werd bij het versturen van een nieuw pakket.
+ *	Was een probleem bij het versturen van 108 IRTX codes.
+ *  reden: Controle op end of file mag pas na het lezen van laatse char. Daarom
+ *  bij het uitlezen van de data controleren op het aantal gelezen chars.
+ *  sedert: Implementatie van FTP.
+ *  solved: v0x0620 (zie SOLVE_BUG_FTP_CONFIG).
+ *
+ * @bug	
+ *	referentie: BUG-0130
+ *  probleem: Bij de detectie van naam verschillen: 
+ *  Bij het doorsturen van de namen worden de node namen niet veranderd.
+ *  reden: Voor het doorsturen van de namen worden de RT node properties naar de 
+ *  doc nodes gekopieerd. (TMUpdateNodesWithRTSpecs() - ook de namen.)
+ *	De namen die hierdoor doorgestuurd worden zijn de (oude) van de runtime nodes.
+ *  sedert: Alle versie.
+ *  solved: v0x0620
+ *  attention: Indien enkel de node namen anders zijn en niet de unit namen zal
+ *	er geen foutmelding zijn en worden de namen niet doorgestuurd.
+ *
+ * @bug
+ *	referentie: BUG-0131
+ *	probleem: Doorsturen van namen die leeg zijn en/of starten met een spatie.
+ *	sedert: Alle versies.
+ *  solved: PENDING
+ *  workaround: Komma plaatsen voor units die niet gebruikt zijn.
+ * 
+ * @bug
+ *  referentie: BUG-0132
+ *	probleem: Download van de systemlog bestanden van de homeserver mislukt in 't field.
+ *	Kon deze wel manueel via FTP dialoog downloaden.
+ *  sedert: v0x0620
+ *  solved: Testen Aanpassingen in v0625
+ *  workaround: Manueel via FTP dialoog downloaden.
+ *
+ * @bug
+ *	referentie: BUG-0133
+ *  probleem: De node namen worden niet doorgestuurd wanneer een module werd bijgevoegd.
+ *  Dit is een probleem wnr de namen offline werden ingegeven en in de installatie
+ *  werd één of meerdere nodes toegevoegd. (Testen of dit enkel de node namen zijn.)
+ *	Toont geen Name differences dialoog melding.
+ *  sedert: Alle versies.
+ *  solved: PENDING
+ *  workaround: Eerst de namen doorsturen en nadien pas een module bijvoegen.
+ *
+ * @bug
+ *	referentie: BUG-0134
+ *	probleem: Remotecodes waarin een '9' voorkomt worden verkeerd getoond in de 
+ *  binding property dialoog.
+ *	sedert: Alle versies.
+ *  solved: V0x0635
+ * 
+ * @bug	
+ *  referentie: BUG-0135
+ *  probleem: Sensor units v90 maken alle property bindings aan wnr er maar
+ *  1 moet aangemaakt worden. Dit is omdat niet vergeleken wordt met de 
+ *  default waarden maar met de macros van de gewone sensor unit.
+ *	sedert: Implementatie oled
+ *  solved: V0x0635
+ *  
+ * @bug
+ *  referentie: BUG-0136
+ *  solved: v0x0636
+ *	probleem: Inladen van een bestaande *.duo bestand geeft soms een onterechte 
+ *  foutmelding dat er manueele bindings aanwezig zijn.
+ *  Probleem is dat er een member variabel CBindingEntry::m_nID niet geinitialiseerd
+ *	wordt. Indien deze toevallig op een waarde staat van een binding die reeds in
+ *  de database aanwezig is wordt deze binding entry niet meer toegevoegd aan
+ *  de database. Daardoor zijn er verschillen in de binding entry database en
+ *  de ingelezen binding text bestanden.
+ *	sedert: Alle versies.
+ *
+ * @bug
+ *	referentie: BUG-0137
+ *  probleem: Binding timer operators mogen max tem 119 (=60 minuten).
+ *  solved: 0x0639
+ *  sedert: Alle versies.
+ *
+ * @bug
+ *	referentie: BUG-0138
+ *  probleem: Auto bindings Rolluik.
+ *	2 drukknoppen die meerdere rolluiken sturen mag in puls ipv pulstoggle omdat
+ *  de actie geen f(toestand) is maar een UP/DOWN.
+ *  solved: 0x0639
+ *  sedert: Alle versies.
+ *
+ * @bug
+ *	referentie: BUG-0139
+ *	probleem: IRTX codes view.
+ *  Wanneer afsluiten via de "close" kan deze niet meer getoond worden.
+ *  solved: 0x0639
+ *  sedert: Alle versies
+ *
+ * @bug	
+ *	referentie: BUG-0140
+ *  probleem: Binding software crasht bij opstarten.
+ *  Dit was bij versie 0639 een probleem, manueel downgraden naar 0638 op computer klant 
+ *  was het probleem opgelost.
+ *  Mogelijk een probleem met de winsock DLL ?
+ *  Solved: 0x641 ( - PENDING -)
+ *  sedert: versie 0x0639
+ *  
+ * @bug
+ *	referentie: BUG-0141
+ *  probleem: Binding software crasht in de problem solve wizard bij de dialoog
+ *	Replace nodes. (PropertyWizardPage5).
+ *	Solved: 0x0800
+ *	sedert: Alle versies.
+ * 
+ * @bug	
+ *  referentie: BUG-0142
+ *  probleem: CompareNodeDatabases( ) + Problem solve wizard.
+ *	Wanneer er nodes bijgevoegd worden en er zitten incompatible nodes in het
+ *  systeem worden deze niet meer correct weergegeven.
+ *  Dit is omdat eerst gecontroleerd wordt of er nodes toegevoegd werden en 
+ *  daarna pas over er incompatible nodes in het systeem zitten.
+ *  Wnr er enkel toevoegd zijn wordt er al een gedeeltelijke copy gedaan van 
+ *  de runtime naar de doc nodedatabase. Daarom bij detectie van incompatible
+ *  nodes is de physical address + namen + ... al upgedate van de verkeerde 
+ *  nodes.
+ *  Solved: 0x0800
+ *  Sedert: Alle versies.
+ *
+ * @bug
+ *  referentie: BUG-0143
+ *  probleem: Binding software crasht in engineering mode bij het openen van de 
+ *  dialoog "Communication".
+ *  Solved: 0x0801
+ *  Sedert: Alle versies.
+ *
+ * @bug
+ *  referentie: BUG-0144
+ *  probleem: Binding software crasht bij het openen in normale mode.
+ *  Crasht tijdens het tonen van de splashscreen.
+ *  Deed zich voor op een oude pc Windows 7 - Franstallig
+ *  Moeten downgraden naar een versie 0x0700
+ *  solved: PENDING
+ *			aanpassingen zie TM_CHANGES_BUG_0144
+ *  sedert: Alle versies, sedert versie 0x0800 ?
+ *
+ * @bug	
+ *	referentie: BUG-0145
+ *  probleem: Configuratie van de alarmzones/multimedia via de LCD opent het
+ *	tekstbestand.
+ *  solved: PENDING - Wachten tot de configurator ondesteuning voor multimedia V64 
+ *	ondersteund. De configurator kan dan evt zelf het tekstbestand openen.
+ *  sedert: Alle versies
+ *
+ * @bug
+ *	referentie: BUG-0146
+ *	probleem: Binding software crasht bij het opslaan van een project.
+ *	Naam van de binding is 'BADK3 20%  S'. Wanneer deze naam aangepast wordt
+ *  naar 'BADK3 20%' dan is het probleem opgelost.
+ *	Zie testbestand: 'bruynooghe 20150119_v1'
+ *  Zie CHANGES_0X0A01_USE_FPUTS
+ *  Solved: Testen v0x0A01 
+ *	Sedert: Versie 0x0804: Bindingfileconfig txt bestand.
+ *
+ * @bug
+ *	referentie: BUG-0147
+ *  probleem: Indien er node/unit namen zijn die leeg zijn dan stopt de FSM
+ *  met doorsturen.
+ *  Aangepast in de FSM: Indien de lengte van een naam 0 is dan als data een
+ *  spatie versturen.
+ *	Solved: Testen Versie 0x0B00
+ *  Sedert: Alle versies.
+ *
+ * @bug
+ *  referentie: BUG-0148
+ *	probleem: Reconversie naar binding bestanden.
+ *  Indien er enkel binding bestand met P-bindings ongeldig zijn dan worden
+ *  deze niet opnieuw aangemaakt. Er moet minstens 1 gewone binding tussen
+ *  zitten.
+ *  Solved: TODO
+ *  Sedert: Functionaliteit vanaf versie 0x0902.
+ *
+ * @bug
+ *	referentie: BUG-0149
+ *	probleem: Modbus interface unit create vlaggen.
+ *  Momenteel worden de unit create vlaggen voor de modbus interface verkeerd 
+ *  doorgegeven. Momenteel kunnen alle unit types aangemaakt worden.
+ *  Dit beperken tot enkel sensor units & virtual units.
+ *	Oppassen: Verandering is enkel toepassing indien de firmware van de module
+    > Versie v65;54.04
+ *  Solved: Versie 0x0C03
+ *  Sedert: Alle versies.
+ *
+ * @bug
+ *	referentie: BUG-0150
+ *	probleem: Visualisatie van sensor delegation.
+ *	Indien er een dialoog openstaat van een Delegate en doen een dialoog open van
+ *  een delegator (zonder de eerste te sluiten) dan worden de controls niet upgedate 
+ *  maar blijft de tekst actief.
+ *  Solved: Solved 0x0C05
+ *  Sedert: Implementatie.
+ *
+ * @bug
+ *	referentie: BUG-0151
+ *  probleem: Momenteel zit er een bug in de binding software bij het aanmaken van 
+ *	bindings voor dimmer inc/dec value. De tweede param (stap) ontbreekt. 
+ *	Hierdoor onstaat er undefined behavious (afh. van data in vorig CAN bericht.) 
+ *	Soms reageren de commandos niet (indien de waarde 0 is) 
+ *	kan ook zijn dat deze in groote stappen aangepast worden.
+ *  Solved: Solved 0x0D00
+ *  Sedert: Implementatie.
+ *
+ * @bug
+ *	referentie: BUG-0152
+ *	probleem: Temp sensor: Bindings die aangemaakt worden voor koeling en
+ *	heating gebruiken de verkeerde bindingvlaggen in de B-Binding.
+ *	Dit is geen probleem voor werking omdat deze nergens gebruikt worden.
+ *	Het is enkel bij I-bindings dat deze vlaggen gecontroleerd worden.
+ *  De binding software maakt enkel B-G bindings aan.
+ *  Solved: Solved 0x0D00
+ *  Sedert: Implementatie.
+ * 
+ * @bug 
+ *	referentie: BUG-0153
+ *  probleem: Indien er binding entries aanwezig zijn met onbekende types
+ *	krijgen hiervan melding + vraagt of de binding entry willen verwijderen.
+ *  De binding entry wordt enkel verwijderd uit de GUI-views maar niet uit
+ *  de binding database. 
+ *	Kan in de praktijk in principe nooit voorvallen.
+ *  Solved: PENDING - LOW_PRIO
+ *  Sedert: Implementatie.
+ *
+ * @bug 
+ *	referentie: BUG-0154
+ *  probleem: Verkeerde waarde voor SENS_HYSOFFSET_DEFAULT_V2. 
+ *	Deze is in de firmware van de modules 10 (=1°C).
+ *	Doordat deze hier als 0 staat kunnen er geen bindings aangemaakt worden voor een offset van 0°C
+ *  Solved: V13.00:
+ *  Workaround: Property bindings instellen op 0,1°C
+ *	Sedert: Implementatie.
+ *
+ * @bug	
+ *	referentie: BUG-0155
+ *  probleem: Sample interval met defaults V3 niet correct.
+ *	De eerste sensor unit toont 20 sec maar de binding voor 23 sec
+ *  wordt niet aangemaakt, wel de binding voor 20 sec.
+ *	Solved: PENDING - Lage prio
+ *	Workaround:
+ *  Sedert:
+ *
+ * @bug 
+ *  referentie: BUG-0156
+ *  probleem: Sample interval met defaults V3/V4 niet correct.
+ *  Na uitlezing staan de sample interval waarden verkeerd.
+ *  Bij de sbox+: beide staan op 23°C
+ *  Bij de analoge universele module: staan allemaal op 43°C
+ *	Solved: PENDING - Lage prio
+ *	Workaround:
+ *  Sedert:
+ *
+ * @bug
+ * referentie: BUG-0157
+ * probleem: Wanneer een binding aangemaakt met 2 virtuals of een control + 
+ *			 virtual dan veranderd de pijl soms van zwart naar rood.
+ * Oplossing: Wellicht initialisatie in de ctor.
+ *			  zie macro USE_IMPLEMENTATION_SOLVE_BUG_0157
+ * sedert: Implementatie.
+ * solved: PENDING - Aanpassingen versie V14.07
+ * Workaround:
+ *
+ * @bug
+ * referentie: BUG-0158
+ * probleem: Wanneer bezig zijn met doorsturen van de multimedia configuratie 
+ *           en wordt nog eens op de upload knop gedrukt dan crasht de software.
+ * Oplossing: Opvragen of het algoritme gereed is. 
+ *			  zie BUG_SOLVE_0158
+ * Sedert: Implementatie.
+ * Solved: Versie 0x0E0A
+ * Workaround: 
+ *
+ * @bug
+ * referentie: BUG-0159
+ * probleem: Wanneer een unit naam in unitconfig_xx.txt bestand een '%-' bevat 
+ *			 dan crasht de binding software.
+ * oplossing: sprintf( ) vervangen door een strcpy( ).
+ * sedert: Implementatie.
+ * Solved: Versie 0x0E0C
+ *
+ * @bug
+ * referentie: BUG-0160
+ * probleem: Wanneer een unit naam in unitconfig_xx.txt bestand een '%' bevat 
+ *			 kan soms de unit config niet doorgestuurd worden.
+ *			  Zie ook BUG-0159
+ * oplossing: ??
+ * sedert: Implementatie.
+ * Solved: 
+ *
+ * @bug 
+ * referentie: BUG-0161
+ * probleem: Bij het maken van een binding inverse naar een rolluik zijn
+ *			 er manuele bindings. (zie doc op de server.)
+ *			 Kunnen momenteel het probleem niet meer simuleren.
+ *			 Bindings:
+ *			  000088_00_0009_BU00E01>A000088U1CS
+ *			  000088_02_0009_GA000088U00E01=U1CFB6D020100S
+ *
+ * oplossing: ??
+ * sedert: Implementatie.
+ * Solved: ?
+ *
+ * @bug 
+ * referentie: BUG-0162
+ * probleem: Wanneer er in de screenmapping onbekende units aanwezig zijn en er 
+ *			 zijn screenmap entries met nodeaddress (=0xff) dan hangt de 
+ *			 binding software.
+ *			 Is enkel mogelijk in de configuratie van de audiokamers (wanneer er
+ *			 virtuele audio kamers aanwezig zijn.)
+ * oplossing: zie CScreenmapUtil::CorrectArray
+ * Sedert: altijd.
+ * Status: Solved 0x0F06
+ *
+ *
+ * @bug 
+ * referentie: BUG-0163
+ * probleem: Screenmapping: Wanneer de laatste entry van het verkeerde type was 
+ *		     dan werd deze niet verwijderd.
+ * oplossing: zie CScreenmapUtil::CorrectArray
+ * Sedert: altijd.
+ * Status: Solved 0x0F06
+ *
+ *
+ * @bug
+ * referentie: BUG-0164
+ * probleem: Wanneer een oude Sonos interface vervangen werd door een nieuwe 
+ *			 SonosCloud interface dan wordt er een P-Binding aangemaakt die 
+ *			 het config type overschrijft. Hierdoor staat het config type op
+ *			 NONE en kunnen de SonosCloud bronnen / devices niet meer geconfigureerd worden.
+ * oplossing: P-Binding enkel aanmaken voor de interfaces waar een P-binding moet 
+ *			  aangemaakt worden: Momenteel Integra & Audac.
+ * workaround: Manueel de P-Binding wissen.
+ * sedert: ..
+ * status: Solved 0x0F10 (Testen.)
+ *
+ *
+ * @bug 
+ * referentie: BUG-0165
+ * probleem: Bij de touchscreen wanneer we via pop-up context menu 'node configuration'
+ *			 selcteren dan een verkeerde index van pagina.
+ *			 Toont tab-page binding ipv node configuration.
+ *			 reden: Berekening verkeerde index van property page door de bitmpas config.
+ *			 LCD V66 heeft geen propertypage voor de bitmaps config.
+ * oplossing: Uitzondering LCD V66
+ * sedert: V16.07
+ * status: Solved V16.08
+ *
+ * 
+ * @bug 
+ * referentie: BUG-0166
+ * probleem: Bij het starten van een nieuw project wordt na het opslaan van het project 
+ *			 telkens na het uitvoeren van een taak opnieuw gevraagd om eerst het 
+ *			 project op te slaan.
+ * oplossing: V16.11: zie OnApplicationOnlineIdle().
+ *			  De melding enkel tonen als er nog geen data ingeladen/opgeslagen was.
+ * sedert: V16.10
+ * status: Solved V16.11
+ *
+ * @bug
+ * referentie: BUG-0167
+ * probleem: *.duo bestanden worden soms verkeerd opgeslaan wanneer deze lang zijn.
+ *			 De CFileDialog geeft kortere namen voor de title & bestandsnaam.
+ * opossing: NormalizeFileNames( )
+ *			 Controle doen op de namen en zelf aanmaken a.d.h.v. volledig path.
+ *
+ *
+ * @bug
+ * referentie: BUG-0168
+ * probleem: Probleem bij het opslaan van een *.duo bestand wanneer we een bestaand
+ *		     bestand selecteren.
+ * oplossing: Zie code: aanpassingen aan CApplicationFileSettings en CTimerDoc
+ * Sedert:	 V16.16
+ *
+ ******************************************************************************
+ * @bug
+ * referentie: BUG-0169 (zie ook BUG-0176)
+ * sedert: 16.14 ? (eerste melding.)
+ * probleem: Probleem bij het openen van de node property dialogen.
+ *		     De dialoog gaat korstondig openen en sluit daarna af.
+ *			 Probleem wellicht sedert de integratie via de menu pop-up dialogen.
+ * status: PENDING.
+ *		   Reeds diverse workarounds geimplementeerd: Vroeger ging de dialoog 
+ *		   niet meer open wanneer dezelfde node geselecteerd werd.
+ *		   Aanpassingen in versie V16.17. (zie referenties.)
+ *		   In de versie V16.27 nog steeds een probleem. Op de labtop van Mario was
+ *		   de enige oplossing om de PC te rebooten.
+ *		   Diverse aanpassingen in V16.28 + Opslaan van een logbestand.
+ * oplossing: 
+ *
+ * ref: BUG_0169_CHANGES_DIALOG_DESTROY, 
+ *		BUG_0169_CHANGES_PROPERTY_NODESSHEET
+ *		BUG_0169_CHANGES_PROPERTY_NODESSHEET_POSTMESSAGE
+ *******************************************************************************
+ * @bug
+ * referentie: BUG-0170
+ * sedert: Altijd.
+ * probleem:  Wanneer een bestaande binding ge-editeerd wordt op een verkeerde manier (bvb.
+ *	          omdat niet alle units geconnecteerd waren) dan werd deze binding verwijderd uit de GUI treeviews 
+ *			  maar was wel nog aanwezig in de binding bestanden.
+ * status: Solved V16.17 ????
+ * Oplossing: zie BUG_0170_CHANGES_SOLVE
+ *
+ *******************************************************************************
+ * @bug
+ * referentie: BUG-0171
+ * sedert: Altijd.
+ * probleem: Screenmapping virtuele kamers.
+ *			 Wanneer de index van de virtuele kamers niet op elkaar volgen dan wordt de data 
+ *			 corrupt doorgestuurd naar de touchscreens.
+ * status: Solved V16.25
+ * Oplossing: Zie code ref BUG-0171
+ *******************************************************************************
+ * @bug
+ * referentie: BUG-0172
+ * sedert: Altijd.
+ * probleem: Bij een "SaveAs" worden de Bestanden die door de binding software onder 
+ *			 de CONFIG of DATA mappen gesaved worden overschreven door de oudere 
+ *			 versies (van  de vorige project directory.)
+ *			 Betreft de 'projectnodeservices.dat' / 'projectnodeservices.json'
+ *			 Betreft de 'projectLoginInfo.dat' / 'projectLoginInfo.json'
+ * reden: De bestanden werden eerst opgeslagen in de Serialize() functie.
+ *		  Bij een saveAs wordt er nadien nog een CopyDirectory uitgevoerd waardoor
+ *		  de oude bestanden opnieuw gekopieerd worden.
+ * status: Solved V16.28
+ * Oplossing: Zie code ref BUG-0172 - saveAdditionalConfigFiles( )
+ *			  Deze functie wordt aangeroepen in onSave() en onSaveAs( ).
+ *****************************************************************************
+ * @bug
+ * referentie: BUG-0173
+ * sedert: Aanpassingen V16.29 ?
+ * probleem: Wanneer een node niet gevonden werd via de physical browse for nodes
+ *			 dan werd deze later verkeerd ingevoegd via de Browse for nodes.
+ *			 Hierdoor wordt er tijdens de browse for nodes telkens extra nodes
+ *			 gevonden waardoor deze telkens opnieuw de browse for nodes uitvoert.
+ * reden: Typo. De waarde in de constructor werd niet toegekend als logisch adres.
+ * status: Solved: V16.32
+ * Oplossing: Zie code aanpassing ref BUG-0173.
+ *****************************************************************************
+ * @bug 
+ * referentie: BUG-0174
+ * sedert: Altijd.
+ * probleem: Autobinding forward binding van een dimmer naar een relais wordt
+ *			 soms aangemaakt via een rode pijl.
+ * reden: Variabele werd niet geïnitialiseerd. 
+ *		  Om de toestand (pijl) van een binding te bepalen met de 'm_ControlUnitProp'
+ *		  toestand gebruikt worden.
+ * status: Solved: V16.32
+ * Oplossing: Zie code aanpassing ref BUG-0174.
+ ****************************************************************************
+ * @bug 
+ * referentie: BUG-0175
+ * sedert: Aanpassingen dialoog connect offline naar online gaan.
+ * probleem: Binding configuratie verschillen gevonden.
+ *			 Het probleem komt voor wanneer er vanuit offline mode naar online
+ *			 mode gegaan wordt zonder te browsen op de installatie.
+ *		     Wanneer er dan bindings doorgestuurd worden dan zullen er de volgende
+ *			 keer wanneer er online gegaan wordt configuratie verschillen gevonden.
+ *			 worden.
+ * reden: In de mode (offline -> online) werd na het doorsturen van bindings de
+ *		  database node niet upgedate met de nieuwe XOR en NrOfBindings.
+ * status: Solved V16.32
+ * oplossing: Zie code aanpassingen ref BUG-0175.
+ ******************************************************************************
+ * @bug
+ * referentie: BUG-0176 (zie ook BUG-0169)
+ * sedert: Invoegen context menu
+ * probleem: Wanneer in de treeview het context menu geopend wordt voor het 
+ *			 tonen van de node properties werd soms nog de vorige node getoond.
+ *			 Voornamelijk een probleem na het editeren van de naam of wanneer
+ *			 de selectie via het tekst label gebeurd.
+ *			 Wanneer er nog geen property dialogen geopend werden en doen dit
+ *			 via een label waarvan we de tekst editeren dan opent de dialoog niet.
+ * reden: Het geselecteerde item (m_hItemSelected) werd niet upgedate bij het
+ *		  openen van het context menu.
+ * status: Solved V16.32
+ * Oplossing: Zie code aanpassingen BUG-0176.
+ *****************************************************************************
+ * @bug 
+ * referentie: BUG-0177
+ * sedert: 0x0E10
+ * probleem: Wanneer de verbinding verbroken wordt tijdens het versturen van 
+ *		     bindings dan zijn de 'Add', 'Auto' en 'Delete' niet meer zichtbaar.
+ *			 Moet de software opnieuw opstarten (of opnieuw de bindings doorsturen)
+ *			 om het probleem te verhelpen.
+ * reden: Tijdens het doorsturen van de bindings worden deze knoppen disabled om 
+ *		  te voorkomen dat de bindingbestanden nog aangepast worden tijdens het
+ *		  versturen. Bij een disconnect event moeten we deze toestand veranderen.
+ * status: Solved V16.32
+ * Oplossing: Zie code aanpassingen BUG-0177
+ *****************************************************************************
+ * @bug
+ * referentie: BUG-0178 (zie ook  BUG-0176 / BUG-0169)
+ * sedert: Invoegen context menu
+ * probleem: Context menu van de verkeerde node wordt geoped.
+ *		     Bij een klant (windows11/teamviewer) wordt telkens een verkeerde 
+ *		     node geopend.
+ *			 Extra aanpassingen V17.03
+ * reden: Houden sinds V16.32 het HTREEITEM bij van de geselecteerde node.
+ *		  Mogelijk is deze data corrupt??
+ *		  Code aangepast zodat het node address van de geselecteerde node bijgehouden 
+ *		  wordt.
+ * status: Aanpassingen V17.02 nog steeds een probleem.
+ * Oplossing:
+ *****************************************************************************
+ * @bug 
+ * referentie: BUG-0179 
+ * sedert: Altijd.
+ * prio: LAAG.
+ * probleem: Property defaults.
+ *           Wanneer we bij de sensor unit in de property dialoog makeDefaults 
+ *			 aanmaken dan wordt de index van de unit niet in rekening gebracht.
+ *			 De sampling tijd is niet correct.
+ *		     vb: Als er 2 sensoren van de smartbox aanwezig zijn.
+ *		     Sensor1: 20sec, sensor2: 23sec.
+ *		     Bij het maken van defaults voor sensor 1 wordt er in de GUI 
+ *		     23sec getoond en wordt er een binding gemaakt voor de 20 seconden.
+ * reden: Er is maar 1 instantie van defaults (singleton).
+ *		  CBindingPropertyUnit is gekoppeld aan de CBindingPropertyUnitSensDefault* m_pDefaults
+ *		  Deze m_pDefaults is gekoppeld aan de static instance aangemaakt door de factory.
+ *		  Voor iedere versie is er maar 1 instantie. (Bevat data van de laats aangemaakte met de hoogste idx).
+ *		  Het is enkel van belang bij het opnieuw aanmaken van de default p-bindings.
+ * status: Pending.
+ * Oplossing:
+ *****************************************************************************
+ * @bug 
+ * referentie: BUG-0180
+ * sedert: Sedert V16.38
+ * prio: LAAG.
+ * probleem: Smartbox ultra: Wanneer we op deze module browsen met een nieuwe
+ *			 installatie en er zijn in de module reeds DALI dimmers aangemaakt
+ *			 dan worden de P-Bindings voor alle dimmer units aangemaakt.
+ *			 zie helper_dimmerCreateExtraPBindings( )
+ * reden: Functie is gelding voor alle units van een node.
+ * status: Oplossing V16.41
+ * oplossing: Het laatste unitaddress meegeven aan de create functie.
+ *****************************************************************************
+ * @bug 
+ * referentie: BUG-0181
+ * sedert: NVT.
+ * prio: hoog.
+ * probleem: De binding software verstuurd onterect IPC Refresh berichten naar 
+ *			 de configurator.
+ * status: oplossing V16.47
+ * oplossing: Vroeger werd de database opgeslagen na het uitvoeren van ieder algoritme (inclusief opvragen van het
+			  actual level van een control gear device.)
+			  Nu: Na het uitvoeren van een algoritme wordt de data enkel opgeslagen bij veranderingen.
+			  Vroeger werd na het openen van de configurator de data niet direct opgeslagen. Wanneer er gegevens gewijzigd 
+			  waren dan werd dit opgeslagen in de polling + werd er een IPC bericht verstuurd naar de configurator.
+			  Nu: De data wordt opgeslagen bij het openen van de configurator.
+ ***************************************************************************** 
+ * @bug
+ * referentie: BUG-0182
+ * sedert: NVT
+ * prio: Normaal.
+ * probleem: Automatisch doorsturen van de units wanneer een module gevonden wordt
+ *		     met een 0xFE adres wordt niet altijd uitgevoerd.
+ * reden: In de dialogen 'Replace nodes' + andere wordt er gewacht op een response 
+ *		  van de node. Wanneer de dialoog vroeger afgesloten wordt of er worden
+ *		  andere acties uitgevoerd dan wordt de actie niet uitgevoerd.
+ * status: Solved V17.01
+ * Oplossing: Tijdens het uitvoeren van de acties de muis cursor in de wacht toestand 
+ *	          plaatsen + de navigatie knoppen disablen.	 
+  ***************************************************************************** 
+ * @bug
+ * referentie: BUG-0183
+ * sedert: altijd
+ * prio: Normaal.
+ * probleem: Een binding van dezelfde units die naar elkaar verwijzen kunnen een loop veroorzaken. In de autobindings wordt er geen controle uitgevoerd.
+ * status: Solved V17.03
+ * Oplossing: Bij het aanmaken van de auto binding controle doen op het aantal identieke units. (zie nUniqueBindingUnits). 
+ *****************************************************************************
+ * @bug
+ * referentie: BUG-0184
+ * sedert: altijd
+ * prio: Normaal
+ * probleem: DALI devices/groepen.
+ * Namen die aangepast werden in de edit box werden niet altijd correct upgedate in de overview pagina van de DALI groepen.
+ * status: Solved 17.05
+ * Oplossing: Model assynchroon updaten.
+ ******************************************************************************
+ * @bug
+ * referentie: BUG-0185
+ * sedert: altijd
+ * prio: Normaal
+ * probleem: DALI Netwerk Connectie
+ * Niet altijd mogelijk om te connecteren via de remote instellingen.
+ * Reden: De selectie van de radiobuttons lokaal/remote werd niet altijd ingelezen.
+ * status: Solved 17.05
+ * Oplossing: UpdateData(TRUE).
+ ******************************************************************************
+ * @bug 
+ * referentie: BUG-0186
+ * sedert: Altijd.
+ * prio: hoog
+ * probleem: DALI control gear configuratie.
+ * Bij sommige(oudere) DALI - apparaten die niet volledig volgens de specificaties werken, 
+ * kon de configuratie stoppen bij het verifiëren van de geheugenmap.
+ * Wijziging: Het proces gaat nu door, ook als de controle mislukt, waardoor parameters alsnog opgevraagd worden.
+ * Let op: GTIN of serienummer kan mogelijk niet correct in de software worden weergegeven.
+ * status: Solved V17.06
+ * Oplossing: Code aangepast.
+ ******************************************************************************
+
