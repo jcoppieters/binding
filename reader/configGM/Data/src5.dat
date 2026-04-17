@@ -1,0 +1,5 @@
+type=0
+parentid=00020000radio:stubru
+id=00020000radio:stubru
+title=Stubru
+uri=x-sonosapi-radio:radio%3ara.341026107?sid=204&amp;flags=8300&amp;sn=1

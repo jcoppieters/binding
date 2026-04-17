@@ -1,0 +1,66 @@
+;/****************** ROOM CONTROLLER AUDIO CONFIG *****************
+;/*****************************************************************
+;/*********************** DESTINATION CONFIG **********************
+;/*****************************************************************
+DEST=0x00;
+szName=;
+bAddress=0xFC;0x65;
+bDestNR=0x00;
+bMaxVolume=0x64;
+bType=0x00;
+bConfig=0x03;
+
+;/*****************************************************************
+;/************************** SOURCE CONFIG ************************
+;/*****************************************************************
+SOURCE=0x00;
+szName=OFF;
+bSource=0xFF;
+bConfig=0x00;
+
+SOURCE=0x01;
+szName=Joe;
+bSource=0x00;
+bConfig=0x00;
+
+SOURCE=0x02;
+szName=Joe easy;
+bSource=0x01;
+bConfig=0x00;
+
+SOURCE=0x03;
+szName=MNM;
+bSource=0x02;
+bConfig=0x00;
+
+SOURCE=0x04;
+szName=Radio2;
+bSource=0x03;
+bConfig=0x00;
+
+SOURCE=0x05;
+szName=StuBru;
+bSource=0x04;
+bConfig=0x00;
+
+SOURCE=0x06;
+szName=Radio1;
+bSource=0x05;
+bConfig=0x00;
+
+SOURCE=0x07;
+szName=vrt nieuws;
+bSource=0x06;
+bConfig=0x00;
+
+SOURCE=0x08;
+szName=local in;
+bSource=0x07;
+bConfig=0x00;
+
+;/*****************************************************************
+;/********************* SOURCE FUNCTIONS CONFIG ********************
+;/*****************************************************************
+;/*****************************************************************
+;/*********************** TUNER PRESET CONFIG *********************
+;/*****************************************************************

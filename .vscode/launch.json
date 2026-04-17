@@ -1,0 +1,45 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Reader (TypeScript)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--import",
+        "tsx",
+        "${workspaceFolder}/reader/src/index.ts"
+      ],
+      "cwd": "${workspaceFolder}/reader",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_OPTIONS": "--enable-source-maps"
+      }
+    },
+    {
+      "name": "Debug Reader (Compiled JS)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/reader/dist/index.js",
+      "cwd": "${workspaceFolder}/reader",
+      "preLaunchTask": "tsc: build - reader/tsconfig.json",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "outFiles": [
+        "${workspaceFolder}/reader/dist/**/*.js"
+      ],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "sourceMaps": true
+    }
+  ]
+}

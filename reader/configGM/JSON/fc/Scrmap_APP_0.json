@@ -1,0 +1,32 @@
+[
+  {
+    "nodeaddress": 16,
+    "unitaddress": 29,
+    "name": "Saloon",
+    "type": 1
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 30,
+    "name": "Uplighters",
+    "type": 1
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 31,
+    "name": "Table",
+    "type": 1
+  },
+  {
+    "nodeaddress": 6,
+    "unitaddress": 34,
+    "name": "Sticks",
+    "type": 1
+  },
+  {
+    "nodeaddress": 6,
+    "unitaddress": 33,
+    "name": "Vintage",
+    "type": 1
+  }
+]

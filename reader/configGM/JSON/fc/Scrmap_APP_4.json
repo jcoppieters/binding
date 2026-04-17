@@ -1,0 +1,38 @@
+[
+  {
+    "nodeaddress": 16,
+    "unitaddress": 28,
+    "name": "Curtains",
+    "type": 8
+  },
+  {
+    "nodeaddress": 4,
+    "unitaddress": 0,
+    "name": "Salon boven",
+    "type": 8
+  },
+  {
+    "nodeaddress": 4,
+    "unitaddress": 4,
+    "name": "Keuken",
+    "type": 8
+  },
+  {
+    "nodeaddress": 4,
+    "unitaddress": 3,
+    "name": "Tim links",
+    "type": 8
+  },
+  {
+    "nodeaddress": 4,
+    "unitaddress": 2,
+    "name": "Tim rechts",
+    "type": 8
+  },
+  {
+    "nodeaddress": 4,
+    "unitaddress": 5,
+    "name": "Pool Cover",
+    "type": 8
+  }
+]

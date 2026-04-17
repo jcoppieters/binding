@@ -1,0 +1,21 @@
+;/******************** BOSE SOUNDTOUCH CONFIG *******************
+MEDIARENDER=0;
+szName=Kitchen;
+pbMACAddress=48:A6:B8:1F:23:D6;
+bDestNr=0;
+
+MEDIARENDER=1;
+szName=Living Room;
+pbMACAddress=48:A6:B8:24:E4:90;
+bDestNr=1;
+
+MEDIARENDER=2;
+szName=Master Bedroom;
+pbMACAddress=54:2A:1B:E1:61:FD;
+bDestNr=2;
+
+MEDIARENDER=3;
+szName=Bedroom Tim;
+pbMACAddress=48:A6:B8:1F:23:86;
+bDestNr=3;
+

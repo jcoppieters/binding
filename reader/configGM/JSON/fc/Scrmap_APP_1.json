@@ -1,0 +1,56 @@
+[
+  {
+    "nodeaddress": 16,
+    "unitaddress": 36,
+    "name": "Cook",
+    "type": 2
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 34,
+    "name": "Work",
+    "type": 2
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 38,
+    "name": "LED",
+    "type": 2
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 33,
+    "name": "Wall",
+    "type": 2
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 37,
+    "name": "Outside",
+    "type": 2
+  },
+  {
+    "nodeaddress": 6,
+    "unitaddress": 41,
+    "name": "Plug 1",
+    "type": 2
+  },
+  {
+    "nodeaddress": 6,
+    "unitaddress": 40,
+    "name": "Driveway",
+    "type": 2
+  },
+  {
+    "nodeaddress": 6,
+    "unitaddress": 39,
+    "name": "Trees",
+    "type": 2
+  },
+  {
+    "nodeaddress": 6,
+    "unitaddress": 43,
+    "name": "Swimmingpool",
+    "type": 2
+  }
+]

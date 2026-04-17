@@ -1,0 +1,26 @@
+[
+  {
+    "id": 0,
+    "name": "Videophone",
+    "type": 0,
+    "cam_url": "http://192.168.0.200:8080/video.cgi",
+    "cam_userid": "admin",
+    "cam_pwd": "Grote46b"
+  },
+  {
+    "id": 1,
+    "name": "Poort",
+    "type": 0,
+    "cam_url": "http://admin:Peter6376@81.83.0.10:8007/cgi-bin/mjpg/video.cgi?channel=0&subtype=1",
+    "cam_userid": "admin",
+    "cam_pwd": "Peter6376"
+  },
+  {
+    "id": 10,
+    "name": "Garage",
+    "type": 0,
+    "cam_url": "http://duotecno:duotecno%@81.83.0.10:8006/cgi-bin/mjpg/video.cgi?channel=0&subtype=1 ",
+    "cam_userid": "duotecno",
+    "cam_pwd": "duotecno%"
+  }
+]

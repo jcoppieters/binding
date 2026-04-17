@@ -1,0 +1,1231 @@
+[
+  {
+    "roomnr": 0,
+    "roomname": "Living",
+    "startpage": true,
+    "sensorunit": {
+      "nodeaddress": 53,
+      "unitaddress": 0,
+      "name": "Living",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 19,
+        "unitaddress": 0,
+        "name": "HC midden",
+        "type": 1
+      },
+      {
+        "nodeaddress": 19,
+        "unitaddress": 1,
+        "name": "HC zij",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 45,
+        "name": "HC ledstrip",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 44,
+        "name": "HC ledstrip",
+        "type": 1
+      },
+      {
+        "nodeaddress": 21,
+        "unitaddress": 5,
+        "name": "HC stpc hoek",
+        "type": 1
+      },
+      {
+        "nodeaddress": 18,
+        "unitaddress": 0,
+        "name": "HC gordijn",
+        "type": 8
+      },
+      {
+        "nodeaddress": 14,
+        "unitaddress": 2,
+        "name": "HC proj living",
+        "type": 8
+      },
+      {
+        "nodeaddress": 18,
+        "unitaddress": 1,
+        "name": "Living lift TV",
+        "type": 8
+      },
+      {
+        "nodeaddress": 144,
+        "unitaddress": 35,
+        "name": "LV 11 R zij+HC",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 5,
+        "name": "Haard knetter",
+        "type": 2
+      },
+      {
+        "nodeaddress": 53,
+        "unitaddress": 0,
+        "name": "Living",
+        "type": 4
+      },
+      {
+        "nodeaddress": 61,
+        "unitaddress": 0,
+        "name": "Living bose",
+        "type": 10
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 113,
+        "name": "Living TV",
+        "type": 5
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 138,
+        "name": "Living ST",
+        "type": 5
+      }
+    ]
+  },
+  {
+    "roomnr": 5,
+    "roomname": "Bureau Peter",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 62,
+      "unitaddress": 0,
+      "name": "Bureau Peter",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 116,
+        "unitaddress": 1,
+        "name": "Peter led",
+        "type": 1
+      },
+      {
+        "nodeaddress": 116,
+        "unitaddress": 0,
+        "name": "Peter spots",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 24,
+        "name": "Piscine R",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 25,
+        "name": "Piscine G",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 26,
+        "name": "Piscine B",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 27,
+        "name": "Piscine W",
+        "type": 1
+      },
+      {
+        "nodeaddress": 6,
+        "unitaddress": 0,
+        "name": "Peter stpc",
+        "type": 2
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 2,
+        "name": "Bureau Peter",
+        "type": 133
+      },
+      {
+        "nodeaddress": 62,
+        "unitaddress": 0,
+        "name": "Bureau Peter",
+        "type": 4
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 31,
+        "name": "Peter 20 99",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 34,
+        "name": "Peter 50 OFF",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 32,
+        "name": "Peter 20",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 35,
+        "name": "Peter 50",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 33,
+        "name": "Peter 90",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 36,
+        "name": "Peter OFF",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 4,
+        "name": "Na 22u ",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 2,
+        "name": "Schemer buiten",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 3,
+        "name": "Donker buiten",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 8,
+        "name": "Iemand thuis",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 7,
+        "name": "Party",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 9,
+        "name": "tss6u en 10 u",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 10,
+        "name": "Dimmen drk's",
+        "type": 7
+      },
+      {
+        "nodeaddress": 9,
+        "unitaddress": 4,
+        "name": "Deur Peter$",
+        "type": 2
+      }
+    ]
+  },
+  {
+    "roomnr": 6,
+    "roomname": "Bureau Burt",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 48,
+      "unitaddress": 0,
+      "name": "Bureau Burt",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 35,
+        "unitaddress": 1,
+        "name": "Burt spots",
+        "type": 1
+      },
+      {
+        "nodeaddress": 35,
+        "unitaddress": 2,
+        "name": "Burt led",
+        "type": 1
+      },
+      {
+        "nodeaddress": 6,
+        "unitaddress": 1,
+        "name": "Burt stpc",
+        "type": 2
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 37,
+        "name": "Burt 20 99",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 40,
+        "name": "Burt 50 OFF",
+        "type": 7
+      },
+      {
+        "nodeaddress": 48,
+        "unitaddress": 0,
+        "name": "Bureau Burt",
+        "type": 4
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 3,
+        "name": "Bureau Burt",
+        "type": 133
+      },
+      {
+        "nodeaddress": 9,
+        "unitaddress": 5,
+        "name": "Deur Burt$",
+        "type": 2
+      }
+    ]
+  },
+  {
+    "roomnr": 8,
+    "roomname": "Badkamer WC",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 19,
+        "unitaddress": 2,
+        "name": "WC Gast lavabo",
+        "type": 1
+      },
+      {
+        "nodeaddress": 19,
+        "unitaddress": 3,
+        "name": "WC Gast toilet",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 44,
+        "name": "WC1",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 42,
+        "name": "WC2",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 43,
+        "name": "WC3",
+        "type": 1
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 109,
+        "name": "Toiletten",
+        "type": 5
+      }
+    ]
+  },
+  {
+    "roomnr": 9,
+    "roomname": "Inkom",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 22,
+      "unitaddress": 16,
+      "name": "Buiten ",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 12,
+        "unitaddress": 1,
+        "name": "Buiten bur duo",
+        "type": 2
+      },
+      {
+        "nodeaddress": 19,
+        "unitaddress": 4,
+        "name": "Inkom wand",
+        "type": 1
+      },
+      {
+        "nodeaddress": 9,
+        "unitaddress": 3,
+        "name": "Slot voordeur$",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 0,
+        "name": "Inkom vloerstpc",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 4,
+        "name": "Oprit stpc",
+        "type": 2
+      },
+      {
+        "nodeaddress": 22,
+        "unitaddress": 16,
+        "name": "Buiten ",
+        "type": 4
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 1,
+        "name": "Inkom",
+        "type": 133
+      },
+      {
+        "nodeaddress": 6,
+        "unitaddress": 5,
+        "name": "Kkn glv stpc",
+        "type": 2
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 8,
+        "name": "Iemand thuis",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 6,
+        "name": "Auto slot voord",
+        "type": 7
+      }
+    ]
+  },
+  {
+    "roomnr": 1,
+    "roomname": "Home Cinema",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 53,
+      "unitaddress": 0,
+      "name": "Living",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 19,
+        "unitaddress": 0,
+        "name": "HC midden",
+        "type": 1
+      },
+      {
+        "nodeaddress": 19,
+        "unitaddress": 1,
+        "name": "HC zij",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 44,
+        "name": "HC ledstrip",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 45,
+        "name": "HC ledstrip",
+        "type": 1
+      },
+      {
+        "nodeaddress": 21,
+        "unitaddress": 5,
+        "name": "HC stpc hoek",
+        "type": 1
+      },
+      {
+        "nodeaddress": 53,
+        "unitaddress": 0,
+        "name": "Living",
+        "type": 4
+      },
+      {
+        "nodeaddress": 18,
+        "unitaddress": 0,
+        "name": "HC gordijn",
+        "type": 8
+      },
+      {
+        "nodeaddress": 14,
+        "unitaddress": 0,
+        "name": "HC proj buiten",
+        "type": 8
+      },
+      {
+        "nodeaddress": 170,
+        "unitaddress": 28,
+        "name": "HCproj gordijn",
+        "type": 8
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 0,
+        "name": "Home cinema",
+        "type": 133
+      },
+      {
+        "nodeaddress": 34,
+        "unitaddress": 0,
+        "name": "Haard",
+        "type": 1
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 5,
+        "name": "Haard knetter",
+        "type": 2
+      }
+    ]
+  },
+  {
+    "roomnr": 10,
+    "roomname": "Opleiding",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 42,
+      "unitaddress": 0,
+      "name": "Opleiding ",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 24,
+        "unitaddress": 2,
+        "name": "Opleiding 3D",
+        "type": 1
+      },
+      {
+        "nodeaddress": 29,
+        "unitaddress": 9,
+        "name": "Opleid R G",
+        "type": 7
+      },
+      {
+        "nodeaddress": 29,
+        "unitaddress": 12,
+        "name": "Opleid B W",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 73,
+        "name": "Opleid WW ALL",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 75,
+        "name": "Opleid WW proj",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 77,
+        "name": "Ww alll up     ",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 78,
+        "name": "Ww all down",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 79,
+        "name": "Ww proj up",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 80,
+        "name": "Ww proj down",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 74,
+        "name": "Opleid WIT ALL",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 76,
+        "name": "Opleid WIT proj",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 81,
+        "name": "Opleiding uit",
+        "type": 7
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 12,
+        "name": "Opleid wand R",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 13,
+        "name": "Opleid wand G",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 14,
+        "name": "Opleid wand B",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 15,
+        "name": "Opleid wand W",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 0,
+        "name": "Opleid raam R",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 1,
+        "name": "Opleid raam G",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 2,
+        "name": "Opleid raam B",
+        "type": 1
+      },
+      {
+        "nodeaddress": 27,
+        "unitaddress": 3,
+        "name": "Opleid raam W",
+        "type": 1
+      },
+      {
+        "nodeaddress": 40,
+        "unitaddress": 0,
+        "name": "Opleiding proj.",
+        "type": 8
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 1,
+        "name": "Opleiding scree",
+        "type": 8
+      },
+      {
+        "nodeaddress": 42,
+        "unitaddress": 0,
+        "name": "Opleiding ",
+        "type": 4
+      },
+      {
+        "nodeaddress": 57,
+        "unitaddress": 0,
+        "name": "Opleiding V525",
+        "type": 10
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 4,
+        "name": "Opleiding",
+        "type": 133
+      }
+    ]
+  },
+  {
+    "roomnr": 11,
+    "roomname": "Bureau Xillo",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 46,
+      "unitaddress": 8,
+      "name": "Bureau Xillo",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 28,
+        "unitaddress": 24,
+        "name": "Bur Xill kast R",
+        "type": 1
+      },
+      {
+        "nodeaddress": 28,
+        "unitaddress": 25,
+        "name": "Bur Xil kast G",
+        "type": 1
+      },
+      {
+        "nodeaddress": 28,
+        "unitaddress": 26,
+        "name": "Bur Xil kast B",
+        "type": 1
+      },
+      {
+        "nodeaddress": 28,
+        "unitaddress": 27,
+        "name": "Bur Xil kast W",
+        "type": 1
+      },
+      {
+        "nodeaddress": 144,
+        "unitaddress": 37,
+        "name": "Bureau XILLO",
+        "type": 2
+      },
+      {
+        "nodeaddress": 6,
+        "unitaddress": 2,
+        "name": "Bur XILLO stk",
+        "type": 2
+      },
+      {
+        "nodeaddress": 46,
+        "unitaddress": 8,
+        "name": "Bureau Xillo",
+        "type": 4
+      }
+    ]
+  },
+  {
+    "roomnr": 12,
+    "roomname": "Bureau Duotecno",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 44,
+      "unitaddress": 4,
+      "name": "Bureau Duotecno",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 26,
+        "unitaddress": 48,
+        "name": "Bur duo kast R",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 49,
+        "name": "Bur duo kast G",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 50,
+        "name": "Bur duo kast B",
+        "type": 1
+      },
+      {
+        "nodeaddress": 26,
+        "unitaddress": 51,
+        "name": "Bur duo kast W",
+        "type": 1
+      },
+      {
+        "nodeaddress": 144,
+        "unitaddress": 39,
+        "name": "Bureau duotecno",
+        "type": 2
+      },
+      {
+        "nodeaddress": 6,
+        "unitaddress": 3,
+        "name": "Bur duo stk",
+        "type": 2
+      },
+      {
+        "nodeaddress": 44,
+        "unitaddress": 4,
+        "name": "Bureau Duotecno",
+        "type": 4
+      }
+    ]
+  },
+  {
+    "roomnr": 13,
+    "roomname": "Boekhouding",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 45,
+      "unitaddress": 8,
+      "name": "Boek- houding",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 144,
+        "unitaddress": 38,
+        "name": "Bureau boekhoud",
+        "type": 2
+      },
+      {
+        "nodeaddress": 45,
+        "unitaddress": 8,
+        "name": "Boek- houding",
+        "type": 4
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 111,
+        "name": "Boekh. ST",
+        "type": 5
+      }
+    ]
+  },
+  {
+    "roomnr": 14,
+    "roomname": "Productie",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 41,
+      "unitaddress": 0,
+      "name": "Productie",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 144,
+        "unitaddress": 36,
+        "name": "Productie",
+        "type": 2
+      },
+      {
+        "nodeaddress": 6,
+        "unitaddress": 4,
+        "name": "Productie stk",
+        "type": 2
+      },
+      {
+        "nodeaddress": 41,
+        "unitaddress": 0,
+        "name": "Productie",
+        "type": 4
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 110,
+        "name": "Productie SA5",
+        "type": 5
+      }
+    ]
+  },
+  {
+    "roomnr": 15,
+    "roomname": "Magazijn",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 4,
+        "unitaddress": 37,
+        "name": "Magazijn LED",
+        "type": 2
+      },
+      {
+        "nodeaddress": 4,
+        "unitaddress": 33,
+        "name": "Magazijn TL",
+        "type": 2
+      },
+      {
+        "nodeaddress": 4,
+        "unitaddress": 36,
+        "name": "Deur magazijn!",
+        "type": 2
+      },
+      {
+        "nodeaddress": 4,
+        "unitaddress": 28,
+        "name": "Poort magazijn!",
+        "type": 8
+      }
+    ]
+  },
+  {
+    "roomnr": 4,
+    "roomname": "Sales",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 15,
+      "unitaddress": 4,
+      "name": "Sales",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 85,
+        "unitaddress": 2,
+        "name": "Sales pendel",
+        "type": 1
+      },
+      {
+        "nodeaddress": 65,
+        "unitaddress": 3,
+        "name": "Sales Stopc",
+        "type": 2
+      },
+      {
+        "nodeaddress": 3,
+        "unitaddress": 35,
+        "name": "Deur Xillo!",
+        "type": 2
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 145,
+        "name": "Sales",
+        "type": 5
+      },
+      {
+        "nodeaddress": 17,
+        "unitaddress": 2,
+        "name": "Sales ",
+        "type": 8
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 74,
+        "name": "Sales aan/uit",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 58,
+        "name": "Sales 20 99",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 61,
+        "name": "Sales 50 off",
+        "type": 7
+      },
+      {
+        "nodeaddress": 15,
+        "unitaddress": 4,
+        "name": "Sales",
+        "type": 4
+      }
+    ]
+  },
+  {
+    "roomnr": 16,
+    "roomname": "Oprit / Tuin",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 22,
+      "unitaddress": 16,
+      "name": "Buiten ",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 12,
+        "unitaddress": 1,
+        "name": "Buiten bur duo",
+        "type": 2
+      },
+      {
+        "nodeaddress": 9,
+        "unitaddress": 3,
+        "name": "Slot voordeur$",
+        "type": 2
+      },
+      {
+        "nodeaddress": 22,
+        "unitaddress": 16,
+        "name": "Buiten ",
+        "type": 4
+      }
+    ]
+  },
+  {
+    "roomnr": 3,
+    "roomname": "Eetkamer",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 59,
+      "unitaddress": 0,
+      "name": "Showroom",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 34,
+        "unitaddress": 2,
+        "name": "Showr mid 1 led",
+        "type": 1
+      },
+      {
+        "nodeaddress": 34,
+        "unitaddress": 1,
+        "name": "Showr mid 1 opb",
+        "type": 1
+      },
+      {
+        "nodeaddress": 85,
+        "unitaddress": 0,
+        "name": "Showr mid 2 led",
+        "type": 1
+      },
+      {
+        "nodeaddress": 85,
+        "unitaddress": 1,
+        "name": "Showr mid 2 opb",
+        "type": 1
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 105,
+        "name": "Showroom ",
+        "type": 5
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 61,
+        "name": "Showr LOOP*",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 57,
+        "name": "Showr Paars",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 55,
+        "name": "Showr Groen",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 56,
+        "name": "Showr Blauw",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 53,
+        "name": "Showr WarmW",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 52,
+        "name": "Showr RGB OFF",
+        "type": 7
+      },
+      {
+        "nodeaddress": 59,
+        "unitaddress": 0,
+        "name": "Showroom",
+        "type": 4
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 5,
+        "name": "Showroom",
+        "type": 133
+      }
+    ]
+  },
+  {
+    "roomnr": 7,
+    "roomname": "Keuken",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 59,
+      "unitaddress": 0,
+      "name": "Showroom",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 49,
+        "unitaddress": 25,
+        "name": "Keuken 20 99",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 28,
+        "name": "Keuken 50 OFF",
+        "type": 7
+      },
+      {
+        "nodeaddress": 36,
+        "unitaddress": 22,
+        "name": "Lf C1050 1",
+        "type": 1
+      },
+      {
+        "nodeaddress": 36,
+        "unitaddress": 23,
+        "name": "Lf C1050 2",
+        "type": 1
+      },
+      {
+        "nodeaddress": 36,
+        "unitaddress": 24,
+        "name": "Lf C1050 3",
+        "type": 1
+      },
+      {
+        "nodeaddress": 36,
+        "unitaddress": 25,
+        "name": "Lf C1050 4",
+        "type": 1
+      },
+      {
+        "nodeaddress": 36,
+        "unitaddress": 26,
+        "name": "Lf C1050 5",
+        "type": 1
+      },
+      {
+        "nodeaddress": 36,
+        "unitaddress": 27,
+        "name": "Lf C1050 6",
+        "type": 1
+      },
+      {
+        "nodeaddress": 13,
+        "unitaddress": 0,
+        "name": "Speakers wand1",
+        "type": 8
+      },
+      {
+        "nodeaddress": 13,
+        "unitaddress": 1,
+        "name": "Speakers wand2",
+        "type": 8
+      },
+      {
+        "nodeaddress": 13,
+        "unitaddress": 2,
+        "name": "Speakers wand3",
+        "type": 8
+      },
+      {
+        "nodeaddress": 59,
+        "unitaddress": 0,
+        "name": "Showroom",
+        "type": 4
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 103,
+        "name": "Speaker wand",
+        "type": 5
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 114,
+        "name": "Keuken TV",
+        "type": 5
+      }
+    ]
+  },
+  {
+    "roomnr": 2,
+    "roomname": "Party",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 59,
+      "unitaddress": 0,
+      "name": "Showroom",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 49,
+        "unitaddress": 92,
+        "name": "Party Luid",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 95,
+        "name": "Party Stil",
+        "type": 7
+      },
+      {
+        "nodeaddress": 49,
+        "unitaddress": 98,
+        "name": "Party 85%",
+        "type": 7
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 102,
+        "name": "Showr boom",
+        "type": 5
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 5,
+        "name": "Showroom",
+        "type": 133
+      },
+      {
+        "nodeaddress": 144,
+        "unitaddress": 40,
+        "name": "DMX PARTY",
+        "type": 2
+      },
+      {
+        "nodeaddress": 71,
+        "unitaddress": 0,
+        "name": "MHead power",
+        "type": 2
+      },
+      {
+        "nodeaddress": 59,
+        "unitaddress": 0,
+        "name": "Showroom",
+        "type": 4
+      }
+    ]
+  }
+]

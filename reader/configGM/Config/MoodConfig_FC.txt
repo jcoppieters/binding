@@ -1,0 +1,22 @@
+;/****************************** MOODCONFIG *******************
+
+MOOD=0x00;
+
+MOOD=0x62;
+
+MOOD=0x0D;
+
+MOOD=0x0E;
+
+MOOD=0x0F;
+
+MOOD=0x10;
+
+MOOD=0x09;
+entry=FC06A6020301;
+entry=FC06A6020300;21;
+
+MOOD=0x07;
+
+MOOD=0x06;
+

@@ -1,0 +1,44 @@
+[
+  {
+    "nodeaddress": 16,
+    "unitaddress": 2,
+    "name": "All off",
+    "type": 7
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 9,
+    "name": "Poort openen",
+    "type": 7
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 8,
+    "name": "Breakfast",
+    "type": 7
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 5,
+    "name": "Saloon",
+    "type": 7
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 6,
+    "name": "Eating",
+    "type": 7
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 4,
+    "name": "Cooking",
+    "type": 7
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 7,
+    "name": "TV",
+    "type": 7
+  }
+]
