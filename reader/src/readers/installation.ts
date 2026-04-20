@@ -320,6 +320,9 @@ export class InstallationReader {
                 nodeAddress: otherNodeAddr,
                 bindingNumber: entry.bindingNumber,
                 bindingType: entry.bindingType,
+                inputUnits: entry.inputUnits,
+                outputUnits: entry.outputUnits,
+                operators: entry.operators,
               });
             }
           }

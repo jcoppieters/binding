@@ -39,14 +39,8 @@ export class BindingWriterFSM {
   // File control commands (FC_NODEBINDINGSFILECONTROL)
   private static readonly FILE_CLOSE = 0x00;
   private static readonly FILE_OPEN = 0x01;
-  private static readonly FILE_INFO = 0x02;
+  // private static readonly FILE_INFO = 0x02;  // Unused - kept for reference
   private static readonly FILE_ERASE = 0x03;
-  
-  // File control events (EV_NODEBINDINGSFILECONTROL responses)
-  private static readonly FILE_EVENT_CLOSED = 0x00;
-  private static readonly FILE_EVENT_OPENED = 0x01;
-  private static readonly FILE_EVENT_INFO = 0x02;
-  private static readonly FILE_EVENT_ERASED = 0x03;
   
   // Binding entry commands (FC_NODEBINDINGENTRY)
   private static readonly WRITE_HEADER = 0x01;
@@ -57,9 +51,6 @@ export class BindingWriterFSM {
   private state: State = State.IDLE;
   private currentNodeAddress: number = 0;
   private currentBindings: string[] = [];
-  private currentBindingIndex: number = 0;
-  private currentBindingString: string = '';
-  private currentStringPos: number = 0;
   private maxCharsPerChunk: number = 5;
   
   // Promise resolvers for async/await on responses
@@ -168,6 +159,43 @@ export class BindingWriterFSM {
       true   // enableProgramming = set APPL_UNLOCK flag
     );
     console.log('✓ Programming mode enabled (APPL_UNLOCK set)');
+  }
+  
+  /**
+   * Disable programming mode on the node by clearing APPL_UNLOCK flag
+   * CRITICAL: This should be called AFTER binding file operations complete!
+   * This returns the node to normal operating state
+   */
+  async disableProgrammingMode(): Promise<void> {
+    console.log(`Disabling programming mode on node 0x${this.currentNodeAddress.toString(16).toUpperCase().padStart(2, '0')}...`);
+    
+    // Clear APPL_UNLOCK on target node
+    try {
+      await this.connection.setNodeConfig(
+        this.currentNodeAddress,
+        0x00,  // nodeConfig flags
+        false  // enableProgramming = clear APPL_UNLOCK flag
+      );
+      console.log('✓ Programming mode disabled (APPL_UNLOCK cleared)');
+    } catch (err) {
+      console.warn('⚠️  Failed to disable programming mode:', err);
+    }
+    
+    // Small delay
+    await new Promise(resolve => setTimeout(resolve, 200));
+    
+    // Clear APPL_UNLOCK on master node (0xFC) as well
+    try {
+      console.log('Clearing APPL_UNLOCK on master node (0xFC)...');
+      await this.connection.setNodeConfig(
+        0xFC,  // master node
+        0x00,  // nodeConfig flags
+        false  // enableProgramming = clear APPL_UNLOCK flag
+      );
+      console.log('✓ Master node APPL_UNLOCK cleared');
+    } catch (err) {
+      console.warn('⚠️  Master node config warning (may be normal):', err);
+    }
   }
   
   /**
@@ -410,9 +438,6 @@ export class BindingWriterFSM {
         flags
       ]
     }, State.WRITING_HEADER);
-    
-    // Initialize data writing position (skip first 14 chars like C++ code)
-    this.currentStringPos = 14;
   }
   
   /**
@@ -459,7 +484,6 @@ export class BindingWriterFSM {
   private async writeBinding(bindingNumber: number, bindingString: string): Promise<void> {
     // Normalize the binding string
     const normalized = this.normalizeBindingString(bindingString);
-    this.currentBindingString = normalized;
     
     console.log(`\nWriting binding ${bindingNumber + 1}/${this.currentBindings.length}`);
     console.log(`Binding string: ${normalized.substring(0, 50)}...`);
@@ -491,7 +515,6 @@ export class BindingWriterFSM {
     
     this.currentNodeAddress = nodeAddress;
     this.currentBindings = bindingFile.bindings;
-    this.currentBindingIndex = 0;
     
     try {
       this.state = State.IDLE;
@@ -542,6 +565,14 @@ export class BindingWriterFSM {
       this.state = State.ERROR;
       console.error(`\n✗ Error writing bindings to node 0x${nodeAddress.toString(16).padStart(2, '0')}:`, error);
       throw error;
+    } finally {
+      // 8. Always disable programming mode (clear APPL_UNLOCK)
+      // This returns the node to normal operating state
+      try {
+        await this.disableProgrammingMode();
+      } catch (err) {
+        console.warn('⚠️  Warning: Could not disable programming mode cleanly:', err);
+      }
     }
   }
 }

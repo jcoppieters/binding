@@ -5,6 +5,26 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Debug Web Server",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "--import",
+        "tsx",
+        "${workspaceFolder}/reader/src/server-enhanced.ts"
+      ],
+      "cwd": "${workspaceFolder}/reader",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "openOnSessionStart",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "env": {
+        "NODE_OPTIONS": "--enable-source-maps"
+      }
+    },
+    {
       "name": "Debug Reader (TypeScript)",
       "type": "node",
       "request": "launch",
@@ -16,7 +36,7 @@
       ],
       "cwd": "${workspaceFolder}/reader",
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
+      "internalConsoleOptions": "openOnSessionStart",
       "skipFiles": [
         "<node_internals>/**"
       ],
@@ -32,7 +52,7 @@
       "cwd": "${workspaceFolder}/reader",
       "preLaunchTask": "tsc: build - reader/tsconfig.json",
       "console": "integratedTerminal",
-      "internalConsoleOptions": "neverOpen",
+      "internalConsoleOptions": "openOnSessionStart",
       "outFiles": [
         "${workspaceFolder}/reader/dist/**/*.js"
       ],

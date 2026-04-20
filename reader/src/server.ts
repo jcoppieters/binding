@@ -36,13 +36,13 @@ async function loadInstallation() {
 /**
  * API: Get complete installation data
  */
-app.get('/api/installation', async (req, res) => {
+app.get('/api/installation', async (_req, res) => {
   try {
     const data = await loadInstallation();
-    res.json(data);
+    return res.json(data);
   } catch (error) {
     console.error('Error loading installation:', error);
-    res.status(500).json({ error: 'Failed to load installation' });
+    return res.status(500).json({ error: 'Failed to load installation' });
   }
 });
 
@@ -59,10 +59,10 @@ app.get('/api/nodes/:nodeAddress', async (req, res) => {
       return res.status(404).json({ error: 'Node not found' });
     }
     
-    res.json(node);
+    return res.json(node);
   } catch (error) {
     console.error('Error getting node:', error);
-    res.status(500).json({ error: 'Failed to get node' });
+    return res.status(500).json({ error: 'Failed to get node' });
   }
 });
 
@@ -85,7 +85,7 @@ app.get('/api/nodes/:nodeAddress/units/:unitAddress', async (req, res) => {
       return res.status(404).json({ error: 'Unit not found' });
     }
     
-    res.json({
+    return res.json({
       node: {
         nodeAddress: node.nodeAddress,
         name: node.name,
@@ -94,21 +94,21 @@ app.get('/api/nodes/:nodeAddress/units/:unitAddress', async (req, res) => {
     });
   } catch (error) {
     console.error('Error getting unit:', error);
-    res.status(500).json({ error: 'Failed to get unit' });
+    return res.status(500).json({ error: 'Failed to get unit' });
   }
 });
 
 /**
  * API: Reload configuration
  */
-app.post('/api/reload', async (req, res) => {
+app.post('/api/reload', async (_req, res) => {
   try {
     cachedInstallation = null;
     const data = await loadInstallation();
-    res.json({ success: true, summary: data.summary });
+    return res.json({ success: true, summary: data.summary });
   } catch (error) {
     console.error('Error reloading installation:', error);
-    res.status(500).json({ error: 'Failed to reload installation' });
+    return res.status(500).json({ error: 'Failed to reload configuration' });
   }
 });
 

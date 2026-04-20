@@ -7,6 +7,7 @@ let currentNodeAddress = null;
 let currentUnitAddress = null;
 let filterWithBindings = true;
 let filterWithoutBindings = true;
+let currentUnitTypeFilter = 'all'; // all, control, sens, virtual, relais, dimmer, motor, audio
 
 // Event type names
 const EVENT_NAMES = {
@@ -25,6 +26,7 @@ const EVENT_NAMES = {
 async function init() {
   setupEventListeners();
   await loadInstallation();
+  await updateUploadButtonState();
 }
 
 /**
@@ -88,6 +90,7 @@ async function reloadInstallation() {
     }
     
     await loadInstallation();
+    await updateUploadButtonState();
   } catch (error) {
     console.error('Error reloading installation:', error);
     showError(`Failed to reload configuration: ${error.message}`);
@@ -199,17 +202,51 @@ function showNodeDetail(nodeAddress) {
   `;
   document.getElementById('breadcrumb').innerHTML = breadcrumb;
   
-  // Filter units based on checkbox state
+  // Filter units based on checkbox state and unit type
   const filteredUnits = node.units.filter(unit => {
+    // Filter by bindings checkbox
     if (unit.hasBindings && !filterWithBindings) return false;
     if (!unit.hasBindings && !filterWithoutBindings) return false;
+    
+    // Filter by unit type
+    if (currentUnitTypeFilter !== 'all') {
+      const unitType = unit.unitType.toLowerCase();
+      if (currentUnitTypeFilter === 'control' && unitType !== 'control') return false;
+      if (currentUnitTypeFilter === 'sens' && unitType !== 'sens') return false;
+      if (currentUnitTypeFilter === 'virtual' && unitType !== 'virtual') return false;
+      if (currentUnitTypeFilter === 'relais' && unitType !== 'relais') return false;
+      if (currentUnitTypeFilter === 'dimmer' && unitType !== 'dimmer') return false;
+      if (currentUnitTypeFilter === 'motor' && unitType !== 'motor') return false;
+      if (currentUnitTypeFilter === 'audio' && !unitType.includes('audio')) return false;
+    }
+    
     return true;
   });
+  
+  // Count units by type for tab badges
+  const unitTypeCounts = {
+    all: node.units.length,
+    control: node.units.filter(u => u.unitType.toLowerCase() === 'control').length,
+    sens: node.units.filter(u => u.unitType.toLowerCase() === 'sens').length,
+    virtual: node.units.filter(u => u.unitType.toLowerCase() === 'virtual').length,
+    relais: node.units.filter(u => u.unitType.toLowerCase() === 'relais').length,
+    dimmer: node.units.filter(u => u.unitType.toLowerCase() === 'dimmer').length,
+    motor: node.units.filter(u => u.unitType.toLowerCase() === 'motor').length,
+    audio: node.units.filter(u => u.unitType.toLowerCase().includes('audio')).length,
+  };
   
   // Render node detail
   const html = `
     <div class="node-detail">
-      <h2>🖥️ ${node.name}</h2>
+      <div class="detail-header">
+        <h2>🖥️ ${node.name}</h2>
+        <button class="btn-icon" onclick="renameNode(${nodeAddress})" title="Rename node">
+          ✏️ Rename
+        </button>
+        <button class="btn-icon btn-hardware" onclick="pushNodeNameToHardware(${nodeAddress})" title="Push name to hardware">
+          📤 Push to Hardware
+        </button>
+      </div>
       
       <div class="node-meta">
         <div class="meta-item">
@@ -238,8 +275,35 @@ function showNodeDetail(nodeAddress) {
         </div>
       </div>
       
+      <div class="unit-type-tabs">
+        <button class="unit-type-tab ${currentUnitTypeFilter === 'all' ? 'active' : ''}" onclick="setUnitTypeFilter('all')">
+          All <span class="tab-badge">${unitTypeCounts.all}</span>
+        </button>
+        <button class="unit-type-tab ${currentUnitTypeFilter === 'control' ? 'active' : ''}" onclick="setUnitTypeFilter('control')"}>
+          Inputs <span class="tab-badge">${unitTypeCounts.control}</span>
+        </button>
+        <button class="unit-type-tab ${currentUnitTypeFilter === 'sens' ? 'active' : ''}" onclick="setUnitTypeFilter('sens')"}>
+          Sensors <span class="tab-badge">${unitTypeCounts.sens}</span>
+        </button>
+        <button class="unit-type-tab ${currentUnitTypeFilter === 'virtual' ? 'active' : ''}" onclick="setUnitTypeFilter('virtual')">
+          Moods <span class="tab-badge">${unitTypeCounts.virtual}</span>
+        </button>
+        <button class="unit-type-tab ${currentUnitTypeFilter === 'relais' ? 'active' : ''}" onclick="setUnitTypeFilter('relais')">
+          Relais <span class="tab-badge">${unitTypeCounts.relais}</span>
+        </button>
+        <button class="unit-type-tab ${currentUnitTypeFilter === 'dimmer' ? 'active' : ''}" onclick="setUnitTypeFilter('dimmer')">
+          Dimmers <span class="tab-badge">${unitTypeCounts.dimmer}</span>
+        </button>
+        <button class="unit-type-tab ${currentUnitTypeFilter === 'motor' ? 'active' : ''}" onclick="setUnitTypeFilter('motor')">
+          Motors <span class="tab-badge">${unitTypeCounts.motor}</span>
+        </button>
+        <button class="unit-type-tab ${currentUnitTypeFilter === 'audio' ? 'active' : ''}" onclick="setUnitTypeFilter('audio')">
+          Audio <span class="tab-badge">${unitTypeCounts.audio}</span>
+        </button>
+      </div>
+      
       ${filteredUnits.length > 0 ? `
-        <h3>📋 Units (${filteredUnits.length} of ${node.units.length})</h3>
+        <h3>📋 Units (${filteredUnits.length})</h3>
         <table class="units-table">
           <thead>
             <tr>
@@ -258,10 +322,7 @@ function showNodeDetail(nodeAddress) {
                 <tr>
                   <td><code>${addr}</code></td>
                   <td>
-                    ${unit.hasBindings 
-                      ? `<a class="unit-link" onclick="showUnitDetail(${node.nodeAddress}, ${unit.address[1]})">${unit.name}</a>`
-                      : `<span class="unit-link no-bindings">${unit.name}</span>`
-                    }
+                    <a class="unit-link" onclick="showUnitDetail(${node.nodeAddress}, ${unit.address[1]})">${unit.name}</a>
                   </td>
                   <td>${unit.unitType}</td>
                   <td>
@@ -285,6 +346,16 @@ function showNodeDetail(nodeAddress) {
   `;
   
   document.getElementById('detail-view').innerHTML = html;
+}
+
+/**
+ * Set unit type filter and re-render
+ */
+function setUnitTypeFilter(filterType) {
+  currentUnitTypeFilter = filterType;
+  if (currentNodeAddress !== null) {
+    showNodeDetail(currentNodeAddress);
+  }
 }
 
 /**
@@ -315,7 +386,15 @@ function showUnitDetail(nodeAddress, unitAddress) {
   
   let html = `
     <div class="unit-detail">
-      <h2>📦 ${unit.name}</h2>
+      <div class="detail-header">
+        <h2>📦 ${unit.name}</h2>
+        <button class="btn-icon" onclick="renameUnit(${nodeAddress}, ${unitAddress})" title="Rename unit">
+          ✏️ Rename
+        </button>
+        <button class="btn-icon btn-hardware" onclick="pushUnitNameToHardware(${nodeAddress}, ${unitAddress})" title="Push name to hardware">
+          📤 Push to Hardware
+        </button>
+      </div>
       
       <div class="unit-meta">
         <div class="meta-item">
@@ -367,16 +446,9 @@ function showUnitDetail(nodeAddress, unitAddress) {
         <p style="color: var(--text-muted); font-size: 0.875rem; margin-bottom: 1rem;">
           This unit is referenced in bindings from other nodes:
         </p>
-        ${unit.bindingsFromOtherNodes.map(ref => {
-          const otherNode = installation.nodes.find(n => n.nodeAddress === ref.nodeAddress);
-          return `
-            <div class="binding-card">
-              <div class="binding-header">
-                <span class="binding-type">[${ref.bindingType}]</span>
-                <span class="binding-number">From: ${otherNode?.name || 'Unknown'} (0x${ref.nodeAddress.toString(16).toUpperCase()})</span>
-              </div>
-            </div>
-          `;
+        ${unit.bindingsFromOtherNodes.map(binding => {
+          const otherNode = installation.nodes.find(n => n.nodeAddress === binding.nodeAddress);
+          return renderBinding(binding, otherNode, unit, 'cross-node');
         }).join('')}
       </div>
     `;
@@ -390,6 +462,15 @@ function showUnitDetail(nodeAddress, unitAddress) {
       </div>
     `;
   }
+  
+  // Add binding creation button
+  html += `
+    <div class="unit-binding-actions">
+      <button class="add-binding-btn" onclick="openBindingEditor(${nodeAddress}, ${unitAddress})">
+        ➕ Add New Binding
+      </button>
+    </div>
+  `;
   
   html += `</div>`;
   
@@ -406,6 +487,29 @@ function renderBinding(binding, currentNode, currentUnit, direction) {
   
   if (direction === 'input') {
     // Show: [This Unit] → [Output Units]
+    binding.inputUnits.forEach((input, idx) => {
+      if (idx > 0) flowHTML += '<span class="binding-arrow">•</span>';
+      
+      flowHTML += `<div class="binding-unit">`;
+      flowHTML += renderUnitReference(input, true);
+      flowHTML += `</div>`;
+    });
+    
+    if (binding.operators && binding.operators.length > 0) {
+      flowHTML += `<span class="binding-arrow">${binding.operators.join(' ')}</span>`;
+    }
+    
+    flowHTML += '<span class="binding-arrow">⇒</span>';
+    
+    binding.outputUnits.forEach((output, idx) => {
+      if (idx > 0) flowHTML += '<span class="binding-arrow">+</span>';
+      
+      flowHTML += `<div class="binding-unit">`;
+      flowHTML += renderUnitReference(output, false);
+      flowHTML += `</div>`;
+    });
+  } else if (direction === 'cross-node') {
+    // Show full binding flow for cross-node bindings: [Input Units] → [Output Units]
     binding.inputUnits.forEach((input, idx) => {
       if (idx > 0) flowHTML += '<span class="binding-arrow">•</span>';
       
@@ -452,11 +556,32 @@ function renderBinding(binding, currentNode, currentUnit, direction) {
     });
   }
   
+  // For cross-node bindings, show which node this binding is from
+  const nodeInfo = direction === 'cross-node' 
+    ? ` <span class="binding-node-info">From: ${currentNode?.name || 'Unknown Node'}</span>` 
+    : '';
+  
+  // Show edit/delete buttons for all bindings (pass binding object for edit)
+  const bindingDataJSON = JSON.stringify(binding).replace(/"/g, '&quot;');
+  const actionsHTML = `
+    <div class="binding-actions">
+      <button class="btn-icon" onclick='editBinding(${currentNode.nodeAddress}, ${binding.bindingNumber}, JSON.parse("${bindingDataJSON}"))' title="Edit binding">
+        ✏️
+      </button>
+      <button class="btn-icon btn-danger" onclick="deleteBinding(${currentNode.nodeAddress}, ${binding.bindingNumber})" title="Delete binding">
+        🗑️
+      </button>
+    </div>
+  `;
+  
   return `
     <div class="binding-card">
       <div class="binding-header">
-        <span class="binding-type">[${binding.bindingType}]</span>
-        <span class="binding-number">${bindingNumber}</span>
+        <div class="binding-header-left">
+          <span class="binding-type">[${binding.bindingType}]</span>
+          <span class="binding-number">${bindingNumber}${nodeInfo}</span>
+        </div>
+        ${actionsHTML}
       </div>
       <div class="binding-flow">
         ${flowHTML}
@@ -488,6 +613,369 @@ function renderUnitReference(unitRef, isInput) {
   }
   
   return html;
+}
+
+/**
+ * Open the binding editor for creating a new binding
+ */
+async function openBindingEditor(presetNodeAddress = null, presetUnitAddress = null) {
+  const returnToNode = currentNodeAddress;
+  
+  // Open the editor with a callback to handle saving
+  bindingEditor.open(installation, async (bindingString, bindingData) => {
+    console.log('Binding created:', bindingString);
+    console.log('Binding data:', bindingData);
+    
+    try {
+      // Determine target node (where the binding will be stored)
+      const targetNodeAddress = bindingData.outputNodeAddress;
+      
+      // Add binding to the target node
+      const response = await fetch(`/api/bindings/${targetNodeAddress.toString(16).padStart(2, '0')}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bindingString }),
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Show success message
+        alert('✅ Binding created successfully!');
+        
+        // Reload the installation to show the new binding
+        await reloadInstallation();
+        
+        // Return to the original node if one was selected
+        if (returnToNode !== null) {
+          showNodeDetail(returnToNode);
+        }
+      } else {
+        alert('❌ Failed to add binding: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Failed to add binding:', error);
+      alert('❌ Error adding binding: ' + error.message);
+    }
+  });
+  
+  // If preset values are provided, pre-select them in the editor
+  if (presetNodeAddress !== null && presetUnitAddress !== null) {
+    // Wait a bit for the modal to render
+    setTimeout(() => {
+      const inputNodeSelect = document.getElementById('input-node-select');
+      const inputUnitSelect = document.getElementById('input-unit-select');
+      
+      if (inputNodeSelect) {
+        inputNodeSelect.value = presetNodeAddress;
+        bindingEditor.onInputNodeChange();
+        
+        if (inputUnitSelect) {
+          setTimeout(() => {
+            inputUnitSelect.value = presetUnitAddress;
+            bindingEditor.onInputUnitChange();
+          }, 100);
+        }
+      }
+    }, 100);
+  }
+}
+
+/**
+ * Delete a binding
+ */
+async function deleteBinding(nodeAddress, bindingIndex) {
+  const nodeHex = nodeAddress.toString(16).padStart(2, '0').toUpperCase();
+  const returnToNode = currentNodeAddress;
+  
+  if (!confirm(`Are you sure you want to delete binding #${bindingIndex} from node 0x${nodeHex}?\n\nThis will remove the binding from memory.`)) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/api/bindings/${nodeHex}/${bindingIndex}`, {
+      method: 'DELETE'
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      alert('✅ Binding deleted successfully!');
+      
+      // Reload to show updated bindings
+      await reloadInstallation();
+      await updateUploadButtonState();
+      
+      // Return to the original node view
+      if (returnToNode !== null) {
+        showNodeDetail(returnToNode);
+      }
+    } else {
+      alert('❌ Failed to delete binding: ' + (result.error || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Failed to delete binding:', error);
+    alert('❌ Error deleting binding: ' + error.message);
+  }
+}
+
+/**
+ * Edit a binding
+ */
+async function editBinding(nodeAddress, bindingIndex, binding) {
+  // Store the current node for returning after edit
+  const returnToNode = currentNodeAddress;
+  
+  // Extract binding data for editing
+  const editData = {
+    bindingIndex: binding.bindingNumber,
+    nodeAddress: nodeAddress,
+    inputUnits: binding.inputUnits,
+    outputUnits: binding.outputUnits,
+    operators: binding.operators || []
+  };
+  
+  // Open editor in edit mode
+  bindingEditor.open(installation, async (bindingString, bindingData) => {
+    try {
+      // Update the binding
+      const response = await fetch(`/api/bindings/${nodeAddress.toString(16).padStart(2, '0')}/${bindingIndex}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ bindingString }),
+      });
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        alert('✅ Binding updated successfully!');
+        await reloadInstallation();
+        await updateUploadButtonState();
+        
+        // Return to the original node
+        if (returnToNode !== null) {
+          showNodeDetail(returnToNode);
+        }
+      } else {
+        alert('❌ Failed to update binding: ' + (result.error || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Failed to update binding:', error);
+      alert('❌ Error updating binding: ' + error.message);
+    }
+  }, editData);
+}
+
+/**
+ * Update upload button state based on modified nodes
+ */
+async function updateUploadButtonState() {
+  try {
+    const response = await fetch('/api/bindings/modified');
+    const result = await response.json();
+    const uploadBtn = document.getElementById('upload-btn');
+    
+    if (!uploadBtn) return;
+    
+    if (result.modified && result.modified.length > 0) {
+      // Has unsaved changes - make button blue/prominent
+      uploadBtn.classList.remove('btn-secondary');
+      uploadBtn.classList.add('btn-primary');
+      uploadBtn.classList.add('has-changes');
+      uploadBtn.title = `${result.modified.length} node(s) with unsaved changes`;
+    } else {
+      // No unsaved changes - make button secondary
+      uploadBtn.classList.remove('btn-primary', 'has-changes');
+      uploadBtn.classList.add('btn-secondary');
+      uploadBtn.title = 'Upload to Hardware';
+    }
+  } catch (error) {
+    console.error('Error checking modified nodes:', error);
+  }
+}
+
+/**
+ * Rename a node
+ */
+async function renameNode(nodeAddress) {
+  const node = installation.nodes.find(n => n.nodeAddress === nodeAddress);
+  if (!node) return;
+  
+  const newName = prompt(`Rename node "${node.name}":`, node.name);
+  if (!newName || newName === node.name) return;
+  
+  // Ask if user wants to push to hardware
+  const pushToHardware = confirm('Do you want to push this name to the hardware node?\n\n✅ Yes - Save to file AND hardware\n❌ No - Save to file only');
+  
+  try {
+    const response = await fetch(`/api/nodes/${nodeAddress.toString(16).padStart(2, '0')}/rename`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newName, pushToHardware }),
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      let message = '✅ Node renamed successfully!';
+      if (result.hardwarePush) {
+        message += result.hardwarePush.success 
+          ? '\n📤 Name pushed to hardware!' 
+          : `\n⚠️ Hardware push failed: ${result.hardwarePush.error}`;
+      }
+      alert(message);
+      await reloadInstallation();
+      showNodeDetail(nodeAddress);
+    } else {
+      alert('❌ Failed to rename node: ' + (result.error || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Failed to rename node:', error);
+    alert('❌ Error renaming node: ' + error.message);
+  }
+}
+
+/**
+ * Rename a unit
+ */
+async function renameUnit(nodeAddress, unitAddress) {
+  const node = installation.nodes.find(n => n.nodeAddress === nodeAddress);
+  if (!node) return;
+  
+  const unit = node.units.find(u => u.address[1] === unitAddress);
+  if (!unit) return;
+  
+  const newName = prompt(`Rename unit "${unit.name}":`, unit.name);
+  if (!newName || newName === unit.name) return;
+  
+  // Ask if user wants to push to hardware
+  const pushToHardware = confirm('Do you want to push this name to the hardware unit?\n\n✅ Yes - Save to file AND hardware\n❌ No - Save to file only');
+  
+  try {
+    const response = await fetch(`/api/nodes/${nodeAddress.toString(16).padStart(2, '0')}/units/${unitAddress.toString(16).padStart(2, '0')}/rename`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: newName, pushToHardware }),
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      let message = '✅ Unit renamed successfully!';
+      if (result.hardwarePush) {
+        message += result.hardwarePush.success 
+          ? '\n📤 Name pushed to hardware!' 
+          : `\n⚠️ Hardware push failed: ${result.hardwarePush.error}`;
+      }
+      alert(message);
+      await reloadInstallation();
+      showUnitDetail(nodeAddress, unitAddress);
+    } else {
+      alert('❌ Failed to rename unit: ' + (result.error || 'Unknown error'));
+    }
+  } catch (error) {
+    console.error('Failed to rename unit:', error);
+    alert('❌ Error renaming unit: ' + error.message);
+  }
+}
+
+/**
+ * Push node name to hardware (separate button)
+ */
+async function pushNodeNameToHardware(nodeAddress) {
+  const node = installation.nodes.find(n => n.nodeAddress === nodeAddress);
+  if (!node) return;
+  
+  if (!confirm(`Push node name "${node.name}" to hardware node 0x${nodeAddress.toString(16).toUpperCase()}?`)) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/api/nodes/${nodeAddress.toString(16).padStart(2, '0')}/push-name`, {
+      method: 'POST',
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      alert(`✅ Node name "${node.name}" pushed to hardware successfully!`);
+    } else {
+      alert(`❌ Failed to push name: ${result.error || 'Unknown error'}`);
+    }
+  } catch (error) {
+    console.error('Failed to push node name:', error);
+    alert('❌ Network error. Check console for details.');
+  }
+}
+
+/**
+ * Push unit name to hardware (separate button)
+ */
+async function pushUnitNameToHardware(nodeAddress, unitAddress) {
+  const node = installation.nodes.find(n => n.nodeAddress === nodeAddress);
+  if (!node) return;
+  
+  const unit = node.units.find(u => u.address[1] === unitAddress);
+  if (!unit) return;
+  
+  if (!confirm(`Push unit name "${unit.name}" to hardware?\n\nNode: 0x${nodeAddress.toString(16).toUpperCase()}\nUnit: 0x${unitAddress.toString(16).toUpperCase()}`)) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/api/nodes/${nodeAddress.toString(16).padStart(2, '0')}/units/${unitAddress.toString(16).padStart(2, '0')}/push-name`, {
+      method: 'POST',
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      alert(`✅ Unit name "${unit.name}" pushed to hardware successfully!`);
+    } else {
+      alert(`❌ Failed to push name: ${result.error || 'Unknown error'}`);
+    }
+  } catch (error) {
+    console.error('Failed to push unit name:', error);
+    alert('❌ Network error. Check console for details.');
+  }
+}
+
+/**
+ * Push all names to hardware
+ */
+async function pushAllNamesToHardware() {
+  if (!confirm('Push ALL node and unit names to hardware?\n\nThis may take several minutes depending on the number of nodes and units.')) {
+    return;
+  }
+  
+  const startTime = Date.now();
+  
+  try {
+    const response = await fetch('/api/hardware/push-all-names', {
+      method: 'POST',
+    });
+    
+    const result = await response.json();
+    
+    const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+    
+    let message = `Operation completed in ${duration}s\n\n`;
+    message += `✅ Nodes: ${result.successfulNodes}/${result.totalNodes}\n`;
+    message += `✅ Units: ${result.successfulUnits}/${result.totalUnits}\n`;
+    
+    if (result.errors.length > 0) {
+      message += `\n⚠️ ${result.errors.length} errors:\n`;
+      message += result.errors.slice(0, 5).join('\n');
+      if (result.errors.length > 5) {
+        message += `\n... and ${result.errors.length - 5} more errors`;
+      }
+    }
+    
+    alert(message);
+  } catch (error) {
+    console.error('Failed to push all names:', error);
+    alert('❌ Network error. Check console for details.');
+  }
 }
 
 // Initialize on page load

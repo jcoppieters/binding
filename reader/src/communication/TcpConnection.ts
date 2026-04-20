@@ -50,18 +50,18 @@ export class TcpConnection extends EventEmitter {
   private static readonly EV_NODECONFIG = 0x0C; // 12 decimal
   
   // DLL Access Control flags (from nodegenestructs.h)
-  private static readonly APPL_SERIALIZE = 0x01;
+  // private static readonly APPL_SERIALIZE = 0x01;  // Unused - kept for reference
   private static readonly APPL_UNLOCK = 0x02;
   
   // Access level methods
   private static readonly ATTR_CODE = 0;
-  private static readonly OBJECT_CHANGECODE = 1;
-  private static readonly OBJECT_RESET = 2;
+  // private static readonly OBJECT_CHANGECODE = 1;  // Unused - kept for reference
+  // private static readonly OBJECT_RESET = 2;       // Unused - kept for reference
   
   // Task types (from tcpsockethomeclientcmn.h)
-  private static readonly TASK_BROWSE = 0;
-  private static readonly TASK_BROWSE_CLEAR = 1;
-  private static readonly TASK_PNP = 2;
+  // private static readonly TASK_BROWSE = 0;         // Unused - kept for reference
+  // private static readonly TASK_BROWSE_CLEAR = 1;   // Unused - kept for reference
+  // private static readonly TASK_PNP = 2;            // Unused - kept for reference
   private static readonly TASK_UPDATE_DBASE = 3;
   
   // APDU Header constants (from apdu_def.h)
@@ -215,6 +215,25 @@ export class TcpConnection extends EventEmitter {
   }
   
   /**
+   * Unsubscribe from CAN bus messages
+   * Should be called before disconnecting to stop receiving CAN bus traffic
+   */
+  private unsubscribeFromCanBus(): void {
+    if (!this.connected || !this.socket) {
+      return;
+    }
+    
+    const message = [
+      TcpConnection.FC_PROTOCOLMSG,
+      TcpConnection.ATTR_SUBSCRIBE_CANBUS_MSG,
+      0  // 0 = unsubscribe
+    ];
+    
+    console.log('TX Unsubscribe from CAN bus:', message);
+    this.sendRaw(message);
+  }
+  
+  /**
    * Start a task on the master node (e.g., UPDATE_DBASE for configuration mode)
    * @param taskPassword - 4-digit numeric password for task authorization
    * @param taskType - Task type (default: TASK_UPDATE_DBASE)
@@ -358,8 +377,34 @@ export class TcpConnection extends EventEmitter {
   }
   
   /**
-   * Handle incoming data
+   * Reset a node (soft reset - clears runtime state without erasing configuration)
+   * Use this to clear stuck states like APPL_UNLOCK or other abnormal conditions
+   * 
+   * @param nodeAddress - Node logical address (e.g., 0xFC for master)
+   * @returns Promise that resolves when reset command is sent
+   * 
+   * From C++: ResetNode(bNodeAddress) sends FC_NODERESET with data [0]
+   * - 0 = soft reset (clear runtime state)
+   * - 2 = factory reset (WARNING: erases all configuration!)
+   * - 3 = factory init
    */
+  async resetNode(nodeAddress: number): Promise<void> {
+    const FC_NODERESET = 0x9b; // 155 decimal
+    
+    console.log(`TX ResetNode: 0x${nodeAddress.toString(16).toUpperCase().padStart(2, '0')} (soft reset)`);
+    
+    // Send reset command
+    this.sendCanBusMessage({
+      nodeAddress: nodeAddress,
+      unitAddress: 0xFF,  // BROADCAST_UNIT
+      messageCode: FC_NODERESET,
+      data: [0]  // 0 = soft reset
+    });
+    
+    // Give node time to reset
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    console.log(`✓ Node 0x${nodeAddress.toString(16).toUpperCase().padStart(2, '0')} reset command sent`);
+  }
   private handleData(data: Buffer): void {
     this.buffer += data.toString();
     
@@ -403,7 +448,7 @@ export class TcpConnection extends EventEmitter {
     if (bytes.length > 0 && bytes[0] === TcpConnection.EV_ACCESSLEVELINFO) {
       // Response format: [75, method, access_level, ...password_echo]
       // access_level: 0=No authority, 1=User, 2=Installer, 3=Engineer
-      const method = bytes[1];
+      // bytes[1] is the method code, not currently needed
       const accessLevel = bytes[2];
       
       const accessLevelNames = ['No authority', 'User', 'Installer', 'Engineer'];
@@ -495,14 +540,21 @@ export class TcpConnection extends EventEmitter {
       return;
     }
     
-    // Check for subscribe confirmation (EV_PROTOCOLMSG with ATTR_SUBSCRIBE_CANBUS_MSG)
+    // Check for subscribe/unsubscribe confirmation (EV_PROTOCOLMSG with ATTR_SUBSCRIBE_CANBUS_MSG)
     // Format: [EV_PROTOCOLMSG, ATTR_SUBSCRIBE_CANBUS_MSG, status]
+    // status: 1 = subscribed, 0 = unsubscribed
     if (bytes.length >= 3 && 
         bytes[0] === TcpConnection.EV_PROTOCOLMSG &&
         bytes[1] === TcpConnection.ATTR_SUBSCRIBE_CANBUS_MSG) {
-      const status = bytes[2] === 1;
-      console.log(`CAN bus subscription ${status ? 'confirmed' : 'failed'}`);
-      this.emit('canbus-subscribed', status);
+      const subscriptionStatus = bytes[2];
+      if (subscriptionStatus === 1) {
+        console.log('✓ CAN bus subscription confirmed');
+      } else if (subscriptionStatus === 0) {
+        console.log('✓ CAN bus unsubscribed successfully');
+      } else {
+        console.log(`⚠️  CAN bus subscription status: ${subscriptionStatus}`);
+      }
+      this.emit('canbus-subscribed', subscriptionStatus === 1);
       return;
     }
     
@@ -570,8 +622,17 @@ export class TcpConnection extends EventEmitter {
    */
   disconnect(): void {
     if (this.socket) {
-      this.socket.destroy();
-      this.socket = null;
+      // Unsubscribe from CAN bus before closing
+      this.unsubscribeFromCanBus();
+      
+      // Give the unsubscribe message time to be sent
+      setTimeout(() => {
+        if (this.socket) {
+          this.socket.destroy();
+          this.socket = null;
+        }
+      }, 100);
+      
       this.connected = false;
     }
   }

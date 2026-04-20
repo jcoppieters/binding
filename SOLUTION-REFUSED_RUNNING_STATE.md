@@ -108,6 +108,66 @@ async enableProgrammingMode(): Promise<void> {
 4. eraseFile()
 5. writeBindings()
 6. closeFile()
+7. disableProgrammingMode()  ✅ Clears APPL_UNLOCK (returns node to normal state)
+```
+
+### 5. Added disableProgrammingMode() to Clean Up After Upload
+
+**CRITICAL:** After uploading bindings, the node must be returned to normal operating state by clearing the APPL_UNLOCK flag. Without this cleanup step, nodes remain in programming mode and may exhibit abnormal behavior (such as excessive cmd=122 messages on the CAN bus).
+
+```typescript
+/**
+ * Disable programming mode on the node by clearing APPL_UNLOCK flag
+ * CRITICAL: This should be called AFTER binding file operations complete!
+ * This returns the node to normal operating state
+ */
+async disableProgrammingMode(): Promise<void> {
+  await this.connection.setNodeConfig(
+    this.currentNodeAddress,
+    0x00,  // nodeConfig flags
+    false  // enableProgramming = clear APPL_UNLOCK
+  );
+}
+```
+
+This is called in a `finally` block to ensure it runs even if an error occurs during upload.
+
+### 6. Added unsubscribeFromCanBus() to Stop CAN Bus Traffic
+
+**CRITICAL:** When connecting via TCP/IP, the client subscribes to ALL CAN bus messages. Without unsubscribing before disconnect, the system continues receiving CAN bus traffic (cmd=122 messages) even after operations complete.
+
+```typescript
+/**
+ * Unsubscribe from CAN bus messages
+ * Should be called before disconnecting to stop receiving CAN bus traffic
+ */
+private unsubscribeFromCanBus(): void {
+  const message = [
+    FC_PROTOCOLMSG,
+    ATTR_SUBSCRIBE_CANBUS_MSG,
+    0  // 0 = unsubscribe (was 1 for subscribe)
+  ];
+  this.sendRaw(message);
+}
+```
+
+Updated `disconnect()` method now unsubscribes before closing the socket:
+```typescript
+disconnect(): void {
+  if (this.socket) {
+    // Unsubscribe from CAN bus before closing
+    this.unsubscribeFromCanBus();
+    
+    // Give the unsubscribe message time to be sent
+    setTimeout(() => {
+      if (this.socket) {
+        this.socket.destroy();
+      }
+    }, 100);
+    
+    this.connected = false;
+  }
+}
 ```
 
 ---
@@ -128,7 +188,28 @@ TX SetNodeConfig: Node 0xFC, Config=0x00, DllAccess=0x02 (UNLOCK=true)
 TX OpenFile: Node 0xFC
 ✓ File opened successfully
 ...
+✓ CAN bus unsubscribed successfully
 ```
+
+## Recovery: If Nodes Get Stuck (cmd=122 flood)
+
+**Symptom:** After a failed upload, continuous cmd=122 messages flood the CAN bus from node 0xFC.
+
+**Cause:** The master node was left in programming/debug mode (APPL_UNLOCK set) when upload failed.
+
+**Solution:** Perform a soft reset to clear the stuck state:
+
+```bash
+npm run reset
+```
+
+This sends **FC_NODERESET (0x9b)** with parameter 0, which:
+- Clears runtime state (including APPL_UNLOCK)
+- Does NOT erase configuration or bindings
+- Triggers node rediscovery
+- Returns system to normal operation
+
+**Verified:** This successfully cleared the cmd=122 flood and restored normal operation with all nodes rediscovered properly.
 
 ---
 
