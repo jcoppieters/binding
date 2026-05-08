@@ -12,7 +12,7 @@
       "runtimeArgs": [
         "--import",
         "tsx",
-        "${workspaceFolder}/reader/src/server-enhanced.ts"
+        "${workspaceFolder}/reader/src/server.ts"
       ],
       "cwd": "${workspaceFolder}/reader",
       "console": "integratedTerminal",
@@ -25,27 +25,7 @@
       }
     },
     {
-      "name": "Debug Reader (TypeScript)",
-      "type": "node",
-      "request": "launch",
-      "runtimeExecutable": "node",
-      "runtimeArgs": [
-        "--import",
-        "tsx",
-        "${workspaceFolder}/reader/src/index.ts"
-      ],
-      "cwd": "${workspaceFolder}/reader",
-      "console": "integratedTerminal",
-      "internalConsoleOptions": "openOnSessionStart",
-      "skipFiles": [
-        "<node_internals>/**"
-      ],
-      "env": {
-        "NODE_OPTIONS": "--enable-source-maps"
-      }
-    },
-    {
-      "name": "Debug Reader (Compiled JS)",
+      "name": "Debug Reader",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/reader/dist/index.js",

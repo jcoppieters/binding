@@ -9,7 +9,7 @@
       "runtimeArgs": [
         "--import",
         "tsx",
-        "${workspaceFolder}/src/server-enhanced.ts"
+        "${workspaceFolder}/src/server.ts"
       ],
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",

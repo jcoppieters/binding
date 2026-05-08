@@ -80,7 +80,7 @@ async function main() {
         // CRITICAL: Enable programming mode for this specific node
         // This sets APPL_UNLOCK flag which is required before any binding operations
         console.log(`Enabling programming mode for node 0x${node.address.toString(16).toUpperCase()}...`);
-        await writer.getConnection().setNodeConfig(node.address, 0x00, true);
+        await writer.getConnection().setNodeConfig(node.address, 0x00, 1);
         
         // Upload to node
         await writer.writeBindingsToNode(node.address, bindingFile);

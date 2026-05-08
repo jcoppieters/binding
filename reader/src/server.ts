@@ -1,11 +1,24 @@
 /**
- * Web server for Duotecno configuration viewer
+ * Enhanced Web server for Duotecno configuration viewer and binding editor
  */
 
 import express from 'express';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { readdir } from 'fs/promises';
 import { InstallationReader } from './readers/installation.js';
+import { BindingFileReader } from './readers/BindingFileReader.js';
+import { BindingManager } from './services/BindingManager.js';
+import { MasterConnectionService } from './services/MasterConnectionService.js';
+
+// Import API modules
+import bindingEditorAPI from './api/bindingEditorAPI.js';
+import { createInstallationAPI } from './api/installationAPI.js';
+import { createBindingsAPI } from './api/bindingsAPI.js';
+import { createUploadAPI } from './api/uploadAPI.js';
+import { createMasterAPI } from './api/masterAPI.js';
+import { createUnitsAPI } from './api/unitsAPI.js';
+import { createStatsAPI } from './api/statsAPI.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,12 +26,25 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = 3000;
 
+// Enable JSON body parsing
+app.use(express.json());
+
 // Serve static files from public directory
 app.use(express.static(join(__dirname, '../public')));
 
-// Global installation cache
+// Request logging middleware
+app.use((req, _res, next) => {
+  console.log(`[${req.method}] ${req.url}`);
+  next();
+});
+
+// Global state
 let cachedInstallation: any = null;
-let configPath = join(__dirname, '../configGM');
+let configPath = join(__dirname, '../configValies');
+const bindingManager = new BindingManager();
+
+// Master connection for unit control and status monitoring (singleton)
+const masterService = MasterConnectionService.getInstance();
 
 /**
  * Load installation from config directory
@@ -34,90 +60,101 @@ async function loadInstallation() {
 }
 
 /**
- * API: Get complete installation data
+ * Invalidate installation cache (call after modifying bindings)
  */
-app.get('/api/installation', async (_req, res) => {
-  try {
-    const data = await loadInstallation();
-    return res.json(data);
-  } catch (error) {
-    console.error('Error loading installation:', error);
-    return res.status(500).json({ error: 'Failed to load installation' });
-  }
-});
+function invalidateInstallationCache() {
+  cachedInstallation = null;
+}
 
 /**
- * API: Get specific node data
+ * Load all binding files into manager
  */
-app.get('/api/nodes/:nodeAddress', async (req, res) => {
-  try {
-    const data = await loadInstallation();
-    const nodeAddress = parseInt(req.params.nodeAddress, 16);
-    const node = data.nodes.find((n: any) => n.nodeAddress === nodeAddress);
-    
-    if (!node) {
-      return res.status(404).json({ error: 'Node not found' });
-    }
-    
-    return res.json(node);
-  } catch (error) {
-    console.error('Error getting node:', error);
-    return res.status(500).json({ error: 'Failed to get node' });
+async function loadBindingFiles() {
+  console.log('Loading binding files...');
+  const files = await readdir(configPath);
+  const bindFiles = files.filter(f => f.match(/^bind[0-9a-f]{2}\.txt$/i));
+  
+  for (const filename of bindFiles) {
+    const filepath = join(configPath, filename);
+    const bindingFile = await BindingFileReader.readFile(filepath);
+    const nodeAddress = parseInt(filename.substring(4, 6), 16);
+    bindingManager.load(nodeAddress, bindingFile, filepath);
   }
+  
+  const stats = bindingManager.getStatistics();
+  console.log(`✅ Loaded ${stats.totalNodes} binding files (${stats.totalBindings} total bindings)`);
+}
+
+// ==================== Mount API Routes ====================
+
+// Create and mount API routers
+app.use('/api', createInstallationAPI({
+  loadInstallation,
+  invalidateInstallationCache,
+  loadBindingFiles,
+  bindingManager,
+  configPath
+}));
+
+app.use('/api', createBindingsAPI({
+  bindingManager,
+  invalidateInstallationCache
+}));
+
+app.use('/api', createUploadAPI({
+  bindingManager,
+  masterService
+}));
+
+app.use('/api', createMasterAPI({
+  masterService
+}));
+
+app.use('/api', createUnitsAPI({
+  masterService
+}));
+
+app.use('/api', createStatsAPI({
+  bindingManager
+}));
+
+app.use('/api/editor', bindingEditorAPI);
+
+// ==================== End API Routes ====================
+
+process.on('SIGINT', () => {
+  console.log('\n👋 Received SIGINT, shutting down gracefully...');
+  
+  // Disconnect from master if connected
+  if (masterService.isConnected()) {
+    masterService.disconnect().catch(console.error);
+  }
+  
+  process.exit(0);
 });
 
-/**
- * API: Get specific unit data with all bindings
- */
-app.get('/api/nodes/:nodeAddress/units/:unitAddress', async (req, res) => {
-  try {
-    const data = await loadInstallation();
-    const nodeAddress = parseInt(req.params.nodeAddress, 16);
-    const unitAddress = parseInt(req.params.unitAddress, 16);
-    
-    const node = data.nodes.find((n: any) => n.nodeAddress === nodeAddress);
-    if (!node) {
-      return res.status(404).json({ error: 'Node not found' });
-    }
-    
-    const unit = node.units.find((u: any) => u.address[1] === unitAddress);
-    if (!unit) {
-      return res.status(404).json({ error: 'Unit not found' });
-    }
-    
-    return res.json({
-      node: {
-        nodeAddress: node.nodeAddress,
-        name: node.name,
-      },
-      unit,
-    });
-  } catch (error) {
-    console.error('Error getting unit:', error);
-    return res.status(500).json({ error: 'Failed to get unit' });
-  }
+process.on('uncaughtException', (error) => {
+  console.error('\n❌ Uncaught Exception:', error);
 });
 
-/**
- * API: Reload configuration
- */
-app.post('/api/reload', async (_req, res) => {
-  try {
-    cachedInstallation = null;
-    const data = await loadInstallation();
-    return res.json({ success: true, summary: data.summary });
-  } catch (error) {
-    console.error('Error reloading installation:', error);
-    return res.status(500).json({ error: 'Failed to reload configuration' });
-  }
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('\n❌ Unhandled Rejection at:', promise, 'reason:', reason);
 });
 
 // Start server
-app.listen(PORT, () => {
-  console.log(`\n🌐 Duotecno Configuration Viewer`);
+const server = app.listen(PORT, () => {
+  console.log(`\n🌐 Duotecno Configuration Server`);
   console.log(`   http://localhost:${PORT}`);
   console.log(`   Config: ${configPath}\n`);
-  
-  // Pre-load installation
-  loadInstallation().catch(console.error);
+});
+
+// Pre-load installation and bindings after server starts
+server.on('listening', async () => {
+  try {
+    await loadInstallation();
+    await loadBindingFiles();
+    console.log('\n✅ Server ready and listening for requests\n');
+  } catch (error) {
+    console.error('❌ Error during startup:', error);
+  }
 });

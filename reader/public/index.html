@@ -12,12 +12,11 @@
     <header>
       <h1>🏠 Duotecno Configuration Viewer</h1>
       <div class="header-actions">
-        <div id="connection-status-header" class="connection-status-header disconnected" onclick="uploadManager.openConnectionModal()">
-          <span class="status-indicator disconnected"></span> Not Connected
+        <div id="unit-control-status" class="connection-status-header disconnected" onclick="openUnitControlConnection()">
+          <span class="status-indicator disconnected"></span> Master Disconnected
         </div>
         <button id="upload-btn" class="btn btn-primary" onclick="uploadManager.openUploadModal()">📤 Upload to Hardware</button>
         <button id="reload-btn" class="btn btn-secondary">🔄 Reload</button>
-        <button id="push-all-names-btn" class="btn btn-hardware" onclick="pushAllNamesToHardware()">📤 Push All Names</button>
         <div class="filter-controls">
           <label>
             <input type="checkbox" id="filter-with-bindings" checked>
@@ -62,6 +61,7 @@
 
   <script src="binding-editor.js"></script>
   <script src="upload-manager.js"></script>
+  <script src="unit-control.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -185,6 +185,9 @@ function renderNodesList() {
  * Show node detail view
  */
 function showNodeDetail(nodeAddress) {
+  // Stop polling when navigating away from unit
+  unitControl.stopPolling();
+  
   currentNodeAddress = nodeAddress;
   currentUnitAddress = null;
   
@@ -242,9 +245,6 @@ function showNodeDetail(nodeAddress) {
         <h2>🖥️ ${node.name}</h2>
         <button class="btn-icon" onclick="renameNode(${nodeAddress})" title="Rename node">
           ✏️ Rename
-        </button>
-        <button class="btn-icon btn-hardware" onclick="pushNodeNameToHardware(${nodeAddress})" title="Push name to hardware">
-          📤 Push to Hardware
         </button>
       </div>
       
@@ -361,7 +361,7 @@ function setUnitTypeFilter(filterType) {
 /**
  * Show unit detail view with bindings
  */
-function showUnitDetail(nodeAddress, unitAddress) {
+async function showUnitDetail(nodeAddress, unitAddress) {
   currentNodeAddress = nodeAddress;
   currentUnitAddress = unitAddress;
   
@@ -370,6 +370,16 @@ function showUnitDetail(nodeAddress, unitAddress) {
   
   const unit = node.units.find(u => u.address[1] === unitAddress);
   if (!unit) return;
+  
+  // Pre-fetch unit state before rendering (if connected to master)
+  let unitState = null;
+  if (unitControl.connected) {
+    try {
+      unitState = await unitControl.getUnitState(nodeAddress, unitAddress);
+    } catch (error) {
+      console.warn('Failed to pre-fetch unit state:', error);
+    }
+  }
   
   // Render breadcrumb
   const breadcrumb = `
@@ -391,9 +401,6 @@ function showUnitDetail(nodeAddress, unitAddress) {
         <button class="btn-icon" onclick="renameUnit(${nodeAddress}, ${unitAddress})" title="Rename unit">
           ✏️ Rename
         </button>
-        <button class="btn-icon btn-hardware" onclick="pushUnitNameToHardware(${nodeAddress}, ${unitAddress})" title="Push name to hardware">
-          📤 Push to Hardware
-        </button>
       </div>
       
       <div class="unit-meta">
@@ -410,6 +417,8 @@ function showUnitDetail(nodeAddress, unitAddress) {
           <span class="meta-value">${node.name}</span>
         </div>
       </div>
+      
+      ${renderUnitControls(unit, nodeAddress, unitAddress, unitState)}
   `;
   
   // Bindings where this unit is an input (triggers action)
@@ -475,6 +484,460 @@ function showUnitDetail(nodeAddress, unitAddress) {
   html += `</div>`;
   
   document.getElementById('detail-view').innerHTML = html;
+  
+  // Start polling for real-time updates if connected
+  if (unitControl.connected) {
+    unitControl.startPolling(nodeAddress, unitAddress);
+  }
+}
+
+/**
+ * Render unit controls based on unit type
+ */
+function renderUnitControls(unit, nodeAddress, unitAddress, unitState) {
+  if (!unitControl.connected) {
+    return `
+      <div class="unit-control-panel">
+        <div class="unit-control-disconnected">
+          <p>💡 <strong>Unit Control Not Connected</strong></p>
+          <p>Connect to the master to control and monitor this unit in real-time.</p>
+          <button class="btn btn-primary" onclick="openUnitControlConnection()">Connect to Master</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // Determine initial values from unitState (if available)
+  const hasState = unitState != null;
+  const status = hasState ? unitState.status : 0;
+  const value = hasState ? (unitState.value || 0) : 0;
+  const isOn = hasState ? (unitState.type === 1 ? (status && value > 0) : !!status) : false;
+  const statusText = hasState ? unitControl.getDisplayState(unitState) : 'Loading...';
+
+  // Show loading state initially - will be updated when state loads
+  let html = `
+    <div class="unit-control-panel">
+  `;
+
+  // Render controls based on unit type
+  const unitTypeLower = unit.unitType.toLowerCase();
+  
+  // Switch/Relay Controls
+  if (unitTypeLower.includes('relais') || unitTypeLower.includes('switch')) {
+    // Determine status text based on state value
+    const statusText = isOn ? 'ON' : 'OFF';
+    const statusClass = isOn ? 'status-on' : 'status-off';
+    
+    html += `
+      <div class="unit-control-widget">
+        <!-- Status Block -->
+        <div class="control-block status-block">
+          <h4 class="block-title">📊 Status</h4>
+          <div class="dimmer-status-display">
+            <div class="status-row">
+              <span class="status-label">State:</span>
+              <span id="switch-status-value" class="status-value ${statusClass}">${statusText}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Control Block -->
+        <div class="control-block command-block">
+          <h4 class="block-title">🎛️ Control</h4>
+          <div class="switch-commands-grid">
+            <button class="protocol-cmd-btn" onclick="setSwitchState(${nodeAddress}, ${unitAddress}, true)" title="Turn ON">
+              💡 ON
+            </button>
+            <button class="protocol-cmd-btn" onclick="setSwitchState(${nodeAddress}, ${unitAddress}, false)" title="Turn OFF">
+              ⚫ OFF
+            </button>
+            <button class="protocol-cmd-btn" onclick="toggleSwitch(${nodeAddress}, ${unitAddress})" title="Toggle ON/OFF">
+              🔄 TOGGLE
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Dimmer Controls
+  else if (unitTypeLower.includes('dimmer')) {
+    // Determine status text based on state value (0=OFF, 1=ON, 2=PIRTIMED)
+    const statusMap = { 0: 'OFF', 1: 'ON', 2: 'PIRTIMED' };
+    const statusText = statusMap[unit.status] || (isOn ? 'ON' : 'OFF');
+    const statusClass = isOn ? 'status-on' : 'status-off';
+    
+    html += `
+      <div class="unit-control-widget">
+        <!-- Status Block -->
+        <div class="control-block status-block">
+          <h4 class="block-title">📊 Status</h4>
+          <div class="dimmer-status-display">
+            <div class="status-row">
+              <span class="status-label">State:</span>
+              <span id="dimmer-status-value" class="status-value ${statusClass}">${statusText}</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Brightness:</span>
+              <span id="dimmer-brightness-display" class="status-value">${value}%</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Control Block -->
+        <div class="control-block command-block">
+          <h4 class="block-title">🎛️ Control</h4>
+          
+          <!-- Basic Control Buttons -->
+          <div class="dimmer-commands-grid">
+            <button class="protocol-cmd-btn" onclick="sendDimmerMethod(${nodeAddress}, ${unitAddress}, 10)" title="Method 0x0A: ON (restore last value)">
+              💡 ON
+            </button>
+            <button class="protocol-cmd-btn" onclick="sendDimmerMethod(${nodeAddress}, ${unitAddress}, 9)" title="Method 0x09: OFF">
+              ⚫ OFF
+            </button>
+            <button class="protocol-cmd-btn" onclick="sendDimmerMethod(${nodeAddress}, ${unitAddress}, 11)" title="Method 0x0B: TOGGLE ON/OFF">
+              🔄 TOGGLE
+            </button>
+          </div>
+          
+          <!-- Brightness Slider -->
+          <div class="dimmer-slider-control">
+            <label>Set Brightness (Method 0x03)</label>
+            <div class="dimmer-slider-container">
+              <input type="range" id="unit-dimmer-slider" min="0" max="99" value="${value}" 
+                     class="dimmer-slider"
+                     oninput="document.getElementById('unit-dimmer-value').textContent = this.value + '%'"
+                     onchange="setDimmerValue(${nodeAddress}, ${unitAddress}, parseInt(this.value))">
+              <span id="unit-dimmer-value" class="dimmer-value">${value}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Motor/Blind Controls
+  else if (unitTypeLower.includes('motor') || unitTypeLower.includes('duo')) {
+    // Determine motor status
+    const motorStates = ['Stopped', 'Stopped Down', 'Stopped Up', 'Opening', 'Closing'];
+    const statusText = motorStates[status] || 'Unknown';
+    const statusClass = (status === 3 || status === 4) ? 'status-on' : 'status-off';
+    
+    html += `
+      <div class="unit-control-widget">
+        <!-- Status Block -->
+        <div class="control-block status-block">
+          <h4 class="block-title">📊 Status</h4>
+          <div class="dimmer-status-display">
+            <div class="status-row">
+              <span class="status-label">State:</span>
+              <span id="motor-status-value" class="status-value ${statusClass}">${statusText}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Control Block -->
+        <div class="control-block command-block">
+          <h4 class="block-title">🎛️ Control</h4>
+          <div class="motor-controls">
+            <button class="btn btn-motor" onclick="controlMotor(${nodeAddress}, ${unitAddress}, 4)" title="Method 4: Open/Up">
+              ▲ Open
+            </button>
+            <button class="btn btn-motor btn-stop" onclick="controlMotor(${nodeAddress}, ${unitAddress}, 3)" title="Method 3: Stop">
+              ■ Stop
+            </button>
+            <button class="btn btn-motor" onclick="controlMotor(${nodeAddress}, ${unitAddress}, 5)" title="Method 5: Close/Down">
+              ▼ Close
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Temperature Sensor Display
+  else if (unitTypeLower.includes('sens') || unitTypeLower.includes('temperature')) {
+    const tempC = unitState?.temperature ? (unitState.temperature.temp / 10).toFixed(1) : '--';
+    const presets = ['Off', 'Sun', 'Half Sun', 'Moon', 'Half Moon'];
+    const presetIdx = unitState?.temperature?.preset ?? -1;
+    const presetName = presetIdx >= 0 && presetIdx < presets.length ? presets[presetIdx] : 'Off';
+    
+    // Get setpoint temperature based on active preset
+    let setpointC = '--';
+    if (unitState?.temperature && presetIdx >= 0) {
+      const presetValues = [0, unitState.temperature.sun, unitState.temperature.hsun, unitState.temperature.moon, unitState.temperature.hmoon];
+      if (presetIdx < presetValues.length) {
+        setpointC = (presetValues[presetIdx] / 10).toFixed(1);
+      }
+    }
+    
+    html += `
+      <div class="unit-control-widget">
+        <!-- Status Block -->
+        <div class="control-block status-block">
+          <h4 class="block-title">📊 Status</h4>
+          <div class="dimmer-status-display">
+            <div class="status-row">
+              <span class="status-label">Current Temp:</span>
+              <span id="sensor-temp-display" class="status-value">${tempC}°C</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Setpoint:</span>
+              <span id="sensor-setpoint-display" class="status-value">${setpointC}°C</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Preset:</span>
+              <span id="sensor-preset-display" class="status-value">${presetName}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Control Block -->
+        <div class="control-block command-block">
+          <h4 class="block-title">🎛️ Control</h4>
+          
+          <!-- Temperature Adjustment -->
+          <div class="temp-adjust-controls">
+            <button class="temp-adjust-btn" onclick="adjustSensorTemp(${nodeAddress}, ${unitAddress}, 'dec')" title="Decrease setpoint">
+              − TEMP
+            </button>
+            <button class="temp-adjust-btn" onclick="adjustSensorTemp(${nodeAddress}, ${unitAddress}, 'inc')" title="Increase setpoint">
+              + TEMP
+            </button>
+          </div>
+          
+          <!-- Preset Selection -->
+          <div class="sensor-commands-grid">
+            <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 0)" title="Preset: OFF">
+              ❄️ OFF
+            </button>
+            <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 1)" title="Preset: SUN">
+              ☀️ SUN
+            </button>
+            <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 2)" title="Preset: HALF SUN">
+              🌤️ HALF SUN
+            </button>
+            <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 3)" title="Preset: MOON">
+              🌙 MOON
+            </button>
+            <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 4)" title="Preset: HALF MOON">
+              🌜 HALF MOON
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Mood/Virtual Units (LCD Virtual buttons)
+  else if (unitTypeLower.includes('virtual') || unitTypeLower === 'lcd_virtual') {
+    const statusText = isOn ? 'ON' : 'OFF';
+    const statusClass = isOn ? 'status-on' : 'status-off';
+    
+    html += `
+      <div class="unit-control-widget">
+        <!-- Status Block -->
+        <div class="control-block status-block">
+          <h4 class="block-title">📊 Status</h4>
+          <div class="dimmer-status-display">
+            <div class="status-row">
+              <span class="status-label">State:</span>
+              <span id="mood-status-value" class="status-value ${statusClass}">${statusText}</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Control Block -->
+        <div class="control-block command-block">
+          <h4 class="block-title">🎛️ Control</h4>
+          <div class="mood-commands-grid">
+            <button class="protocol-cmd-btn" onclick="sendProtocolCommand(${nodeAddress}, ${unitAddress}, 3, -1)" title="PULSE (short press)">
+              ⚡ PULSE
+            </button>
+            <button class="protocol-cmd-btn" onclick="sendProtocolCommand(${nodeAddress}, ${unitAddress}, 3, 0)" title="LONG OFF">
+              🔴 LONG OFF
+            </button>
+            <button class="protocol-cmd-btn" onclick="sendProtocolCommand(${nodeAddress}, ${unitAddress}, 3, 1)" title="LONG ON">
+              🟢 LONG ON
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Control/Input Units (Read-only)
+  else if (unitTypeLower.includes('control') || unitTypeLower.includes('input')) {
+    const controlStatus = isOn ? 'Pressed' : 'Released';
+    const statusClass = isOn ? 'status-on' : 'status-off';
+    
+    html += `
+      <div class="unit-control-widget">
+        <!-- Status Block -->
+        <div class="control-block status-block">
+          <h4 class="block-title">📊 Status</h4>
+          <div class="dimmer-status-display">
+            <div class="status-row">
+              <span class="status-label">State:</span>
+              <span id="control-status-value" class="status-value ${statusClass}">${controlStatus}</span>
+            </div>
+          </div>
+        </div>
+        
+        <p class="dimmer-note">
+          ℹ️ <strong>Read-only unit</strong> - This is an input/control unit that cannot be controlled via TCP.
+        </p>
+      </div>
+    `;
+  }
+  
+  // Generic/Unknown Units
+  else {
+    html += `
+      <div class="unit-control-widget">
+        <!-- Status Block -->
+        <div class="control-block status-block">
+          <h4 class="block-title">📊 Status</h4>
+          <div class="dimmer-status-display">
+            <div class="status-row">
+              <span class="status-label">Type:</span>
+              <span class="status-value">${unit.unitType}</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Status:</span>
+              <span id="generic-status-value" class="status-value">${status !== undefined ? status : 'Loading...'}</span>
+            </div>
+            <div class="status-row">
+              <span class="status-label">Value:</span>
+              <span id="generic-value-display" class="status-value">${value !== undefined ? value : 'Loading...'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  
+  // Add Protocol Commands section - shows available commands for this unit type
+  // Skip for all unit types with dedicated Control Blocks (they already have their buttons)
+  const skipProtocolCommands = unitTypeLower.includes('dimmer') || 
+                               unitTypeLower.includes('relais') || 
+                               unitTypeLower.includes('switch') || 
+                               unitTypeLower.includes('sens') ||
+                               unitTypeLower.includes('motor') ||
+                               unitTypeLower.includes('duo') ||
+                               unitTypeLower.includes('virtual') ||
+                               unitTypeLower.includes('control') ||
+                               unitTypeLower.includes('input');
+  
+  if (!skipProtocolCommands) {
+    html += renderProtocolCommands(unit, nodeAddress, unitAddress, unitTypeLower);
+  }
+  
+  // Close panel and add script to refresh state (in case it changes)
+  html += `
+    </div>
+    <script>
+      // If state wasn't pre-fetched or to handle real-time updates
+      (async function() {
+        try {
+          const state = await unitControl.getUnitState(${nodeAddress}, ${unitAddress});
+          if (state) {
+            await updateUnitControlsInView(state);
+          }
+        } catch (error) {
+          console.error('Error refreshing unit state:', error);
+        }
+      })();
+    </script>
+  `;
+  
+  return html;
+}
+
+/**
+ * Render protocol commands section - shows available commands for debugging/testing
+ */
+function renderProtocolCommands(unit, nodeAddress, unitAddress, unitTypeLower) {
+  let html = `
+    <div class="protocol-commands-section">
+      <h4>⚡ Protocol Commands</h4>
+      <div class="protocol-commands-grid">
+  `;
+
+  // Dimmer Commands - REMOVED (now in Control Block)
+  // No need to duplicate dimmer commands here
+  
+  // Switch Commands
+  if (unitTypeLower.includes('relais') || unitTypeLower.includes('switch')) {
+    html += `
+      <button class="protocol-cmd-btn" onclick="sendProtocolCommand(${nodeAddress}, ${unitAddress}, 2, 1)" title="Method 3: ON">
+        💡 ON
+      </button>
+      <button class="protocol-cmd-btn" onclick="sendProtocolCommand(${nodeAddress}, ${unitAddress}, 2, 0)" title="Method 2: OFF">
+        ⚫ OFF
+      </button>
+    `;
+  }
+  
+  // Motor/Blind Commands
+  else if (unitTypeLower.includes('motor') || unitTypeLower.includes('duo')) {
+    html += `
+      <button class="protocol-cmd-btn" onclick="controlMotor(${nodeAddress}, ${unitAddress}, 4)" title="Method 4: UP">
+        ▲ UP
+      </button>
+      <button class="protocol-cmd-btn" onclick="controlMotor(${nodeAddress}, ${unitAddress}, 3)" title="Method 3: STOP">
+        ■ STOP
+      </button>
+      <button class="protocol-cmd-btn" onclick="controlMotor(${nodeAddress}, ${unitAddress}, 5)" title="Method 5: DOWN">
+        ▼ DOWN
+      </button>
+    `;
+  }
+  
+  // Temperature Sensor Commands
+  else if (unitTypeLower.includes('sens') || unitTypeLower.includes('temperature')) {
+    html += `
+      <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 0)" title="Method 13: Select preset OFF">
+        ❄️ OFF
+      </button>
+      <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 1)" title="Method 13: Select preset SUN">
+        ☀️ SUN
+      </button>
+      <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 2)" title="Method 13: Select preset HALF SUN">
+        🌤️ HALF SUN
+      </button>
+      <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 3)" title="Method 13: Select preset MOON">
+        🌙 MOON
+      </button>
+      <button class="protocol-cmd-btn" onclick="sendSensorPreset(${nodeAddress}, ${unitAddress}, 4)" title="Method 13: Select preset HALF MOON">
+        🌜 HALF MOON
+      </button>
+    `;
+  }
+  
+  // Control/Input/Virtual Commands
+  else if (unitTypeLower.includes('control') || unitTypeLower.includes('input') || unitTypeLower.includes('virtual')) {
+    html += `
+      <button class="protocol-cmd-btn" onclick="sendProtocolCommand(${nodeAddress}, ${unitAddress}, 3, -1)" title="Method 2: PULSE (short)">
+        ⚡ PULSE
+      </button>
+      <button class="protocol-cmd-btn" onclick="sendProtocolCommand(${nodeAddress}, ${unitAddress}, 3, 0)" title="Method 3: LONG OFF">
+        🔴 LONG OFF
+      </button>
+      <button class="protocol-cmd-btn" onclick="sendProtocolCommand(${nodeAddress}, ${unitAddress}, 3, 1)" title="Method 3: LONG ON">
+        🟢 LONG ON
+      </button>
+    `;
+  }
+
+  html += `
+      </div>
+      <p class="protocol-commands-hint">💡 Protocol commands for testing • Hover for method details</p>
+    </div>
+  `;
+
+  return html;
 }
 
 /**

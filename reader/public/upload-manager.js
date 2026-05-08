@@ -1,63 +1,18 @@
 /**
- * Upload Manager - Handles connection and uploading bindings to hardware
+ * Upload Manager - Handles uploading bindings to hardware
+ * Connection is now managed by MasterConnectionService (unit-control.js)
  */
 
 class UploadManager {
   constructor() {
-    this.isConnected = false;
-    this.connectionInfo = null;
     this.initializeModal();
-    this.loadConnectionSettings();
   }
 
   /**
-   * Create the connection settings modal
+   * Create the upload modal (connection modal removed - use header button)
    */
   initializeModal() {
     const modalHTML = `
-      <div id="connection-modal" class="modal" style="display: none;">
-        <div class="modal-backdrop" onclick="uploadManager.closeConnectionModal()"></div>
-        <div class="modal-content connection-modal">
-          <div class="modal-header">
-            <h2>🔌 Connection Settings</h2>
-            <button class="close-btn" onclick="uploadManager.closeConnectionModal()">✕</button>
-          </div>
-          
-          <div class="modal-body">
-            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
-              Connect to the master node to upload binding changes to your Duotecno installation.
-            </p>
-            
-            <div class="form-group">
-              <label for="connection-host">Master Node IP Address</label>
-              <input type="text" id="connection-host" placeholder="192.168.0.97" value="192.168.0.97">
-              <small class="help-text">The IP address of your Duotecno master node</small>
-            </div>
-            
-            <div class="form-group">
-              <label for="connection-port">Port</label>
-              <input type="number" id="connection-port" placeholder="5001" value="5001" min="1" max="65535">
-              <small class="help-text">Usually 5001 for Duotecno systems</small>
-            </div>
-            
-            <div class="form-group">
-              <label for="connection-password">Password (Optional)</label>
-              <input type="password" id="connection-password" placeholder="">
-              <small class="help-text">Leave empty if no password is set</small>
-            </div>
-            
-            <div id="connection-status" class="connection-status" style="display: none;"></div>
-          </div>
-          
-          <div class="modal-footer">
-            <button class="btn btn-secondary" onclick="uploadManager.closeConnectionModal()">Cancel</button>
-            <button class="btn btn-primary" id="connect-btn" onclick="uploadManager.connect()">
-              Connect
-            </button>
-          </div>
-        </div>
-      </div>
-      
       <div id="upload-modal" class="modal" style="display: none;">
         <div class="modal-backdrop" onclick="uploadManager.closeUploadModal()"></div>
         <div class="modal-content upload-modal">
@@ -121,50 +76,21 @@ class UploadManager {
   }
 
   /**
-   * Load connection settings from localStorage
-   */
-  loadConnectionSettings() {
-    const saved = localStorage.getItem('duotecno-connection');
-    if (saved) {
-      try {
-        this.connectionInfo = JSON.parse(saved);
-        document.getElementById('connection-host').value = this.connectionInfo.host || '192.168.0.97';
-        document.getElementById('connection-port').value = this.connectionInfo.port || 5001;
-      } catch (e) {
-        console.error('Failed to load connection settings:', e);
-      }
-    }
-  }
-
-  /**
-   * Save connection settings to localStorage
-   */
-  saveConnectionSettings(host, port) {
-    this.connectionInfo = { host, port };
-    localStorage.setItem('duotecno-connection', JSON.stringify(this.connectionInfo));
-  }
-
-  /**
-   * Open connection settings modal
-   */
-  openConnectionModal() {
-    document.getElementById('connection-modal').style.display = 'flex';
-  }
-
-  /**
-   * Close connection settings modal
-   */
-  closeConnectionModal() {
-    document.getElementById('connection-modal').style.display = 'none';
-  }
-
-  /**
    * Open upload modal
    */
-  openUploadModal() {
-    if (!this.isConnected) {
-      alert('Please connect to the master node first');
-      this.openConnectionModal();
+  async openUploadModal() {
+    // Check if master is connected via unit control
+    try {
+      const statusResponse = await fetch('/api/master/status');
+      const status = await statusResponse.json();
+      
+      if (!status.connected) {
+        alert('Please connect to the master node first using the connection button in the header.');
+        return;
+      }
+    } catch (error) {
+      console.error('Failed to check connection status:', error);
+      alert('Failed to check connection status. Please ensure you are connected.');
       return;
     }
     
@@ -183,92 +109,7 @@ class UploadManager {
     document.getElementById('upload-modal').style.display = 'none';
   }
 
-  /**
-   * Connect to master node
-   */
-  async connect() {
-    const host = document.getElementById('connection-host').value.trim();
-    const port = parseInt(document.getElementById('connection-port').value);
-    const password = document.getElementById('connection-password').value;
-    
-    if (!host || !port) {
-      alert('Please enter both host and port');
-      return;
-    }
-    
-    const connectBtn = document.getElementById('connect-btn');
-    const statusDiv = document.getElementById('connection-status');
-    
-    connectBtn.disabled = true;
-    connectBtn.textContent = 'Connecting...';
-    statusDiv.style.display = 'block';
-    statusDiv.className = 'connection-status connecting';
-    statusDiv.textContent = 'Connecting to master node...';
-    
-    try {
-      const response = await fetch('/api/upload/connect', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ host, port, password })
-      });
-      
-      const result = await response.json();
-      
-      if (result.success) {
-        this.isConnected = true;
-        this.saveConnectionSettings(host, port);
-        
-        statusDiv.className = 'connection-status connected';
-        statusDiv.textContent = '✓ Connected successfully!';
-        
-        // Update header status
-        this.updateConnectionStatus();
-        
-        setTimeout(() => {
-          this.closeConnectionModal();
-          statusDiv.style.display = 'none';
-        }, 1500);
-      } else {
-        throw new Error(result.error || 'Connection failed');
-      }
-    } catch (error) {
-      console.error('Connection error:', error);
-      statusDiv.className = 'connection-status error';
-      statusDiv.textContent = '✗ ' + error.message;
-      this.isConnected = false;
-      this.updateConnectionStatus();
-    } finally {
-      connectBtn.disabled = false;
-      connectBtn.textContent = 'Connect';
-    }
-  }
-
-  /**
-   * Disconnect from master node
-   */
-  async disconnect() {
-    try {
-      await fetch('/api/upload/disconnect', { method: 'POST' });
-      this.isConnected = false;
-      this.updateConnectionStatus();
-    } catch (error) {
-      console.error('Disconnect error:', error);
-    }
-  }
-
-  /**
-   * Update connection status in header
-   */
-  updateConnectionStatus() {
-    const statusEl = document.getElementById('connection-status-header');
-    if (this.isConnected) {
-      statusEl.innerHTML = '<span class="status-indicator connected"></span> Connected';
-      statusEl.className = 'connection-status-header connected';
-    } else {
-      statusEl.innerHTML = '<span class="status-indicator disconnected"></span> Not Connected';
-      statusEl.className = 'connection-status-header disconnected';
-    }
-  }
+  // Connection management removed - now handled by MasterConnectionService (unit-control.js)
 
   /**
    * Start upload process

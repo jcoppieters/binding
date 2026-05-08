@@ -1,5 +1,19 @@
-import { TcpConnection, CanBusMessage, CanBusResponse } from './TcpConnection';
+import { MasterConnectionService } from '../services/MasterConnectionService.js';
 import { NodeBindingFile } from '../readers/BindingFileReader';
+
+export interface CanBusMessage {
+  nodeAddress: number;
+  unitAddress: number;
+  messageCode: number;
+  data: number[];
+}
+
+export interface CanBusResponse {
+  nodeAddress: number;
+  unitAddress?: number;
+  messageCode: number;
+  data: number[];
+}
 
 /**
  * State-machine based binding file writer
@@ -29,7 +43,7 @@ enum State {
 }
 
 export class BindingWriterFSM {
-  private connection: TcpConnection;
+  private connection: MasterConnectionService;
   
   // Message codes (from nodemess.h)
   private static readonly FC_NODEBINDINGSFILECONTROL = 0x98;  // 152 decimal
@@ -60,9 +74,15 @@ export class BindingWriterFSM {
   private readonly RESPONSE_TIMEOUT_MS = 10000; // Increased to 10 seconds for testing
   private taskPassword: string;
   private accessPassword: string;
+  private host: string;
+  private port: number;
+  private password: string;
 
   constructor(host: string, port: number, password: string = '', taskPassword: string = '1234', accessPassword: string = '2222') {
-    this.connection = new TcpConnection(host, port, password);
+    this.connection = MasterConnectionService.getInstance();
+    this.host = host;
+    this.port = port;
+    this.password = password;
     this.taskPassword = taskPassword;
     this.accessPassword = accessPassword;
     
@@ -83,10 +103,10 @@ export class BindingWriterFSM {
     // Listen for binding entry errors (error codes 0x80+)
     this.connection.on('binding-entry-error', (error: any) => {
       if (error.nodeAddress === this.currentNodeAddress) {
-        console.error(`❌ Node 0x${error.nodeAddress.toString(16).padStart(2, '0')} binding entry error: ${error.errorName}`);
+        console.error(`❌ Node 0x${error.nodeAddress.toString(16).padStart(2, '0')} binding entry error`);
         // Reject the current operation
         if (this.responseRejecter) {
-          this.rejectPendingResponse(new Error(`Binding entry error: ${error.errorName} (0x${error.errorCode.toString(16)})`));
+          this.rejectPendingResponse(new Error(`Binding entry error: 0x${error.errorCode.toString(16)}`));
         }
       }
     });
@@ -94,26 +114,30 @@ export class BindingWriterFSM {
     // Listen for node errors
     this.connection.on('node-error', (error: any) => {
       if (error.nodeAddress === this.currentNodeAddress) {
-        console.error(`Node 0x${error.nodeAddress.toString(16).padStart(2, '0')} error: ${error.errorName}`);
+        console.error(`Node 0x${error.nodeAddress.toString(16).padStart(2, '0')} error: 0x${error.errorCode?.toString(16) || '??'}`);
         if (error.errorCode === 0x00) {
-          console.error('⚠️  Node is refusing operation - may need to close existing file first or use different sequence');
+          console.error('⚠️  Node is refusing operation -may need to close existing file first or use different sequence');
         }
         // Don't reject here - let timeout handle it, but log for debugging
       }
     });
-    
-    // Handle disconnections
-    this.connection.on('disconnected', () => {
-      console.log('WARNING: Master node disconnected');
-      this.rejectPendingResponse(new Error('Connection lost'));
-    });
   }
   
   /**
-   * Connect to the master node
+   * Connect to the master node (using singleton connection)
    */
   async connect(): Promise<void> {
-    return this.connection.connect();
+    // Check if already connected to same host/port
+    if (this.connection.isConnected()) {
+      console.log('Already connected to master');
+      return;
+    }
+    
+    // Connect using singleton
+    const result = await this.connection.connect(this.host, this.port, this.password);
+    if (!result.success) {
+      throw new Error(result.message || 'Connection failed');
+    }
   }
   
   /**
@@ -142,7 +166,7 @@ export class BindingWriterFSM {
       await this.connection.setNodeConfig(
         0xFC,  // master node
         0x00,  // nodeConfig flags
-        true   // enableProgramming = set APPL_UNLOCK flag
+        1   // enableProgramming = set APPL_UNLOCK flag
       );
       console.log('✓ Master node APPL_UNLOCK set');
     } catch (err) {
@@ -156,7 +180,7 @@ export class BindingWriterFSM {
     await this.connection.setNodeConfig(
       this.currentNodeAddress,
       0x00,  // nodeConfig flags (use 0x00 if unknown)
-      true   // enableProgramming = set APPL_UNLOCK flag
+      1   // enableProgramming = set APPL_UNLOCK flag
     );
     console.log('✓ Programming mode enabled (APPL_UNLOCK set)');
   }
@@ -174,7 +198,7 @@ export class BindingWriterFSM {
       await this.connection.setNodeConfig(
         this.currentNodeAddress,
         0x00,  // nodeConfig flags
-        false  // enableProgramming = clear APPL_UNLOCK flag
+        0  // enableProgramming = clear APPL_UNLOCK flag
       );
       console.log('✓ Programming mode disabled (APPL_UNLOCK cleared)');
     } catch (err) {
@@ -190,7 +214,7 @@ export class BindingWriterFSM {
       await this.connection.setNodeConfig(
         0xFC,  // master node
         0x00,  // nodeConfig flags
-        false  // enableProgramming = clear APPL_UNLOCK flag
+        0  // enableProgramming = clear APPL_UNLOCK flag
       );
       console.log('✓ Master node APPL_UNLOCK cleared');
     } catch (err) {
@@ -215,10 +239,9 @@ export class BindingWriterFSM {
   }
   
   /**
-   * Get the underlying TCP connection for direct access
-   * Useful for calling connection methods like setNodeConfig() before operations
+   * Get the master connection service instance
    */
-  getConnection(): TcpConnection {
+  getConnection(): MasterConnectionService {
     return this.connection;
   }
   
@@ -347,7 +370,12 @@ export class BindingWriterFSM {
    */
   private async sendAndWait(message: CanBusMessage, newState: State): Promise<void> {
     this.state = newState;
-    this.connection.sendCanBusMessage(message);
+    this.connection.sendCanBusMessage(
+      message.nodeAddress,
+      message.unitAddress,
+      message.messageCode,
+      message.data
+    );
     await this.waitForResponse();
   }
   

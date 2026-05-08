@@ -4,7 +4,7 @@
 
 import { BindingWriterFSM } from './BindingWriterFSM';
 import { BindingManager } from '../services/BindingManager';
-import { TcpConnection } from './TcpConnection';
+import { MasterConnectionService } from '../services/MasterConnectionService.js';
 
 export interface FileInfo {
   nodeAddress: number;
@@ -22,7 +22,7 @@ export interface UploadResult {
 }
 
 export class BindingUploader {
-  private connection: TcpConnection;
+  private connection: MasterConnectionService;
   private writer: BindingWriterFSM;
 
   constructor(host: string, port: number, password: string = '') {
@@ -91,12 +91,12 @@ export class BindingUploader {
       this.connection.on('file-control-response', handler);
 
       // Send FILE_INFO request
-      this.connection.sendCanBusMessage({
+      this.connection.sendCanBusMessage(
         nodeAddress,
-        unitAddress: BROADCAST_UNIT,
-        messageCode: FC_NODEBINDINGSFILECONTROL,
-        data: [FILE_INFO]
-      });
+        BROADCAST_UNIT,
+        FC_NODEBINDINGSFILECONTROL,
+        [FILE_INFO]
+      );
     });
   }
 
