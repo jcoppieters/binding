@@ -163,26 +163,25 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
 .fd-label{font-size:9px;color:#6a7899;text-align:center;line-height:1.3}
 .fd-addr{font-size:8px;color:#a0aaba}
 
-/* ── 4-gang switch (like photo: aluminum square, 4 buttons + center display) ── */
-.sw4-housing{width:92px;height:92px;background:linear-gradient(135deg,#e8e8e8,#c8c8c8);border:2px solid #b0b0b0;border-radius:8px;padding:5px;display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:1fr auto 1fr;gap:3px;box-shadow:inset 0 1px 3px rgba(255,255,255,.6),0 3px 8px rgba(0,0,0,.25);transition:border-color .12s}
-.sw4-housing:hover{border-color:#2060d0}
-.sw4-btn{background:linear-gradient(145deg,#d5d5d5,#bcbcbc);border:1px solid #a8a8a8;border-radius:4px;display:flex;align-items:flex-start;justify-content:flex-start;padding:4px 5px;cursor:pointer;transition:all .1s;box-shadow:1px 1px 3px rgba(0,0,0,.2),inset 0 1px 1px rgba(255,255,255,.5)}
-.sw4-btn:active,.sw4-btn.on{background:linear-gradient(145deg,#bcbcbc,#d0d0d0);box-shadow:inset 1px 1px 3px rgba(0,0,0,.2)}
-.sw4-btn span{font-size:7px;color:#333;font-weight:600;line-height:1.1}
-.sw4-btn.tr span,.sw4-btn.br span{align-self:flex-start}
-.sw4-center{background:#111;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:28px;height:28px;border:1px solid #333}
-.sw4-temp{font-size:7px;font-weight:700;color:#eee;font-family:monospace;letter-spacing:-.3px}
+/* ── 4-gang switch ── */
+.sw4-housing{width:112px;height:112px;background:linear-gradient(145deg,#d0d0d0,#a8a8a8);border-radius:6px;box-shadow:inset 0 1px 3px rgba(255,255,255,.5),0 3px 8px rgba(0,0,0,.22);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:2px;padding:3px;position:relative;transition:box-shadow .12s}
+.sw4-housing:hover{box-shadow:0 6px 18px rgba(32,96,208,.28),inset 0 1px 3px rgba(255,255,255,.5)}
+.sw4-btn{background:linear-gradient(155deg,#dcdcdc,#b8b8b8);border-radius:3px;display:flex;align-items:center;justify-content:center;padding:5px;cursor:pointer;transition:all .1s;text-align:center}
+.sw4-btn:active,.sw4-btn.on{background:linear-gradient(145deg,#bcbcbc,#d0d0d0)}
+.sw4-btn span{font-size:8.5px;color:#333;font-weight:600;line-height:1.2}
+.sw4-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#111;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:30px;height:30px;border:1px solid #333;z-index:1;pointer-events:none}
+.sw4-temp{font-size:7px;font-weight:700;color:#eee;font-family:monospace}
 .sw4-icon{font-size:9px}
 
 /* ── 2-gang switch ── */
-.sw2-housing{width:60px;height:92px;background:linear-gradient(135deg,#e8e8e8,#c8c8c8);border:2px solid #b0b0b0;border-radius:8px;padding:5px;display:flex;flex-direction:column;gap:4px;box-shadow:inset 0 1px 3px rgba(255,255,255,.6),0 3px 8px rgba(0,0,0,.25);transition:border-color .12s}
-.sw2-housing:hover{border-color:#2060d0}
-.sw2-btn{flex:1;background:linear-gradient(145deg,#d5d5d5,#bcbcbc);border:1px solid #a8a8a8;border-radius:4px;display:flex;align-items:flex-end;padding:4px 5px;cursor:pointer;transition:all .1s;box-shadow:1px 1px 3px rgba(0,0,0,.2)}
-.sw2-btn span{font-size:7px;color:#333;font-weight:600}
+.sw2-housing{width:56px;height:112px;background:linear-gradient(145deg,#d0d0d0,#a8a8a8);border-radius:6px;box-shadow:inset 0 1px 3px rgba(255,255,255,.5),0 3px 8px rgba(0,0,0,.22);display:flex;flex-direction:column;gap:2px;padding:3px;transition:box-shadow .12s}
+.sw2-housing:hover{box-shadow:0 6px 18px rgba(32,96,208,.28),inset 0 1px 3px rgba(255,255,255,.5)}
+.sw2-btn{flex:1;background:linear-gradient(155deg,#dcdcdc,#b8b8b8);border-radius:3px;display:flex;align-items:center;justify-content:center;padding:5px;cursor:pointer;transition:all .1s;text-align:center}
+.sw2-btn span{font-size:8.5px;color:#333;font-weight:600}
 .sw2-btn:active{background:linear-gradient(145deg,#bcbcbc,#d0d0d0)}
 
 /* ── LCD touch panel (like photo: white housing, large screen) ── */
-.lcd-housing{width:170px;height:120px;background:#f0f0f0;border:8px solid #e8e8e8;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 2px rgba(255,255,255,.8);overflow:hidden;transition:box-shadow .12s;position:relative;cursor:pointer}
+.lcd-housing{width:190px;height:120px;background:#f0f0f0;border:8px solid #e8e8e8;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 2px rgba(255,255,255,.8);overflow:hidden;transition:box-shadow .12s;position:relative;cursor:pointer}
 .lcd-housing:hover{box-shadow:0 4px 14px rgba(32,96,208,.3)}
 .lcd-screen{width:100%;height:100%;background:linear-gradient(160deg,#3a4a5c 0%,#5a6a7c 40%,#7a8a7c 100%);position:relative;display:flex;flex-direction:column;overflow:hidden}
 /* subtle kitchen photo simulation */
@@ -215,6 +214,7 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
 .floor-plan-hint p{font-size:13px}
 .room-rect{position:absolute;border:2px solid #b0bcd8;border-radius:8px;background:rgba(255,255,255,.88);display:flex;flex-direction:column;padding:8px;cursor:move;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .room-rect:hover{border-color:#8090c8}
+.room-rect.fp-hidden{display:none!important}
 .room-title{font-size:11px;font-weight:600;color:#6a7899;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
 .room-title span{color:#4a5568}
 .room-devices{display:flex;flex-wrap:wrap;gap:8px}
@@ -298,12 +298,78 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
 ::-webkit-scrollbar{width:6px;height:6px}
 ::-webkit-scrollbar-track{background:#f0f2f8}
 ::-webkit-scrollbar-thumb{background:#c0c8d8;border-radius:3px}
+
+/* ═══════════════════════════════════════════
+   BINDING WIZARD OVERLAY
+═══════════════════════════════════════════ */
+.bw-hidden{display:none!important}
+#bw-overlay{position:fixed;inset:0;background:rgba(15,22,50,.55);display:flex;align-items:center;justify-content:center;z-index:150;backdrop-filter:blur(3px)}
+#bw-dialog{background:#fff;width:560px;max-width:calc(100vw - 32px);max-height:calc(100vh - 48px);border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.22),0 6px 16px rgba(0,0,0,.1);display:flex;flex-direction:column;overflow:hidden}
+#bw-hdr{padding:16px 20px 12px;border-bottom:1px solid #f0f2f7;display:flex;align-items:center;gap:12px}
+#bw-src-icon{width:36px;height:36px;background:#eef2fd;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+#bw-src-info{flex:1;min-width:0}
+#bw-src-name{font-weight:700;font-size:14px;color:#1a2540}
+#bw-src-sub{font-size:11px;color:#aaa;margin-top:2px}
+#bw-close{width:30px;height:30px;border:none;background:#f4f5f8;border-radius:50%;cursor:pointer;font-size:14px;color:#999;transition:all .15s;flex-shrink:0;line-height:1;display:flex;align-items:center;justify-content:center}
+#bw-close:hover{background:#ffe0e0;color:#c62828}
+#bw-bc{display:flex;align-items:center;flex-wrap:wrap;gap:4px;padding:8px 20px;background:#f8f9fc;border-bottom:1px solid #f0f2f7;min-height:40px}
+.bw-chip{display:inline-flex;align-items:center;gap:3px;background:#e8edf8;border-radius:16px;padding:3px 10px 3px 8px;font-size:11.5px;cursor:pointer;color:#2060d0;font-weight:500;transition:background .15s;white-space:nowrap}
+.bw-chip:hover{background:#c8d8f8}
+.bw-chip-key{color:#8aa0c8;font-weight:400;margin-right:1px}
+.bw-sep{color:#c8d0e0;font-size:14px}
+.bw-bc-empty{font-size:12px;color:#bbb;font-style:italic}
+#bw-body{padding:20px;flex:1;overflow-y:auto;min-height:0}
+#bw-step-hdr{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.bw-step-num{width:22px;height:22px;background:#2060d0;color:#fff;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+#bw-step-label{font-size:14px;font-weight:700;color:#1a2540}
+.bw-sw-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.bw-sw4{width:160px;height:160px;background:linear-gradient(145deg,#d0d0d0,#a8a8a8);border-radius:9px;box-shadow:0 4px 14px rgba(0,0,0,.2);display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:3px;padding:4px;position:relative}
+.bw-sw2{width:80px;height:160px;background:linear-gradient(145deg,#d0d0d0,#a8a8a8);border-radius:9px;box-shadow:0 4px 14px rgba(0,0,0,.2);display:flex;flex-direction:column;gap:3px;padding:4px}
+.bw-sw-btn{background:linear-gradient(155deg,#dcdcdc,#b8b8b8);border-radius:5px;border:2.5px solid transparent;display:flex;align-items:center;justify-content:center;font-size:10px;color:#333;font-weight:600;text-align:center;padding:6px;cursor:pointer;transition:all .15s;line-height:1.2}
+.bw-sw-btn:hover{background:linear-gradient(155deg,#dce8ff,#b0c8f0)!important;border-color:#2060d0;color:#1a3890}
+.bw-sw4-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;background:#111;border-radius:5px;pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;z-index:1}
+.bw-sw4-center span{font-size:8px;color:#7cf;line-height:1.2}
+.bw-sw-hint{font-size:11px;color:#aaa;margin-top:4px}
+.bw-trigger-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.bw-trigger-btn{border:2px solid #e4e8f4;border-radius:12px;padding:22px 16px;text-align:center;cursor:pointer;background:#fff;transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px}
+.bw-trigger-btn:hover{border-color:#2060d0;background:#f0f5ff;box-shadow:0 0 0 3px rgba(32,96,208,.08)}
+.bw-tri-icon{font-size:32px}
+.bw-tri-name{font-weight:800;font-size:15px;color:#1a2540}
+.bw-tri-desc{font-size:11px;color:#999}
+.bw-modtype-grid{display:flex;flex-wrap:wrap;gap:8px}
+.bw-modtype-tab{border:2px solid #e4e8f4;border-radius:10px;padding:10px 16px;cursor:pointer;background:#fff;font-size:13px;font-weight:600;transition:all .15s;display:flex;align-items:center;gap:7px;color:#1a2540}
+.bw-modtype-tab:hover{border-color:#2060d0;background:#f0f5ff;color:#2060d0}
+.bw-mod-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bw-mod-card{border:2px solid #e4e8f4;border-radius:10px;padding:14px;cursor:pointer;background:#fff;text-align:left;transition:all .15s}
+.bw-mod-card:hover{border-color:#2060d0;background:#f0f5ff;box-shadow:0 0 0 3px rgba(32,96,208,.08)}
+.bw-mc-name{font-weight:700;font-size:13px;color:#1a2540}
+.bw-mc-desc{font-size:11px;color:#999;margin-top:3px}
+.bw-mc-node{font-size:10px;color:#ccc;margin-top:3px}
+.bw-mc-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:7px}
+.bw-mc-badge.free{background:#e8f5e9;color:#2e7d32}
+.bw-mc-badge.partial{background:#fff8e1;color:#e65100}
+.bw-mc-badge.full{background:#fde8e8;color:#c62828}
+.bw-ch-grid{display:flex;flex-wrap:wrap;gap:8px}
+.bw-ch{border-radius:9px;padding:9px 13px;font-size:12px;font-weight:600;display:flex;flex-direction:column;gap:3px;min-width:90px;transition:all .15s;border:2px solid transparent}
+.bw-ch.free{border-color:#2060d0;background:#f0f5ff;cursor:pointer;color:#1a3890}
+.bw-ch.free:hover{background:#2060d0;color:#fff;box-shadow:0 0 0 3px rgba(32,96,208,.15)}
+.bw-ch.used{border-color:#e8e8e8;background:#f8f8f8;cursor:not-allowed;color:#bbb}
+.bw-ch-name{font-weight:700}
+.bw-ch-bound{font-size:10px;font-weight:400;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.bw-action-grid{display:flex;flex-wrap:wrap;gap:10px}
+.bw-action-btn{border:2px solid #e4e8f4;border-radius:11px;padding:14px 20px;cursor:pointer;background:#fff;font-size:14px;font-weight:700;transition:all .15s;display:flex;align-items:center;gap:9px;color:#1a2540}
+.bw-action-btn:hover{border-color:#2060d0;background:#2060d0;color:#fff;box-shadow:0 4px 12px rgba(32,96,208,.3)}
+.bw-act-icon{font-size:22px}
+#bw-foot{padding:12px 20px;border-top:1px solid #f0f2f7;display:flex;align-items:center;justify-content:space-between;background:#f8f9fc}
+#bw-back{background:none;border:1.5px solid #dde3ef;border-radius:7px;padding:7px 14px;font-size:13px;cursor:pointer;color:#555;transition:all .15s}
+#bw-back:hover{background:#fff;border-color:#aaa;color:#1a2540}
+.bw-progress{font-size:12px;color:#bbb}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Duo<em>tecno</em></div>
+  <div class="logo">Duotecno</div>
   <div class="project-name">Project: <strong>Villa De Smedt – Gent</strong></div>
   <div class="spacer"></div>
   <button class="header-btn" onclick="showToast('Ongedaan gemaakt','')">↩ Undo</button>
@@ -595,14 +661,14 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
         </div>
 
         <!-- Schakelaar Living (4-gang) -->
-        <div class="field-device" id="fd-sw1" onclick="showToast('Schakelaar Living (DT-SW-04) – N:08','')">
+        <div class="field-device" id="fd-sw1" onclick="openBW('sw1')">
           <div class="cdl"></div>
-          <div class="sw4-housing" onclick="showToast('Schakelaar Living – 4 knoppen','')">
-            <div class="sw4-btn" style="grid-column:1;grid-row:1"><span>light</span></div>
+          <div class="sw4-housing">
+            <div class="sw4-btn"><span>Eettafel</span></div>
+            <div class="sw4-btn"><span>Alles uit</span></div>
+            <div class="sw4-btn"><span>Hall</span></div>
+            <div class="sw4-btn"><span>—</span></div>
             <div class="sw4-center"><div class="sw4-temp">21.5C</div><div class="sw4-icon">🔆</div></div>
-            <div class="sw4-btn tr" style="grid-column:3;grid-row:1"><span>TEMP+</span></div>
-            <div class="sw4-btn" style="grid-column:1;grid-row:3"><span>screen</span></div>
-            <div class="sw4-btn br" style="grid-column:3;grid-row:3"><span>TEMP-</span></div>
           </div>
           <div class="fd-label">Schakelaar<br>Living</div>
           <div class="fd-addr">N:08</div>
@@ -610,14 +676,14 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
         </div>
 
         <!-- Schakelaar Keuken (4-gang) -->
-        <div class="field-device" id="fd-sw2" onclick="showToast('Schakelaar Keuken (DT-SW-04) – N:09','')">
+        <div class="field-device" id="fd-sw2" onclick="openBW('sw2')">
           <div class="cdl"></div>
           <div class="sw4-housing">
-            <div class="sw4-btn" style="grid-column:1;grid-row:1"><span>light</span></div>
+            <div class="sw4-btn"><span>Koken</span></div>
+            <div class="sw4-btn"><span>Alles uit</span></div>
+            <div class="sw4-btn"><span>Eten</span></div>
+            <div class="sw4-btn"><span>Dimmer</span></div>
             <div class="sw4-center"><div class="sw4-temp">20.5C</div><div class="sw4-icon">🌡</div></div>
-            <div class="sw4-btn tr" style="grid-column:3;grid-row:1"><span>TEMP+</span></div>
-            <div class="sw4-btn" style="grid-column:1;grid-row:3"><span>screen</span></div>
-            <div class="sw4-btn br" style="grid-column:3;grid-row:3"><span>TEMP-</span></div>
           </div>
           <div class="fd-label">Schakelaar<br>Keuken</div>
           <div class="fd-addr">N:09</div>
@@ -625,7 +691,7 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
         </div>
 
         <!-- Schakelaar Bureau (2-gang) -->
-        <div class="field-device" id="fd-sw3" onclick="showToast('Schakelaar Bureau (DT-SW-02) – N:10','')">
+        <div class="field-device" id="fd-sw3" onclick="openBW('sw3')">
           <div class="cdl"></div>
           <div class="sw2-housing">
             <div class="sw2-btn"><span>licht</span></div>
@@ -643,7 +709,7 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
             <div class="lcd-screen">
               <div class="lcd-top">
                 <div style="display:flex;align-items:center;gap:5px">
-                  <div class="lcd-logo-box"><span>duo</span><em>tecno</em></div>
+                  <div class="lcd-logo-box"><span>Duotecno</span></div>
                   <div class="lcd-time-big">15:20</div>
                 </div>
                 <div class="lcd-room-info">
@@ -682,10 +748,22 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
 <!-- ===================== HOME VIEW ===================== -->
 <div class="canvas-area" id="home-view" style="display:none;flex-direction:row">
   <div class="floor-canvas-wrap" id="floor-canvas">
-    <div class="floor-plan-hint">
-      <div class="big">🗺️</div>
-      <p>Sleep een grondplan hieronder, of werk zonder grondplan</p>
-    </div>
+    <!-- Floor plan image layer (hidden by default) -->
+    <img id="floorplan-img" src="image.png" alt="Grondplan"
+         style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+                object-position:top center;padding:56px 32px 32px;opacity:.85;pointer-events:none;display:none">
+    <!-- Toggle button -->
+    <button id="floorplan-toggle" onclick="toggleFloorplan()"
+            title="Wissel kamer / grondplan"
+            style="position:absolute;top:12px;right:12px;z-index:20;
+                   background:#fff;border:1.5px solid #dde3ef;border-radius:8px;
+                   padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;
+                   display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,.1);
+                   color:#4a5568;transition:all .15s">
+      <span id="floorplan-toggle-icon">🗺️</span>
+      <span id="floorplan-toggle-label">Toon grondplan</span>
+    </button>
+
     <svg id="binding-svg"></svg>
     <div class="room-rect" id="room-living" style="left:40px;top:40px;width:340px;height:200px" onmousedown="startDrag(event,this)">
       <div class="room-title"><span>🛋️ Living</span><button onclick="addDeviceToRoom('living')" style="background:none;border:none;color:#a0aaba;cursor:pointer;font-size:14px">＋</button></div>
@@ -792,6 +870,34 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════
+     BINDING WIZARD OVERLAY
+═══════════════════════════════════════════ -->
+<div id="bw-overlay" class="bw-hidden">
+  <div id="bw-dialog" role="dialog" aria-modal="true">
+    <div id="bw-hdr">
+      <div id="bw-src-icon">🔲</div>
+      <div id="bw-src-info">
+        <div id="bw-src-name"></div>
+        <div id="bw-src-sub"></div>
+      </div>
+      <button id="bw-close" onclick="closeBW()">✕</button>
+    </div>
+    <div id="bw-bc"></div>
+    <div id="bw-body">
+      <div id="bw-step-hdr">
+        <span class="bw-step-num" id="bw-step-num">1</span>
+        <span id="bw-step-label"></span>
+      </div>
+      <div id="bw-grid"></div>
+    </div>
+    <div id="bw-foot">
+      <button id="bw-back" onclick="bwGoBack()">← Terug</button>
+      <span class="bw-progress" id="bw-progress"></span>
+    </div>
+  </div>
+</div>
 
 <script>
 // === Module DB ===
@@ -1070,6 +1176,27 @@ function drawBindings() {
 function toggleFilter(btn) { btn.classList.toggle('active'); }
 function openModuleDetail(m) { showToast('Module '+m+' – eigenschappen bewerken',''); }
 
+// === Floor plan toggle ===
+let floorplanVisible = false;
+function toggleFloorplan() {
+  floorplanVisible = !floorplanVisible;
+  const img   = document.getElementById('floorplan-img');
+  const r1    = document.getElementById('room-living');
+  const r2   = document.getElementById('room-keuken');
+  const r3    = document.getElementById('room-bureau');
+  const r4    = document.getElementById('room-hall');
+
+  const icon  = document.getElementById('floorplan-toggle-icon');
+  const label = document.getElementById('floorplan-toggle-label');
+  img.style.display = floorplanVisible ? 'block' : 'none';
+  r1.style.display = floorplanVisible ? 'none' : 'flex';
+  r2.style.display = floorplanVisible ? 'none' : 'flex';
+  r3.style.display = floorplanVisible ? 'none' : 'flex';
+  r4.style.display = floorplanVisible ? 'none' : 'flex';
+  icon.textContent  = floorplanVisible ? '🏠' : '🗺️';
+  label.textContent = floorplanVisible ? 'Toon kamers' : 'Toon grondplan';
+}
+
 let toastTimer;
 function showToast(msg,type) {
   const t=document.getElementById('toast');
@@ -1077,6 +1204,202 @@ function showToast(msg,type) {
   t.className='toast show'+(type?' '+type:'');
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// ═══════════════════════════════════════════
+// BINDING WIZARD
+// ═══════════════════════════════════════════
+const BW_SWITCHES = {
+  sw1:{ name:'Schakelaar Living',  model:'DT-SW-04', node:8,  buttons:['Eettafel','Alles uit','Hall','—'] },
+  sw2:{ name:'Schakelaar Keuken',  model:'DT-SW-04', node:9,  buttons:['Koken','Alles uit','Eten','Dimmer'] },
+  sw3:{ name:'Schakelaar Bureau',  model:'DT-SW-02', node:10, buttons:['licht','off'] },
+};
+
+const BW_MODULES = {
+  Dimmer:[
+    {id:'m1',name:'DT05-06TE',desc:'Trailing Edge · 6ch',node:1,channels:['Dim 1','Dim 2','Dim 3','Dim 4','Dim 5','Dim 6'],bindings:{}},
+    {id:'m2',name:'DT06-02',desc:'Leading Edge · 2ch',node:2,channels:['Dim 1','Dim 2'],bindings:{}},
+  ],
+  Relais:[
+    {id:'m3',name:'DT02-08',desc:'8× relaisuitgang',node:3,channels:['Relais 1','Relais 2','Relais 3','Relais 4','Relais 5','Relais 6','Relais 7','Relais 8'],bindings:{}},
+  ],
+  Motor:[
+    {id:'m4',name:'Up/Down 1',desc:'DT04-04 · ch 1–4',node:5,channels:['Motor 1','Motor 2','Motor 3','Motor 4'],bindings:{0:'Living · Eettafel · Kort',1:'Living · Eettafel · Lang'}},
+    {id:'m5',name:'Up/Down 2',desc:'DT04-04 · ch 1–4',node:5,channels:['Motor 1','Motor 2','Motor 3','Motor 4'],bindings:{}},
+  ],
+  Input:[
+    {id:'m6',name:'DT03-16',desc:'16× dig. ingang',node:4,channels:Array.from({length:16},(_,i)=>'Input '+(i+1)),bindings:{}},
+  ],
+  DALI:[
+    {id:'m8',name:'DT13-DAL',desc:'DALI interface',node:7,channels:Array.from({length:8},(_,i)=>'Groep '+(i+1)),bindings:{}},
+  ],
+};
+
+const BW_MODTYPES = [
+  {id:'Dimmer',icon:'💡'},{id:'Relais',icon:'🔌'},{id:'Motor',icon:'⬆️'},{id:'DALI',icon:'✨'},
+];
+
+const BW_ACTIONS = {
+  Dimmer:[{icon:'🔄',a:'Toggle'},{icon:'☀️',a:'Aan (100%)'},{icon:'⛅',a:'Aan (50%)'},{icon:'⭕',a:'Uit'}],
+  Relais:[{icon:'🔄',a:'Toggle'},{icon:'🟢',a:'Aan'},{icon:'⭕',a:'Uit'}],
+  Motor: [{icon:'⬆️',a:'Omhoog'},{icon:'⬇️',a:'Omlaag'},{icon:'⏹',a:'Stop'}],
+  Input: [{icon:'📡',a:'Korte puls'},{icon:'📡',a:'Lange puls'}],
+  DALI:  [{icon:'🔄',a:'Toggle'},{icon:'☀️',a:'Aan (100%)'},{icon:'⛅',a:'Aan (50%)'},{icon:'⭕',a:'Uit'}],
+};
+
+const BW_STEPS = ['button','trigger','modtype','module','channel','action'];
+let bwSel = {};
+
+function openBW(swId) {
+  const sw = BW_SWITCHES[swId];
+  bwSel = { sw, button:null, trigger:null, modType:null, module:null, channel:null };
+  document.getElementById('bw-src-name').textContent = sw.name;
+  document.getElementById('bw-src-sub').textContent  = sw.model + ' · N:' + sw.node;
+  document.getElementById('bw-overlay').classList.remove('bw-hidden');
+  bwRender();
+}
+
+function closeBW() { document.getElementById('bw-overlay').classList.add('bw-hidden'); }
+
+document.getElementById('bw-overlay').addEventListener('click', e => {
+  if (e.target.id === 'bw-overlay') closeBW();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBW(); });
+
+function bwStep() {
+  if (bwSel.button  === null) return 'button';
+  if (bwSel.trigger === null) return 'trigger';
+  if (bwSel.modType === null) return 'modtype';
+  if (bwSel.module  === null) return 'module';
+  if (bwSel.channel === null) return 'channel';
+  return 'action';
+}
+
+function bwGoBack() {
+  const i = BW_STEPS.indexOf(bwStep());
+  if (i === 0) { closeBW(); return; }
+  bwJump(BW_STEPS[i - 1]);
+}
+
+function bwJump(step) {
+  const from = BW_STEPS.indexOf(step);
+  if (from <= 0) bwSel.button  = null;
+  if (from <= 1) bwSel.trigger = null;
+  if (from <= 2) bwSel.modType = null;
+  if (from <= 3) bwSel.module  = null;
+  if (from <= 4) bwSel.channel = null;
+  bwRender();
+}
+
+function bwRender() {
+  const step = bwStep();
+  const idx  = BW_STEPS.indexOf(step) + 1;
+  document.getElementById('bw-step-num').textContent   = idx;
+  document.getElementById('bw-progress').textContent   = 'Stap ' + idx + ' / 6';
+  document.getElementById('bw-back').textContent       = idx === 1 ? 'Annuleer' : '← Terug';
+  document.getElementById('bw-step-label').textContent = {
+    button:'Kies een knop', trigger:'Kies trigger-type', modtype:'Kies module-type',
+    module:'Kies module',   channel:'Kies kanaal',       action:'Kies actie',
+  }[step];
+  bwRenderBC();
+  const g = document.getElementById('bw-grid');
+  if (step === 'button')  g.innerHTML = bwStepButton();
+  if (step === 'trigger') g.innerHTML = bwStepTrigger();
+  if (step === 'modtype') g.innerHTML = bwStepModType();
+  if (step === 'module')  g.innerHTML = bwStepModule();
+  if (step === 'channel') g.innerHTML = bwStepChannel();
+  if (step === 'action')  g.innerHTML = bwStepAction();
+}
+
+function bwRenderBC() {
+  const chips = [];
+  if (bwSel.button  !== null) chips.push({key:'Knop',    val:bwSel.sw.buttons[bwSel.button],       step:'button'  });
+  if (bwSel.trigger !== null) chips.push({key:'Trigger', val:bwSel.trigger,                        step:'trigger' });
+  if (bwSel.modType !== null) chips.push({key:'Type',    val:bwSel.modType,                        step:'modtype' });
+  if (bwSel.module  !== null) chips.push({key:'Module',  val:bwSel.module.name,                    step:'module'  });
+  if (bwSel.channel !== null) chips.push({key:'Kanaal',  val:bwSel.module.channels[bwSel.channel], step:'channel' });
+  const bc = document.getElementById('bw-bc');
+  if (!chips.length) { bc.innerHTML = '<span class="bw-bc-empty">Selecteer stap voor stap</span>'; return; }
+  bc.innerHTML = chips.map((c, i) =>
+    (i > 0 ? '<span class="bw-sep">›</span>' : '') +
+    '<span class="bw-chip" onclick="bwJump(\'' + c.step + '\')">' +
+      '<span class="bw-chip-key">' + c.key + ':</span>' + c.val +
+    '</span>'
+  ).join('');
+}
+
+function bwStepButton() {
+  const sw = bwSel.sw;
+  const is4 = sw.model === 'DT-SW-04';
+  const btns = sw.buttons.map((l, i) =>
+    '<div class="bw-sw-btn" onclick="bwSelButton(' + i + ')">' + l + '</div>'
+  ).join('');
+  const center = is4 ? '<div class="bw-sw4-center"><span>21°C</span><span>▲▼</span></div>' : '';
+  return '<div class="bw-sw-wrap"><div class="' + (is4 ? 'bw-sw4' : 'bw-sw2') + '">' +
+    btns + center + '</div><div class="bw-sw-hint">Klik op de gewenste knop</div></div>';
+}
+
+function bwStepTrigger() {
+  return '<div class="bw-trigger-grid">' +
+    '<div class="bw-trigger-btn" onclick="bwSelTrigger(\'Kort\')"><span class="bw-tri-icon">👆</span><span class="bw-tri-name">Kort</span><span class="bw-tri-desc">Korte druk · &lt; 1 s</span></div>' +
+    '<div class="bw-trigger-btn" onclick="bwSelTrigger(\'Lang\')"><span class="bw-tri-icon">✋</span><span class="bw-tri-name">Lang</span><span class="bw-tri-desc">Lange druk · ≥ 1 s</span></div>' +
+  '</div>';
+}
+
+function bwStepModType() {
+  return '<div class="bw-modtype-grid">' +
+    BW_MODTYPES.map(t =>
+      '<div class="bw-modtype-tab" onclick="bwSelModType(\'' + t.id + '\')">' +
+        '<span style="font-size:18px">' + t.icon + '</span>' + t.id + '</div>'
+    ).join('') + '</div>';
+}
+
+function bwStepModule() {
+  const mods = BW_MODULES[bwSel.modType] || [];
+  if (!mods.length) return '<p style="color:#bbb;font-style:italic;padding:12px 0">Geen modules van dit type.</p>';
+  return '<div class="bw-mod-cards">' + mods.map((m, i) => {
+    const total = m.channels.length, used = Object.keys(m.bindings).length, free = total - used;
+    const cls = free === 0 ? 'full' : used === 0 ? 'free' : 'partial';
+    const txt = free === 0 ? 'Volledig bezet' : free + ' vrij / ' + total;
+    return '<div class="bw-mod-card" onclick="bwSelModule(' + i + ')">' +
+      '<div class="bw-mc-name">' + m.name + '</div>' +
+      '<div class="bw-mc-desc">' + m.desc + '</div>' +
+      '<div class="bw-mc-node">N:' + m.node + '</div>' +
+      '<span class="bw-mc-badge ' + cls + '">' + txt + '</span></div>';
+  }).join('') + '</div>';
+}
+
+function bwStepChannel() {
+  const m = bwSel.module;
+  return '<div class="bw-ch-grid">' + m.channels.map((ch, i) => {
+    const bound = m.bindings[i];
+    const cls   = bound ? 'used' : 'free';
+    const oc    = bound ? '' : ' onclick="bwSelChannel(' + i + ')"';
+    const info  = bound ? '<span class="bw-ch-bound" title="' + bound + '">↳ ' + bound + '</span>' : '';
+    return '<div class="bw-ch ' + cls + '"' + oc + '><span class="bw-ch-name">' + ch + '</span>' + info + '</div>';
+  }).join('') + '</div>';
+}
+
+function bwStepAction() {
+  return '<div class="bw-action-grid">' +
+    (BW_ACTIONS[bwSel.modType] || []).map(a =>
+      '<div class="bw-action-btn" onclick="bwSelAction(\'' + a.a + '\')">' +
+        '<span class="bw-act-icon">' + a.icon + '</span>' + a.a + '</div>'
+    ).join('') + '</div>';
+}
+
+function bwSelButton(i)  { bwSel.button  = i;                              bwRender(); }
+function bwSelTrigger(t) { bwSel.trigger = t;                              bwRender(); }
+function bwSelModType(t) { bwSel.modType = t;                              bwRender(); }
+function bwSelModule(i)  { bwSel.module  = (BW_MODULES[bwSel.modType]||[])[i]; bwRender(); }
+function bwSelChannel(i) { bwSel.channel = i;                              bwRender(); }
+
+function bwSelAction(action) {
+  const m = bwSel.module;
+  m.bindings[bwSel.channel] = bwSel.sw.name + ' · ' + bwSel.sw.buttons[bwSel.button] + ' · ' + bwSel.trigger;
+  closeBW();
+  showToast('✓ ' + bwSel.sw.buttons[bwSel.button] + ' ' + bwSel.trigger +
+    ' → ' + m.name + ' · ' + m.channels[bwSel.channel] + ' · ' + action, 'success');
 }
 
 // Init

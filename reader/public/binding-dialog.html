@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Binding Wizard – Duotecno</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+     background:#f0f2f7;color:#1a2540;min-height:100vh}
+
+/* ── Header ── */
+.app-header{background:#1a2540;color:#fff;display:flex;align-items:center;
+  gap:10px;padding:0 24px;height:52px;user-select:none}
+.app-header .logo{font-size:15px;letter-spacing:.5px}
+.app-header .logo strong{font-weight:800}
+.app-header .subtitle{font-size:12px;opacity:.45;margin-left:4px}
+
+/* ── Demo woning panel ── */
+.demo-area{padding:32px 32px 0;max-width:1000px;margin:0 auto}
+.demo-area h2{font-size:14px;font-weight:700;color:#1a2540;margin-bottom:4px}
+.demo-area p{font-size:13px;color:#777;margin-bottom:20px}
+.demo-switches{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+
+.sw-card{cursor:pointer;user-select:none}
+.sw-label{font-size:11px;color:#444;text-align:center;margin-bottom:8px;
+  font-weight:600;letter-spacing:.3px}
+.sw-meta{font-size:10px;color:#bbb;text-align:center;margin-top:6px}
+
+/* DT-SW-04 */
+.sw4-housing{width:112px;height:112px;
+  background:linear-gradient(145deg,#d0d0d0,#a8a8a8);border-radius:6px;
+  box-shadow:0 3px 10px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.3);
+  display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:3px;
+  position:relative;transition:box-shadow .15s}
+.sw-card:hover .sw4-housing{box-shadow:0 6px 20px rgba(32,96,208,.32),inset 0 1px 0 rgba(255,255,255,.3)}
+.sw4-btn{background:linear-gradient(155deg,#dcdcdc,#b4b4b4);border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:8.5px;color:#222;font-weight:500;text-align:center;padding:3px}
+.sw4-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:30px;height:30px;background:#1a1a1a;border-radius:3px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  font-size:7.5px;color:#8cf;z-index:1;pointer-events:none;gap:1px}
+
+/* DT-SW-02 */
+.sw2-housing{width:56px;height:112px;
+  background:linear-gradient(145deg,#d0d0d0,#a8a8a8);border-radius:6px;
+  box-shadow:0 3px 10px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.3);
+  display:grid;grid-template-rows:1fr 1fr;gap:2px;padding:3px;
+  transition:box-shadow .15s}
+.sw-card:hover .sw2-housing{box-shadow:0 6px 20px rgba(32,96,208,.32),inset 0 1px 0 rgba(255,255,255,.3)}
+.sw2-btn{background:linear-gradient(155deg,#dcdcdc,#b4b4b4);border-radius:3px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:8.5px;color:#222;font-weight:500;text-align:center;padding:3px}
+
+/* ── Bindings list ── */
+.bindings-section{padding:32px;max-width:1000px;margin:0 auto}
+.bindings-section h3{font-size:14px;font-weight:700;color:#1a2540;margin-bottom:12px}
+.binding-item{background:#fff;border:1px solid #dde3ef;border-radius:8px;
+  padding:10px 16px;margin-bottom:8px;display:flex;align-items:center;
+  gap:10px;font-size:13px;flex-wrap:wrap}
+.binding-source{font-weight:600;color:#1a2540}
+.binding-trigger{background:#fff3e0;color:#bf6000;border-radius:4px;
+  padding:2px 7px;font-size:11px;font-weight:700}
+.binding-arrow{color:#ccc;font-size:16px}
+.binding-target{color:#2060d0}
+.binding-action{font-weight:700;color:#1a2540}
+.binding-del{margin-left:auto;background:none;border:none;color:#ddd;
+  cursor:pointer;font-size:15px;padding:3px 7px;border-radius:4px;transition:all .15s}
+.binding-del:hover{background:#fee;color:#c62828}
+.empty-state{font-size:13px;color:#bbb;font-style:italic;padding:4px 0}
+
+/* ── Overlay ── */
+#overlay{position:fixed;inset:0;background:rgba(15,22,50,.55);
+  display:flex;align-items:center;justify-content:center;
+  z-index:100;backdrop-filter:blur(3px)}
+#overlay.hidden{display:none}
+
+/* ── Dialog ── */
+#dialog{background:#fff;width:560px;max-width:calc(100vw - 32px);
+  max-height:calc(100vh - 48px);border-radius:14px;
+  box-shadow:0 24px 64px rgba(0,0,0,.22),0 6px 16px rgba(0,0,0,.1);
+  display:flex;flex-direction:column;overflow:hidden}
+
+#dialog-header{padding:16px 20px 12px;border-bottom:1px solid #f0f2f7;
+  display:flex;align-items:center;gap:12px}
+#dialog-source-icon{width:36px;height:36px;background:#eef2fd;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+#dialog-source-info{flex:1;min-width:0}
+#dialog-source-name{font-weight:700;font-size:14px;color:#1a2540;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#dialog-source-sub{font-size:11px;color:#aaa;margin-top:2px}
+#btn-close{width:30px;height:30px;border:none;background:#f4f5f8;border-radius:50%;
+  cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;
+  color:#999;transition:all .15s;flex-shrink:0;line-height:1}
+#btn-close:hover{background:#ffe0e0;color:#c62828}
+
+/* ── Breadcrumb ── */
+#breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:4px;
+  padding:8px 20px;background:#f8f9fc;border-bottom:1px solid #f0f2f7;min-height:40px}
+.bc-chip{display:inline-flex;align-items:center;gap:3px;background:#e8edf8;
+  border-radius:16px;padding:3px 10px 3px 8px;font-size:11.5px;
+  cursor:pointer;color:#2060d0;font-weight:500;transition:background .15s;white-space:nowrap}
+.bc-chip:hover{background:#c8d8f8}
+.bc-key{color:#8aa0c8;font-weight:400;margin-right:1px}
+.bc-sep{color:#c8d0e0;font-size:14px;line-height:1}
+.bc-empty{font-size:12px;color:#bbb;font-style:italic}
+
+/* ── Step area ── */
+#step-area{padding:20px;flex:1;overflow-y:auto;min-height:0}
+#step-header{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+.step-num{width:22px;height:22px;background:#2060d0;color:#fff;border-radius:50%;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0}
+#step-label{font-size:14px;font-weight:700;color:#1a2540}
+
+/* ── Switch face in dialog ── */
+.dlg-sw-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.dlg-sw4{width:160px;height:160px;
+  background:linear-gradient(145deg,#d0d0d0,#a8a8a8);border-radius:9px;
+  box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.25);
+  display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:4px;position:relative}
+.dlg-sw2{width:80px;height:160px;
+  background:linear-gradient(145deg,#d0d0d0,#a8a8a8);border-radius:9px;
+  box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.25);
+  display:grid;grid-template-rows:1fr 1fr;gap:3px;padding:4px}
+.dlg-sw-btn{background:linear-gradient(155deg,#dcdcdc,#b8b8b8);border-radius:5px;
+  border:2.5px solid transparent;display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:#333;font-weight:600;text-align:center;padding:6px;
+  cursor:pointer;transition:all .15s;user-select:none;line-height:1.2}
+.dlg-sw-btn:hover{background:linear-gradient(155deg,#dce8ff,#b0c8f0) !important;
+  border-color:#2060d0;color:#1a3890}
+.dlg-sw4-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:38px;height:38px;background:#111;border-radius:5px;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1px;z-index:1}
+.dlg-sw4-center span{font-size:8px;color:#7cf;line-height:1.2}
+.dlg-sw-hint{font-size:11px;color:#aaa}
+
+/* ── Trigger step ── */
+.trigger-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.trigger-btn{border:2px solid #e4e8f4;border-radius:12px;padding:22px 16px;
+  text-align:center;cursor:pointer;background:#fff;transition:all .15s;
+  display:flex;flex-direction:column;align-items:center;gap:8px}
+.trigger-btn:hover{border-color:#2060d0;background:#f0f5ff;
+  box-shadow:0 0 0 3px rgba(32,96,208,.08)}
+.trigger-icon{font-size:32px;line-height:1}
+.trigger-name{font-weight:800;font-size:15px;color:#1a2540}
+.trigger-desc{font-size:11px;color:#999}
+
+/* ── Module type step ── */
+.modtype-grid{display:flex;flex-wrap:wrap;gap:8px}
+.modtype-tab{border:2px solid #e4e8f4;border-radius:10px;padding:10px 16px;
+  cursor:pointer;background:#fff;font-size:13px;font-weight:600;
+  transition:all .15s;display:flex;align-items:center;gap:7px;color:#1a2540}
+.modtype-tab:hover{border-color:#2060d0;background:#f0f5ff;color:#2060d0}
+.tab-icon{font-size:18px;line-height:1}
+
+/* ── Module cards ── */
+.module-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.module-card-btn{border:2px solid #e4e8f4;border-radius:10px;padding:14px;
+  cursor:pointer;background:#fff;text-align:left;transition:all .15s}
+.module-card-btn:hover{border-color:#2060d0;background:#f0f5ff;
+  box-shadow:0 0 0 3px rgba(32,96,208,.08)}
+.mc-name{font-weight:700;font-size:13px;color:#1a2540}
+.mc-desc{font-size:11px;color:#999;margin-top:3px}
+.mc-node{font-size:10px;color:#ccc;margin-top:3px}
+.mc-badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;
+  border-radius:10px;margin-top:7px}
+.mc-badge.free{background:#e8f5e9;color:#2e7d32}
+.mc-badge.partial{background:#fff8e1;color:#e65100}
+.mc-badge.full{background:#fde8e8;color:#c62828}
+.mc-none{font-size:13px;color:#bbb;font-style:italic;padding:12px 0}
+
+/* ── Channel chips ── */
+.channel-grid{display:flex;flex-wrap:wrap;gap:8px}
+.ch-chip{border-radius:9px;padding:9px 13px;font-size:12px;font-weight:600;
+  display:flex;flex-direction:column;gap:3px;min-width:90px;
+  transition:all .15s;border:2px solid transparent}
+.ch-chip.free{border-color:#2060d0;background:#f0f5ff;cursor:pointer;color:#1a3890}
+.ch-chip.free:hover{background:#2060d0;color:#fff;
+  box-shadow:0 0 0 3px rgba(32,96,208,.15)}
+.ch-chip.used{border-color:#e8e8e8;background:#f8f8f8;cursor:not-allowed;color:#bbb}
+.ch-name{font-weight:700}
+.ch-binding{font-size:10px;font-weight:400;opacity:.7;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+
+/* ── Action buttons ── */
+.action-grid{display:flex;flex-wrap:wrap;gap:10px}
+.action-btn{border:2px solid #e4e8f4;border-radius:11px;padding:14px 20px;
+  cursor:pointer;background:#fff;font-size:14px;font-weight:700;
+  transition:all .15s;display:flex;align-items:center;gap:9px;color:#1a2540}
+.action-btn:hover{border-color:#2060d0;background:#2060d0;color:#fff;
+  box-shadow:0 4px 12px rgba(32,96,208,.3)}
+.action-icon{font-size:22px;line-height:1}
+
+/* ── Footer ── */
+#dialog-footer{padding:12px 20px;border-top:1px solid #f0f2f7;
+  display:flex;align-items:center;justify-content:space-between;background:#f8f9fc}
+#btn-back{background:none;border:1.5px solid #dde3ef;border-radius:7px;
+  padding:7px 14px;font-size:13px;cursor:pointer;color:#555;transition:all .15s}
+#btn-back:hover{background:#fff;border-color:#aaa;color:#1a2540}
+.step-progress{font-size:12px;color:#bbb;letter-spacing:.3px}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:#1a2540;color:#fff;padding:10px 20px;border-radius:9px;
+  font-size:13px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.22);
+  opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;z-index:200}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <span class="logo">Duotecno</span>
+  <span class="subtitle">Binding wizard – prototype</span>
+</header>
+
+<div class="demo-area">
+  <h2>Woning – Schakelaars</h2>
+  <p>Klik op een schakelaar om een binding te configureren.</p>
+  <div class="demo-switches" id="demo-switches"></div>
+</div>
+
+<div class="bindings-section">
+  <h3>Geconfigureerde bindings</h3>
+  <div id="bindings-list"><p class="empty-state">Nog geen bindings geconfigureerd.</p></div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     DIALOG
+══════════════════════════════════════════ -->
+<div id="overlay" class="hidden">
+  <div id="dialog" role="dialog" aria-modal="true">
+
+    <div id="dialog-header">
+      <div id="dialog-source-icon">🔲</div>
+      <div id="dialog-source-info">
+        <div id="dialog-source-name"></div>
+        <div id="dialog-source-sub"></div>
+      </div>
+      <button id="btn-close" onclick="closeDialog()" title="Sluiten">✕</button>
+    </div>
+
+    <div id="breadcrumb"></div>
+
+    <div id="step-area">
+      <div id="step-header">
+        <span class="step-num" id="step-num">1</span>
+        <span id="step-label"></span>
+      </div>
+      <div id="step-grid"></div>
+    </div>
+
+    <div id="dialog-footer">
+      <button id="btn-back" onclick="goBack()">← Terug</button>
+      <span class="step-progress" id="step-progress"></span>
+    </div>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════ DATA ════════════════════════════════
+
+const SWITCHES = [
+  { id:'sw1', name:'Schakelaar Living', model:'DT-SW-04', node:8,
+    buttons:['Eettafel','Alles uit','Hall','—'] },
+  { id:'sw2', name:'Schakelaar Keuken', model:'DT-SW-04', node:9,
+    buttons:['Koken','Alles uit','Eten','Dimmer'] },
+  { id:'sw3', name:'Schakelaar Bureau', model:'DT-SW-02', node:10,
+    buttons:['Bureau','Alles uit'] },
+];
+
+const MODULE_TYPES = [
+  { id:'Dimmer', icon:'💡' },
+  { id:'Relais', icon:'🔌' },
+  { id:'Motor',  icon:'⬆️' },
+  { id:'Input',  icon:'🔍' },
+  { id:'Switch', icon:'🔲' },
+  { id:'DALI',   icon:'✨' },
+];
+
+// bindings: object mapping channel-index → description of existing binding (or absent = free)
+const MODULES = {
+  Dimmer: [
+    { id:'m1', name:'DT05-06TE', desc:'Trailing Edge · 6ch', node:1,
+      channels:['Dim 1','Dim 2','Dim 3','Dim 4','Dim 5','Dim 6'],
+      bindings:{ 0:'Living · Eettafel · Kort', 1:'Living · Alles uit · Kort', 2:'Bureau · Bureau · Kort' } },
+    { id:'m2', name:'DT06-02', desc:'Leading Edge · 2ch', node:2,
+      channels:['Dim 1','Dim 2'],
+      bindings:{ 0:'Keuken · Koken · Kort' } },
+  ],
+  Relais: [
+    { id:'m3', name:'DT02-08', desc:'8 Relay outputs', node:3,
+      channels:['Relais 1','Relais 2','Relais 3','Relais 4','Relais 5','Relais 6','Relais 7','Relais 8'],
+      bindings:{ 0:'Living · Hall · Kort', 1:'Keuken · Alles uit · Kort', 2:'Keuken · Eten · Kort' } },
+  ],
+  Motor: [
+    { id:'m4', name:'Up/Down 1', desc:'DT04-04 · ch 1–4', node:5,
+      channels:['Motor 1','Motor 2','Motor 3','Motor 4'],
+      bindings:{ 0:'Living · Eettafel · Kort', 1:'Living · Eettafel · Lang' } },
+    { id:'m5', name:'Up/Down 2', desc:'DT04-04 · ch 1–4', node:5,
+      channels:['Motor 1','Motor 2','Motor 3','Motor 4'],
+      bindings:{} },
+  ],
+  Input: [
+    { id:'m6', name:'DT03-16', desc:'16 Digital inputs', node:4,
+      channels:['Input 1','Input 2','Input 3','Input 4','Input 5','Input 6',
+                'Input 7','Input 8','Input 9','Input 10','Input 11','Input 12',
+                'Input 13','Input 14','Input 15','Input 16'],
+      bindings:{} },
+  ],
+  Switch: [
+    { id:'m7', name:'Schakelaar Keuken', desc:'DT-SW-04', node:9,
+      channels:['Knop 1','Knop 2','Knop 3','Knop 4'],
+      bindings:{} },
+  ],
+  DALI: [
+    { id:'m8', name:'DT13-DAL', desc:'DALI interface', node:7,
+      channels:['Groep 1','Groep 2','Groep 3','Groep 4','Groep 5','Groep 6','Groep 7','Groep 8'],
+      bindings:{ 0:'Living · Eettafel · Kort', 1:'Keuken · Koken · Kort',
+                 2:'Bureau · Bureau · Kort',   3:'Bureau · Bureau · Lang' } },
+  ],
+};
+
+const ACTIONS = {
+  Dimmer: [
+    { icon:'🔄', a:'Toggle'      },
+    { icon:'☀️', a:'Aan (100%)'  },
+    { icon:'🌤', a:'Aan (75%)'   },
+    { icon:'⛅', a:'Aan (50%)'   },
+    { icon:'🌑', a:'Aan (25%)'   },
+    { icon:'⭕', a:'Uit'         },
+  ],
+  Relais: [
+    { icon:'🔄', a:'Toggle' },
+    { icon:'🟢', a:'Aan'    },
+    { icon:'⭕', a:'Uit'    },
+  ],
+  Motor: [
+    { icon:'⬆️', a:'Omhoog' },
+    { icon:'⬇️', a:'Omlaag' },
+    { icon:'⏹',  a:'Stop'   },
+  ],
+  Input: [
+    { icon:'📡', a:'Korte puls' },
+    { icon:'📡', a:'Lange puls' },
+  ],
+  Switch: [
+    { icon:'💡', a:'LED Aan'    },
+    { icon:'⭕', a:'LED Uit'    },
+    { icon:'🔄', a:'LED Toggle' },
+  ],
+  DALI: [
+    { icon:'🔄', a:'Toggle'     },
+    { icon:'☀️', a:'Aan (100%)' },
+    { icon:'⛅', a:'Aan (50%)'  },
+    { icon:'⭕', a:'Uit'        },
+    { icon:'🎬', a:'Scene 1'    },
+    { icon:'🎬', a:'Scene 2'    },
+  ],
+};
+
+// ═══════════════════════════════ STATE ═══════════════════════════════
+
+const STEP_ORDER = ['button','trigger','modtype','module','channel','action'];
+
+let sel = {};
+let bindings = [];
+
+// ═══════════════════════════════ DEMO SWITCHES ═══════════════════════
+
+function renderDemoSwitches() {
+  document.getElementById('demo-switches').innerHTML = SWITCHES.map(sw => {
+    const is4 = sw.model === 'DT-SW-04';
+    const btns = sw.buttons.map(l =>
+      `<div class="${is4 ? 'sw4-btn' : 'sw2-btn'}">${l}</div>`
+    ).join('');
+    const center = is4
+      ? `<div class="sw4-center"><span>21°C</span><span>▲▼</span></div>` : '';
+    const housing = is4
+      ? `<div class="sw4-housing">${btns}${center}</div>`
+      : `<div class="sw2-housing">${btns}</div>`;
+    return `<div class="sw-card" onclick="openDialog('${sw.id}')">
+      <div class="sw-label">${sw.name}</div>
+      ${housing}
+      <div class="sw-meta">${sw.model} · N:${sw.node}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════ DIALOG ══════════════════════════════
+
+function openDialog(swId) {
+  const sw = SWITCHES.find(s => s.id === swId);
+  sel = { sw, button:null, trigger:null, modType:null, module:null, channel:null };
+  document.getElementById('dialog-source-name').textContent = sw.name;
+  document.getElementById('dialog-source-sub').textContent  = sw.model + ' · N:' + sw.node;
+  document.getElementById('overlay').classList.remove('hidden');
+  render();
+}
+
+function closeDialog() {
+  document.getElementById('overlay').classList.add('hidden');
+}
+
+document.getElementById('overlay').addEventListener('click', e => {
+  if (e.target.id === 'overlay') closeDialog();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDialog();
+});
+
+// ═══════════════════════════════ STEP LOGIC ══════════════════════════
+
+function currentStep() {
+  if (sel.button  === null) return 'button';
+  if (sel.trigger === null) return 'trigger';
+  if (sel.modType === null) return 'modtype';
+  if (sel.module  === null) return 'module';
+  if (sel.channel === null) return 'channel';
+  return 'action';
+}
+
+function goBack() {
+  const idx = STEP_ORDER.indexOf(currentStep());
+  if (idx === 0) { closeDialog(); return; }
+  jumpToStep(STEP_ORDER[idx - 1]);
+}
+
+// Jump back to a step: reset that step and everything after it
+function jumpToStep(step) {
+  const from = STEP_ORDER.indexOf(step);
+  if (from <= 0) sel.button  = null;
+  if (from <= 1) sel.trigger = null;
+  if (from <= 2) sel.modType = null;
+  if (from <= 3) sel.module  = null;
+  if (from <= 4) sel.channel = null;
+  render();
+}
+
+// ═══════════════════════════════ RENDER ══════════════════════════════
+
+function render() {
+  const step = currentStep();
+  const idx  = STEP_ORDER.indexOf(step) + 1;
+
+  document.getElementById('step-num').textContent      = idx;
+  document.getElementById('step-progress').textContent = `Stap ${idx} / 6`;
+  document.getElementById('btn-back').textContent      = idx === 1 ? 'Annuleer' : '← Terug';
+  document.getElementById('step-label').textContent = {
+    button:  'Kies een knop',
+    trigger: 'Kies trigger-type',
+    modtype: 'Kies module-type',
+    module:  'Kies module',
+    channel: 'Kies kanaal',
+    action:  'Kies actie',
+  }[step];
+
+  renderBreadcrumb();
+
+  const g = document.getElementById('step-grid');
+  if (step === 'button')  g.innerHTML = renderButtonStep();
+  if (step === 'trigger') g.innerHTML = renderTriggerStep();
+  if (step === 'modtype') g.innerHTML = renderModTypeStep();
+  if (step === 'module')  g.innerHTML = renderModuleStep();
+  if (step === 'channel') g.innerHTML = renderChannelStep();
+  if (step === 'action')  g.innerHTML = renderActionStep();
+}
+
+function renderBreadcrumb() {
+  const chips = [];
+  if (sel.button  !== null) chips.push({ key:'Knop',    val:sel.sw.buttons[sel.button],          step:'button'  });
+  if (sel.trigger !== null) chips.push({ key:'Trigger', val:sel.trigger,                          step:'trigger' });
+  if (sel.modType !== null) chips.push({ key:'Type',    val:sel.modType,                          step:'modtype' });
+  if (sel.module  !== null) chips.push({ key:'Module',  val:sel.module.name,                      step:'module'  });
+  if (sel.channel !== null) chips.push({ key:'Kanaal',  val:sel.module.channels[sel.channel],     step:'channel' });
+
+  const bc = document.getElementById('breadcrumb');
+  if (!chips.length) {
+    bc.innerHTML = '<span class="bc-empty">Selecteer stap voor stap</span>';
+    return;
+  }
+  bc.innerHTML = chips.map((c, i) =>
+    (i > 0 ? '<span class="bc-sep">›</span>' : '') +
+    `<span class="bc-chip" onclick="jumpToStep('${c.step}')">
+       <span class="bc-key">${c.key}:</span>${c.val}
+     </span>`
+  ).join('');
+}
+
+// ── Step renderers ────────────────────────────────────────────────────
+
+function renderButtonStep() {
+  const sw  = sel.sw;
+  const is4 = sw.model === 'DT-SW-04';
+  const btns = sw.buttons.map((l, i) =>
+    `<div class="dlg-sw-btn" onclick="selectButton(${i})">${l}</div>`
+  ).join('');
+  const center = is4
+    ? `<div class="dlg-sw4-center"><span>21°C</span><span>▲▼</span></div>` : '';
+  return `<div class="dlg-sw-wrap">
+    <div class="${is4 ? 'dlg-sw4' : 'dlg-sw2'}">${btns}${center}</div>
+    <div class="dlg-sw-hint">Klik op de gewenste knop</div>
+  </div>`;
+}
+
+function renderTriggerStep() {
+  return `<div class="trigger-grid">
+    <div class="trigger-btn" onclick="selectTrigger('Kort')">
+      <span class="trigger-icon">👆</span>
+      <span class="trigger-name">Kort</span>
+      <span class="trigger-desc">Korte druk · &lt; 1 s</span>
+    </div>
+    <div class="trigger-btn" onclick="selectTrigger('Lang')">
+      <span class="trigger-icon">✋</span>
+      <span class="trigger-name">Lang</span>
+      <span class="trigger-desc">Lange druk · ≥ 1 s</span>
+    </div>
+  </div>`;
+}
+
+function renderModTypeStep() {
+  return `<div class="modtype-grid">${
+    MODULE_TYPES.map(t =>
+      `<div class="modtype-tab" onclick="selectModType('${t.id}')">
+         <span class="tab-icon">${t.icon}</span>${t.id}
+       </div>`
+    ).join('')
+  }</div>`;
+}
+
+function renderModuleStep() {
+  const mods = MODULES[sel.modType] || [];
+  if (!mods.length)
+    return '<p class="mc-none">Geen modules van dit type geconfigureerd.</p>';
+
+  return `<div class="module-cards">${mods.map((m, i) => {
+    const total = m.channels.length;
+    const used  = Object.keys(m.bindings).length;
+    const free  = total - used;
+    const cls   = free === 0 ? 'full' : used === 0 ? 'free' : 'partial';
+    const txt   = free === 0 ? 'Volledig bezet' : `${free} vrij / ${total}`;
+    return `<div class="module-card-btn" onclick="selectModule(${i})">
+      <div class="mc-name">${m.name}</div>
+      <div class="mc-desc">${m.desc}</div>
+      <div class="mc-node">N:${m.node}</div>
+      <span class="mc-badge ${cls}">${txt}</span>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderChannelStep() {
+  const m = sel.module;
+  return `<div class="channel-grid">${m.channels.map((ch, i) => {
+    const bound   = m.bindings[i];
+    const cls     = bound ? 'used' : 'free';
+    const onclick = bound ? '' : `onclick="selectChannel(${i})"`;
+    const info    = bound
+      ? `<span class="ch-binding" title="${bound}">↳ ${bound}</span>` : '';
+    return `<div class="ch-chip ${cls}" ${onclick}>
+      <span class="ch-name">${ch}</span>${info}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderActionStep() {
+  return `<div class="action-grid">${
+    (ACTIONS[sel.modType] || []).map(a =>
+      `<div class="action-btn" onclick="selectAction('${a.a}')">
+         <span class="action-icon">${a.icon}</span>${a.a}
+       </div>`
+    ).join('')
+  }</div>`;
+}
+
+// ═══════════════════════════════ SELECT HANDLERS ══════════════════════
+
+function selectButton(idx)  { sel.button  = idx;                             render(); }
+function selectTrigger(t)   { sel.trigger = t;                               render(); }
+function selectModType(t)   { sel.modType = t;                               render(); }
+function selectModule(idx)  { sel.module  = (MODULES[sel.modType] || [])[idx]; render(); }
+function selectChannel(idx) { sel.channel = idx;                             render(); }
+
+function selectAction(action) {
+  const b = {
+    id:      Date.now(),
+    source:  sel.sw.name,
+    button:  sel.sw.buttons[sel.button],
+    trigger: sel.trigger,
+    modType: sel.modType,
+    module:  sel.module.name,
+    channel: sel.module.channels[sel.channel],
+    action,
+  };
+
+  // Mark channel as occupied so it shows as used if wizard is reopened
+  sel.module.bindings[sel.channel] = `${b.source} · ${b.button} · ${b.trigger}`;
+
+  bindings.push(b);
+  renderBindingsList();
+  closeDialog();
+  showToast(`✓  ${b.button} · ${b.trigger}  →  ${b.module} · ${b.channel} · ${action}`);
+}
+
+// ═══════════════════════════════ BINDINGS LIST ════════════════════════
+
+function renderBindingsList() {
+  const el = document.getElementById('bindings-list');
+  if (!bindings.length) {
+    el.innerHTML = '<p class="empty-state">Nog geen bindings geconfigureerd.</p>';
+    return;
+  }
+  el.innerHTML = bindings.map(b =>
+    `<div class="binding-item">
+       <span class="binding-source">${b.source} · ${b.button}</span>
+       <span class="binding-trigger">${b.trigger}</span>
+       <span class="binding-arrow">→</span>
+       <span class="binding-target">${b.modType} · ${b.module} · ${b.channel} ·
+         <span class="binding-action">${b.action}</span></span>
+       <button class="binding-del" onclick="deleteBinding(${b.id})" title="Verwijder">✕</button>
+     </div>`
+  ).join('');
+}
+
+function deleteBinding(id) {
+  const b = bindings.find(x => x.id === id);
+  if (b) {
+    const mod = (MODULES[b.modType] || []).find(m => m.name === b.module);
+    if (mod) {
+      const idx = mod.channels.indexOf(b.channel);
+      if (idx >= 0) delete mod.bindings[idx];
+    }
+  }
+  bindings = bindings.filter(x => x.id !== id);
+  renderBindingsList();
+}
+
+// ═══════════════════════════════ TOAST ═══════════════════════════════
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3500);
+}
+
+// ═══════════════════════════════ INIT ════════════════════════════════
+
+renderDemoSwitches();
+</script>
+</body>
+</html>
