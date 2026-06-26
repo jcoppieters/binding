@@ -104,6 +104,8 @@ export class MasterConnectionService extends EventEmitter {
     resolve: (status: DiscoveredUnit) => void;
     reject: (error: Error) => void;
     timeout: NodeJS.Timeout;
+    expectedValue?: number;
+    expectedStatus?: number;
   }> = new Map();
   
   private constructor() {
@@ -759,9 +761,18 @@ export class MasterConnectionService extends EventEmitter {
     // Resolve any pending commands for this unit
     const pending = this.pendingCommands.get(key);
     if (pending) {
-      clearTimeout(pending.timeout);
-      this.pendingCommands.delete(key);
-      pending.resolve(unit);
+      // Check if status matches expected values (if provided)
+      const statusMatches = pending.expectedStatus === undefined || unit.status === pending.expectedStatus;
+      const valueMatches = pending.expectedValue === undefined || unit.value === pending.expectedValue;
+      
+      if (statusMatches && valueMatches) {
+        console.log(`Status matches expected (status=${pending.expectedStatus}, value=${pending.expectedValue}), resolving`);
+        clearTimeout(pending.timeout);
+        this.pendingCommands.delete(key);
+        pending.resolve(unit);
+      } else {
+        console.log(`Status doesn't match expected yet (got status=${unit.status}, value=${unit.value}, expected status=${pending.expectedStatus}, value=${pending.expectedValue}), waiting...`);
+      }
     }
   }
   
@@ -781,39 +792,85 @@ export class MasterConnectionService extends EventEmitter {
       throw new Error('Not connected to master');
     }
     
+    // Get current unit state before sending command
+    const currentUnit = this.getUnit(nodeAddr, unitAddr);
+    if (!currentUnit) {
+      throw new Error('Unit not found');
+    }
+    
     let msg: Message;
+    let expectedValue: number | undefined;
+    let expectedStatus: number | undefined;
     
     switch (type) {
       case UnitType.SWITCH:
         console.log(`Building switch command: nodeAddr=${nodeAddr}, unitAddr=${unitAddr}, status=${status}, status>0=${status > 0}`);
         msg = DuotecnoProtocol.buildSetSwitch(nodeAddr, unitAddr, status > 0);
         console.log(`Switch command built: [${msg.join(',')}]`);
+        expectedStatus = status > 0 ? 1 : 0;
         break;
       case UnitType.CONTROL:
       case UnitType.LCD_VIRTUAL:
         // Use value parameter: if < 0 = pulse, else = toggle with 0/1
         msg = DuotecnoProtocol.buildSetControl(nodeAddr, unitAddr, value != null ? value : status);
+        // Control units don't have predictable state changes (pulse events)
         break;
       case UnitType.DIM:
         // If value provided (not null/undefined): use it. Else use status: >0 = -1 (ON/restore), 0 = 0 (OFF)
         const dimValue = value != null ? value : (status > 0 ? -1 : 0);
-        msg = DuotecnoProtocol.buildSetDimmer(nodeAddr, unitAddr, dimValue);
+        
+        // Hardware limitation: Some dimmers can't set to specific value when OFF
+        // Solution: If dimmer is OFF and we want a specific value, turn ON first
+        if (dimValue > 0 && currentUnit.status === 0) {
+          console.log(`Dimmer is OFF, turning ON before setting to ${dimValue}%`);
+          // First turn ON (will restore to previous value, e.g., 75%)
+          const onMsg = DuotecnoProtocol.buildSetDimmer(nodeAddr, unitAddr, -1);
+          this.send(onMsg);
+          // Small delay to let dimmer turn on
+          await new Promise(resolve => setTimeout(resolve, 100));
+          // Now set to desired value
+          msg = DuotecnoProtocol.buildSetDimmer(nodeAddr, unitAddr, dimValue);
+        } else {
+          msg = DuotecnoProtocol.buildSetDimmer(nodeAddr, unitAddr, dimValue);
+        }
+        
+        // Only set expected value if we know the exact target (not for restore command -1)
+        if (dimValue >= 0) {
+          expectedValue = dimValue;
+          expectedStatus = dimValue === 0 ? 0 : 1;
+        }
         break;
       case UnitType.SENS:
         msg = DuotecnoProtocol.buildSetSensor(nodeAddr, unitAddr, value != null ? value : (status > 0 ? 0 : -1));
         break;
       case UnitType.DUOSWITCH:
         msg = DuotecnoProtocol.buildSetMotor(nodeAddr, unitAddr, status);
+        expectedStatus = status;
         break;
       default:
         throw new Error(`Unsupported unit type: ${type}`);
     }
     
+    // Check if unit is already at the expected state (for dimmer/switch)
+    // If so, hardware might not send a status update
+    const alreadyAtTarget = 
+      (expectedStatus !== undefined && currentUnit.status === expectedStatus) &&
+      (expectedValue === undefined || currentUnit.value === expectedValue);
+    
+    if (alreadyAtTarget) {
+      console.log(`Unit already at target state (status=${expectedStatus}, value=${expectedValue}), returning current state`);
+      this.send(msg); // Still send the command (hardware might do something)
+      // Brief delay to allow command processing
+      await new Promise(resolve => setTimeout(resolve, 100));
+      return currentUnit;
+    }
+    
     // Send command (action commands don't wait for response)
     this.send(msg);
     
-    // Hardware bug: Some dimmers don't send status updates after commands.
-    // Explicitly request status for dimmers to work around this issue.
+    // Explicitly request status for dimmers because:
+    // 1. Hardware bug: Some dimmers don't send automatic status updates after commands
+    // 2. ON command (dimValue=-1) restores previous value, which we need to fetch
     if (type === UnitType.DIM) {
       const statusMsg = DuotecnoProtocol.buildUnitStatus(nodeAddr, unitAddr, type);
       this.sendQueued(statusMsg);
@@ -839,7 +896,7 @@ export class MasterConnectionService extends EventEmitter {
         }, 1000);
       }, 3000);
       
-      this.pendingCommands.set(key, { resolve, reject, timeout });
+      this.pendingCommands.set(key, { resolve, reject, timeout, expectedValue, expectedStatus });
     });
   }
   

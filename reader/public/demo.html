@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duotecno – Binding Software Demo</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#eef1f8;color:#1a1f2e;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* === Header === */
+header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;background:#1a2540;border-bottom:2px solid #e08c00;flex-shrink:0}
+.logo{font-size:19px;font-weight:700;color:#fff}
+.logo em{color:#e08c00;font-style:normal}
+.project-name{font-size:12px;color:#8090b0}
+.project-name strong{color:#c0ccdf}
+.spacer{flex:1}
+.header-btn{padding:6px 14px;border-radius:6px;border:1px solid #2a3a60;background:#243060;color:#b8c8e0;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;transition:background .15s}
+.header-btn:hover{background:#2e3a70}
+.header-btn.primary{background:#e08c00;color:#fff;border-color:#e08c00;font-weight:600}
+.header-btn.primary:hover{background:#c87c00}
+.save-dot{width:7px;height:7px;border-radius:50%;background:#4cd04c;display:inline-block}
+
+/* === Tabs === */
+.view-tabs{display:flex;background:#fff;border-bottom:1px solid #dde3ef;flex-shrink:0;padding:0 20px}
+.view-tab{padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:#6a7899;transition:color .15s;display:flex;align-items:center;gap:8px;user-select:none}
+.view-tab:hover{color:#1a1f2e}
+.view-tab.active{color:#e08c00;border-bottom-color:#e08c00}
+
+/* === Layout === */
+.main{display:flex;flex:1;overflow:hidden}
+.canvas-area{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#eef1f8}
+
+/* === Sidebar === */
+.sidebar{width:210px;background:#fff;border-right:1px solid #dde3ef;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-section{padding:12px 14px 6px}
+.sidebar-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#a0aaba;font-weight:600;margin-bottom:8px}
+.sidebar-item{padding:7px 10px;border-radius:6px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;color:#4a5568;transition:background .12s,color .12s}
+.sidebar-item:hover{background:#f0f4fc;color:#1a1f2e}
+.sidebar-item.active{background:#fef3e0;color:#e08c00}
+.sidebar-item .icon{font-size:14px;width:18px;text-align:center}
+.sidebar-item .badge{margin-left:auto;background:#eef1f8;color:#6a7899;font-size:10px;padding:1px 6px;border-radius:10px}
+.sidebar-add{margin:4px 14px;padding:6px 10px;border-radius:6px;border:1px dashed #dde3ef;color:#a0aaba;font-size:12px;cursor:pointer;text-align:center;transition:all .15s;background:none;width:calc(100% - 28px)}
+.sidebar-add:hover{border-color:#e08c00;color:#e08c00;background:#fef9f0}
+.floor-header{padding:8px 14px 4px;font-size:12px;color:#6a7899;display:flex;align-items:center;justify-content:space-between}
+.floor-header span{font-weight:600;color:#4a5568}
+.floor-header button{background:none;border:none;color:#a0aaba;cursor:pointer;font-size:16px;line-height:1;padding:0 2px}
+.floor-header button:hover{color:#e08c00}
+.floor-indent{padding-left:10px}
+
+/* === Toolbar === */
+.toolbar{display:flex;align-items:center;gap:8px;padding:8px 16px;border-bottom:1px solid #dde3ef;background:#fff;flex-shrink:0;flex-wrap:wrap}
+.toolbar-group{display:flex;gap:4px}
+.tool-btn{padding:5px 12px;border-radius:5px;border:1px solid #dde3ef;background:#f5f7fb;color:#4a5568;font-size:12px;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:5px}
+.tool-btn:hover{background:#e8ecf5;color:#1a1f2e}
+.tool-btn.active{background:#fef3e0;color:#e08c00;border-color:#f5c060}
+.tool-sep{width:1px;background:#dde3ef;height:22px;margin:0 4px}
+.tool-label{font-size:11px;color:#a0aaba}
+
+/* ===========================
+   RAIL VIEW
+=========================== */
+#rail-view{flex:1;display:flex;flex-direction:column;overflow:hidden}
+#rail-canvas{flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:16px;position:relative}
+
+/* Cabinet */
+.cabinet-card{background:#fff;border:1px solid #dde3ef;border-radius:10px;overflow:visible;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.cabinet-header{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #eef1f8;background:#f8f9fd;border-radius:10px 10px 0 0}
+.cabinet-header h3{font-size:14px;font-weight:600;flex:1;color:#1a1f2e}
+.cabinet-stats{font-size:11px;color:#6a7899;display:flex;gap:14px;flex-wrap:wrap}
+.stat{display:flex;align-items:center;gap:4px}
+.stat .val{color:#1a1f2e;font-weight:600}
+.stat.warn .val{color:#e08c00}
+.stat.ok .val{color:#28a745}
+
+/* PSU summary */
+.psu-summary{background:#fef8ee;border:1px solid #f5d080;border-radius:6px;padding:8px 12px;margin:10px 16px 0;font-size:12px;color:#7a5000;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.psu-summary strong{color:#c07000}
+
+/* Rail row */
+.rail-row{padding:16px 20px 12px;display:flex;align-items:center;gap:0;border-bottom:1px solid #f0f2f8;position:relative}
+.rail-row:last-of-type{border-bottom:none}
+.rail-label{font-size:10px;color:#a0aaba;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);margin-right:12px;min-width:14px;text-align:center;font-weight:600;flex-shrink:0}
+
+/* The horizontal row containing modules — the CAN line runs behind */
+.rail-modules{display:flex;align-items:center;gap:0;position:relative;flex-wrap:nowrap;overflow-x:auto;padding:4px 0;width:100%}
+.rail-spacer{flex:1;min-width:12px;position:relative;z-index:0}
+
+/* Orange CAN line behind everything */
+.can-line{position:absolute;left:0;right:0;height:4px;background:#e08c00;top:50%;transform:translateY(-50%);z-index:0;pointer-events:none;border-radius:2px}
+/* Blue CAN line variant */
+.can-line.seg2{background:#2060d0}
+
+/* 60Ω Terminator */
+.terminator{position:relative;flex-shrink:0;z-index:2;margin:0 4px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.term-body{width:22px;height:120px;background:#fff;border:2px solid #e08c00;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#e08c00;writing-mode:vertical-rl;transform:rotate(180deg);box-shadow:1px 2px 4px rgba(0,0,0,.1)}
+.term-label{font-size:8px;color:#a0aaba;text-align:center}
+/* Seg 2 terminator */
+.terminator.seg2 .term-body{border-color:#2060d0;color:#2060d0}
+
+/* Module slot (wrapper for module + dots) */
+.module-slot{position:relative;z-index:2;flex-shrink:0;margin:0 6px;display:flex;align-items:center}
+.module-slot .cdl,.module-slot .cdr{position:absolute;width:12px;height:12px;border-radius:50%;background:#e08c00;border:2px solid #fff;z-index:4;top:50%;transform:translateY(-50%);box-shadow:0 0 0 1px #e08c00}
+.module-slot .cdl{left:-6px}
+.module-slot .cdr{right:6px}
+.module-slot.seg2 .cdl,.module-slot.seg2 .cdr{background:#2060d0;box-shadow:0 0 0 1px #2060d0}
+
+/* Module card */
+.module-card{margin-right: 12px;display:flex;flex-direction:column;cursor:pointer;transition:transform .12s,box-shadow .12s;position:relative;border-radius:3px;border:1px solid #b0bac8;box-shadow:1px 2px 5px rgba(0,0,0,.14);z-index:1;width:220px;height:130px;background:#ddd;flex-shrink:0;overflow:hidden}
+.module-card:hover{transform:translateY(-4px);box-shadow:1px 6px 14px rgba(0,0,0,.2)}
+.module-card.dali{width:100px}
+
+/* Screw terminals top / bottom */
+.m-terms{display:flex;padding:3px 4px;gap:3px;background:#b8c0d0;flex-shrink:0;justify-content:flex-start}
+.m-terms.bot{background:#b8c0d0}
+.m-screw{width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 33% 33%,#e5e8f0,#8898b0);border:1px solid #6878a0;flex-shrink:0}
+
+/* Black face plate */
+.m-face{background:#111;color:#fff;flex:1;display:flex;flex-direction:column;padding:5px 7px;gap:2px;overflow:hidden}
+.m-type{font-size:7px;color:#666;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+.m-model{font-size:10px;font-weight:700;color:#fff;line-height:1.1;flex-shrink:0}
+.m-desc{font-size:8px;color:#999;line-height:1.2;flex-shrink:0}
+.m-channels{display:flex;gap:2px;flex-wrap:wrap;margin-top:2px;flex-shrink:0}
+.ch{width:7px;height:7px;border-radius:1px}
+.ch.dimmer{background:#f5a020}
+.ch.relay{background:#3090f0}
+.ch.input{background:#30c050}
+.ch.motor{background:#f04040}
+.ch.audio{background:#c040f0}
+.ch.dali{background:#f0e020}
+.m-ports{display:flex;gap:5px;margin-top:auto;padding-top:2px}
+.m-port{width:12px;height:8px;background:#2a2a2a;border:1px solid #444;border-radius:2px}
+.m-port.seg1{border-color:#e08c00}
+.m-port.seg2{border-color:#3080e0}
+.m-footer{display:flex;justify-content:space-between;align-items:center;margin-top:2px}
+.m-din{font-size:7px;color:#666}
+.m-addr{font-size:7px;background:#222;color:#888;padding:1px 4px;border-radius:2px}
+.psu-can .m-face{border-top:1px solid #e08c00}
+.psu-can .m-model{color:#e08c00}
+
+/* Add module button */
+.add-module-btn{width:42px;height:120px;border:2px dashed #c0c8d8;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#a0aaba;font-size:20px;cursor:pointer;flex-shrink:0;margin:0 8px;transition:all .15s;background:#f8f9fd;z-index:2;position:relative}
+.add-module-btn:hover{border-color:#e08c00;color:#e08c00;background:#fef9f0}
+
+.add-rail-btn{margin:6px 16px 12px;padding:8px;border:1px dashed #c0c8d8;border-radius:6px;color:#a0aaba;font-size:12px;cursor:pointer;text-align:center;background:none;transition:all .15s;width:calc(100% - 32px)}
+.add-rail-btn:hover{border-color:#e08c00;color:#e08c00}
+
+/* ===========================
+   WONING PANEL (Segment 2)
+=========================== */
+.woning-panel{background:#fff;border:2px dashed #2060d0;border-radius:10px;padding:14px 18px 14px;position:relative;box-shadow:0 2px 8px rgba(32,96,208,.08)}
+.woning-header{font-size:11px;font-weight:600;color:#2060d0;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.seg2-badge{background:#e8f0fe;color:#2060d0;font-size:10px;padding:2px 8px;border-radius:10px}
+
+/* Woning row: contains field devices + CAN line */
+.woning-row{display:flex;align-items:center;gap:24px;position:relative;overflow-x:auto;padding:4px 0}
+
+/* Woning devices */
+.field-device{position:relative;z-index:2;flex-shrink:0;margin:0 6px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
+.field-device .cdl,.field-device .cdr{position:absolute;width:12px;height:12px;border-radius:50%;background:#2060d0;border:2px solid #fff;z-index:4;top:50%;transform:translateY(-50%);box-shadow:0 0 0 1px #2060d0}
+.field-device .cdl{left:-6px}
+.field-device .cdr{right:-6px}
+.fd-label{font-size:9px;color:#6a7899;text-align:center;line-height:1.3}
+.fd-addr{font-size:8px;color:#a0aaba}
+
+/* ── 4-gang switch (like photo: aluminum square, 4 buttons + center display) ── */
+.sw4-housing{width:92px;height:92px;background:linear-gradient(135deg,#e8e8e8,#c8c8c8);border:2px solid #b0b0b0;border-radius:8px;padding:5px;display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:1fr auto 1fr;gap:3px;box-shadow:inset 0 1px 3px rgba(255,255,255,.6),0 3px 8px rgba(0,0,0,.25);transition:border-color .12s}
+.sw4-housing:hover{border-color:#2060d0}
+.sw4-btn{background:linear-gradient(145deg,#d5d5d5,#bcbcbc);border:1px solid #a8a8a8;border-radius:4px;display:flex;align-items:flex-start;justify-content:flex-start;padding:4px 5px;cursor:pointer;transition:all .1s;box-shadow:1px 1px 3px rgba(0,0,0,.2),inset 0 1px 1px rgba(255,255,255,.5)}
+.sw4-btn:active,.sw4-btn.on{background:linear-gradient(145deg,#bcbcbc,#d0d0d0);box-shadow:inset 1px 1px 3px rgba(0,0,0,.2)}
+.sw4-btn span{font-size:7px;color:#333;font-weight:600;line-height:1.1}
+.sw4-btn.tr span,.sw4-btn.br span{align-self:flex-start}
+.sw4-center{background:#111;border-radius:3px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:28px;height:28px;border:1px solid #333}
+.sw4-temp{font-size:7px;font-weight:700;color:#eee;font-family:monospace;letter-spacing:-.3px}
+.sw4-icon{font-size:9px}
+
+/* ── 2-gang switch ── */
+.sw2-housing{width:60px;height:92px;background:linear-gradient(135deg,#e8e8e8,#c8c8c8);border:2px solid #b0b0b0;border-radius:8px;padding:5px;display:flex;flex-direction:column;gap:4px;box-shadow:inset 0 1px 3px rgba(255,255,255,.6),0 3px 8px rgba(0,0,0,.25);transition:border-color .12s}
+.sw2-housing:hover{border-color:#2060d0}
+.sw2-btn{flex:1;background:linear-gradient(145deg,#d5d5d5,#bcbcbc);border:1px solid #a8a8a8;border-radius:4px;display:flex;align-items:flex-end;padding:4px 5px;cursor:pointer;transition:all .1s;box-shadow:1px 1px 3px rgba(0,0,0,.2)}
+.sw2-btn span{font-size:7px;color:#333;font-weight:600}
+.sw2-btn:active{background:linear-gradient(145deg,#bcbcbc,#d0d0d0)}
+
+/* ── LCD touch panel (like photo: white housing, large screen) ── */
+.lcd-housing{width:170px;height:120px;background:#f0f0f0;border:8px solid #e8e8e8;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.2),inset 0 1px 2px rgba(255,255,255,.8);overflow:hidden;transition:box-shadow .12s;position:relative;cursor:pointer}
+.lcd-housing:hover{box-shadow:0 4px 14px rgba(32,96,208,.3)}
+.lcd-screen{width:100%;height:100%;background:linear-gradient(160deg,#3a4a5c 0%,#5a6a7c 40%,#7a8a7c 100%);position:relative;display:flex;flex-direction:column;overflow:hidden}
+/* subtle kitchen photo simulation */
+.lcd-screen::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(180,160,120,.3) 0%,rgba(200,190,160,.4) 60%,rgba(140,170,120,.3) 100%);pointer-events:none}
+.lcd-top{display:flex;align-items:flex-start;justify-content:space-between;padding:5px 7px;position:relative;z-index:1}
+.lcd-logo-box{background:rgba(180,20,20,.85);border-radius:3px;padding:2px 5px;display:flex;flex-direction:column;align-items:center;line-height:1}
+.lcd-logo-box span{font-size:5px;color:#fff;font-weight:700;letter-spacing:.3px}
+.lcd-logo-box em{font-size:5px;color:#ff9999;font-style:normal}
+.lcd-time-big{font-size:22px;font-weight:700;color:rgba(255,255,255,.95);font-family:system-ui;letter-spacing:1px;text-shadow:0 1px 4px rgba(0,0,0,.4);margin-left:6px;margin-top:-1px}
+.lcd-room-info{text-align:right}
+.lcd-room-name{font-size:9px;font-weight:700;color:rgba(255,255,255,.9);text-shadow:0 1px 3px rgba(0,0,0,.4);letter-spacing:.5px}
+.lcd-room-temp{font-size:8px;color:rgba(255,255,255,.75);text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.lcd-middle{flex:1}
+.lcd-icons-bar{display:flex;align-items:center;justify-content:space-around;padding:4px 6px;background:rgba(0,0,0,.35);backdrop-filter:blur(4px);position:relative;z-index:1}
+.lcd-icon{font-size:13px;opacity:.8;cursor:pointer;transition:opacity .1s;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.lcd-icon:hover{opacity:1}
+
+/* Field terminator */
+.field-term{position:relative;z-index:2;flex-shrink:0;margin:0 4px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.ft-body{width:22px;height:92px;border:2px solid #2060d0;border-radius:3px;background:#e8f0fe;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#2060d0;writing-mode:vertical-rl;transform:rotate(180deg)}
+.ft-label{font-size:8px;color:#a0aaba}
+
+/* ===========================
+   HOME VIEW
+=========================== */
+#home-view{flex:1;display:flex;overflow:hidden}
+.floor-canvas-wrap{flex:1;position:relative;overflow:hidden;background:#f5f7fb;background-image:radial-gradient(circle,#c8d0e0 1px,transparent 1px);background-size:24px 24px}
+.floor-plan-hint{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#c8d0e0;pointer-events:none;z-index:0}
+.floor-plan-hint .big{font-size:64px}
+.floor-plan-hint p{font-size:13px}
+.room-rect{position:absolute;border:2px solid #b0bcd8;border-radius:8px;background:rgba(255,255,255,.88);display:flex;flex-direction:column;padding:8px;cursor:move;user-select:none;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.room-rect:hover{border-color:#8090c8}
+.room-title{font-size:11px;font-weight:600;color:#6a7899;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.room-title span{color:#4a5568}
+.room-devices{display:flex;flex-wrap:wrap;gap:8px}
+.device{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.device-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid transparent;transition:border-color .12s,transform .1s}
+.device:hover .device-icon{transform:scale(1.1);border-color:#e08c00}
+.device-label{font-size:9px;color:#6a7899;text-align:center;max-width:50px;line-height:1.2}
+.device.dimmer .device-icon{background:#fff8ee;border-color:#f0d0a0}
+.device.dimmer.on .device-icon{background:#fff0d0;border-color:#e08c00;box-shadow:0 0 8px rgba(224,140,0,.25)}
+.device.relay .device-icon{background:#eef6ff;border-color:#b0d0f0}
+.device.relay.on .device-icon{background:#d8eeff;border-color:#3090f0}
+.device.switch .device-icon{background:#f0f2f8;border-color:#c8d0e0}
+.device.motor .device-icon{background:#fff0f0;border-color:#f0c0c0}
+.device.sensor .device-icon{background:#f8f0ff;border-color:#d8b0f0}
+#binding-svg{position:absolute;inset:0;pointer-events:none;z-index:10}
+.home-right{width:230px;background:#fff;border-left:1px solid #dde3ef;display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
+.panel-section{padding:12px 14px;border-bottom:1px solid #eef1f8}
+.panel-title{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#a0aaba;font-weight:600;margin-bottom:10px}
+.device-palette{display:flex;flex-wrap:wrap;gap:8px}
+.palette-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:grab;padding:6px 8px;border-radius:6px;border:1px solid #dde3ef;background:#f5f7fb;transition:all .12s;min-width:52px}
+.palette-item:hover{border-color:#e08c00;background:#fef9f0}
+.palette-item .pi{font-size:20px}
+.palette-item .pl{font-size:10px;color:#6a7899}
+.binding-list{display:flex;flex-direction:column;gap:6px}
+.binding-entry{font-size:11px;padding:6px 8px;border-radius:5px;background:#f8f9fd;border:1px solid #dde3ef;cursor:pointer;transition:border-color .12s}
+.binding-entry:hover{border-color:#b0bcd8}
+.binding-src{color:#e08c00}
+.binding-arrow{color:#a0aaba;margin:0 4px}
+.binding-dst{color:#3090f0}
+.binding-type{font-size:9px;color:#a0aaba;margin-top:2px}
+
+/* ===========================
+   MATERIALS VIEW
+=========================== */
+#materials-view{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.mat-body{padding:16px;flex:1;overflow:auto}
+.materials-table-wrap{background:#fff;border:1px solid #dde3ef;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{background:#f5f7fb;padding:10px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#6a7899;font-weight:600;border-bottom:2px solid #dde3ef;white-space:nowrap}
+tbody tr{border-bottom:1px solid #eef1f8;transition:background .1s}
+tbody tr:hover{background:#fafbfe}
+tbody td{padding:9px 12px;color:#1a1f2e}
+tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px solid #f5d080;color:#7a5000}
+.type-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+.badge-dimmer{background:#fff3d0;color:#a06000}
+.badge-relay{background:#dceeff;color:#0050a0}
+.badge-input{background:#d8f5e4;color:#00602a}
+.badge-motor{background:#fde8e8;color:#a00020}
+.badge-audio{background:#f0e0ff;color:#6000a0}
+.badge-dali{background:#fffbd0;color:#806000}
+.badge-psu{background:#e8eaf5;color:#304080}
+.badge-switch{background:#e8ffe8;color:#205020}
+.badge-lcd{background:#e8eeff;color:#2030a0}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:#fff;border:1px solid #dde3ef;border-radius:12px;padding:24px;min-width:440px;max-width:560px;width:90vw;transform:translateY(12px);transition:transform .2s;box-shadow:0 8px 32px rgba(0,0,0,.15)}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal h2{font-size:16px;font-weight:600;margin-bottom:16px;color:#1a1f2e}
+.modal-cats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.cat-btn{padding:6px 14px;border-radius:20px;border:1px solid #dde3ef;background:#f5f7fb;color:#4a5568;font-size:12px;cursor:pointer;transition:all .12s}
+.cat-btn:hover,.cat-btn.active{background:#e08c00;color:#fff;border-color:#e08c00;font-weight:600}
+.module-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;max-height:260px;overflow-y:auto}
+.module-option{padding:12px;border:1px solid #dde3ef;border-radius:8px;background:#f8f9fd;cursor:pointer;transition:all .12s}
+.module-option:hover,.module-option.selected{border-color:#e08c00;background:#fef9f0}
+.module-option .mo-model{font-size:11px;color:#e08c00;font-weight:700}
+.module-option .mo-name{font-size:12px;color:#1a1f2e;margin:2px 0}
+.module-option .mo-info{font-size:10px;color:#6a7899}
+.modal-footer{display:flex;gap:10px;justify-content:flex-end}
+.btn{padding:8px 18px;border-radius:6px;border:none;font-size:13px;cursor:pointer;transition:background .15s}
+.btn-cancel{background:#f5f7fb;color:#4a5568;border:1px solid #dde3ef}
+.btn-cancel:hover{background:#e8ecf5}
+.btn-confirm{background:#e08c00;color:#fff;font-weight:600}
+.btn-confirm:hover{background:#c87c00}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;right:20px;background:#1a2540;border:1px solid #2a3a60;border-radius:8px;padding:12px 16px;font-size:13px;color:#c0cce0;z-index:200;transform:translateY(20px);opacity:0;transition:all .25s}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-left:3px solid #4cd04c}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#f0f2f8}
+::-webkit-scrollbar-thumb{background:#c0c8d8;border-radius:3px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Duo<em>tecno</em></div>
+  <div class="project-name">Project: <strong>Villa De Smedt – Gent</strong></div>
+  <div class="spacer"></div>
+  <button class="header-btn" onclick="showToast('Ongedaan gemaakt','')">↩ Undo</button>
+  <button class="header-btn" onclick="showToast('Project opgeslagen','success')"><span class="save-dot"></span> Opgeslagen</button>
+  <button class="header-btn primary">📤 Upload naar hardware</button>
+</header>
+
+<div class="view-tabs">
+  <div class="view-tab active" id="tab-rail" onclick="switchView('rail')">🗄️ Rail View</div>
+  <div class="view-tab" id="tab-home" onclick="switchView('home')">🏠 Home View</div>
+  <div class="view-tab" id="tab-mat"  onclick="switchView('mat')">📋 Materiaallijst</div>
+</div>
+
+<div class="main">
+
+<!-- sidebar rail -->
+<div class="sidebar" id="sidebar-rail">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Kasten</div>
+    <div class="sidebar-item active"><span class="icon">🗄️</span> Hoofdkast <span class="badge">2 rails</span></div>
+  </div>
+  <button class="sidebar-add" onclick="showToast('Kast toevoegen...','')">+ Kast toevoegen</button>
+  <div class="sidebar-section" style="margin-top:8px">
+    <div class="sidebar-label">CAN Bus Segments</div>
+    <div class="sidebar-item"><span class="icon" style="color:#e08c00">●</span> 1 – kast <span class="badge">7</span></div>
+    <div class="sidebar-item"><span class="icon" style="color:#2060d0">●</span> 2 – woning <span class="badge">4</span></div>
+  </div>
+  <div class="sidebar-section" style="margin-top:8px">
+    <div class="sidebar-label">Samenvatting</div>
+    <div style="padding:4px;font-size:11px;color:#6a7899;line-height:2">
+      Kastmodules: <strong style="color:#1a1f2e">7</strong><br>
+      Woningapparaten: <strong style="color:#1a1f2e">4</strong><br>
+      Dimmers: <strong style="color:#e08c00">14</strong><br>
+      Relais: <strong style="color:#3090f0">8</strong><br>&nbsp;<br>
+      Totaalverbruik: <strong style="color:#e08c00">105 W</strong><br>
+      Voedingen nodig: <strong style="color:#e08c00">2×</strong>
+    </div>
+  </div>
+</div>
+
+<!-- sidebar home -->
+<div class="sidebar" id="sidebar-home" style="display:none">
+  <div class="floor-header"><span>📐 Verdiepingen</span><button onclick="showToast('Verdieping toevoegen...','')">＋</button></div>
+  <div class="floor-header" style="padding-top:4px"><span>Gelijkvloers</span></div>
+  <div class="floor-indent">
+    <div class="sidebar-item active" onclick="selectRoom(event)"><span class="icon">🛋️</span> Living <span class="badge">4</span></div>
+    <div class="sidebar-item" onclick="selectRoom(event)"><span class="icon">🍳</span> Keuken <span class="badge">2</span></div>
+    <div class="sidebar-item" onclick="selectRoom(event)"><span class="icon">🖥️</span> Bureau <span class="badge">3</span></div>
+    <div class="sidebar-item" onclick="selectRoom(event)"><span class="icon">🚪</span> Inkomhal <span class="badge">1</span></div>
+  </div>
+  <button class="sidebar-add" onclick="showToast('Kamer toevoegen...','')">+ Kamer toevoegen</button>
+  <div class="floor-header" style="padding-top:8px"><span>Verdieping 1</span></div>
+  <div class="floor-indent">
+    <div class="sidebar-item" onclick="selectRoom(event)"><span class="icon">🛏️</span> Slaapkamer 1 <span class="badge">3</span></div>
+    <div class="sidebar-item" onclick="selectRoom(event)"><span class="icon">🛏️</span> Slaapkamer 2 <span class="badge">2</span></div>
+    <div class="sidebar-item" onclick="selectRoom(event)"><span class="icon">🚿</span> Badkamer <span class="badge">2</span></div>
+  </div>
+  <button class="sidebar-add" onclick="showToast('Kamer toevoegen...','')">+ Kamer toevoegen</button>
+</div>
+
+<!-- sidebar materials -->
+<div class="sidebar" id="sidebar-mat" style="display:none">
+  <div class="sidebar-section">
+    <div class="sidebar-label">Export</div>
+    <div class="sidebar-item" onclick="showToast('Excel exporteren...','')"><span class="icon">📊</span> Excel</div>
+    <div class="sidebar-item" onclick="showToast('PDF exporteren...','')"><span class="icon">📄</span> PDF</div>
+  </div>
+  <div class="sidebar-section" style="margin-top:8px">
+    <div class="sidebar-label">Filter</div>
+    <div class="sidebar-item active"><span class="icon">📋</span> Alles</div>
+    <div class="sidebar-item" onclick="showToast('Filter kastmodules','')"><span class="icon">🗄️</span> Kastmodules</div>
+    <div class="sidebar-item" onclick="showToast('Filter woning','')"><span class="icon">🔌</span> Woning</div>
+  </div>
+</div>
+
+<!-- ===================== RAIL VIEW ===================== -->
+<div class="canvas-area" id="rail-view">
+  <div class="toolbar">
+    <div class="tool-label">Toon:</div>
+    <div class="toolbar-group">
+      <button class="tool-btn active" onclick="toggleFilter(this)">🟡 Dimmer</button>
+      <button class="tool-btn active" onclick="toggleFilter(this)">🔵 Relais</button>
+      <button class="tool-btn active" onclick="toggleFilter(this)">🟢 Input</button>
+      <button class="tool-btn active" onclick="toggleFilter(this)">🔴 Motor</button>
+      <button class="tool-btn active" onclick="toggleFilter(this)">🟣 DALI</button>
+    </div>
+    <div class="tool-sep"></div>
+    <button class="tool-btn" onclick="showToast('PDF exporteren...','')">📄 PDF</button>
+    <button class="tool-btn" onclick="openAddModuleModal()">＋ Module</button>
+  </div>
+
+  <div id="rail-canvas">
+    <div class="cabinet-card" id="cabinet-main">
+      <div class="cabinet-header">
+        <h3>🗄️ Hoofdkast – Technische ruimte</h3>
+        <div class="cabinet-stats">
+          <div class="stat"><span>Rails:</span><span class="val">2</span></div>
+          <div class="stat"><span>Modules:</span><span class="val">7</span></div>
+          <div class="stat warn"><span>Verbruik:</span><span class="val">105 W</span></div>
+          <div class="stat ok"><span>CAN Seg 1</span></div>
+        </div>
+      </div>
+      <div class="psu-summary">
+        ⚡ Totaalverbruik: <strong>105 W</strong> &nbsp;|&nbsp;
+        Nodig: <strong>2×60W</strong>&nbsp;|&nbsp;
+        Aanwezig: 1× PSU+CAN Switch → bijkomend: <strong>1× extra PSU</strong>
+      </div>
+
+      <!-- Rail 1: term → DT05 → DT06 → DT02 → [+] -->
+      <div class="rail-row">
+        <div class="rail-label">Rail 1</div>
+        <div class="rail-modules" id="rail-1">
+
+          <!-- 60Ω terminator seg1 left -->
+          <div class="terminator" id="term-seg1-l">
+            <div class="term-body">60Ω</div>
+            <div class="term-label">SEG1</div>
+          </div>
+
+          <!-- DT05-06TE -->
+          <div class="module-slot" id="slot-dt05">
+            <div class="cdl"></div>
+            <div class="module-card" onclick="openModuleDetail('DT05-06TE')">
+              <div class="m-terms"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+              <div class="m-face">
+                <div class="m-type">Dimmer</div>
+                <div class="m-model">DT05-06TE</div>
+                <div class="m-desc">Trailing Edge 6×30W</div>
+                <div class="m-channels"><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div></div>
+                <div class="m-ports"><div class="m-port seg1"></div><div class="m-port seg1"></div></div>
+                <div class="m-footer"><span class="m-din">18W</span><span class="m-addr">N:01</span></div>
+              </div>
+              <div class="m-terms bot"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+            </div>
+            <div class="cdr"></div>
+          </div>
+
+          <!-- DT06-02 -->
+          <div class="module-slot" id="slot-dt06">
+            <div class="cdl"></div>
+            <div class="module-card" onclick="openModuleDetail('DT06-02')">
+              <div class="m-terms"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+              <div class="m-face">
+                <div class="m-type">Dimmer</div>
+                <div class="m-model">DT06-02</div>
+                <div class="m-desc">Leading Edge 8×130W</div>
+                <div class="m-channels"><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div><div class="ch dimmer"></div></div>
+                <div class="m-ports"><div class="m-port seg1"></div><div class="m-port seg1"></div></div>
+                <div class="m-footer"><span class="m-din">22W</span><span class="m-addr">N:02</span></div>
+              </div>
+              <div class="m-terms bot"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+            </div>
+            <div class="cdr"></div>
+          </div>
+
+          <!-- DT02-08 -->
+          <div class="module-slot" id="slot-dt02">
+            <div class="cdl"></div>
+            <div class="module-card" onclick="openModuleDetail('DT02-08')">
+              <div class="m-terms"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+              <div class="m-face">
+                <div class="m-type">Relais</div>
+                <div class="m-model">DT02-08</div>
+                <div class="m-desc">8× relaisuitgang</div>
+                <div class="m-channels"><div class="ch relay"></div><div class="ch relay"></div><div class="ch relay"></div><div class="ch relay"></div><div class="ch relay"></div><div class="ch relay"></div><div class="ch relay"></div><div class="ch relay"></div></div>
+                <div class="m-ports"><div class="m-port seg1"></div><div class="m-port seg1"></div></div>
+                <div class="m-footer"><span class="m-din">15W</span><span class="m-addr">N:03</span></div>
+              </div>
+              <div class="m-terms bot"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+            </div>
+            <div class="cdr" id="r1-last-dot"></div>
+          </div>
+
+          <div class="rail-spacer"></div>
+          <div class="add-module-btn" onclick="openAddModuleModal()">＋</div>
+        </div>
+      </div>
+
+      <!-- Rail 2: PSU-CAN → DT13 → DT04 → DT03 → [+] -->
+      <!-- CAN enters from rail 1 right, runs RIGHT→LEFT on rail 2 -->
+      <div class="rail-row">
+        <div class="rail-label">Rail 2</div>
+        <div class="rail-modules" id="rail-2">
+
+          <!-- 60Ω terminator seg1 rail 2 left -->
+          <div class="terminator" id="term-seg1-r">
+            <div class="term-body">60&#x3a9;</div>
+            <div class="term-label">SEG1</div>
+          </div>
+
+          <!-- PSU+CAN (seg1 end + seg2 start) -->
+          <div class="module-slot" id="slot-psu">
+            <div class="cdl" id="psu-left-dot"></div>
+            <div class="module-card psu-can" onclick="openModuleDetail('DT-PSU-CAN')">
+              <div class="m-terms"><div class="m-screw"></div><div class="m-screw"></div></div>
+              <div class="m-face">
+                <div class="m-type">Voeding + CAN Switch</div>
+                <div class="m-model">DT-PSU-CAN</div>
+                <div class="m-desc">PSU 2×24VAC/1,85A</div>
+                <div class="m-ports" style="margin-top:4px">
+                  <div class="m-port seg1" title="CAN Seg 1 (terminatie)"></div>
+                  <div class="m-port seg2" title="CAN Seg 2 (start)"></div>
+                </div>
+                <div class="m-footer"><span class="m-din">PSU</span><span class="m-addr">N:07</span></div>
+              </div>
+              <div class="m-terms bot"><div class="m-screw"></div><div class="m-screw"></div></div>
+            </div>
+            <div class="cdr"></div>
+          </div>
+
+          <!-- DT13-DAL (DALI, half width) -->
+          <div class="module-slot" id="slot-dt13">
+            <div class="cdl"></div>
+            <div class="module-card dali" onclick="openModuleDetail('DT13-DAL')">
+              <div class="m-terms"><div class="m-screw"></div><div class="m-screw"></div></div>
+              <div class="m-face">
+                <div class="m-type">DALI</div>
+                <div class="m-model">DT13</div>
+                <div class="m-desc">64× DALI</div>
+                <div class="m-channels"><div class="ch dali"></div><div class="ch dali"></div><div class="ch dali"></div></div>
+                <div class="m-ports"><div class="m-port seg1"></div></div>
+                <div class="m-footer"><span class="m-din">8W</span><span class="m-addr">N:06</span></div>
+              </div>
+              <div class="m-terms bot"><div class="m-screw"></div><div class="m-screw"></div></div>
+            </div>
+            <div class="cdr"></div>
+          </div>
+
+          <!-- DT04-04 Motor -->
+          <div class="module-slot" id="slot-dt04">
+            <div class="cdl"></div>
+            <div class="module-card" onclick="openModuleDetail('DT04-04')">
+              <div class="m-terms"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+              <div class="m-face">
+                <div class="m-type">Motor</div>
+                <div class="m-model">DT04-04</div>
+                <div class="m-desc">4× op/neer</div>
+                <div class="m-channels"><div class="ch motor"></div><div class="ch motor"></div><div class="ch motor"></div><div class="ch motor"></div></div>
+                <div class="m-ports"><div class="m-port seg1"></div><div class="m-port seg1"></div></div>
+                <div class="m-footer"><span class="m-din">18W</span><span class="m-addr">N:05</span></div>
+              </div>
+              <div class="m-terms bot"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+            </div>
+            <div class="cdr"></div>
+          </div>
+
+          <!-- DT03-16 Input -->
+          <div class="module-slot" id="slot-dt03">
+            <div class="cdl"></div>
+            <div class="module-card" onclick="openModuleDetail('DT03-16')">
+              <div class="m-terms"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+              <div class="m-face">
+                <div class="m-type">Input</div>
+                <div class="m-model">DT03-16</div>
+                <div class="m-desc">16× dig. ingang</div>
+                <div class="m-channels"><div class="ch input"></div><div class="ch input"></div><div class="ch input"></div><div class="ch input"></div><div class="ch input"></div><div class="ch input"></div><div class="ch input"></div><div class="ch input"></div></div>
+                <div class="m-ports"><div class="m-port seg1"></div><div class="m-port seg1"></div></div>
+                <div class="m-footer"><span class="m-din">7W</span><span class="m-addr">N:04</span></div>
+              </div>
+              <div class="m-terms bot"><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div><div class="m-screw"></div></div>
+            </div>
+            <div class="cdr" id="r2-last-dot"></div>
+          </div>
+
+          <div class="rail-spacer"></div>
+          <div class="add-module-btn" onclick="openAddModuleModal()">＋</div>
+        </div>
+      </div>
+
+      <button class="add-rail-btn" onclick="showToast('Rail toevoegen...','')">＋ Rail toevoegen</button>
+    </div><!-- end cabinet-main -->
+
+    <!-- SVG overlay for rail-to-rail connector + drop to woning -->
+    <svg id="can-svg" style="position:absolute;top:0;left:0;pointer-events:none;z-index:0;overflow:visible"></svg>
+
+    <!-- WONING PANEL -->
+    <div class="woning-panel" id="woning-panel">
+      <div class="woning-header">
+        🏠 Woning – schakelaars &amp; LCD
+        <span class="seg2-badge">CAN Segment 2</span>
+      </div>
+      <div class="woning-row" id="woning-row">
+        <div class="can-line seg2"></div>
+
+        <!-- Seg2 terminator start -->
+        <div class="field-term" id="woning-term-l" style="margin-right:10px">
+          <div class="ft-body">60Ω</div>
+          <div class="ft-label">SEG2</div>
+        </div>
+
+        <!-- Schakelaar Living (4-gang) -->
+        <div class="field-device" id="fd-sw1" onclick="showToast('Schakelaar Living (DT-SW-04) – N:08','')">
+          <div class="cdl"></div>
+          <div class="sw4-housing" onclick="showToast('Schakelaar Living – 4 knoppen','')">
+            <div class="sw4-btn" style="grid-column:1;grid-row:1"><span>light</span></div>
+            <div class="sw4-center"><div class="sw4-temp">21.5C</div><div class="sw4-icon">🔆</div></div>
+            <div class="sw4-btn tr" style="grid-column:3;grid-row:1"><span>TEMP+</span></div>
+            <div class="sw4-btn" style="grid-column:1;grid-row:3"><span>screen</span></div>
+            <div class="sw4-btn br" style="grid-column:3;grid-row:3"><span>TEMP-</span></div>
+          </div>
+          <div class="fd-label">Schakelaar<br>Living</div>
+          <div class="fd-addr">N:08</div>
+          <div class="cdr"></div>
+        </div>
+
+        <!-- Schakelaar Keuken (4-gang) -->
+        <div class="field-device" id="fd-sw2" onclick="showToast('Schakelaar Keuken (DT-SW-04) – N:09','')">
+          <div class="cdl"></div>
+          <div class="sw4-housing">
+            <div class="sw4-btn" style="grid-column:1;grid-row:1"><span>light</span></div>
+            <div class="sw4-center"><div class="sw4-temp">20.5C</div><div class="sw4-icon">🌡</div></div>
+            <div class="sw4-btn tr" style="grid-column:3;grid-row:1"><span>TEMP+</span></div>
+            <div class="sw4-btn" style="grid-column:1;grid-row:3"><span>screen</span></div>
+            <div class="sw4-btn br" style="grid-column:3;grid-row:3"><span>TEMP-</span></div>
+          </div>
+          <div class="fd-label">Schakelaar<br>Keuken</div>
+          <div class="fd-addr">N:09</div>
+          <div class="cdr"></div>
+        </div>
+
+        <!-- Schakelaar Bureau (2-gang) -->
+        <div class="field-device" id="fd-sw3" onclick="showToast('Schakelaar Bureau (DT-SW-02) – N:10','')">
+          <div class="cdl"></div>
+          <div class="sw2-housing">
+            <div class="sw2-btn"><span>licht</span></div>
+            <div class="sw2-btn"><span>off</span></div>
+          </div>
+          <div class="fd-label">Schakelaar<br>Bureau</div>
+          <div class="fd-addr">N:10</div>
+          <div class="cdr"></div>
+        </div>
+
+        <!-- LCD Touch Panel (large) -->
+        <div class="field-device" id="fd-lcd" onclick="showToast('LCD Touch Panel (DT-LCD-01) – N:11','')">
+          <div class="cdl"></div>
+          <div class="lcd-housing">
+            <div class="lcd-screen">
+              <div class="lcd-top">
+                <div style="display:flex;align-items:center;gap:5px">
+                  <div class="lcd-logo-box"><span>duo</span><em>tecno</em></div>
+                  <div class="lcd-time-big">15:20</div>
+                </div>
+                <div class="lcd-room-info">
+                  <div class="lcd-room-name">KEUKEN</div>
+                  <div class="lcd-room-temp">21.5°C</div>
+                </div>
+              </div>
+              <div class="lcd-middle"></div>
+              <div class="lcd-icons-bar">
+                <span class="lcd-icon" title="Licht">💡</span>
+                <span class="lcd-icon" title="Stopcontact">🔌</span>
+                <span class="lcd-icon" title="Temperatuur">🌡️</span>
+                <span class="lcd-icon" title="Schermen">🪟</span>
+                <span class="lcd-icon" title="Camera">📷</span>
+                <span class="lcd-icon" title="Home">🏠</span>
+              </div>
+            </div>
+          </div>
+          <div class="fd-label">LCD Touch<br>Inkomhal</div>
+          <div class="fd-addr">N:11</div>
+          <div class="cdr"></div>
+        </div>
+
+        <!-- Seg2 end terminator -->
+        <div class="field-term" id="woning-term-r" style="margin-left:10px">
+          <div class="ft-body">60Ω</div>
+          <div class="ft-label">SEG2</div>
+        </div>
+
+      </div>
+    </div><!-- end woning-panel -->
+
+  </div><!-- end rail-canvas -->
+</div><!-- end rail-view -->
+
+<!-- ===================== HOME VIEW ===================== -->
+<div class="canvas-area" id="home-view" style="display:none;flex-direction:row">
+  <div class="floor-canvas-wrap" id="floor-canvas">
+    <div class="floor-plan-hint">
+      <div class="big">🗺️</div>
+      <p>Sleep een grondplan hieronder, of werk zonder grondplan</p>
+    </div>
+    <svg id="binding-svg"></svg>
+    <div class="room-rect" id="room-living" style="left:40px;top:40px;width:340px;height:200px" onmousedown="startDrag(event,this)">
+      <div class="room-title"><span>🛋️ Living</span><button onclick="addDeviceToRoom('living')" style="background:none;border:none;color:#a0aaba;cursor:pointer;font-size:14px">＋</button></div>
+      <div class="room-devices">
+        <div class="device dimmer on" id="d-living-lamp1" onclick="toggleDevice(this)"><div class="device-icon">💡</div><div class="device-label">Plafond­licht</div></div>
+        <div class="device dimmer" id="d-living-lamp2" onclick="toggleDevice(this)"><div class="device-icon">💡</div><div class="device-label">Sfeer­licht</div></div>
+        <div class="device switch" id="d-living-sw1" onclick="selectSwitch(this)"><div class="device-icon">🔲</div><div class="device-label">Schakelaar</div></div>
+        <div class="device motor" id="d-living-blind1" onclick="toggleDevice(this)"><div class="device-icon">🪟</div><div class="device-label">Gordijn</div></div>
+      </div>
+    </div>
+    <div class="room-rect" id="room-keuken" style="left:400px;top:40px;width:260px;height:160px" onmousedown="startDrag(event,this)">
+      <div class="room-title"><span>🍳 Keuken</span><button onclick="addDeviceToRoom('keuken')" style="background:none;border:none;color:#a0aaba;cursor:pointer;font-size:14px">＋</button></div>
+      <div class="room-devices">
+        <div class="device relay on" id="d-keuken-licht" onclick="toggleDevice(this)"><div class="device-icon">💡</div><div class="device-label">Keuken­licht</div></div>
+        <div class="device switch" id="d-keuken-sw" onclick="selectSwitch(this)"><div class="device-icon">🔲</div><div class="device-label">Schakelaar</div></div>
+      </div>
+    </div>
+    <div class="room-rect" id="room-bureau" style="left:40px;top:260px;width:240px;height:160px" onmousedown="startDrag(event,this)">
+      <div class="room-title"><span>🖥️ Bureau</span><button onclick="addDeviceToRoom('bureau')" style="background:none;border:none;color:#a0aaba;cursor:pointer;font-size:14px">＋</button></div>
+      <div class="room-devices">
+        <div class="device dimmer" id="d-bureau-lamp" onclick="toggleDevice(this)"><div class="device-icon">💡</div><div class="device-label">Bureau­lamp</div></div>
+        <div class="device switch" id="d-bureau-sw" onclick="selectSwitch(this)"><div class="device-icon">🔲</div><div class="device-label">Schakelaar</div></div>
+        <div class="device sensor" id="d-bureau-sens" onclick="showToast('Bewegingssensor bureau','')"><div class="device-icon">📡</div><div class="device-label">Beweging­sensor</div></div>
+      </div>
+    </div>
+    <div class="room-rect" id="room-hall" style="left:300px;top:260px;width:180px;height:120px" onmousedown="startDrag(event,this)">
+      <div class="room-title"><span>🚪 Inkomhal</span><button onclick="addDeviceToRoom('hall')" style="background:none;border:none;color:#a0aaba;cursor:pointer;font-size:14px">＋</button></div>
+      <div class="room-devices">
+        <div class="device relay" id="d-hall-licht" onclick="toggleDevice(this)"><div class="device-icon">💡</div><div class="device-label">Hal­licht</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="home-right">
+    <div class="panel-section">
+      <div class="panel-title">Apparaten</div>
+      <div class="device-palette">
+        <div class="palette-item" draggable="true"><div class="pi">💡</div><div class="pl">Dimmer</div></div>
+        <div class="palette-item" draggable="true"><div class="pi">🔌</div><div class="pl">Relais</div></div>
+        <div class="palette-item" draggable="true"><div class="pi">🔲</div><div class="pl">Schakelaar</div></div>
+        <div class="palette-item" draggable="true"><div class="pi">🪟</div><div class="pl">Motor</div></div>
+        <div class="palette-item" draggable="true"><div class="pi">📡</div><div class="pl">Sensor</div></div>
+        <div class="palette-item" draggable="true"><div class="pi">🔊</div><div class="pl">Audio</div></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-title">Bindings</div>
+      <div class="binding-list">
+        <div class="binding-entry"><div><span class="binding-src">Schakelaar Living</span><span class="binding-arrow">→</span><span class="binding-dst">Plafondlicht</span></div><div class="binding-type">Dimmer · kort = aan/uit · lang = dim</div></div>
+        <div class="binding-entry"><div><span class="binding-src">Schakelaar Living</span><span class="binding-arrow">→</span><span class="binding-dst">Sfeerlicht</span></div><div class="binding-type">Dimmer · dubbel = 50%</div></div>
+        <div class="binding-entry"><div><span class="binding-src">Schakelaar Keuken</span><span class="binding-arrow">→</span><span class="binding-dst">Keukenlicht</span></div><div class="binding-type">Relais · aan/uit</div></div>
+        <div class="binding-entry"><div><span class="binding-src">Bewegingssensor</span><span class="binding-arrow">→</span><span class="binding-dst">Bureaulamp</span></div><div class="binding-type">Dimmer · aanwezig = 80%</div></div>
+      </div>
+    </div>
+    <div class="panel-section">
+      <div class="panel-title">Acties</div>
+      <button class="tool-btn" style="width:100%;justify-content:center;margin-bottom:6px" onclick="showToast('Klik bron → sleep naar doel','')">＋ Binding</button>
+      <button class="tool-btn" style="width:100%;justify-content:center" onclick="showToast('Grondplan importeren...','')">🗺️ Grondplan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MATERIALS VIEW ===================== -->
+<div class="canvas-area" id="materials-view" style="display:none">
+  <div class="toolbar">
+    <span style="font-size:13px;font-weight:600;color:#1a1f2e">📋 Materiaallijst – Villa De Smedt</span>
+    <div style="flex:1"></div>
+    <button class="tool-btn" onclick="showToast('Excel exporteren...','')">📊 Excel</button>
+    <button class="tool-btn" onclick="showToast('PDF exporteren...','')">📄 PDF</button>
+  </div>
+  <div class="mat-body">
+    <div class="materials-table-wrap">
+      <table>
+        <thead>
+          <tr><th>#</th><th>Model</th><th>Omschrijving</th><th>Type</th><th>DIN</th><th>W/st.</th><th>Qty</th><th>Totaal W</th><th>CAN Segment</th><th>Opmerking</th></tr>
+        </thead>
+        <tbody id="mat-tbody"></tbody>
+        <tfoot id="mat-tfoot"></tfoot>
+      </table>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal">
+    <h2>＋ Module toevoegen</h2>
+    <div class="modal-cats">
+      <button class="cat-btn active" onclick="selectCat(this,'Dimmer')">Dimmer</button>
+      <button class="cat-btn" onclick="selectCat(this,'Relais')">Relais</button>
+      <button class="cat-btn" onclick="selectCat(this,'Input')">Input</button>
+      <button class="cat-btn" onclick="selectCat(this,'Motor')">Motor</button>
+      <button class="cat-btn" onclick="selectCat(this,'Audio')">Audio</button>
+      <button class="cat-btn" onclick="selectCat(this,'DALI')">DALI</button>
+      <button class="cat-btn" onclick="selectCat(this,'Voeding')">Voeding</button>
+    </div>
+    <div class="module-grid" id="module-grid"></div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal()">Annuleren</button>
+      <button class="btn btn-confirm" onclick="confirmAddModule()">Toevoegen</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// === Module DB ===
+const MODULE_DB = {
+  Dimmer:[
+    {model:'DT05-06TE',name:'Trailing Edge dimmer',info:'6x30W - 6 DIN',width:6,power:18},
+    {model:'DT06-02',  name:'Leading Edge dimmer', info:'8x130W - 8 DIN',width:8,power:22},
+    {model:'DT05-04TE',name:'Trailing Edge 4ch',   info:'4x30W - 4 DIN',width:4,power:12},
+  ],
+  Relais:[
+    {model:'DT02-08',name:'8x relaisuitgang',info:'8x10A - 8 DIN',width:8,power:15},
+    {model:'DT02-04',name:'4x relaisuitgang',info:'4x10A - 4 DIN',width:4,power:8},
+  ],
+  Input:[
+    {model:'DT03-08',name:'8x digitale ingang', info:'8 inputs - 4 DIN',width:4,power:5},
+    {model:'DT03-16',name:'16x digitale ingang',info:'16 inputs - 4 DIN',width:4,power:7},
+  ],
+  Motor:[
+    {model:'DT04-04',name:'4x motor op/neer',info:'4x6A - 6 DIN',width:6,power:18},
+    {model:'DT04-02',name:'2x motor op/neer',info:'2x6A - 4 DIN',width:4,power:10},
+  ],
+  Audio:[
+    {model:'DT08-04',name:'4-zone audio controller',info:'4x50W - 6 DIN',width:6,power:60},
+  ],
+  DALI:[
+    {model:'DT13-DAL',name:'DALI bus interface',info:'64 app. - 4 DIN',width:4,power:8},
+  ],
+  Voeding:[
+    {model:'DT-PSU-CAN',name:'PSU + 2-ch CAN Switch',info:'2x24VAC - 6 DIN',width:6,power:0},
+    {model:'DT-PSU-24', name:'Extra voeding 24VAC',   info:'24VAC/2.5A - 4 DIN',width:4,power:0},
+  ],
+};
+
+// === Materials data ===
+const MATERIALS = [
+  {model:'DT05-06TE', desc:'Trailing Edge dimmer 6x30W',     type:'dimmer', din:6, power:18, qty:1, seg:'Seg 1', note:''},
+  {model:'DT06-02',   desc:'Leading Edge dimmer 8x130W',     type:'dimmer', din:8, power:22, qty:1, seg:'Seg 1', note:''},
+  {model:'DT02-08',   desc:'8x relaisuitgang',               type:'relay',  din:8, power:15, qty:1, seg:'Seg 1', note:''},
+  {model:'DT03-16',   desc:'16x digitale ingang',            type:'input',  din:4, power:7,  qty:1, seg:'Seg 1', note:''},
+  {model:'DT04-04',   desc:'4x motor op/neer',               type:'motor',  din:6, power:18, qty:1, seg:'Seg 1', note:''},
+  {model:'DT13-DAL',  desc:'DALI bus interface 64 app.',     type:'dali',   din:4, power:8,  qty:1, seg:'Seg 1', note:'Ethernet'},
+  {model:'DT-PSU-CAN',desc:'PSU 2x24VAC + 2-ch CAN Switch', type:'psu',    din:6, power:0,  qty:1, seg:'Seg 1+2', note:'Koppelt seg 1 en 2, levert 60W'},
+  {model:'DT-PSU-24', desc:'Extra voeding 24VAC',            type:'psu',    din:4, power:0,  qty:1, seg:'Seg 1', note:'Bijkomend nodig: 105W > 60W'},
+  {model:'DT-SW-04',  desc:'Wandschakelaar 4-gang met display', type:'switch', din:0, power:3, qty:2, seg:'Seg 2', note:'Living + Keuken'},
+  {model:'DT-SW-02',  desc:'Wandschakelaar 2-gang',          type:'switch', din:0, power:3,  qty:1, seg:'Seg 2', note:'Bureau'},
+  {model:'DT-LCD-01', desc:'LCD Touch Panel',                type:'lcd',    din:0, power:8,  qty:1, seg:'Seg 2', note:'Inkomhal'},
+  {model:'60 Ohm',    desc:'CAN bus terminatieweerstand',    type:'psu',    din:1, power:0,  qty:4, seg:'Seg 1+2', note:'Begin+einde elk segment'},
+];
+
+const TYPE_BADGE = {dimmer:'badge-dimmer',relay:'badge-relay',input:'badge-input',motor:'badge-motor',dali:'badge-dali',psu:'badge-psu',switch:'badge-switch',lcd:'badge-lcd'};
+const TYPE_LABEL = {dimmer:'Dimmer',relay:'Relais',input:'Input',motor:'Motor',dali:'DALI',psu:'Voeding',switch:'Schakelaar',lcd:'LCD'};
+
+// === Render materials ===
+function renderMaterials() {
+  const tbody = document.getElementById('mat-tbody');
+  const tfoot = document.getElementById('mat-tfoot');
+  let totalW = 0, totalDIN = 0;
+  tbody.innerHTML = MATERIALS.map((m,i) => {
+    const tw = m.power * m.qty;
+    totalW += tw;
+    totalDIN += m.din * m.qty;
+    const segCol = m.seg.includes('2') && !m.seg.includes('1') ? '#2060d0' : '#e08c00';
+    return '<tr>' +
+      '<td>' + (i+1) + '</td>' +
+      '<td><strong>' + m.model + '</strong></td>' +
+      '<td>' + m.desc + '</td>' +
+      '<td><span class="type-badge ' + (TYPE_BADGE[m.type]||'') + '">' + (TYPE_LABEL[m.type]||m.type) + '</span></td>' +
+      '<td>' + (m.din>0 ? m.din+' DIN' : '\u2013') + '</td>' +
+      '<td>' + (m.power>0 ? m.power+' W' : '\u2013') + '</td>' +
+      '<td>' + m.qty + '\u00d7</td>' +
+      '<td>' + (tw>0 ? tw+' W' : '\u2013') + '</td>' +
+      '<td style="color:' + segCol + ';font-weight:600">' + m.seg + '</td>' +
+      '<td style="color:#6a7899;font-size:11px">' + m.note + '</td>' +
+    '</tr>';
+  }).join('');
+  const psus = Math.ceil(totalW / 60);
+  tfoot.innerHTML = '<tr>' +
+    '<td colspan="4"><strong>Totaal</strong></td>' +
+    '<td><strong>' + totalDIN + ' DIN</strong></td>' +
+    '<td></td><td></td>' +
+    '<td><strong>' + totalW + ' W</strong></td>' +
+    '<td colspan="2">Voedingen nodig: <strong>' + psus + '\u00d7</strong> (\u00e0 60W) | PSU+CAN telt als 1 \u2192 bijkomend: <strong>' + Math.max(0,psus-1) + '\u00d7 extra PSU</strong></td>' +
+  '</tr>';
+}
+
+// === CAN SVG: only the vertical drop rail1→rail2 and rail2→woning ===
+function drawCANBus() {
+  const canvas = document.getElementById('rail-canvas');
+  const svg = document.getElementById('can-svg');
+  if (!canvas || !svg) return;
+  const cRect = canvas.getBoundingClientRect();
+  svg.setAttribute('width', canvas.scrollWidth);
+  svg.setAttribute('height', canvas.scrollHeight);
+  svg.innerHTML = '';
+
+  function relRect(el) {
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    return {
+      left:   r.left   - cRect.left + canvas.scrollLeft,
+      right:  r.right  - cRect.left + canvas.scrollLeft,
+      top:    r.top    - cRect.top  + canvas.scrollTop,
+      bottom: r.bottom - cRect.top  + canvas.scrollTop,
+      cx:     (r.left+r.right)/2 - cRect.left + canvas.scrollLeft,
+      cy:     (r.top+r.bottom)/2 - cRect.top  + canvas.scrollTop,
+    };
+  }
+
+  function line(x1,y1,x2,y2,col,w) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg','line');
+    el.setAttribute('x1',x1); el.setAttribute('y1',y1);
+    el.setAttribute('x2',x2); el.setAttribute('y2',y2);
+    el.setAttribute('stroke',col); el.setAttribute('stroke-width',w||4);
+    el.setAttribute('stroke-linecap','round');
+    svg.appendChild(el);
+  }
+  function dot(x,y,col) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg','circle');
+    el.setAttribute('cx',x); el.setAttribute('cy',y); el.setAttribute('r',6);
+    el.setAttribute('fill',col); el.setAttribute('stroke','white'); el.setAttribute('stroke-width','2');
+    svg.appendChild(el);
+  }
+
+  const CAN1 = '#e08c00', CAN2 = '#2060d0';
+
+  const t1l    = relRect(document.getElementById('term-seg1-l'));
+  const t2l    = relRect(document.getElementById('term-seg1-r'));
+  const r1last = relRect(document.getElementById('r1-last-dot'));
+  const r2last = relRect(document.getElementById('r2-last-dot'));
+
+  // Rail 1: horizontal line from terminator centre to last-module right dot
+  if (t1l && r1last) {
+    line(t1l.cx, r1last.cy, r1last.cx, r1last.cy, CAN1);
+  }
+
+  // Rail 2: horizontal line from left terminator centre to last-module right dot
+  if (t2l && r2last) {
+    line(t2l.cx, r2last.cy, r2last.cx, r2last.cy, CAN1);
+  }
+
+  // Snake: right of rail-1 last dot → vertical drop → right of rail-2 last dot
+  if (r1last && r2last) {
+    const x = Math.max(r1last.right, r2last.right) + 18;
+    line(r1last.cx, r1last.cy, x, r1last.cy, CAN1);
+    line(x, r1last.cy, x, r2last.cy, CAN1);
+    line(x, r2last.cy, r2last.cx, r2last.cy, CAN1);
+    dot(r1last.cx, r1last.cy, CAN1);
+    dot(x, r1last.cy, CAN1);
+    dot(x, r2last.cy, CAN1);
+    dot(r2last.cx, r2last.cy, CAN1);
+  }
+
+  // PSU-CAN bottom → woning row top (seg2 drop)
+  const psuSlot  = relRect(document.getElementById('slot-psu'));
+  const woningRow = relRect(document.getElementById('woning-row'));
+  if (psuSlot && woningRow) {
+    const x  = psuSlot.cx;
+    const y1 = psuSlot.bottom + 4;
+    const y2 = woningRow.top  - 4;
+    line(x, y1, x, y2, CAN2);
+    dot(x, y1, CAN2);
+    dot(x, y2, CAN2);
+  }
+}
+
+// === View switching ===
+function switchView(v) {
+  ['rail','home','mat'].forEach(n => {
+    const vid = n==='rail' ? 'rail-view' : n==='home' ? 'home-view' : 'materials-view';
+    document.getElementById(vid).style.display = 'none';
+    document.getElementById('sidebar-'+n).style.display = 'none';
+    document.getElementById('tab-'+n).classList.remove('active');
+  });
+  const vid = v==='rail' ? 'rail-view' : v==='home' ? 'home-view' : 'materials-view';
+  const el = document.getElementById(vid);
+  el.style.display = 'flex';
+  if (v==='home') el.style.flexDirection = 'row';
+  document.getElementById('sidebar-'+v).style.display = 'flex';
+  document.getElementById('tab-'+v).classList.add('active');
+  if (v==='rail') setTimeout(drawCANBus, 80);
+  if (v==='home') setTimeout(drawBindings, 80);
+  if (v==='mat')  renderMaterials();
+}
+
+// === Modal ===
+let selectedModuleOpt = null;
+function openAddModuleModal() {
+  selectedModuleOpt = null;
+  document.querySelectorAll('.cat-btn').forEach((b,i) => b.classList.toggle('active',i===0));
+  renderModuleGrid('Dimmer');
+  document.getElementById('modal-add').classList.add('open');
+}
+function closeModal() { document.getElementById('modal-add').classList.remove('open'); }
+function selectCat(btn, cat) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderModuleGrid(cat);
+}
+function renderModuleGrid(cat) {
+  const grid = document.getElementById('module-grid');
+  grid.innerHTML = (MODULE_DB[cat]||[]).map((m,i) =>
+    '<div class="module-option" onclick="selectModuleOpt(this,'+i+',\''+cat+'\')">' +
+    '<div class="mo-model">'+m.model+'</div>' +
+    '<div class="mo-name">'+m.name+'</div>' +
+    '<div class="mo-info">'+m.info+' - '+m.power+'W</div></div>'
+  ).join('');
+  selectedModuleOpt = null;
+}
+function selectModuleOpt(el, idx, cat) {
+  document.querySelectorAll('.module-option').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedModuleOpt = MODULE_DB[document.querySelector('.cat-btn.active').textContent.trim()][idx];
+}
+function confirmAddModule() {
+  if (!selectedModuleOpt) { showToast('Selecteer eerst een module',''); return; }
+  closeModal();
+  showToast('Toegevoegd: '+selectedModuleOpt.model, 'success');
+  setTimeout(drawCANBus, 50);
+}
+document.getElementById('modal-add').addEventListener('click', e => {
+  if (e.target===document.getElementById('modal-add')) closeModal();
+});
+
+// === Home view ===
+function toggleDevice(el) { el.classList.toggle('on'); }
+function selectSwitch() { showToast('Schakelaar geselecteerd – sleep naar lamp voor binding',''); }
+function selectRoom(e) {
+  document.querySelectorAll('#sidebar-home .sidebar-item').forEach(i => i.classList.remove('active'));
+  e.currentTarget.classList.add('active');
+}
+function addDeviceToRoom(r) { showToast('Apparaat toevoegen aan '+r+'...',''); }
+
+// Room dragging
+let dragEl=null, dragOx=0, dragOy=0;
+function startDrag(e, el) {
+  if (e.target.tagName==='BUTTON'||e.target.closest('.device')) return;
+  dragEl=el; dragOx=e.clientX-el.offsetLeft; dragOy=e.clientY-el.offsetTop;
+  e.preventDefault();
+}
+document.addEventListener('mousemove', e => {
+  if (!dragEl) return;
+  dragEl.style.left=(e.clientX-dragOx)+'px';
+  dragEl.style.top=(e.clientY-dragOy)+'px';
+  drawBindings();
+});
+document.addEventListener('mouseup', () => { dragEl=null; });
+
+// Bindings SVG
+const BINDINGS=[
+  {src:'d-living-sw1',dst:'d-living-lamp1'},
+  {src:'d-living-sw1',dst:'d-living-lamp2'},
+  {src:'d-keuken-sw', dst:'d-keuken-licht'},
+  {src:'d-bureau-sens',dst:'d-bureau-lamp'},
+];
+function drawBindings() {
+  const svg=document.getElementById('binding-svg');
+  svg.innerHTML='';
+  svg.setAttribute('width',svg.parentElement.offsetWidth);
+  svg.setAttribute('height',svg.parentElement.offsetHeight);
+  const cr=document.getElementById('floor-canvas').getBoundingClientRect();
+  for (const b of BINDINGS) {
+    const ae=document.getElementById(b.src), ze=document.getElementById(b.dst);
+    if (!ae||!ze) continue;
+    const ar=ae.getBoundingClientRect(), zr=ze.getBoundingClientRect();
+    const ax=(ar.left+ar.right)/2-cr.left, ay=(ar.top+ar.bottom)/2-cr.top;
+    const zx=(zr.left+zr.right)/2-cr.left, zy=(zr.top+zr.bottom)/2-cr.top;
+    const path=document.createElementNS('http://www.w3.org/2000/svg','path');
+    path.setAttribute('d','M'+ax+','+ay+' C'+ax+','+((ay+zy)/2)+' '+zx+','+((ay+zy)/2)+' '+zx+','+zy);
+    path.setAttribute('stroke','#e08c00'); path.setAttribute('stroke-width','1.5');
+    path.setAttribute('fill','none'); path.setAttribute('stroke-dasharray','4 3');
+    path.setAttribute('opacity','0.65');
+    svg.appendChild(path);
+  }
+}
+
+function toggleFilter(btn) { btn.classList.toggle('active'); }
+function openModuleDetail(m) { showToast('Module '+m+' – eigenschappen bewerken',''); }
+
+let toastTimer;
+function showToast(msg,type) {
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show'+(type?' '+type:'');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+// Init
+renderModuleGrid('Dimmer');
+setTimeout(drawCANBus, 150);
+</script>
+</body>
+</html>

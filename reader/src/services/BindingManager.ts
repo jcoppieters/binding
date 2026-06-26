@@ -38,7 +38,7 @@ export class BindingManager {
       nodeAddress,
       filename: file.fileName,
       filepath,
-      bindings: [...file.bindings], // Clone array
+      bindings: [...file.bindings], // clone array
       modified: false,
       edits: [],
     });

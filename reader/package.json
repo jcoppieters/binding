@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "description": "TypeScript reader/writer for Duotecno binding configuration files",
   "main": "dist/index.js",
-  "type": "module",
-  "scripts": {
+  "type": "module","scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "dev": "tsx src/index.ts",
