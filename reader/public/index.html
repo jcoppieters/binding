@@ -1,67 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="nl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Duotecno Configuration Viewer</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="binding-editor.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duotecno Binding Software</title>
+<style>
+/* ── Reset & base ─────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#eef1f8;color:#1a1f2e;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;background:#1a2540;border-bottom:2px solid #e08c00;flex-shrink:0}
+.logo{font-size:19px;font-weight:700;color:#fff}
+.logo em{color:#e08c00;font-style:normal}
+.project-name-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#8090b0;cursor:default}
+#project-name{color:#c0ccdf;font-weight:600;cursor:text;padding:2px 4px;border-radius:3px}
+#project-name:hover{background:rgba(255,255,255,.08)}
+.spacer{flex:1}
+.connection-status{font-size:11px;padding:4px 10px;border-radius:12px;background:#192035;color:#6a7899;cursor:pointer;transition:all .15s}
+.connection-status.connected{background:#0d2a1a;color:#4cd04c}
+.header-btn{padding:6px 14px;border-radius:6px;border:1px solid #2a3a60;background:#243060;color:#b8c8e0;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;transition:background .15s}
+.header-btn:hover{background:#2e3a70}
+.header-btn.primary{background:#e08c00;color:#fff;border-color:#e08c00;font-weight:600}
+.header-btn.primary:hover{background:#c87c00}
+#save-dot{width:7px;height:7px;border-radius:50%;background:#f0a020;display:inline-block;transition:background .3s}
+
+/* ── Tabs ────────────────────────────────────────────────────────────────── */
+.view-tabs{display:flex;background:#fff;border-bottom:1px solid #dde3ef;flex-shrink:0;padding:0 20px}
+.view-tab{padding:10px 20px;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;color:#6a7899;transition:color .15s;display:flex;align-items:center;gap:8px;user-select:none}
+.view-tab:hover{color:#1a1f2e}
+.view-tab.active{color:#e08c00;border-bottom-color:#e08c00}
+
+/* ── Main layout ─────────────────────────────────────────────────────────── */
+.main{display:flex;flex:1;overflow:hidden}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.sidebar{width:210px;background:#fff;border-right:1px solid #dde3ef;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.sidebar-section{padding:12px 14px 6px}
+.sidebar-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#a0aaba;font-weight:600;margin-bottom:8px}
+.sidebar-item{padding:7px 10px;border-radius:6px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;color:#4a5568;transition:background .12s,color .12s}
+.sidebar-item:hover{background:#f0f4fc;color:#1a1f2e}
+.sidebar-item.active{background:#fef3e0;color:#e08c00}
+.sidebar-item .icon{font-size:14px;width:18px;text-align:center}
+.sidebar-item .badge{margin-left:auto;background:#eef1f8;color:#6a7899;font-size:10px;padding:1px 6px;border-radius:10px}
+.sidebar-add{margin:4px 14px 8px;padding:6px 10px;border-radius:6px;border:1px dashed #dde3ef;color:#a0aaba;font-size:12px;cursor:pointer;text-align:center;transition:all .15s;background:none;width:calc(100% - 28px)}
+.sidebar-add:hover{border-color:#e08c00;color:#e08c00;background:#fef9f0}
+
+/* ── Canvas area ─────────────────────────────────────────────────────────── */
+.canvas-area{flex:1;display:flex;flex-direction:column;overflow:hidden;background:#eef1f8;position:relative}
+
+/* ── Toolbar ─────────────────────────────────────────────────────────────── */
+.toolbar{display:flex;align-items:center;gap:8px;padding:8px 16px;border-bottom:1px solid #dde3ef;background:#fff;flex-shrink:0;flex-wrap:wrap}
+.tool-btn{padding:5px 12px;border-radius:5px;border:1px solid #dde3ef;background:#f5f7fb;color:#4a5568;font-size:12px;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:5px}
+.tool-btn:hover{background:#e8ecf5;color:#1a1f2e}
+
+/* ── Empty state ─────────────────────────────────────────────────────────── */
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;color:#a0aaba;user-select:none}
+.empty-state .empty-icon{font-size:48px;opacity:.4}
+.empty-state h3{font-size:16px;font-weight:600;color:#6a7899}
+.empty-state p{font-size:13px;text-align:center;max-width:280px;line-height:1.6}
+.empty-state .empty-btn{padding:8px 20px;border-radius:6px;border:1px dashed #c0c8d8;background:none;color:#6a7899;cursor:pointer;font-size:13px;transition:all .15s}
+.empty-state .empty-btn:hover{border-color:#e08c00;color:#e08c00;background:#fef9f0}
+
+/* ── Toast ───────────────────────────────────────────────────────────────── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1a2540;color:#e0e8f0;padding:10px 20px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:9999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.toast-success{background:#0d2a1a;color:#4cd04c;border:1px solid #2a5a3a}
+.toast.toast-error{background:#2a0d0d;color:#f05050;border:1px solid #5a2a2a}
+</style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🏠 Duotecno Configuration Viewer</h1>
-      <div class="header-actions">
-        <div id="unit-control-status" class="connection-status-header disconnected" onclick="openUnitControlConnection()">
-          <span class="status-indicator disconnected"></span> Master Disconnected
-        </div>
-        <button id="upload-btn" class="btn btn-primary" onclick="uploadManager.openUploadModal()">📤 Upload to Hardware</button>
-        <button id="reload-btn" class="btn btn-secondary">🔄 Reload</button>
-        <div class="filter-controls">
-          <label>
-            <input type="checkbox" id="filter-with-bindings" checked>
-            Show units with bindings
-          </label>
-          <label>
-            <input type="checkbox" id="filter-without-bindings" checked>
-            Show units without bindings
-          </label>
-        </div>
-      </div>
-    </header>
 
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-      <p>Loading configuration...</p>
+<!-- ── Header ───────────────────────────────────────────────────────────── -->
+<header>
+  <div class="logo">Duo<em>tecno</em></div>
+  <div class="project-name-wrap">
+    <span>/</span>
+    <span id="project-name" title="Dubbelklik om te hernoemen">Nieuw project</span>
+    <span id="save-dot" title="Niet-opgeslagen wijzigingen"></span>
+  </div>
+  <div class="spacer"></div>
+  <div id="connection-status" class="connection-status" title="Klik om te verbinden">● Niet verbonden</div>
+  <button class="header-btn" id="btn-save">💾 Opslaan</button>
+  <button class="header-btn primary" id="btn-upload">📤 Upload naar hardware</button>
+</header>
+
+<!-- ── Tabs ─────────────────────────────────────────────────────────────── -->
+<div class="view-tabs">
+  <div class="view-tab active" id="tab-rail">🗄️ Rail View</div>
+  <div class="view-tab" id="tab-home">🏠 Home View</div>
+  <div class="view-tab" id="tab-mat">📋 Materiaallijst</div>
+</div>
+
+<!-- ── Main ─────────────────────────────────────────────────────────────── -->
+<div class="main">
+
+  <!-- Rail sidebar -->
+  <div class="sidebar" id="sidebar-rail">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Kasten</div>
+      <div id="cabinets-list"></div>
     </div>
-
-    <div class="error" id="error" style="display: none;">
-      <p>❌ <span id="error-message"></span></p>
+    <button class="sidebar-add" id="btn-add-cabinet">+ Kast toevoegen</button>
+    <div class="sidebar-section" style="margin-top:8px">
+      <div class="sidebar-label">CAN Bus</div>
+      <div class="sidebar-item"><span class="icon" style="color:#e08c00">●</span> Segment 1 – kast <span class="badge" id="seg1-count">0</span></div>
+      <div class="sidebar-item"><span class="icon" style="color:#2060d0">●</span> Segment 2 – woning <span class="badge" id="seg2-count">0</span></div>
     </div>
-
-    <main id="main-content" style="display: none;">
-      <aside class="sidebar">
-        <div class="summary">
-          <h2>📊 Summary</h2>
-          <div id="summary-content"></div>
-        </div>
-        
-        <div class="nodes-list">
-          <h2>🖥️ Nodes</h2>
-          <div id="nodes-list"></div>
-        </div>
-      </aside>
-
-      <section class="content">
-        <div class="breadcrumb" id="breadcrumb"></div>
-        <div id="detail-view"></div>
-      </section>
-    </main>
   </div>
 
-  <script src="binding-editor.js"></script>
-  <script src="upload-manager.js"></script>
-  <script src="unit-control.js"></script>
-  <script src="app.js"></script>
+  <!-- Home sidebar -->
+  <div class="sidebar" id="sidebar-home" style="display:none">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Verdiepingen &amp; kamers</div>
+      <div id="rooms-list"></div>
+    </div>
+    <button class="sidebar-add" id="btn-add-room">+ Kamer toevoegen</button>
+  </div>
+
+  <!-- Materials sidebar -->
+  <div class="sidebar" id="sidebar-mat" style="display:none">
+    <div class="sidebar-section">
+      <div class="sidebar-label">Export</div>
+      <div class="sidebar-item" id="btn-export-excel"><span class="icon">📊</span> Excel</div>
+      <div class="sidebar-item" id="btn-export-pdf"><span class="icon">📄</span> PDF</div>
+    </div>
+  </div>
+
+  <!-- ── Rail View ──────────────────────────────────────────────────────── -->
+  <div class="canvas-area" id="rail-view">
+    <div class="toolbar">
+      <button class="tool-btn" id="btn-add-module">＋ Module</button>
+      <button class="tool-btn" id="btn-add-switch">＋ Schakelaar</button>
+      <button class="tool-btn" id="btn-add-lcd">＋ LCD</button>
+    </div>
+    <div id="rail-canvas" style="flex:1;overflow:auto;padding:20px;display:flex;flex-direction:column;gap:16px">
+      <div class="empty-state" id="rail-empty">
+        <div class="empty-icon">🗄️</div>
+        <h3>Geen kast geconfigureerd</h3>
+        <p>Voeg een kast toe om te beginnen met het plaatsen van modules.</p>
+        <button class="empty-btn" id="btn-add-cabinet-empty">+ Kast toevoegen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Home View ──────────────────────────────────────────────────────── -->
+  <div class="canvas-area" id="home-view" style="display:none">
+    <div class="toolbar">
+      <button class="tool-btn" id="btn-add-room-toolbar">＋ Kamer</button>
+      <button class="tool-btn" id="btn-import-floorplan">🗺️ Grondplan</button>
+    </div>
+    <div id="home-canvas" style="flex:1;position:relative;overflow:hidden">
+      <div class="empty-state" id="home-empty">
+        <div class="empty-icon">🏠</div>
+        <h3>Geen kamers aangemaakt</h3>
+        <p>Voeg kamers toe en wijs apparaten toe aan de beschikbare kanalen.</p>
+        <button class="empty-btn" id="btn-add-room-empty">+ Kamer toevoegen</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Materiaallijst ─────────────────────────────────────────────────── -->
+  <div class="canvas-area" id="mat-view" style="display:none">
+    <div style="padding:20px;overflow:auto;flex:1">
+      <div class="empty-state" id="mat-empty">
+        <div class="empty-icon">📋</div>
+        <h3>Materiaallijst</h3>
+        <p>Voeg modules toe in de Rail View om de materiaallijst te genereren.</p>
+      </div>
+      <table id="mat-table" style="display:none;width:100%;border-collapse:collapse;font-size:13px"></table>
+    </div>
+  </div>
+
+</div><!-- end .main -->
+
+<!-- ── Toast ─────────────────────────────────────────────────────────────── -->
+<div class="toast" id="toast"></div>
+
+<!-- ── Scripts (ES modules) ──────────────────────────────────────────────── -->
+<script type="module" src="/app/main.js"></script>
+
 </body>
 </html>

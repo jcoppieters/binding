@@ -19,6 +19,7 @@ import { createUploadAPI } from './api/uploadAPI.js';
 import { createMasterAPI } from './api/masterAPI.js';
 import { createUnitsAPI } from './api/unitsAPI.js';
 import { createStatsAPI } from './api/statsAPI.js';
+import { createModulesAPI } from './api/modulesAPI.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -119,6 +120,9 @@ app.use('/api', createStatsAPI({
 }));
 
 app.use('/api/editor', bindingEditorAPI);
+
+// Module database (product catalogue)
+app.use('/api', createModulesAPI());
 
 // ==================== End API Routes ====================
 

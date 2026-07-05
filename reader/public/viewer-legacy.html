@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duotecno Configuration Viewer</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="binding-editor.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🏠 Duotecno Configuration Viewer</h1>
+      <div class="header-actions">
+        <div id="unit-control-status" class="connection-status-header disconnected" onclick="openUnitControlConnection()">
+          <span class="status-indicator disconnected"></span> Master Disconnected
+        </div>
+        <button id="upload-btn" class="btn btn-primary" onclick="uploadManager.openUploadModal()">📤 Upload to Hardware</button>
+        <button id="reload-btn" class="btn btn-secondary">🔄 Reload</button>
+        <div class="filter-controls">
+          <label>
+            <input type="checkbox" id="filter-with-bindings" checked>
+            Show units with bindings
+          </label>
+          <label>
+            <input type="checkbox" id="filter-without-bindings" checked>
+            Show units without bindings
+          </label>
+        </div>
+      </div>
+    </header>
+
+    <div class="loading" id="loading">
+      <div class="spinner"></div>
+      <p>Loading configuration...</p>
+    </div>
+
+    <div class="error" id="error" style="display: none;">
+      <p>❌ <span id="error-message"></span></p>
+    </div>
+
+    <main id="main-content" style="display: none;">
+      <aside class="sidebar">
+        <div class="summary">
+          <h2>📊 Summary</h2>
+          <div id="summary-content"></div>
+        </div>
+        
+        <div class="nodes-list">
+          <h2>🖥️ Nodes</h2>
+          <div id="nodes-list"></div>
+        </div>
+      </aside>
+
+      <section class="content">
+        <div class="breadcrumb" id="breadcrumb"></div>
+        <div id="detail-view"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="binding-editor.js"></script>
+  <script src="upload-manager.js"></script>
+  <script src="unit-control.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
