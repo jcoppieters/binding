@@ -1,0 +1,470 @@
+/**
+ * Rail View component — renders cabinets/rails/modules from project state.
+ *
+ * Activated by router.js when the Rail tab is selected.
+ */
+
+import { state, dispatch, makeId } from '../app/state.js';
+import { openModulePicker } from './module-picker.js';
+
+// ─── CSS injection ────────────────────────────────────────────────────────────
+
+let _cssLoaded = false;
+function ensureCSS() {
+  if (_cssLoaded) return;
+  _cssLoaded = true;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/components/rail-view.css';
+  document.head.appendChild(link);
+}
+
+// ─── Activation ───────────────────────────────────────────────────────────────
+
+let _unsubscribe = null;
+
+export function activate() {
+  ensureCSS();
+  if (!_unsubscribe) {
+    _unsubscribe = state.subscribe(s => render(s));
+  }
+  wireSVG();
+}
+
+// ─── Render ───────────────────────────────────────────────────────────────────
+
+function render(s) {
+  const { railView } = s.project;
+  const canvas = document.getElementById('rail-canvas');
+  const emptyState = document.getElementById('rail-empty');
+  if (!canvas) return;
+
+  const hasCabinets = railView.cabinets.length > 0;
+  if (emptyState) emptyState.style.display = hasCabinets ? 'none' : 'flex';
+
+  // Remove old cabinet cards (keep empty state and SVG overlay)
+  canvas.querySelectorAll('.cabinet-card,.woning-panel').forEach(el => el.remove());
+
+  // Render each cabinet
+  railView.cabinets.forEach(cabinet => {
+    canvas.appendChild(buildCabinetCard(cabinet, s.modules));
+  });
+
+  // Render woning panel (field devices)
+  if (railView.woningDevices.length > 0 || hasCabinets) {
+    canvas.appendChild(buildWoningPanel(railView.woningDevices, s.modules));
+  }
+
+  // Update sidebar badge counts
+  updateSidebarCounts(railView, s.modules);
+
+  // Redraw CAN SVG
+  setTimeout(() => drawCANBus(canvas), 80);
+}
+
+// ─── Cabinet card ─────────────────────────────────────────────────────────────
+
+function buildCabinetCard(cabinet, modules) {
+  const totalDIN = cabinet.rails
+    .flatMap(r => r.modules)
+    .reduce((s, m) => s + (lookupModule(m.model, modules)?.dinUnits ?? 0), 0);
+  const totalW = cabinet.rails
+    .flatMap(r => r.modules)
+    .reduce((s, m) => s + (lookupModule(m.model, modules)?.powerW ?? 0), 0);
+  const psusNeeded = Math.ceil(totalW / 60);
+
+  const card = el('div', 'cabinet-card');
+  card.dataset.cabinetId = cabinet.id;
+
+  // Header
+  const hdr = el('div', 'cabinet-header');
+  const h3 = el('h3'); h3.textContent = `🗄️ ${cabinet.name}` + (cabinet.location ? ` — ${cabinet.location}` : '');
+  const stats = el('div', 'cabinet-stats');
+  stats.innerHTML = `
+    <div class="cabinet-stat"><span>Rails:</span><span class="val">${cabinet.rails.length}</span></div>
+    <div class="cabinet-stat"><span>Modules:</span><span class="val">${cabinet.rails.flatMap(r=>r.modules).length}</span></div>
+    ${totalW > 0 ? `<div class="cabinet-stat warn"><span>Verbruik:</span><span class="val">${totalW.toFixed(1)} W</span></div>` : ''}
+  `;
+  hdr.append(h3, stats);
+  card.append(hdr);
+
+  // PSU summary
+  if (totalW > 0) {
+    const psu = el('div', 'psu-summary');
+    psu.innerHTML = `⚡ Totaalverbruik: <strong>${totalW.toFixed(1)} W</strong> &nbsp;|&nbsp; Voedingen nodig: <strong>${psusNeeded}×60W</strong>`;
+    card.append(psu);
+  }
+
+  // Rails
+  cabinet.rails.forEach((rail, railIdx) => {
+    card.append(buildRailRow(cabinet.id, rail, railIdx, modules));
+  });
+
+  // Add rail button
+  const addRailBtn = el('button', 'add-rail-btn');
+  addRailBtn.textContent = '＋ Rail toevoegen';
+  addRailBtn.onclick = () => addRail(cabinet.id);
+  card.append(addRailBtn);
+
+  return card;
+}
+
+// ─── Rail row ─────────────────────────────────────────────────────────────────
+
+function buildRailRow(cabinetId, rail, railIdx, modules) {
+  const row = el('div', 'rail-row');
+  row.dataset.railId = rail.id;
+
+  const lbl = el('div', 'rail-label');
+  lbl.textContent = rail.label;
+  row.append(lbl);
+
+  const railModules = el('div', 'rail-modules');
+  railModules.style.position = 'relative';
+  const canLine = el('div', 'can-line'); railModules.append(canLine);
+
+  // Left terminator
+  const termL = buildTerminator('SEG1');
+  termL.id = `term-l-${rail.id}`;
+  railModules.append(termL);
+
+  // Module slots
+  rail.modules.forEach((m, idx) => {
+    const slot = buildModuleSlot(cabinetId, rail.id, m, idx, modules);
+    railModules.append(slot);
+    // Mark last slot for CAN SVG anchoring
+    if (idx === rail.modules.length - 1) slot.id = `last-slot-${rail.id}`;
+  });
+
+  // Add module button
+  const addBtn = el('div', 'add-module-btn');
+  addBtn.textContent = '＋';
+  addBtn.title = 'Module toevoegen';
+  addBtn.onclick = () => openModulePicker({ cabinetId, railId: rail.id });
+  railModules.append(addBtn);
+
+  row.append(railModules);
+  return row;
+}
+
+// ─── Module slot ──────────────────────────────────────────────────────────────
+
+function buildModuleSlot(cabinetId, railId, moduleInstance, idx, modules) {
+  const def = lookupModule(moduleInstance.model, modules);
+  const slot = el('div', 'module-slot');
+  slot.dataset.moduleId = moduleInstance.id;
+
+  const cdl = el('div', 'cdl'); slot.append(cdl);
+
+  const card = buildModuleCard(moduleInstance, def);
+  card.onclick = () => openModuleConfig(moduleInstance);
+  slot.append(card);
+
+  const cdr = el('div', 'cdr'); slot.append(cdr);
+  return slot;
+}
+
+function buildModuleCard(moduleInstance, def) {
+  const card = el('div', 'module-card');
+  if (def?.dinUnits >= 12) card.classList.add('wide');
+  else if (def?.dinUnits <= 4) card.classList.add('narrow');
+
+  // Screw terminals top
+  const termsTop = el('div', 'm-terms');
+  const screwCount = def?.dinUnits ? Math.max(2, Math.min(10, def.dinUnits)) : 4;
+  for (let i = 0; i < screwCount; i++) termsTop.append(el('div', 'm-screw'));
+  card.append(termsTop);
+
+  // Face plate
+  const face = el('div', 'm-face');
+  const typeEl = el('div', 'm-type');
+  typeEl.textContent = uiCategoryLabel(def?.uiCategory);
+  face.append(typeEl);
+
+  const modelEl = el('div', 'm-model');
+  modelEl.textContent = moduleInstance.model;
+  face.append(modelEl);
+
+  if (def?.name) {
+    const desc = el('div', 'm-desc');
+    desc.textContent = def.name;
+    face.append(desc);
+  }
+
+  // Channel dots
+  if (def?.channelGroups?.length) {
+    const chs = el('div', 'm-channels');
+    def.channelGroups.forEach(g => {
+      const count = Math.min(g.count, 12);
+      for (let i = 0; i < count; i++) {
+        const dot = el('div', `ch ${g.type}`);
+        chs.append(dot);
+      }
+    });
+    face.append(chs);
+  }
+
+  // CAN ports
+  const ports = el('div', 'm-ports');
+  ports.append(el('div', 'm-port seg1'), el('div', 'm-port seg1'));
+  face.append(ports);
+
+  // Footer
+  const footer = el('div', 'm-footer');
+  const dinEl = el('span', 'm-din');
+  dinEl.textContent = def?.powerW ? `${def.powerW}W` : '';
+  const addrEl = el('span', 'm-addr');
+  addrEl.textContent = moduleInstance.nodeAddress ? `N:${moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}` : '—';
+  footer.append(dinEl, addrEl);
+  face.append(footer);
+
+  card.append(face);
+
+  // Screw terminals bottom
+  const termsBot = el('div', 'm-terms bot');
+  for (let i = 0; i < screwCount; i++) termsBot.append(el('div', 'm-screw'));
+  card.append(termsBot);
+
+  return card;
+}
+
+// ─── Woning panel ─────────────────────────────────────────────────────────────
+
+function buildWoningPanel(woningDevices, modules) {
+  const panel = el('div', 'woning-panel');
+  panel.id = 'woning-panel';
+
+  const hdr = el('div', 'woning-header');
+  hdr.innerHTML = '🏠 Woning – schakelaars &amp; LCD <span class="seg2-badge">CAN Segment 2</span>';
+  panel.append(hdr);
+
+  const row = el('div', 'woning-row');
+  row.id = 'woning-row';
+  const canLine = el('div', 'can-line seg2'); row.append(canLine);
+
+  woningDevices.forEach(wd => {
+    const def = lookupModule(wd.model, modules);
+    const fd = el('div', 'field-device');
+    fd.dataset.deviceId = wd.id;
+    fd.append(el('div', 'cdl'));
+
+    const icon = el('div', def?.category === 'lcd' ? 'fd-lcd' : 'fd-switch');
+    icon.textContent = def?.category === 'lcd' ? '🖥' : '🔲';
+    fd.append(icon);
+
+    const lbl = el('div', 'fd-label');
+    lbl.textContent = wd.name ?? def?.productLine ?? wd.model;
+    fd.append(lbl);
+
+    if (wd.nodeAddress != null) {
+      const addr = el('div', 'fd-addr');
+      addr.textContent = `N:${wd.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`;
+      fd.append(addr);
+    }
+
+    fd.append(el('div', 'cdr'));
+    row.append(fd);
+  });
+
+  // Add device buttons
+  const addSwBtn = el('div', 'add-fd-btn'); addSwBtn.textContent = '＋🔲'; addSwBtn.title = 'Schakelaar toevoegen';
+  addSwBtn.onclick = () => openModulePicker({ woningType: 'switch' });
+  const addLcdBtn = el('div', 'add-fd-btn'); addLcdBtn.textContent = '＋🖥'; addLcdBtn.title = 'LCD toevoegen';
+  addLcdBtn.onclick = () => openModulePicker({ woningType: 'lcd' });
+  row.append(addSwBtn, addLcdBtn);
+
+  panel.append(row);
+  return panel;
+}
+
+// ─── Terminator ───────────────────────────────────────────────────────────────
+
+function buildTerminator(label) {
+  const t = el('div', 'terminator');
+  const body = el('div', 'term-body'); body.textContent = '60Ω';
+  const lbl = el('div', 'term-label'); lbl.textContent = label;
+  t.append(body, lbl);
+  return t;
+}
+
+// ─── CAN SVG snake ────────────────────────────────────────────────────────────
+
+function wireSVG() {
+  let svg = document.getElementById('can-svg');
+  if (!svg) {
+    svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.id = 'can-svg';
+    document.getElementById('rail-canvas')?.prepend(svg);
+  }
+}
+
+function drawCANBus(canvas) {
+  const svg = document.getElementById('can-svg');
+  if (!svg || !canvas) return;
+  const cRect = canvas.getBoundingClientRect();
+  svg.setAttribute('width', canvas.scrollWidth);
+  svg.setAttribute('height', canvas.scrollHeight);
+  svg.innerHTML = '';
+
+  const CAN1 = '#e08c00', CAN2 = '#2060d0';
+
+  function relRect(el) {
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    return {
+      left: r.left - cRect.left + canvas.scrollLeft,
+      right: r.right - cRect.left + canvas.scrollLeft,
+      top: r.top - cRect.top + canvas.scrollTop,
+      bottom: r.bottom - cRect.top + canvas.scrollTop,
+      cx: (r.left + r.right) / 2 - cRect.left + canvas.scrollLeft,
+      cy: (r.top + r.bottom) / 2 - cRect.top + canvas.scrollTop,
+    };
+  }
+
+  function svgLine(x1, y1, x2, y2, col, w = 4) {
+    const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', x1); l.setAttribute('y1', y1);
+    l.setAttribute('x2', x2); l.setAttribute('y2', y2);
+    l.setAttribute('stroke', col); l.setAttribute('stroke-width', w);
+    l.setAttribute('stroke-linecap', 'round');
+    svg.appendChild(l);
+  }
+
+  function svgDot(x, y, col) {
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', 6);
+    c.setAttribute('fill', col); c.setAttribute('stroke', 'white'); c.setAttribute('stroke-width', '2');
+    svg.appendChild(c);
+  }
+
+  // Collect last-slot positions per rail (for snake connectors)
+  const rails = canvas.querySelectorAll('.rail-row');
+  const railRects = [];
+  rails.forEach(r => {
+    const lastSlot = r.querySelector('[id^="last-slot-"]');
+    if (lastSlot) railRects.push(relRect(lastSlot));
+  });
+
+  // Draw snake: last slot of rail N → first slot of rail N+1
+  for (let i = 0; i + 1 < railRects.length; i++) {
+    const r1 = railRects[i], r2 = railRects[i + 1];
+    if (!r1 || !r2) continue;
+    const x = Math.max(r1.right, r2.right) + 18;
+    svgLine(r1.cx, r1.cy, x, r1.cy, CAN1);
+    svgLine(x, r1.cy, x, r2.cy, CAN1);
+    svgLine(x, r2.cy, r2.cx, r2.cy, CAN1);
+    svgDot(x, r1.cy, CAN1);
+    svgDot(x, r2.cy, CAN1);
+  }
+
+  // PSU → woning panel drop (Segment 2)
+  const woningRow = relRect(document.getElementById('woning-row'));
+  if (woningRow && railRects.length > 0) {
+    const lastRail = railRects[railRects.length - 1];
+    // Find PSU module if any
+    const psuSlot = canvas.querySelector('[data-module-id]') &&
+      [...canvas.querySelectorAll('[data-module-id]')].find(s => {
+        const m = s.querySelector('.m-model'); return m && m.textContent.includes('PSU');
+      });
+    const anchor = psuSlot ? relRect(psuSlot) : (lastRail ?? null);
+    if (anchor) {
+      const x = anchor.cx, y1 = anchor.bottom + 4, y2 = woningRow.top - 4;
+      svgLine(x, y1, x, y2, CAN2);
+      svgDot(x, y1, CAN2);
+      svgDot(x, y2, CAN2);
+    }
+  }
+}
+
+// ─── Sidebar counts ───────────────────────────────────────────────────────────
+
+function updateSidebarCounts(railView, modules) {
+  const cabinetsEl = document.getElementById('cabinets-list');
+  if (cabinetsEl) {
+    cabinetsEl.innerHTML = railView.cabinets.map(c =>
+      `<div class="sidebar-item active"><span class="icon">🗄️</span> ${c.name} <span class="badge">${c.rails.length} rails</span></div>`
+    ).join('');
+  }
+  const seg1 = document.getElementById('seg1-count');
+  const seg2 = document.getElementById('seg2-count');
+  if (seg1) seg1.textContent = String(railView.cabinets.flatMap(c => c.rails.flatMap(r => r.modules)).length);
+  if (seg2) seg2.textContent = String(railView.woningDevices.length);
+}
+
+// ─── Actions ──────────────────────────────────────────────────────────────────
+
+export function addCabinet(name = 'Nieuwe kast') {
+  const cabinet = {
+    id: makeId(),
+    name,
+    rails: [{ id: makeId(), label: 'Rail 1', modules: [] }],
+  };
+  dispatch({ type: 'ADD_CABINET', cabinet });
+}
+
+function addRail(cabinetId) {
+  const s = state.get();
+  const cabinet = s.project.railView.cabinets.find(c => c.id === cabinetId);
+  const n = cabinet ? cabinet.rails.length + 1 : 1;
+  dispatch({ type: 'ADD_RAIL', cabinetId, rail: { id: makeId(), label: `Rail ${n}`, modules: [] } });
+}
+
+function openModuleConfig(moduleInstance) {
+  // TODO P6-1: open per-module config modal
+  alert(`Config voor ${moduleInstance.model} (nodeAddress: ${moduleInstance.nodeAddress ?? 'niet toegewezen'})`);
+}
+
+// ─── Wire buttons ─────────────────────────────────────────────────────────────
+
+export function wireButtons() {
+  const btnCabinet = document.getElementById('btn-add-cabinet');
+  const btnCabinetEmpty = document.getElementById('btn-add-cabinet-empty');
+  const btnModule = document.getElementById('btn-add-module');
+
+  btnCabinet?.addEventListener('click', () => promptAddCabinet());
+  btnCabinetEmpty?.addEventListener('click', () => promptAddCabinet());
+  btnModule?.addEventListener('click', () => {
+    const s = state.get();
+    const c = s.project.railView.cabinets[0];
+    const r = c?.rails[0];
+    if (!c || !r) { alert('Voeg eerst een kast toe.'); return; }
+    openModulePicker({ cabinetId: c.id, railId: r.id });
+  });
+}
+
+function promptAddCabinet() {
+  const name = prompt('Naam van de kast:', 'Hoofdkast');
+  if (name) addCabinet(name);
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function el(tag, className = '') {
+  const e = document.createElement(tag);
+  if (className) e.className = className;
+  return e;
+}
+
+function lookupModule(model, modules) {
+  if (!modules?.length) return null;
+  // Check standalone entries
+  const standalone = modules.find(m => m.model === model);
+  if (standalone) return standalone;
+  // Check variant within families
+  for (const m of modules) {
+    if (m.variants) {
+      const v = m.variants.find(v => v.model === model);
+      if (v) return { ...m, ...v }; // merge family properties with variant
+    }
+  }
+  return null;
+}
+
+function uiCategoryLabel(uiCategory) {
+  const map = {
+    Dimmer: 'Dimmer', Relais: 'Relais', Motor: 'Motor', Input: 'Input',
+    DALI: 'DALI', DMX: 'DMX', Audio: 'Audio', Smartbox: 'Smartbox',
+    'Smartbox plugin': 'Plugin', Infrastructuur: 'Infra',
+  };
+  return map[uiCategory] ?? uiCategory ?? '';
+}

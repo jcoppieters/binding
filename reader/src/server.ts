@@ -33,6 +33,9 @@ app.use(express.json());
 // Serve static files from public directory
 app.use(express.static(join(__dirname, '../public')));
 
+// Serve module images under /modules/images/ path
+app.use('/modules/images', express.static(join(__dirname, '../modules/images')));
+
 // Request logging middleware
 app.use((req, _res, next) => {
   console.log(`[${req.method}] ${req.url}`);

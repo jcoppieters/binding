@@ -94,11 +94,16 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 ### Phase 1 — Rail View
 
-- [ ] **P1-1** Render Rail View from project data (cabinets, rails, modules, woning panel)
-  - Module cards from module JSON database; CAN SVG snake (extracted from demo5)
-- [ ] **P1-2** Add module: picker → choose model → assign node address → save to project
-- [ ] **P1-3** Add rail / add cabinet
-- [ ] **P1-4** Add switch / LCD to woning panel
+- [x] **P1-1** Render Rail View from project data \u2014 **DONE**
+  - `public/components/rail-view.js` + `rail-view.css`
+  - Cabinet cards, rail rows, module slots, woning panel, CAN SVG snake
+  - State-driven: re-renders on every `dispatch()` call
+- [x] **P1-2** Add module: picker → choose model → save to project \u2014 **DONE**
+  - `public/components/module-picker.js`
+  - Groups by `uiCategory`, shows family cards with finish dropdown, product images
+  - Dispatches `ADD_MODULE` or `ADD_WONING_DEVICE` to state
+- [x] **P1-3** Add cabinet + add rail \u2014 **DONE** (via `promptAddCabinet()` / dispatch)
+- [ ] **P1-4** Add switch / LCD to woning panel (via module picker, `woningType` context)
 - [ ] **P1-5** Resources panel in sidebar: used vs. available counts per type
 - [ ] **P1-6** DIN rail space bar (M-units used vs. cabinet width)
 

@@ -4,6 +4,7 @@
 
 import { state, dispatch } from './state.js';
 import { initRouter, switchView } from './router.js';
+import { wireButtons as wireRailButtons } from '../components/rail-view.js';
 
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
 
@@ -54,6 +55,9 @@ async function init() {
 
   // Boot router (activates initial tab)
   initRouter();
+
+  // Wire Rail View action buttons
+  wireRailButtons();
 }
 
 // ─── Save / Upload ────────────────────────────────────────────────────────────

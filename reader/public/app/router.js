@@ -37,9 +37,10 @@ export async function switchView(viewName) {
   // Load and activate view module
   if (!_views[viewName]) {
     try {
-      _views[viewName] = await import(`../components/${viewName}-view.js`);
-    } catch {
-      // View component not yet implemented — ignore
+      const mod = await import(`../components/${viewName}-view.js`);
+      _views[viewName] = mod;
+    } catch (e) {
+      console.warn(`[router] View component ${viewName}-view.js not found`);
     }
   }
   _views[viewName]?.activate?.();

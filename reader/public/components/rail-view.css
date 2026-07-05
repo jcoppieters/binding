@@ -1,0 +1,88 @@
+/* ── Rail View ────────────────────────────────────────────────────────────── */
+
+/* Cabinet card */
+.cabinet-card{background:#fff;border:1px solid #dde3ef;border-radius:10px;overflow:visible;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.cabinet-header{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid #eef1f8;background:#f8f9fd;border-radius:10px 10px 0 0}
+.cabinet-header h3{font-size:14px;font-weight:600;flex:1;color:#1a1f2e}
+.cabinet-stats{font-size:11px;color:#6a7899;display:flex;gap:14px;flex-wrap:wrap}
+.cabinet-stat{display:flex;align-items:center;gap:4px}
+.cabinet-stat .val{color:#1a1f2e;font-weight:600}
+.cabinet-stat.warn .val{color:#e08c00}
+
+/* PSU summary */
+.psu-summary{background:#fef8ee;border:1px solid #f5d080;border-radius:6px;padding:8px 12px;margin:10px 16px 0;font-size:12px;color:#7a5000;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* Rail row */
+.rail-row{padding:16px 20px 12px;display:flex;align-items:center;gap:0;border-bottom:1px solid #f0f2f8;position:relative}
+.rail-row:last-of-type{border-bottom:none}
+.rail-label{font-size:10px;color:#a0aaba;writing-mode:vertical-rl;text-orientation:mixed;transform:rotate(180deg);margin-right:12px;min-width:14px;text-align:center;font-weight:600;flex-shrink:0}
+.rail-modules{display:flex;align-items:center;gap:0;position:relative;flex-wrap:nowrap;overflow-x:auto;padding:4px 0;width:100%}
+
+/* CAN line */
+.can-line{position:absolute;left:0;right:0;height:4px;background:#e08c00;top:50%;transform:translateY(-50%);z-index:0;pointer-events:none;border-radius:2px}
+
+/* 60Ω Terminator */
+.terminator{position:relative;flex-shrink:0;z-index:2;margin:0 4px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.term-body{width:22px;height:120px;background:#fff;border:2px solid #e08c00;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:700;color:#e08c00;writing-mode:vertical-rl;transform:rotate(180deg);box-shadow:1px 2px 4px rgba(0,0,0,.1)}
+.term-label{font-size:8px;color:#a0aaba;text-align:center}
+
+/* Module slot */
+.module-slot{position:relative;z-index:2;flex-shrink:0;margin:0 6px;display:flex;align-items:center}
+.module-slot .cdl,.module-slot .cdr{position:absolute;width:12px;height:12px;border-radius:50%;background:#e08c00;border:2px solid #fff;z-index:4;top:50%;transform:translateY(-50%);box-shadow:0 0 0 1px #e08c00}
+.module-slot .cdl{left:-6px}
+.module-slot .cdr{right:-6px}
+
+/* Module card */
+.module-card{display:flex;flex-direction:column;cursor:pointer;transition:transform .12s,box-shadow .12s;position:relative;border-radius:3px;border:1px solid #b0bac8;box-shadow:1px 2px 5px rgba(0,0,0,.14);z-index:1;width:160px;height:130px;background:#ddd;flex-shrink:0;overflow:hidden}
+.module-card:hover{transform:translateY(-4px);box-shadow:1px 6px 14px rgba(0,0,0,.2)}
+.module-card.wide{width:220px}
+.module-card.narrow{width:100px}
+.m-terms{display:flex;padding:3px 4px;gap:3px;background:#b8c0d0;flex-shrink:0;justify-content:flex-start}
+.m-screw{width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 33% 33%,#e5e8f0,#8898b0);border:1px solid #6878a0;flex-shrink:0}
+.m-face{background:#111;color:#fff;flex:1;display:flex;flex-direction:column;padding:5px 7px;gap:2px;overflow:hidden}
+.m-type{font-size:7px;color:#666;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0}
+.m-model{font-size:10px;font-weight:700;color:#fff;line-height:1.1;flex-shrink:0}
+.m-desc{font-size:7px;color:#999;line-height:1.2;flex-shrink:0;max-height:20px;overflow:hidden}
+.m-channels{display:flex;gap:2px;flex-wrap:wrap;margin-top:2px;flex-shrink:0}
+.ch{width:7px;height:7px;border-radius:1px}
+.ch.dimmer_le,.ch.dimmer_te,.ch.dimmer_pwm,.ch.dimmer_dc{background:#f5a020}
+.ch.relay_no,.ch.relay_nc,.ch.relay_ssr{background:#3090f0}
+.ch.input_digital,.ch.input_analog{background:#30c050}
+.ch.motor_updown,.ch.motor_polar{background:#f04040}
+.ch.audio{background:#c040f0}
+.ch.dali,.ch.dmx{background:#f0e020}
+.m-ports{display:flex;gap:5px;margin-top:auto;padding-top:2px}
+.m-port{width:12px;height:8px;background:#2a2a2a;border:1px solid #444;border-radius:2px}
+.m-port.seg1{border-color:#e08c00}
+.m-footer{display:flex;justify-content:space-between;align-items:center;margin-top:2px}
+.m-din{font-size:7px;color:#666}
+.m-addr{font-size:7px;background:#222;color:#888;padding:1px 4px;border-radius:2px}
+
+/* Add module button */
+.add-module-btn{width:42px;height:120px;border:2px dashed #c0c8d8;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#a0aaba;font-size:20px;cursor:pointer;flex-shrink:0;margin:0 8px;transition:all .15s;background:#f8f9fd;z-index:2;position:relative}
+.add-module-btn:hover{border-color:#e08c00;color:#e08c00;background:#fef9f0}
+
+.add-rail-btn{margin:6px 16px 12px;padding:8px;border:1px dashed #c0c8d8;border-radius:6px;color:#a0aaba;font-size:12px;cursor:pointer;text-align:center;background:none;transition:all .15s;width:calc(100% - 32px)}
+.add-rail-btn:hover{border-color:#e08c00;color:#e08c00}
+
+/* Woning panel (Segment 2 field devices) */
+.woning-panel{background:#fff;border:2px dashed #2060d0;border-radius:10px;padding:14px 18px;position:relative;box-shadow:0 2px 8px rgba(32,96,208,.08)}
+.woning-header{font-size:11px;font-weight:600;color:#2060d0;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.seg2-badge{background:#e8f0fe;color:#2060d0;font-size:10px;padding:2px 8px;border-radius:10px}
+.woning-row{display:flex;align-items:center;gap:24px;position:relative;overflow-x:auto;padding:4px 0}
+.field-device{position:relative;z-index:2;flex-shrink:0;margin:0 6px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
+.field-device .cdl,.field-device .cdr{position:absolute;width:12px;height:12px;border-radius:50%;background:#2060d0;border:2px solid #fff;z-index:4;top:50%;transform:translateY(-50%);box-shadow:0 0 0 1px #2060d0}
+.field-device .cdl{left:-6px}
+.field-device .cdr{right:-6px}
+.fd-label{font-size:9px;color:#6a7899;text-align:center;line-height:1.3}
+.fd-addr{font-size:8px;color:#a0aaba}
+/* Switch housing placeholder */
+.fd-switch{width:80px;height:80px;background:linear-gradient(145deg,#d0d0d0,#a8a8a8);border-radius:6px;box-shadow:inset 0 1px 3px rgba(255,255,255,.5),0 3px 8px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;font-size:22px}
+.fd-lcd{width:140px;height:80px;background:#1a2540;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;font-size:22px;color:#e08c00}
+
+/* Add field device button */
+.add-fd-btn{width:60px;height:80px;border:2px dashed #2060d0;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#5080c0;font-size:18px;cursor:pointer;flex-shrink:0;background:#f0f4fe;transition:all .15s}
+.add-fd-btn:hover{border-color:#1040a0;color:#1040a0;background:#e0e8fe}
+
+/* CAN SVG overlay */
+#can-svg{position:absolute;top:0;left:0;pointer-events:none;z-index:0;overflow:visible}
