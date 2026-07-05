@@ -1,0 +1,21 @@
+{
+  "model": "DT02-06",
+  "name": "6 kan. 1/10V - 0/10V analoge output module + relais",
+  "description": "6 kan. 1/10V - 0/10V analoge output module + relais",
+  "category": "module",
+  "uiCategory": "Dimmer",
+  "channelGroups": [
+    {
+      "type": "dimmer_dc",
+      "count": 6
+    }
+  ],
+  "dinUnits": 9,
+  "lengthMm": 157.7,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=30755",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30755/ID_TDS_NL-FR-EN_DT02-06-0-10V-1-10V-Analoog-6-kanaals_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT02-06/DT02-06-web-1.jpg",
+  "powerW": 4.8,
+  "channels": 6,
+  "imageFile": "images/dt02-06.jpg"
+}

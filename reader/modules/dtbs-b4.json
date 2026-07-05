@@ -1,0 +1,41 @@
+{
+  "functionalModel": "DTBS-B4",
+  "productLine": "Serenity 4-knops",
+  "category": "switch",
+  "uiCategory": "Schakelaar",
+  "powerW": 0.5,
+  "variants": [
+    {
+      "model": "DTBS-B4Ag",
+      "finish": "Aluminium Grey",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=29872",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/29872/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERA4-Schuin-Rechts.png",
+      "imageFile": "images/dtbs-b4ag.png"
+    },
+    {
+      "model": "DTBS-B4FA",
+      "finish": "Forged Aluminium Grey",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30403",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30403/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAF4-Schuin-Rechts.png",
+      "imageFile": "images/dtbs-b4fa.png"
+    },
+    {
+      "model": "DTBS-B4Ab",
+      "finish": "Aluminium Black",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30409",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30409/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAB4.png",
+      "imageFile": "images/dtbs-b4ab.png"
+    },
+    {
+      "model": "DTBS-B4FAb",
+      "finish": "Forged Aluminium Black",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30415",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30415/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERABF4.png",
+      "imageFile": "images/dtbs-b4fab.png"
+    }
+  ]
+}

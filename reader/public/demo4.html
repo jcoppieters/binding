@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Duotecno – Binding Software Demo</title>
+<title>Duotecno – Demo 4 (schakelaars)</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#eef1f8;color:#1a1f2e;height:100vh;display:flex;flex-direction:column;overflow:hidden}
@@ -460,7 +460,7 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
     <button class="tool-btn" onclick="showToast('PDF exporteren...','')">📄 PDF</button>
     <button class="tool-btn" onclick="openAddModuleModal()">＋ Module</button>
     <button class="tool-btn" onclick="showToast('Schakelaar toevoegen...','')">＋ Schakelaar</button>
-    <button class="tool-btn" onclick="showToast('LCD toevoegen...','')">＋ LCD</button>
+    <button class="tool-btn" onclick="nextStep()">＋ LCD</button>
   </div>
 
   <div id="rail-canvas">
@@ -648,21 +648,19 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
     <svg id="can-svg" style="position:absolute;top:0;left:0;pointer-events:none;z-index:0;overflow:visible"></svg>
 
     <!-- WONING PANEL -->
-    <div class="woning-panel" id="woning-panel">
+        <div class="woning-panel" id="woning-panel">
       <div class="woning-header">
         🏠 Woning – schakelaars &amp; LCD
         <span class="seg2-badge">CAN Segment 2</span>
       </div>
       <div class="woning-row" id="woning-row">
         <div class="can-line seg2"></div>
-
         <!-- Seg2 terminator start -->
         <div class="field-term" id="woning-term-l" style="margin-right:10px">
           <div class="ft-body">60Ω</div>
           <div class="ft-label">SEG2</div>
         </div>
-
-        <!-- Schakelaar Living (4-gang) -->
+<!-- Schakelaar Living (4-gang) -->
         <div class="field-device" id="fd-sw1" onclick="openBW('sw1')">
           <div class="cdl"></div>
           <div class="sw4-housing">
@@ -677,7 +675,7 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
           <div class="cdr"></div>
         </div>
 
-        <!-- Schakelaar Keuken (4-gang) -->
+        <!-- Schakelaar Keuken (4-gang) --><!-- Schakelaar Keuken (4-gang) -->
         <div class="field-device" id="fd-sw2" onclick="openBW('sw2')">
           <div class="cdl"></div>
           <div class="sw4-housing">
@@ -692,7 +690,7 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
           <div class="cdr"></div>
         </div>
 
-        <!-- Schakelaar Bureau (2-gang) -->
+        <!-- Schakelaar Bureau (2-gang) --><!-- Schakelaar Bureau (2-gang) -->
         <div class="field-device" id="fd-sw3" onclick="openBW('sw3')">
           <div class="cdl"></div>
           <div class="sw2-housing">
@@ -705,36 +703,6 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
         </div>
 
         <!-- LCD Touch Panel (large) -->
-        <div class="field-device" id="fd-lcd" onclick="showToast('LCD Touch Panel (DT-LCD-01) – N:11','')">
-          <div class="cdl"></div>
-          <div class="lcd-housing">
-            <div class="lcd-screen">
-              <div class="lcd-top">
-                <div style="display:flex;align-items:center;gap:5px">
-                  <div class="lcd-logo-box"><span>Duotecno</span></div>
-                  <div class="lcd-time-big">15:20</div>
-                </div>
-                <div class="lcd-room-info">
-                  <div class="lcd-room-name">KEUKEN</div>
-                  <div class="lcd-room-temp">21.5°C</div>
-                </div>
-              </div>
-              <div class="lcd-middle"></div>
-              <div class="lcd-icons-bar">
-                <span class="lcd-icon" title="Licht">💡</span>
-                <span class="lcd-icon" title="Stopcontact">🔌</span>
-                <span class="lcd-icon" title="Temperatuur">🌡️</span>
-                <span class="lcd-icon" title="Schermen">🪟</span>
-                <span class="lcd-icon" title="Camera">📷</span>
-                <span class="lcd-icon" title="Home">🏠</span>
-              </div>
-            </div>
-          </div>
-          <div class="fd-label">LCD Touch<br>Inkomhal</div>
-          <div class="fd-addr">N:11</div>
-          <div class="cdr"></div>
-        </div>
-
         <!-- Seg2 end terminator -->
         <div class="field-term" id="woning-term-r" style="margin-left:10px">
           <div class="ft-body">60Ω</div>
@@ -861,7 +829,6 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
       <button class="cat-btn" onclick="selectCat(this,'Motor')">Motor</button>
       <button class="cat-btn" onclick="selectCat(this,'Audio')">Audio</button>
       <button class="cat-btn" onclick="selectCat(this,'DALI')">DALI</button>
-      <button class="cat-btn" onclick="selectCat(this,'Master')">Master</button>
       <button class="cat-btn" onclick="selectCat(this,'Voeding')">Voeding</button>
     </div>
     <div class="module-grid" id="module-grid"></div>
@@ -929,9 +896,9 @@ const MODULE_DB = {
     {model:'DT13-DAL',name:'DALI bus interface',info:'64 app. - 4 DIN',width:4,power:8},
   ],
   Master:[
-    {model:'DT18-HOME',name:'TCP/IP Home server',info:'Master - 4 DIN',width:4,power:30},
-    {model:'DT18-PRO', name:'TCP/IP Pro server', info:'Master - 6 DIN',width:6,power:40},
-    {model:'DT18-GTWY',name:'Duotecno Gateway',   info:'Master - 4 DIN',width:4,power:20},
+    {model:'DT-18-HS',name:'TCP/IP Home server',info:'Master - 4 DIN',width:4,power:30},
+    {model:'DT-18-PRO',name:'TCP/IP Pro server',info:'Master - 6 DIN',width:6,power:40},
+    {model:'DT-18-GT',name:'Duotecno Gateway',info:'Master - 4 DIN',width:4,power:20},
   ],
   Voeding:[
     {model:'DT-PSU-CAN',name:'PSU + 2-ch CAN Switch',info:'2x24VAC - 6 DIN',width:6,power:0},
@@ -1181,7 +1148,7 @@ function drawBindings() {
   }
 }
 
-function toggleFilter(btn) { btn.classList.toggle('active'); }
+function nextStep(){window.location='demo5.html';} function toggleFilter(btn) { btn.classList.toggle('active'); }
 function openModuleDetail(m) { showToast('Module '+m+' – eigenschappen bewerken',''); }
 
 // === Floor plan toggle ===

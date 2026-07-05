@@ -1,0 +1,43 @@
+{
+  "functionalModel": "DTBS-H2",
+  "productLine": "Velocity 2-hendels",
+  "category": "switch",
+  "uiCategory": "Schakelaar",
+  "channelGroups": [
+    {
+      "type": "input_digital",
+      "count": 2
+    }
+  ],
+  "powerW": 0.5,
+  "variants": [
+    {
+      "model": "DTBS-H2Br",
+      "finish": "Brons",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63395",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63395/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf"
+    },
+    {
+      "model": "DTBS-H2FBr",
+      "finish": "Forged Brons",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63401",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63401/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf"
+    },
+    {
+      "model": "DTBS-H2GM",
+      "finish": "Gun Metal",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30442",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30442/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELB2-Schuin-Rechts.png",
+      "imageFile": "images/dtbs-h2gm.png"
+    },
+    {
+      "model": "DTBS-H2FGM",
+      "finish": "Forged Gun Metal",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30448",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30448/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELBF2-Schuin-Rechts.png",
+      "imageFile": "images/dtbs-h2fgm.png"
+    }
+  ]
+}

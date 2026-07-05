@@ -1,0 +1,12 @@
+{
+  "model": "DT10-AU",
+  "name": "Audio Bluesound/Sonos interface + 8 kan. IR",
+  "description": "Audio Bluesound/Sonos interface + 8 kan. IR",
+  "category": "interface",
+  "uiCategory": "Audio",
+  "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=17011",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/17011/ID_TDS_NL-FR-EN_DT10-AU-Audio-Interface_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-AU/DT13_AU_audio-interface-min-3.jpg",
+  "powerW": 5.8,
+  "imageFile": "images/dt10-au.jpg"
+}

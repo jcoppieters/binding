@@ -1,0 +1,14 @@
+{
+  "model": "DT13-SAT",
+  "name": "TCP/IP Satel alarm interface",
+  "description": "TCP/IP Satel alarm interface",
+  "category": "interface",
+  "uiCategory": "Infrastructuur",
+  "dinUnits": 4,
+  "lengthMm": 70,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/camera-alarm/dt13-2?variant=16652",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16652/ID_TDS_NL-FR-EN_DT13-SAT-Satel-Alarm-Interface_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-SAT/DT13-SAT-min-1-1.jpg",
+  "powerW": 2.9,
+  "imageFile": "images/dt13-sat.jpg"
+}

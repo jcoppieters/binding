@@ -1,0 +1,14 @@
+{
+  "model": "DT13-LC",
+  "name": "Niveau sturingsmodule - Level Controller",
+  "description": "Niveau sturingsmodule - Level Controller",
+  "category": "module",
+  "uiCategory": "Infrastructuur",
+  "dinUnits": 4,
+  "lengthMm": 70,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2-2/dt0e?variant=30775",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30775/ID_TDS_NL-FR-EN_DT13-LC-Level-Control-Module_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-LC/DT13-LC2020.jpg",
+  "powerW": 1.3,
+  "imageFile": "images/dt13-lc.jpg"
+}

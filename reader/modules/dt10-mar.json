@@ -1,0 +1,13 @@
+{
+  "model": "DT10-MAR",
+  "name": "Marantz interface + 8 kan. IR transceiver Extend",
+  "description": "Marantz interface + 8 kan. IR transceiver Extend",
+  "category": "interface",
+  "uiCategory": "Audio",
+  "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16638",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16638/TDS_NL-FR-EN_DT10-MAR_09032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-MAR/DT10-MAR_groot-min.jpg",
+  "powerW": 2.6,
+  "channels": 8,
+  "imageFile": "images/dt10-mar.jpg"
+}

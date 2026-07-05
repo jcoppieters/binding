@@ -1,0 +1,125 @@
+{
+  "functionalModel": "DTBS-4",
+  "productLine": "Touchbutton 4-kanaals",
+  "category": "switch",
+  "uiCategory": "Schakelaar",
+  "channelGroups": [
+    {
+      "type": "input_digital",
+      "count": 4
+    }
+  ],
+  "powerW": 1.2,
+  "variants": [
+    {
+      "model": "DTBS-4Ag",
+      "finish": "Aluminium Grijs",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16698",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Ag/DTBS-4Ag4gewit-1-2-e1528799487572.jpg",
+      "imageFile": "images/dtbs-4ag.jpg"
+    },
+    {
+      "model": "DTBS-4Ab",
+      "finish": "Aluminium Zwart",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16699",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Ab/DTBS-4Ab.png",
+      "imageFile": "images/dtbs-4ab.png"
+    },
+    {
+      "model": "DTBS-4ALw",
+      "finish": "Aluminium Lak Wit",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16700",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DTBS-4ALw/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4ALw/DTBS_4Alw.png",
+      "imageFile": "images/dtbs-4alw.png"
+    },
+    {
+      "model": "DTBS-4bg",
+      "finish": "Brushed Gold",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16849",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4BG/DTBS-4BG.png",
+      "imageFile": "images/dtbs-4bg.png"
+    },
+    {
+      "model": "DTBS-4Gm",
+      "finish": "Gun Metal",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16701",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Br/DTBS-4Br.png",
+      "imageFile": "images/dtbs-4gm.png"
+    },
+    {
+      "model": "DTBS-4Br",
+      "finish": "Brons",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16852",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Brl/DTBS-4Brl.png",
+      "imageFile": "images/dtbs-4br.png"
+    },
+    {
+      "model": "DTBS-4Brl",
+      "finish": "Brons Light",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=60338",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTBS-4x-touchbutton-4-voudig-BUS.pdf"
+    },
+    {
+      "model": "DTBS-4CCLw",
+      "finish": "Corian Claudia Wit",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16859",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4CCLW/DTBS_4CCLW-2.png",
+      "imageFile": "images/dtbs-4cclw.png"
+    },
+    {
+      "model": "DTBS-4CLw",
+      "finish": "Corian Linea Wit",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16861",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4CLIW/DTBS_4CLIW.png",
+      "imageFile": "images/dtbs-4clw.png"
+    },
+    {
+      "model": "DTBS-4Ch",
+      "finish": "Chroom",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16703",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4CH/DTBS-4CH_0001gewit3-e1526981207867.png",
+      "imageFile": "images/dtbs-4ch.png"
+    },
+    {
+      "model": "DTBS-4CRw",
+      "finish": "Corian Ronda Wit",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16860",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4CORW/DTBS-4CROW.png",
+      "imageFile": "images/dtbs-4crw.png"
+    },
+    {
+      "model": "DTBS-4Cw",
+      "finish": "Corian Wit",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16704",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Cw/DTBS_4CW.png",
+      "imageFile": "images/dtbs-4cw.png"
+    },
+    {
+      "model": "DTBS-4INV",
+      "finish": "Aanraakschakelaar op bus 4 kanalen, 8 functies Invisible",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/invisible/dtbs-2?variant=16927",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS-4INV.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4INV/DTBS_4INV-1.png",
+      "imageFile": "images/dtbs-4inv.png"
+    },
+    {
+      "model": "DTBS-4X Trimless",
+      "finish": "Trimless aanraakschakelaar op bus ingebouwd in de muur",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/trimless/dtbs-4?variant=16993",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16993/XILLO-TECHNISCHE-FICHE-TRIMLESS-SWITCH_INV_MCW_17032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4X%20Trimless/Cat-page-1000x600-5.jpg",
+      "imageFile": "images/dtbs-4x-trimless.jpg"
+    }
+  ]
+}

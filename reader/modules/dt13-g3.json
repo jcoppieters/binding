@@ -1,0 +1,14 @@
+{
+  "model": "DT13-G3",
+  "name": "RS 232 interface Galaxy alarm",
+  "description": "RS 232 interface Galaxy alarm",
+  "category": "interface",
+  "uiCategory": "Infrastructuur",
+  "dinUnits": 4,
+  "lengthMm": 70,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/camera-alarm/dt13-2?variant=16651",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16651/ID_TDS_NL-FR-EN_DT13-G3_Galaxy-Alarm-interface_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-G3/DT13-G3-WEB-min-1.jpg",
+  "powerW": 2.2,
+  "imageFile": "images/dt13-g3.jpg"
+}

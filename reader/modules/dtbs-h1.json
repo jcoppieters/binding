@@ -1,0 +1,43 @@
+{
+  "functionalModel": "DTBS-H1",
+  "productLine": "Velocity 1-hendel",
+  "category": "switch",
+  "uiCategory": "Schakelaar",
+  "channelGroups": [
+    {
+      "type": "input_digital",
+      "count": 1
+    }
+  ],
+  "powerW": 0.5,
+  "variants": [
+    {
+      "model": "DTBS-H1Br",
+      "finish": "Brons",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63393",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63393/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf"
+    },
+    {
+      "model": "DTBS-H1FBr",
+      "finish": "Forged Brons",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63399",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63399/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf"
+    },
+    {
+      "model": "DTBS-H1GM",
+      "finish": "Gun Metal",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30440",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30440/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELB1.png",
+      "imageFile": "images/dtbs-h1gm.png"
+    },
+    {
+      "model": "DTBS-H1FGM",
+      "finish": "Forged Gun Metal",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30446",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30446/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELBF1-Schuin-Rechts.png",
+      "imageFile": "images/dtbs-h1fgm.png"
+    }
+  ]
+}

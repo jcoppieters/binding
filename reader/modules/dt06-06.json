@@ -1,0 +1,21 @@
+{
+  "model": "DT06-06",
+  "name": "6 kan. 5A LED PWM dimmer module",
+  "description": "6 kan. 5A LED PWM dimmer module",
+  "category": "module",
+  "uiCategory": "Dimmer",
+  "channelGroups": [
+    {
+      "type": "dimmer_pwm",
+      "count": 6
+    }
+  ],
+  "dinUnits": 9,
+  "lengthMm": 157.7,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=30751",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30751/ID_TDS_NL-FR-EN_DT06-06-PWM-LED-dimmodule-6-kanaals._09032026TPindd_2026-05-26-130935_ifjt.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT06-06/DT06-06.png",
+  "powerW": 2.4,
+  "channels": 6,
+  "imageFile": "images/dt06-06.png"
+}

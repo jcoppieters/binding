@@ -1,0 +1,18 @@
+{
+  "model": "DT0B-TE",
+  "name": "Smartbox+ Dimmer TE faseafsnijding",
+  "description": "Smartbox+ Dimmer TE faseafsnijding",
+  "category": "module",
+  "uiCategory": "Smartbox plugin",
+  "channelGroups": [
+    {
+      "type": "dimmer_te",
+      "count": 1
+    }
+  ],
+  "isSmartboxPlugin": true,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16626",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Smartboxes/TDS_NL-FR-EN_DT0B-TE1.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T120206.993.png",
+  "imageFile": "images/dt0b-te.png"
+}

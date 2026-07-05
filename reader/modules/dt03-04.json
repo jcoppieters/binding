@@ -1,0 +1,22 @@
+{
+  "model": "DT03-04",
+  "name": "4 kan. 10 A relais NO contact module met feedback",
+  "description": "4 kan. 10 A relais NO contact module met feedback",
+  "category": "module",
+  "uiCategory": "Relais",
+  "channelGroups": [
+    {
+      "type": "relay_no",
+      "count": 4,
+      "maxCurrentA": 10
+    }
+  ],
+  "dinUnits": 9,
+  "lengthMm": 157.7,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2/dt03?variant=16758",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DT03-04/FR-DE-EN-NL-DT03-04-20161228J.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT03-04/DT02-06-min-web_2020-min.jpg",
+  "powerW": 7,
+  "channels": 4,
+  "imageFile": "images/dt03-04.jpg"
+}

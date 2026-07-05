@@ -1,0 +1,2352 @@
+[
+  {
+    "functionalModel": "DT0C-10",
+    "productLine": "LED-touchscreen 10\"",
+    "category": "lcd",
+    "uiCategory": "LCD/Touchscreen",
+    "variants": [
+      {
+        "model": "DT0C-10Ag",
+        "finish": "Aluminium grijs",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16896",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-10Ab/DT0C-W10_Inbouwdoos-min.jpg",
+        "imageFile": "images/dt0c-10ag.jpg"
+      },
+      {
+        "model": "DT0C-10Ab",
+        "finish": "Aluminium zwart",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16895",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-10Ab/DT0C-W10_Inbouwdoos-min.jpg",
+        "imageFile": "images/dt0c-10ab.jpg"
+      },
+      {
+        "model": "DT0C-10ALw",
+        "finish": "Aluminium Lak wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16897",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-10Alw/PREV_DE-BEIR-MAATWERKER46.jpg",
+        "imageFile": "images/dt0c-10alw.jpg"
+      },
+      {
+        "model": "DT0C-10Br",
+        "finish": "Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16908",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf"
+      },
+      {
+        "model": "DT0C-10Gm",
+        "finish": "Gun metal",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16905",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-10Br/PREV_DE-BEIR-MAATWERKER05.jpg",
+        "imageFile": "images/dt0c-10gm.jpg"
+      },
+      {
+        "model": "DT0C-10BrL",
+        "finish": "Brons Light",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=60377",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf"
+      },
+      {
+        "model": "DT0C-10Cw",
+        "finish": "Corian wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16898",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf"
+      },
+      {
+        "model": "DT0C-10FF",
+        "finish": "Fer Forgé",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16906",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-10FF/IMG_0818.jpg",
+        "imageFile": "images/dt0c-10ff.jpg"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DT0C-7",
+    "productLine": "LED-touchscreen 7\"",
+    "category": "lcd",
+    "uiCategory": "LCD/Touchscreen",
+    "variants": [
+      {
+        "model": "DT0C-7Ag",
+        "finish": "Aluminium grijs",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16998",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT0C-W7_-7-inch-touchscreen-Wallbox_16122025TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-7Ag/interieur-alu-7-min-2.jpg",
+        "imageFile": "images/dt0c-7ag.jpg"
+      },
+      {
+        "model": "DT0C-7Ab",
+        "finish": "Aluminium zwart",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16997",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT0C-W7_-7-inch-touchscreen-Wallbox_16122025TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-7Ab/Duotecno-Dorine-Ghyselinck-%C2%A9-Pieter-DHoop-13-min.jpg",
+        "imageFile": "images/dt0c-7ab.jpg"
+      },
+      {
+        "model": "DT0C-7ALw",
+        "finish": "Aluminium Lak wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=17016",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT0C-W7_-7-inch-touchscreen-Wallbox_16122025TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-7Alw/Foto-2-10-2020-15-22-06-min.jpg",
+        "imageFile": "images/dt0c-7alw.jpg"
+      },
+      {
+        "model": "DT0C-7Br",
+        "finish": "Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=17018",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT0C-W7_-7-inch-touchscreen-Wallbox_16122025TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-7Ab/DT0C-W5-min.jpg",
+        "imageFile": "images/dt0c-7br.jpg"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-ES1",
+    "productLine": "Essence 1-knop",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 1
+      }
+    ],
+    "powerW": 0.5,
+    "variants": [
+      {
+        "model": "DTBS-ES1w",
+        "finish": "White",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66653",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66653/ID_TDS_NL-FR-EN_DTBS-ES1x_Essence_drukknop_bus_1kan_18062026TP_2026-06-22-075803_snyn.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/66653/Essence_enkelvoudig_wit_linkerzijaanzicht.png",
+        "imageFile": "images/dtbs-es1w.png"
+      },
+      {
+        "model": "DTBS-ES1b",
+        "finish": "Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66726",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66726/ID_TDS_NL-FR-EN_DTBS-ES1x_Essence_drukknop_bus_1kan_18062026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/66726/Essence_enkelvoudig_van-links.png",
+        "imageFile": "images/dtbs-es1b.png"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-ES2",
+    "productLine": "Essence 2-knops",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "powerW": 0.5,
+    "variants": [
+      {
+        "model": "DTBS-ES2w",
+        "finish": "White",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66717",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66717/ID_TDS_NL-FR-EN_DTBS-ES2x_Essence_drukknop_bus_2kan_18062026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/66717/Essence_tweevoudig_wit_linkerzijaanzicht.png",
+        "imageFile": "images/dtbs-es2w.png"
+      },
+      {
+        "model": "DTBS-ES2b",
+        "finish": "Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66728",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66728/ID_TDS_NL-FR-EN_DTBS-ES2x_Essence_drukknop_bus_2kan_18062026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/66728/Essence_tweevoudig_van-links.png",
+        "imageFile": "images/dtbs-es2b.png"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-ES4",
+    "productLine": "Essence 4-knops",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "powerW": 0.5,
+    "variants": [
+      {
+        "model": "DTBS-ES4w",
+        "finish": "White",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66723",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66723/ID_TDS_NL-FR-EN_-DTBS-ES4x_Essence_drukknop_bus_1kan_18062026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/66723/Essence_viervoudig_wit_linkerzijaanzicht.png",
+        "imageFile": "images/dtbs-es4w.png"
+      },
+      {
+        "model": "DTBS-ES4b",
+        "finish": "Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66730",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66730/ID_TDS_NL-FR-EN_-DTBS-ES4x_Essence_drukknop_bus_1kan_18062026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/66730/Essence_viervoudig_van-links.png",
+        "imageFile": "images/dtbs-es4b.png"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-B1",
+    "productLine": "Serenity 1-knop",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 1
+      }
+    ],
+    "powerW": 0.5,
+    "variants": [
+      {
+        "model": "DTBS-B1Ag",
+        "finish": "Aluminium Grey",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=29868",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/29868/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERA1-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b1ag.png"
+      },
+      {
+        "model": "DTBS-B1FA",
+        "finish": "Forged Aluminium Grey",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30399",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30399/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAF1-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b1fa.png"
+      },
+      {
+        "model": "DTBS-B1Ab",
+        "finish": "Aluminium Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30405",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30405/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAB1-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b1ab.png"
+      },
+      {
+        "model": "DTBS-B1FAb",
+        "finish": "Forged Aluminium Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30411",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30411/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERABF1-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b1fab.png"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-B2",
+    "productLine": "Serenity 2-knops",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "powerW": 0.5,
+    "variants": [
+      {
+        "model": "DTBS-B2Ag",
+        "finish": "Aluminium Grey",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=29870",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/29870/TDS_NL-FR-EN_DTBS-B2x._10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERA2-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b2ag.png"
+      },
+      {
+        "model": "DTBS-B2FA",
+        "finish": "Forged Aluminium Grey",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30401",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30401/TDS_NL-FR-EN_DTBS-B2x._10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAF2-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b2fa.png"
+      },
+      {
+        "model": "DTBS-B2Ab",
+        "finish": "Aluminium Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30407",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30407/TDS_NL-FR-EN_DTBS-B2x._10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAB2-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b2ab.png"
+      },
+      {
+        "model": "DTBS-B2FAb",
+        "finish": "Forged Aluminium Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30413",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30413/TDS_NL-FR-EN_DTBS-B2x._10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERABF2-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b2fab.png"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-B4",
+    "productLine": "Serenity 4-knops",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "powerW": 0.5,
+    "variants": [
+      {
+        "model": "DTBS-B4Ag",
+        "finish": "Aluminium Grey",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=29872",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/29872/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERA4-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b4ag.png"
+      },
+      {
+        "model": "DTBS-B4FA",
+        "finish": "Forged Aluminium Grey",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30403",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30403/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAF4-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-b4fa.png"
+      },
+      {
+        "model": "DTBS-B4Ab",
+        "finish": "Aluminium Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30409",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30409/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAB4.png",
+        "imageFile": "images/dtbs-b4ab.png"
+      },
+      {
+        "model": "DTBS-B4FAb",
+        "finish": "Forged Aluminium Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30415",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30415/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERABF4.png",
+        "imageFile": "images/dtbs-b4fab.png"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-H1",
+    "productLine": "Velocity 1-hendel",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 1
+      }
+    ],
+    "powerW": 0.5,
+    "variants": [
+      {
+        "model": "DTBS-H1Br",
+        "finish": "Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63393",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63393/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf"
+      },
+      {
+        "model": "DTBS-H1FBr",
+        "finish": "Forged Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63399",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63399/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf"
+      },
+      {
+        "model": "DTBS-H1GM",
+        "finish": "Gun Metal",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30440",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30440/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELB1.png",
+        "imageFile": "images/dtbs-h1gm.png"
+      },
+      {
+        "model": "DTBS-H1FGM",
+        "finish": "Forged Gun Metal",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30446",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30446/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELBF1-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-h1fgm.png"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-H2",
+    "productLine": "Velocity 2-hendels",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 2
+      }
+    ],
+    "powerW": 0.5,
+    "variants": [
+      {
+        "model": "DTBS-H2Br",
+        "finish": "Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63395",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63395/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf"
+      },
+      {
+        "model": "DTBS-H2FBr",
+        "finish": "Forged Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63401",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63401/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf"
+      },
+      {
+        "model": "DTBS-H2GM",
+        "finish": "Gun Metal",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30442",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30442/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELB2-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-h2gm.png"
+      },
+      {
+        "model": "DTBS-H2FGM",
+        "finish": "Forged Gun Metal",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30448",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30448/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELBF2-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-h2fgm.png"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-H4",
+    "productLine": "Velocity 4-hendels",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 4
+      }
+    ],
+    "powerW": 0.5,
+    "variants": [
+      {
+        "model": "DTBS-H4Br",
+        "finish": "Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63397",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63397/ID_TDS_NL-FR-EN_DTBS-S4x-Velocity-4-kanaals-BUS_10032026TP.pdf"
+      },
+      {
+        "model": "DTBS-H4FBr",
+        "finish": "Forged Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63403",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63403/ID_TDS_NL-FR-EN_DTBS-S4x-Velocity-4-kanaals-BUS_10032026TP.pdf"
+      },
+      {
+        "model": "DTBS-H4GM",
+        "finish": "Gun Metal",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30444",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30444/ID_TDS_NL-FR-EN_DTBS-S4x-Velocity-4-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELB4-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-h4gm.png"
+      },
+      {
+        "model": "DTBS-H4FGM",
+        "finish": "Forged Gun Metal",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30450",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30450/ID_TDS_NL-FR-EN_DTBS-S4x-Velocity-4-kanaals-BUS_10032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELBF4-Schuin-Rechts.png",
+        "imageFile": "images/dtbs-h4fgm.png"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DT30",
+    "productLine": "Temperatuursensor",
+    "category": "sensor",
+    "uiCategory": "Temperatuursensor",
+    "variants": [
+      {
+        "model": "DT30-te",
+        "finish": "BTicino tech",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16793",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Lx-_-TE-_-MG.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-TE/DT30-TE-min.jpg",
+        "imageFile": "images/dt30-te.jpg"
+      },
+      {
+        "model": "DT30-mg",
+        "finish": "BTicino magic",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16796",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Lx-_-TE-_-MG.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-MG/DT30-MG-min.jpg",
+        "imageFile": "images/dt30-mg.jpg"
+      },
+      {
+        "model": "DT30-na",
+        "finish": "Niko Anthracite",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16797",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Nx.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-NA/DT30-NA-min.jpg",
+        "imageFile": "images/dt30-na.jpg"
+      },
+      {
+        "model": "DT30-nc",
+        "finish": "Niko Cream",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16798",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Nx.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-NC/DT30-NC-min.jpg",
+        "imageFile": "images/dt30-nc.jpg"
+      },
+      {
+        "model": "DT30-nw",
+        "finish": "Niko White",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16799",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Nx.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-NW/DT30-NW-min.jpg",
+        "imageFile": "images/dt30-nw.jpg"
+      },
+      {
+        "model": "DT30-EX",
+        "finish": "los om in te bouwen",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16800",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-EX.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-EX/DT30-EX1-min.jpg",
+        "imageFile": "images/dt30-ex.jpg"
+      },
+      {
+        "model": "DT30-IN",
+        "finish": "ingebouwd in Duotecno schakelaar",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16801",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-EX.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-IN/IMG_0528-3-e1527089456679.jpg",
+        "imageFile": "images/dt30-in.jpg"
+      },
+      {
+        "model": "DT30-lg",
+        "finish": "BTicino light",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16836",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Lx-_-TE-_-MG.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-LG/DT30-LG-min.jpg",
+        "imageFile": "images/dt30-lg.jpg"
+      },
+      {
+        "model": "DT30-lv",
+        "finish": "BTicino living",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16837",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Lx-_-TE-_-MG.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-LV/DT30-LV-min-1.jpg",
+        "imageFile": "images/dt30-lv.jpg"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-4",
+    "productLine": "Touchbutton 4-kanaals",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 4
+      }
+    ],
+    "powerW": 1.2,
+    "variants": [
+      {
+        "model": "DTBS-4Ag",
+        "finish": "Aluminium Grijs",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16698",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Ag/DTBS-4Ag4gewit-1-2-e1528799487572.jpg",
+        "imageFile": "images/dtbs-4ag.jpg"
+      },
+      {
+        "model": "DTBS-4Ab",
+        "finish": "Aluminium Zwart",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16699",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Ab/DTBS-4Ab.png",
+        "imageFile": "images/dtbs-4ab.png"
+      },
+      {
+        "model": "DTBS-4ALw",
+        "finish": "Aluminium Lak Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16700",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DTBS-4ALw/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4ALw/DTBS_4Alw.png",
+        "imageFile": "images/dtbs-4alw.png"
+      },
+      {
+        "model": "DTBS-4bg",
+        "finish": "Brushed Gold",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16849",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4BG/DTBS-4BG.png",
+        "imageFile": "images/dtbs-4bg.png"
+      },
+      {
+        "model": "DTBS-4Gm",
+        "finish": "Gun Metal",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16701",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Br/DTBS-4Br.png",
+        "imageFile": "images/dtbs-4gm.png"
+      },
+      {
+        "model": "DTBS-4Br",
+        "finish": "Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16852",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Brl/DTBS-4Brl.png",
+        "imageFile": "images/dtbs-4br.png"
+      },
+      {
+        "model": "DTBS-4Brl",
+        "finish": "Brons Light",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=60338",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTBS-4x-touchbutton-4-voudig-BUS.pdf"
+      },
+      {
+        "model": "DTBS-4CCLw",
+        "finish": "Corian Claudia Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16859",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4CCLW/DTBS_4CCLW-2.png",
+        "imageFile": "images/dtbs-4cclw.png"
+      },
+      {
+        "model": "DTBS-4CLw",
+        "finish": "Corian Linea Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16861",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4CLIW/DTBS_4CLIW.png",
+        "imageFile": "images/dtbs-4clw.png"
+      },
+      {
+        "model": "DTBS-4Ch",
+        "finish": "Chroom",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16703",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4CH/DTBS-4CH_0001gewit3-e1526981207867.png",
+        "imageFile": "images/dtbs-4ch.png"
+      },
+      {
+        "model": "DTBS-4CRw",
+        "finish": "Corian Ronda Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16860",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4CORW/DTBS-4CROW.png",
+        "imageFile": "images/dtbs-4crw.png"
+      },
+      {
+        "model": "DTBS-4Cw",
+        "finish": "Corian Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16704",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Cw/DTBS_4CW.png",
+        "imageFile": "images/dtbs-4cw.png"
+      },
+      {
+        "model": "DTBS-4INV",
+        "finish": "Aanraakschakelaar op bus 4 kanalen, 8 functies Invisible",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/invisible/dtbs-2?variant=16927",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS-4INV.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4INV/DTBS_4INV-1.png",
+        "imageFile": "images/dtbs-4inv.png"
+      },
+      {
+        "model": "DTBS-4X Trimless",
+        "finish": "Trimless aanraakschakelaar op bus ingebouwd in de muur",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/trimless/dtbs-4?variant=16993",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16993/XILLO-TECHNISCHE-FICHE-TRIMLESS-SWITCH_INV_MCW_17032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4X%20Trimless/Cat-page-1000x600-5.jpg",
+        "imageFile": "images/dtbs-4x-trimless.jpg"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DT1ET-4",
+    "productLine": "Easy Touch",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 4
+      }
+    ],
+    "powerW": 1.3,
+    "variants": [
+      {
+        "model": "DT1ET-4Ab",
+        "finish": "Aluminium Zwart",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16873",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DT1ET-4Ab/FR-DE-EN-NL-DT1ET-4x-20181030.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Ab/DT1ET-4AB.png",
+        "imageFile": "images/dt1et-4ab.png"
+      },
+      {
+        "model": "DT1ET-4BRL",
+        "finish": "Bronze Light",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16951",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Brl/DT1ET-4BRL.png",
+        "imageFile": "images/dt1et-4brl.png"
+      },
+      {
+        "model": "DT1ET-4Ag",
+        "finish": "Aluminium Grijs",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16876",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-Ag/DT1ET-4Ag.png",
+        "imageFile": "images/dt1et-4ag.png"
+      },
+      {
+        "model": "DT1ET-4FAB",
+        "finish": "Forged Aluminium Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16971",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4FAB/DT1ET_4FAB.png",
+        "imageFile": "images/dt1et-4fab.png"
+      },
+      {
+        "model": "DT1ET-4ALw",
+        "finish": "Aluminium Lak Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16877",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Alw/DT1ET-4ALW-4.png",
+        "imageFile": "images/dt1et-4alw.png"
+      },
+      {
+        "model": "DT1ET-4FBr",
+        "finish": "Forged Bronze",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16970",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4FBr/DT1ET-FBr.png",
+        "imageFile": "images/dt1et-4fbr.png"
+      },
+      {
+        "model": "DT1ET-4FF",
+        "finish": "Fer Forgé",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16972",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4FF/DT1ET-FF.png",
+        "imageFile": "images/dt1et-4ff.png"
+      },
+      {
+        "model": "DT1ET-4Br",
+        "finish": "Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16883",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Br/DT1ET-4BR.png",
+        "imageFile": "images/dt1et-4br.png"
+      },
+      {
+        "model": "DT1ET-4Cw",
+        "finish": "Corian Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16882",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Cw/DT1ET-4CW.png",
+        "imageFile": "images/dt1et-4cw.png"
+      },
+      {
+        "model": "DT1ET-BCr",
+        "finish": "Brushed Copper Rose",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16969",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-BCr/DT1ET-4BCR.png",
+        "imageFile": "images/dt1et-bcr.png"
+      },
+      {
+        "model": "DT1ET-Bg",
+        "finish": "Brushed Gold",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16937",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-Bg/DT1ET-4BG.png",
+        "imageFile": "images/dt1et-bg.png"
+      },
+      {
+        "model": "DT1ET-4FBrl",
+        "finish": "Forged Bronze Light",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16879",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4FBrl/DT1ET-4FBRL.psd.jpg",
+        "imageFile": "images/dt1et-4fbrl.jpg"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DT1E-4",
+    "productLine": "Room-E",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 4
+      }
+    ],
+    "powerW": 1.3,
+    "variants": [
+      {
+        "model": "DT1E-4Ag",
+        "finish": "Aluminium Grijs",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16721",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Ag/DT1E_4Alg.jpg",
+        "imageFile": "images/dt1e-4ag.jpg"
+      },
+      {
+        "model": "DT1E-4Ab",
+        "finish": "Aluminium Zwart",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16724",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Ab/DT1E_4Alb.jpg",
+        "imageFile": "images/dt1e-4ab.jpg"
+      },
+      {
+        "model": "DT1E-4ALw",
+        "finish": "Alumunium Lak Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16725",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4ALw/DT1E-4ALw-website.png",
+        "imageFile": "images/dt1e-4alw.png"
+      },
+      {
+        "model": "DT1E-4BCR",
+        "finish": "\"Brushed Copper Rose",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16973",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4BCR/DT1E_4BCR.png",
+        "imageFile": "images/dt1e-4bcr.png"
+      },
+      {
+        "model": "DT1E-4Br",
+        "finish": "Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16729",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Br/DT1E_4br.jpg",
+        "imageFile": "images/dt1e-4br.jpg"
+      },
+      {
+        "model": "DT1E-4Brl",
+        "finish": "\"Bronze Light",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16953",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Brl/DT1E_4brl.jpg",
+        "imageFile": "images/dt1e-4brl.jpg"
+      },
+      {
+        "model": "DT1E-4BG",
+        "finish": "\"Brushed Gold",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16952",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4BG/DT1E_4BG.jpg",
+        "imageFile": "images/dt1e-4bg.jpg"
+      },
+      {
+        "model": "DT1E-4Cw",
+        "finish": "Corian Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16728",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Cw/DT1E_4cw.jpg",
+        "imageFile": "images/dt1e-4cw.jpg"
+      },
+      {
+        "model": "DT1E-4FAB",
+        "finish": "\"Forged Aluminium Black",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16974",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4FAB/DT1E_4FAB.png",
+        "imageFile": "images/dt1e-4fab.png"
+      },
+      {
+        "model": "DT1E-4Fbr",
+        "finish": "\"Forged Bronze",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16960",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Fbr/DT1E_4FBr.jpg",
+        "imageFile": "images/dt1e-4fbr.jpg"
+      },
+      {
+        "model": "DT1E-4FBrl",
+        "finish": "\"Forged Bronze Light",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16958",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4FBrl/DT1E_4FBRL.jpg",
+        "imageFile": "images/dt1e-4fbrl.jpg"
+      },
+      {
+        "model": "DT1E-4FAG",
+        "finish": "in \"Forged Aluminium Grey",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16955",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4FAG/DT1E_4Falg.jpg",
+        "imageFile": "images/dt1e-4fag.jpg"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DT40",
+    "productLine": "Bewegingsdetector inbouw",
+    "category": "detector",
+    "uiCategory": "Bewegingsdetector",
+    "powerW": 0.1,
+    "variants": [
+      {
+        "model": "DT40-Bb",
+        "finish": "inbouw (groot zwart)",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16788",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT40-Bx-nieuw.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-A02S/Blauw-Vierkant-Pictogram-Abstract-Logo-3.png",
+        "imageFile": "images/dt40-bb.png"
+      },
+      {
+        "model": "DT40-Bw",
+        "finish": "inbouw (groot wit)",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16787",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT40-Bx-nieuw.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-A02S/Blauw-Vierkant-Pictogram-Abstract-Logo-2.png",
+        "imageFile": "images/dt40-bw.png"
+      },
+      {
+        "model": "DT40-PK",
+        "finish": "Plaster kit voor DT40-Bx",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=63500",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT40-PK/ID_TDS_NL-FR-EN_DT40-PK-plaster-kit_15012026TP.pdf"
+      },
+      {
+        "model": "DT40-lg",
+        "finish": "BTicino Light (klein wit)",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16789",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Bx_INSTALLATION_CONCRETE.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-LG/DT40-LG-min.jpg",
+        "imageFile": "images/dt40-lg.jpg"
+      },
+      {
+        "model": "DT40-IN",
+        "finish": "Bewegingsdetector inbouw in toegeleverde front",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16791",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Bx_INSTALLATION_CONCRETE.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-IN/duotecno_be_20120102014550wvvla-1-e1527585036511.jpg",
+        "imageFile": "images/dt40-in.jpg"
+      },
+      {
+        "model": "DT40-Na",
+        "finish": "in Niko Anthracite (klein zwart)",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16839",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Nx.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-NA/DT40-NA-min.jpg",
+        "imageFile": "images/dt40-na.jpg"
+      },
+      {
+        "model": "DT40-Nc",
+        "finish": "Niko Cream (klein wit)",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16786",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Nx.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-NC/DT40-NC-min.jpg",
+        "imageFile": "images/dt40-nc.jpg"
+      },
+      {
+        "model": "DT40-Nw",
+        "finish": "Niko White (klein wit)",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16783",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Nx.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-NW/DT40-NW_2-min.jpg",
+        "imageFile": "images/dt40-nw.jpg"
+      },
+      {
+        "model": "DT40-lv",
+        "finish": "BTicino Living (klein zwart)",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16843",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Lx-_-TE-_-MG.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-LV/DT40-LV-min.jpg",
+        "imageFile": "images/dt40-lv.jpg"
+      },
+      {
+        "model": "DT40-Sb",
+        "finish": "inbouw (klein zwart)",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16838",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Sx.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-SB/Duotecno-catalogus-2018_NL_v17-min-1-2.jpg",
+        "imageFile": "images/dt40-sb.jpg"
+      },
+      {
+        "model": "DT40-Sw",
+        "finish": "inbouw (klein wit)",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16894",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Sx.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-SW/Duotecno-catalogus-2018_NL_v17-min-1-2-3.jpg",
+        "imageFile": "images/dt40-sw.jpg"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DT41",
+    "productLine": "Bewegingsdetector opbouw",
+    "category": "detector",
+    "uiCategory": "Bewegingsdetector",
+    "powerW": 0.1,
+    "variants": [
+      {
+        "model": "DT41-b",
+        "finish": "opbouw (zowel binnen als buiten) - zwart",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/opbouw/dt41?variant=16629",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT41-x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT41-B/KNX_MOTPLUS_B.png",
+        "imageFile": "images/dt41-b.png"
+      },
+      {
+        "model": "DT41-w",
+        "finish": "opbouw (zowel binnen als buiten) - wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/opbouw/dt41?variant=16792",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT41-x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT41-W/DT41-W.png",
+        "imageFile": "images/dt41-w.png"
+      }
+    ]
+  },
+  {
+    "model": "Pro App",
+    "name": "Duotecno ProApp",
+    "description": "Duotecno ProApp",
+    "category": "software",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/applicaties/applicaties?variant=34660",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/Duotecno-pro-app.png",
+    "imageFile": "images/pro-app.png"
+  },
+  {
+    "model": "App-Lite",
+    "name": "Duotecno Lite App",
+    "description": "Duotecno Lite App",
+    "category": "software",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/applicaties/applicaties?variant=34973",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/Applicatie/Ontwerp-zonder-titel-2.png",
+    "imageFile": "images/app-lite.png"
+  },
+  {
+    "model": "DT-Alto Black",
+    "name": "DT-audio Alto Black",
+    "description": "DT-audio Alto Black",
+    "category": "audio",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/audio/dt-alto?variant=36196",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/downloads/TDS_NL-FR-EN_DT-ALTOx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/Categories/Speaker-Zwart.png",
+    "imageFile": "images/dt-alto-black.png"
+  },
+  {
+    "model": "DT-Alto White",
+    "name": "DT-audio Alto White",
+    "description": "DT-audio Alto White",
+    "category": "audio",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/audio/dt-alto?variant=36198",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/downloads/TDS_NL-FR-EN_DT-ALTOx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/Categories/Speaker-Wit.png",
+    "imageFile": "images/dt-alto-white.png"
+  },
+  {
+    "model": "DT0B-01",
+    "name": "Smartbox+",
+    "description": "Smartbox+",
+    "category": "module",
+    "uiCategory": "Smartbox",
+    "isSmartboxBase": true,
+    "slotCount": 4,
+    "dinUnits": 12,
+    "lengthMm": 210,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16628",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/TDS_NL-FR-EN_DT0B-01.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0B-01/DT0B-01_0002gewit-e1527080385216.png",
+    "powerW": 9.9,
+    "imageFile": "images/dt0b-01.png"
+  },
+  {
+    "model": "DT0B-LITE",
+    "name": "Smartbox+ Lite",
+    "description": "Smartbox+ Lite",
+    "category": "module",
+    "uiCategory": "Smartbox",
+    "isSmartboxBase": true,
+    "slotCount": 4,
+    "dinUnits": 12,
+    "lengthMm": 210,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16780",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16780/ID_TDS_NL-FR-EN_DT0B-Smartbox-LITE_11022026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/Categories/Smartbox-LITE-Category-image.png",
+    "powerW": 9.9,
+    "imageFile": "images/dt0b-lite.png"
+  },
+  {
+    "model": "DT0B-MINI",
+    "name": "Smartbox+ Mini",
+    "description": "Smartbox+ Mini",
+    "category": "module",
+    "uiCategory": "Smartbox",
+    "isSmartboxBase": true,
+    "slotCount": 3,
+    "dinUnits": 9,
+    "lengthMm": 162,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=17019",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/17019/ID_TDS_NL-FR-EN_DT0B-Smartbox-MINI_11022026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0B-Mini/Smartbox-Mini-Website-1.png",
+    "powerW": 9.9,
+    "imageFile": "images/dt0b-mini.png"
+  },
+  {
+    "model": "DT0B-ULTRA",
+    "name": "Smartbox+ Ultra",
+    "description": "Smartbox+ Ultra",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=59887",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0B-ULTRA/SM-ULTRA-met-verschillende-dimmerprintjes-en-DALI-1.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T111600.084.png",
+    "imageFile": "images/dt0b-ultra.png"
+  },
+  {
+    "model": "DT0B-LE",
+    "name": "Smartbox+ Dimmer LE faseaansnijding",
+    "description": "Smartbox+ Dimmer LE faseaansnijding",
+    "category": "module",
+    "uiCategory": "Smartbox plugin",
+    "channelGroups": [
+      {
+        "type": "dimmer_le",
+        "count": 1
+      }
+    ],
+    "isSmartboxPlugin": true,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16627",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Smartboxes/TDS_NL-FR-EN_DT0B-D1.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T115246.674.png",
+    "imageFile": "images/dt0b-le.png"
+  },
+  {
+    "model": "DT0B-DC",
+    "name": "Smartbox+ Dimmer 0/1 - 10V",
+    "description": "Smartbox+ Dimmer 0/1 - 10V",
+    "category": "module",
+    "uiCategory": "Smartbox plugin",
+    "channelGroups": [
+      {
+        "type": "dimmer_dc",
+        "count": 1
+      }
+    ],
+    "isSmartboxPlugin": true,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16782",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Smartboxes/TDS_NL-FR-EN_DT0B-DC1.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T115834.281.png",
+    "imageFile": "images/dt0b-dc.png"
+  },
+  {
+    "model": "DT0B-PW",
+    "name": "Smartbox+ Dimmer LED PWM",
+    "description": "Smartbox+ Dimmer LED PWM",
+    "category": "module",
+    "uiCategory": "Smartbox plugin",
+    "channelGroups": [
+      {
+        "type": "dimmer_pwm",
+        "count": 1
+      }
+    ],
+    "isSmartboxPlugin": true,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16623",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16623/TDS_NL-FR-EN_DT0B-PW_PWM-LED-dimmer_05032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T115948.179.png",
+    "imageFile": "images/dt0b-pw.png"
+  },
+  {
+    "model": "DT0B-TE",
+    "name": "Smartbox+ Dimmer TE faseafsnijding",
+    "description": "Smartbox+ Dimmer TE faseafsnijding",
+    "category": "module",
+    "uiCategory": "Smartbox plugin",
+    "channelGroups": [
+      {
+        "type": "dimmer_te",
+        "count": 1
+      }
+    ],
+    "isSmartboxPlugin": true,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16626",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Smartboxes/TDS_NL-FR-EN_DT0B-TE1.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T120206.993.png",
+    "imageFile": "images/dt0b-te.png"
+  },
+  {
+    "model": "DT0B-R",
+    "name": "Smartbox+ Relais",
+    "description": "Smartbox+ Relais",
+    "category": "module",
+    "uiCategory": "Smartbox plugin",
+    "channelGroups": [
+      {
+        "type": "relay_no",
+        "count": 1
+      }
+    ],
+    "isSmartboxPlugin": true,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16781",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0B-ULTRA/TDS_NL-FR-EN_DT0B-R1-SB-Relais.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T120304.300.png",
+    "imageFile": "images/dt0b-r.png"
+  },
+  {
+    "model": "DT0B-SSR",
+    "name": "Smartbox+ Solid State Relais",
+    "description": "Smartbox+ Solid State Relais",
+    "category": "module",
+    "uiCategory": "Smartbox plugin",
+    "channelGroups": [
+      {
+        "type": "relay_ssr",
+        "count": 1
+      }
+    ],
+    "isSmartboxPlugin": true,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=60415",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0B-ULTRA/ID_TDS_NL-FR-EN_-DT0B-SSR-Sm-Solid-state-relais.pdf"
+  },
+  {
+    "model": "Comparison tool",
+    "name": "Vergelijkingstool",
+    "description": "Vergelijkingstool",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=54569",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/Vergelijkingstool/Vergelijkingstool-Duotecno-Smartboxen-5.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/Vergelijkingstool/Ontwerp-zonder-titel-2025-07-15T112436.148.png",
+    "imageFile": "images/comparison-tool.png"
+  },
+  {
+    "model": "DT00-01",
+    "name": "Werfkit",
+    "description": "Werfkit",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=16730",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Modules/TDS_NL-FR-EN_DT00-01.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT00-01/DT00-01_0006-1-e1525254310433.jpg",
+    "imageFile": "images/dt00-01.jpg"
+  },
+  {
+    "model": "DTTL-00",
+    "name": "Twilight Module",
+    "description": "Twilight Module",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dttl?variant=16748",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DTTL-00-Twilight-module.pdf",
+    "powerW": 3.4,
+    "channels": 8
+  },
+  {
+    "model": "DT00-24",
+    "name": "24 VAC voedingsmodule",
+    "description": "24 VAC voedingsmodule",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 9,
+    "lengthMm": 157.5,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=16742",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16742/ID_TDS_NL-FR-EN_DT00-24-Power-Supply-module-voeding-24V-AC_11022026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT00-24/DT00_24_0001website3-e1527082209846.png",
+    "imageFile": "images/dt00-24.png"
+  },
+  {
+    "model": "DT00-24SW",
+    "name": "2 kan. Can-switch + voeding",
+    "description": "2 kan. Can-switch + voeding",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 9,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=16743",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16743/ID_TDS_NL-FR-EN_DT00-24SW-Power-Supply-Module-voeding-CAN-Switch_11022026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT00-24SW/DT00-24SW-min-1.jpg",
+    "imageFile": "images/dt00-24sw.jpg"
+  },
+  {
+    "model": "DT0E-00",
+    "name": "RJ 11 busconverter",
+    "description": "RJ 11 busconverter",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 2,
+    "lengthMm": 35,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=30743",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DT0E-00/FR-DE-EN-NL-DT0E-00-20150914-1.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0E-00/DT0E-00-min.jpg",
+    "imageFile": "images/dt0e-00.jpg"
+  },
+  {
+    "model": "DT0F-00",
+    "name": "USB programmatie modem inclusief bindingsoftware",
+    "description": "USB programmatie modem inclusief bindingsoftware",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=30745",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Modules/TDS_NL-FR-EN_DT0F-00.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0F-00/DT0F-00-min.jpg",
+    "powerW": 3.6,
+    "imageFile": "images/dt0f-00.jpg"
+  },
+  {
+    "model": "DT13-SW",
+    "name": "CAN-switch",
+    "description": "CAN-switch",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=30747",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30747/TDS_NL-FR-EN_DT13-SW_CAN-Switch_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT13-SW_fiche.png",
+    "powerW": 3.1,
+    "imageFile": "images/dt13-sw.png"
+  },
+  {
+    "model": "DT02-06",
+    "name": "6 kan. 1/10V - 0/10V analoge output module + relais",
+    "description": "6 kan. 1/10V - 0/10V analoge output module + relais",
+    "category": "module",
+    "uiCategory": "Dimmer",
+    "channelGroups": [
+      {
+        "type": "dimmer_dc",
+        "count": 6
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=30755",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30755/ID_TDS_NL-FR-EN_DT02-06-0-10V-1-10V-Analoog-6-kanaals_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT02-06/DT02-06-web-1.jpg",
+    "powerW": 4.8,
+    "channels": 6,
+    "imageFile": "images/dt02-06.jpg"
+  },
+  {
+    "model": "DT05-03",
+    "name": "3 kan. 1000W leading-edge fase dimmer",
+    "description": "3 kan. 1000W leading-edge fase dimmer",
+    "category": "module",
+    "uiCategory": "Dimmer",
+    "channelGroups": [
+      {
+        "type": "dimmer_le",
+        "count": 3,
+        "maxLoadW": 1000
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "maxLoadPerChannel": 1000,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=16766",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16766/ID_TDS_NL-FR-EN_DT05-03-1000W-dimmodule-3-kanaals_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT05-03/DT05-03-e1525706816217.png",
+    "powerW": 2.4,
+    "channels": 3,
+    "imageFile": "images/dt05-03.png"
+  },
+  {
+    "model": "DT05-06",
+    "name": "6 kan. 500W leading-edge fase dimmer module",
+    "description": "6 kan. 500W leading-edge fase dimmer module",
+    "category": "module",
+    "uiCategory": "Dimmer",
+    "channelGroups": [
+      {
+        "type": "dimmer_le",
+        "count": 6,
+        "maxLoadW": 500
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "maxLoadPerChannel": 500,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=16759",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16759/ID_TDS_NL-FR-EN_DT05-06-500W-dimmodule-6-kanaals_05032026TP_2026-07-03-070851_csio.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT05-06TE/DT05-06-min-web.jpg",
+    "powerW": 2.4,
+    "channels": 6,
+    "imageFile": "images/dt05-06.jpg"
+  },
+  {
+    "model": "DT05-06TE",
+    "name": "6 kan. 500W trailing-edge fase dimmer module",
+    "description": "6 kan. 500W trailing-edge fase dimmer module",
+    "category": "module",
+    "uiCategory": "Dimmer",
+    "channelGroups": [
+      {
+        "type": "dimmer_te",
+        "count": 6,
+        "maxLoadW": 500
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "maxLoadPerChannel": 500,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=16762",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16762/ID_TDS_NL-FR-EN_DT05-06TE-500W-dimmodule-trailing-edge-6-kanaals_05032026TP_2026-05-07-093345_rlwi.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT05-06TE/DT05-06TE-2-1-e1527077201170.png",
+    "powerW": 2.4,
+    "channels": 6,
+    "imageFile": "images/dt05-06te.png"
+  },
+  {
+    "model": "DT06-06",
+    "name": "6 kan. 5A LED PWM dimmer module",
+    "description": "6 kan. 5A LED PWM dimmer module",
+    "category": "module",
+    "uiCategory": "Dimmer",
+    "channelGroups": [
+      {
+        "type": "dimmer_pwm",
+        "count": 6
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=30751",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30751/ID_TDS_NL-FR-EN_DT06-06-PWM-LED-dimmodule-6-kanaals._09032026TPindd_2026-05-26-130935_ifjt.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT06-06/DT06-06.png",
+    "powerW": 2.4,
+    "channels": 6,
+    "imageFile": "images/dt06-06.png"
+  },
+  {
+    "model": "DT13-DAL",
+    "name": "Dali interface 64 kan.",
+    "description": "Dali interface 64 kan.",
+    "category": "module",
+    "uiCategory": "DALI",
+    "channelGroups": [
+      {
+        "type": "dali",
+        "count": 64
+      }
+    ],
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=30760",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30760/ID_TDS_NL-FR-EN_DT13-DAL_DALI-Interface_17032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-DAL/DT13-DAL.jpg",
+    "powerW": 1.4,
+    "imageFile": "images/dt13-dal.jpg"
+  },
+  {
+    "model": "DT13-DMX",
+    "name": "DMX interface 64 kan.",
+    "description": "DMX interface 64 kan.",
+    "category": "module",
+    "uiCategory": "DMX",
+    "channelGroups": [
+      {
+        "type": "dmx",
+        "count": 64
+      }
+    ],
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=30762",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30762/ID_TDS_NL-FR-EN_DT13-DMX_DMX-Interface_17032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-DMX/DT13-DMX-2020.jpg",
+    "powerW": 1.1,
+    "imageFile": "images/dt13-dmx.jpg"
+  },
+  {
+    "model": "DT0E-01",
+    "name": "Universele level/spanningsconverter",
+    "description": "Universele level/spanningsconverter",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2-2/dt0e?variant=16961",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DT0E-01/FR-DE-EN-NL-DT0E-01-20190830.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0E-01/DT0E-01II-min.jpg",
+    "powerW": 0.3,
+    "imageFile": "images/dt0e-01.jpg"
+  },
+  {
+    "model": "DT0E-0S",
+    "name": "Drukknopinterface - 8 kanaals NO/NC + 2 kanaals analoge ingangsmodule",
+    "description": "Drukknopinterface - 8 kanaals NO/NC + 2 kanaals analoge ingangsmodule",
+    "category": "module",
+    "uiCategory": "Input",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 8
+      },
+      {
+        "type": "input_analog",
+        "count": 2
+      }
+    ],
+    "dinUnits": 12,
+    "lengthMm": 210,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2-2/dt0e?variant=16736",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Modules/TDS_NL-FR-EN_DT0E-0S.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0E-0S/DT0E-0S-web.jpg",
+    "powerW": 0.6,
+    "channels": 8,
+    "imageFile": "images/dt0e-0s.jpg"
+  },
+  {
+    "model": "DT07-16",
+    "name": "16 kan. NO/NC + 2 kan. analoge input module",
+    "description": "16 kan. NO/NC + 2 kan. analoge input module",
+    "category": "module",
+    "uiCategory": "Input",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 16
+      },
+      {
+        "type": "input_analog",
+        "count": 2
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2-2/dt0e?variant=30771",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30771/TDS_NL-FR-EN_DT07-16-NO-NC-16-kanaals-analoog-2-kanaals_05032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT07-16/DT07-16-min.jpg",
+    "powerW": 3.4,
+    "channels": 16,
+    "imageFile": "images/dt07-16.jpg"
+  },
+  {
+    "model": "DT13-ANA",
+    "name": "8-kanaals analoge input module",
+    "description": "8-kanaals analoge input module",
+    "category": "module",
+    "uiCategory": "Input",
+    "channelGroups": [
+      {
+        "type": "input_analog",
+        "count": 8
+      }
+    ],
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2-2/dt0e?variant=30773",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30773/ID_TDS_NL-FR-EN_DT13-ANA-Analoge-Input-module-8-kanaals_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-ANA/DT13-ANA_2020.jpg",
+    "powerW": 1.1,
+    "channels": 8,
+    "imageFile": "images/dt13-ana.jpg"
+  },
+  {
+    "model": "DT13-LC",
+    "name": "Niveau sturingsmodule - Level Controller",
+    "description": "Niveau sturingsmodule - Level Controller",
+    "category": "module",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2-2/dt0e?variant=30775",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30775/ID_TDS_NL-FR-EN_DT13-LC-Level-Control-Module_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-LC/DT13-LC2020.jpg",
+    "powerW": 1.3,
+    "imageFile": "images/dt13-lc.jpg"
+  },
+  {
+    "model": "DT03-04",
+    "name": "4 kan. 10 A relais NO contact module met feedback",
+    "description": "4 kan. 10 A relais NO contact module met feedback",
+    "category": "module",
+    "uiCategory": "Relais",
+    "channelGroups": [
+      {
+        "type": "relay_no",
+        "count": 4,
+        "maxCurrentA": 10
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2/dt03?variant=16758",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DT03-04/FR-DE-EN-NL-DT03-04-20161228J.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT03-04/DT02-06-min-web_2020-min.jpg",
+    "powerW": 7,
+    "channels": 4,
+    "imageFile": "images/dt03-04.jpg"
+  },
+  {
+    "model": "DT03-06",
+    "name": "6 kan. 16 A relais NO contact module",
+    "description": "6 kan. 16 A relais NO contact module",
+    "category": "module",
+    "uiCategory": "Relais",
+    "channelGroups": [
+      {
+        "type": "relay_no",
+        "count": 6,
+        "maxCurrentA": 16
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2/dt03?variant=16754",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16754/ID_TDS_NL-FR-EN_DT03-06-16A-Relais-module-6-kanaals_05032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT03-06/DT03-06-min.jpg",
+    "powerW": 3.8,
+    "channels": 3,
+    "imageFile": "images/dt03-06.jpg"
+  },
+  {
+    "model": "DT03-06NC",
+    "name": "6 kan. 10 A  relay NC contact module",
+    "description": "6 kan. 10 A  relay NC contact module",
+    "category": "module",
+    "uiCategory": "Relais",
+    "channelGroups": [
+      {
+        "type": "relay_nc",
+        "count": 6,
+        "maxCurrentA": 10
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.7,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2/dt03?variant=16757",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16757/ID_TDS_NL-FR-EN_DT03-12-10A-Relais-module-12-kanaals_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT03-06NC/DT03-06NC_2020.jpg",
+    "powerW": 8.4,
+    "channels": 12,
+    "imageFile": "images/dt03-06nc.jpg"
+  },
+  {
+    "model": "DT03-12",
+    "name": "12 kan. 10A relais NO contact module",
+    "description": "12 kan. 10A relais NO contact module",
+    "category": "module",
+    "uiCategory": "Relais",
+    "channelGroups": [
+      {
+        "type": "relay_no",
+        "count": 12,
+        "maxCurrentA": 10
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.5,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2/dt03?variant=16918",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Modules/TDS_NL-FR-EN_DT03-12.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT03-12/DT03-12_wit-min.jpg",
+    "powerW": 8.4,
+    "channels": 12,
+    "imageFile": "images/dt03-12.jpg"
+  },
+  {
+    "model": "DT04-03",
+    "name": "3 kan. 16A realis NO up/down module",
+    "description": "3 kan. 16A realis NO up/down module",
+    "category": "module",
+    "uiCategory": "Motor",
+    "channelGroups": [
+      {
+        "type": "motor_updown",
+        "count": 3,
+        "maxCurrentA": 16
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.5,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2/dt04?variant=16772",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16772/ID_TDS_NL-FR-EN_DT04-03-16A-Relais-module-3-kanaals-UP-DOWN_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT04-03/DT04-03-min-1.jpg",
+    "powerW": 3.8,
+    "channels": 3,
+    "imageFile": "images/dt04-03.jpg"
+  },
+  {
+    "model": "DT04-06",
+    "name": "6 kan. 10A relais NO up/down module",
+    "description": "6 kan. 10A relais NO up/down module",
+    "category": "module",
+    "uiCategory": "Motor",
+    "channelGroups": [
+      {
+        "type": "motor_updown",
+        "count": 6,
+        "maxCurrentA": 10
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.5,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2/dt04?variant=16919",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16919/ID_TDS_NL-FR-EN_DT04-06-10A-Relais-module-6-kanaals-UP-DOWN_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT04-06/DT04-06-2-min.jpg",
+    "powerW": 5,
+    "channels": 6,
+    "imageFile": "images/dt04-06.jpg"
+  },
+  {
+    "model": "DT04-P3",
+    "name": "3 kan. 10A relaismodule met polariteitswissel",
+    "description": "3 kan. 10A relaismodule met polariteitswissel",
+    "category": "module",
+    "uiCategory": "Motor",
+    "channelGroups": [
+      {
+        "type": "motor_polar",
+        "count": 3
+      }
+    ],
+    "dinUnits": 9,
+    "lengthMm": 157.5,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2/dt04?variant=16775",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16775/ID_TDS_NL-FR-EN_DT04-P3-16A-Relais-module-3-kanaals-polariteitswissel_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT04-P3/DT04-P3-min2020-min.jpg",
+    "powerW": 3.8,
+    "channels": 3,
+    "imageFile": "images/dt04-p3.jpg"
+  },
+  {
+    "model": "DT20-0DS",
+    "name": "Buitenpost video- en parlofonie IP | drukknop, camera en audio",
+    "description": "Buitenpost video- en parlofonie IP | drukknop, camera en audio",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16980",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-0DSx-SIP-Videofonie.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-BD/admin-ajax.jpg",
+    "imageFile": "images/dt20-0ds.jpg"
+  },
+  {
+    "model": "DT20-0DSb",
+    "name": "Buitenpost video- en parlofonie IP Zwart | drukknop, camera en audio",
+    "description": "Buitenpost video- en parlofonie IP Zwart | drukknop, camera en audio",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16902",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-0DSx-SIP-Videofonie.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-BD/admin-ajax.jpg",
+    "imageFile": "images/dt20-0dsb.jpg"
+  },
+  {
+    "model": "DT20-0DSBr",
+    "name": "Buitenpost video- en parlofonie IP | drukknop, camera en audio",
+    "description": "Buitenpost video- en parlofonie IP | drukknop, camera en audio",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=65492",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/65492/TDS_NL-FR-EN_DT20-0DSx-SIP-Videofonie.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/65492/Videofoon-Brons-afwerking.png",
+    "imageFile": "images/dt20-0dsbr.png"
+  },
+  {
+    "model": "DT20-CDS",
+    "name": "Buitenpost video- en parlofonie IP met codeklavier | drukknop, codeklavier, camera en audio",
+    "description": "Buitenpost video- en parlofonie IP met codeklavier | drukknop, codeklavier, camera en audio",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=59939",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-CDSx-SIP-Videofonie-codeklavier.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-CDS/Ontwerp-zonder-titel-2025-07-15T161323.350.png",
+    "imageFile": "images/dt20-cds.png"
+  },
+  {
+    "model": "DT20-CDSb",
+    "name": "Buitenpost video- en parlofonie IP met codeklavier Zwart | met drukknop, codeklavier, camera en audio",
+    "description": "Buitenpost video- en parlofonie IP met codeklavier Zwart | met drukknop, codeklavier, camera en audio",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16983",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-CDSx-SIP-Videofonie-codeklavier.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-BD/admin-ajax.jpg",
+    "imageFile": "images/dt20-cdsb.jpg"
+  },
+  {
+    "model": "DT20-CDSBr",
+    "name": "Buitenpost video- en parlofonie IP met codeklavier Brons | met drukknop, codeklavier, camera en audio",
+    "description": "Buitenpost video- en parlofonie IP met codeklavier Brons | met drukknop, codeklavier, camera en audio",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16981",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-CDSx-SIP-Videofonie-codeklavier.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-BD/admin-ajax.jpg",
+    "imageFile": "images/dt20-cdsbr.jpg"
+  },
+  {
+    "model": "DT20-WB",
+    "name": "Inbouwdoos voor DT20-0DS en DT20-CDS",
+    "description": "Inbouwdoos voor DT20-0DS en DT20-CDS",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=30700",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30700/ID_TDS_NL-FR-EN_DT20-WB-inbouwdoos-SIP-Videofonie_05052026TP_2026-05-11-074504_yqjm.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/30700/Kader.png",
+    "imageFile": "images/dt20-wb.png"
+  },
+  {
+    "model": "DT20-TDS",
+    "name": "8\" videofonie met Touchscreen | Parlofonie met codeklavier, camera, spraak en badgereader",
+    "description": "8\" videofonie met Touchscreen | Parlofonie met codeklavier, camera, spraak en badgereader",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16996",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-TDSb-IP-Videofonie-7-inch-scherm.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-TDS/wallbox-groter.png",
+    "imageFile": "images/dt20-tds.png"
+  },
+  {
+    "model": "DT20-TDSb",
+    "name": "8\" videofonie met Touchscreen | Parlofonie met face-id, codeklavier, camera, spraak en badgereader",
+    "description": "8\" videofonie met Touchscreen | Parlofonie met face-id, codeklavier, camera, spraak en badgereader",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=17017",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT20-TDS-Black/TDS_NL-FR-EN_DT20-TDSb-IP-Videofonie-7-inch-scherm.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-TDS-Black/DT20-CDSbr-3.png",
+    "imageFile": "images/dt20-tdsb.png"
+  },
+  {
+    "model": "DT20-WTD",
+    "name": "Inbouwdoos voor DT20-TDS",
+    "description": "Inbouwdoos voor DT20-TDS",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=30698",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-TDS/wallbox-groter.png",
+    "imageFile": "images/dt20-wtd.png"
+  },
+  {
+    "model": "DT20-AK1",
+    "name": "Buitenpost VoIP/ SIP",
+    "description": "Buitenpost VoIP/ SIP",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=51934",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT20-AK1/TDS_NL-FR-EN_DT20-AK1-Buitenpost-voIP-SIP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-AK1/DT20-AK1.png",
+    "imageFile": "images/dt20-ak1.png"
+  },
+  {
+    "model": "DT20-CKx",
+    "name": "Buitenpost vo IP / SIP met codeklavier",
+    "description": "Buitenpost vo IP / SIP met codeklavier",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=51936",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT20-CKx/TDS_NL-FR-EN_DT20-CKx-Buitenpost-VoIP-SIP-met-codeklavier.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-CKx/DT20-CKx.png",
+    "imageFile": "images/dt20-ckx.png"
+  },
+  {
+    "model": "DT20-CSA",
+    "name": "Stand-alone codeklavier Aluminium",
+    "description": "Stand-alone codeklavier Aluminium",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16802",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-CSAx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSA/DT20-CSA_0002-1.jpg",
+    "imageFile": "images/dt20-csa.jpg"
+  },
+  {
+    "model": "DT20-CSAb",
+    "name": "Stand-alone codeklavier Zwart",
+    "description": "Stand-alone codeklavier Zwart",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16901",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-CSAx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSAPB/2f66a181-d497-4919-a74a-56fc072d067d.jpg",
+    "imageFile": "images/dt20-csab.jpg"
+  },
+  {
+    "model": "DT20-CSABr",
+    "name": "Stand-alone codeklavier Brons",
+    "description": "Stand-alone codeklavier Brons",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16909",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-CSAx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSABr/DT0C-w10II.jpg",
+    "imageFile": "images/dt20-csabr.jpg"
+  },
+  {
+    "model": "DT20-CSAPB",
+    "name": "Codeklavier met drukknop Aluminium",
+    "description": "Codeklavier met drukknop Aluminium",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16979",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-CSAPx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSA/DT0C-bwweb.jpg",
+    "imageFile": "images/dt20-csapb.jpg"
+  },
+  {
+    "model": "DT20-CSAPBb",
+    "name": "Codeklavier met drukknop Zwart",
+    "description": "Codeklavier met drukknop Zwart",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16805",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-CSAPx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSAPB/DT20-CSAPBb_0003.jpg",
+    "imageFile": "images/dt20-csapbb.jpg"
+  },
+  {
+    "model": "DT20-CSAPBBr",
+    "name": "Codeklavier met drukknop Brons",
+    "description": "Codeklavier met drukknop Brons",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=60531",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-CSAPx.pdf"
+  },
+  {
+    "model": "DT20-SAPB",
+    "name": "Stand-alone belknop Aluminium",
+    "description": "Stand-alone belknop Aluminium",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16976",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-SAPBxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSA/DT0C-bwweb.jpg",
+    "imageFile": "images/dt20-sapb.jpg"
+  },
+  {
+    "model": "DT20-SAPBb",
+    "name": "Stand-alone belknop Zwart",
+    "description": "Stand-alone belknop Zwart",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16977",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSA/DT0C-bwweb.jpg",
+    "imageFile": "images/dt20-sapbb.jpg"
+  },
+  {
+    "model": "DT20-SAPBBr",
+    "name": "Stand-alone belknop Brons",
+    "description": "Stand-alone belknop Brons",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16978",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-SAPBxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSA/DT0C-bwweb.jpg",
+    "imageFile": "images/dt20-sapbbr.jpg"
+  },
+  {
+    "model": "DT20-CIP",
+    "name": "Stand-alone klassiek codeklavier",
+    "description": "Stand-alone klassiek codeklavier",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=60512",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT20-CIP/TDS_NL-FR-EN_DT20-A02S-Toegangscontrole-codeklavier.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-TDS-Black/Ontwerp-zonder-titel-2025-09-24T130456.899.png",
+    "imageFile": "images/dt20-cip.png"
+  },
+  {
+    "model": "DT21-BW",
+    "name": "Inbouwdoos voor codeklavier stand-alone",
+    "description": "Inbouwdoos voor codeklavier stand-alone",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=60514",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/60514/ID_TDS_NL-FR-EN_DT21-BW_Inbouwdoos-Stanalone._11052026TPindd.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/60514/ChatGPT-Image-7-mei-2026-15_52_38.png",
+    "imageFile": "images/dt21-bw.png"
+  },
+  {
+    "model": "DTSCR-INT (with gap)",
+    "name": "Geïntegreerd afdekraam met rand",
+    "description": "Geïntegreerd afdekraam met rand",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-inbouw/dtscr-2?variant=17012",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_TRIM_SOCKINT1_WG.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//Trimless/IMG_4247-min.png",
+    "imageFile": "images/dtscr-int-with-gap-.png"
+  },
+  {
+    "model": "DTSCR-INT (no gap)",
+    "name": "Invisible sockets",
+    "description": "Invisible sockets",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-inbouw/dtscr-2?variant=17015",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DTSCR-INT-no-gap/TDS_TRIM_SOCKINV1.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DTSCR-INT-no-gap/Foto-15-03-2021-20-04-38-17-min-e1617292140193.jpg",
+    "imageFile": "images/dtscr-int-no-gap-.jpg"
+  },
+  {
+    "model": "Invisible socket no gap",
+    "name": "Paintable sockets",
+    "description": "Paintable sockets",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-inbouw/dtscr-2?variant=30722",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/TDS_NL-FR-EN_SOCK-PAINTABLE.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//Invisible%20socket%20%28no%20gap%29/duotecno-Antwerpen-%C2%A9-Pieter-DHoop-28-min-1.jpg",
+    "imageFile": "images/invisible-socket-no-gap.jpg"
+  },
+  {
+    "model": "Paintable socket with gap",
+    "name": "Paintable socket (with gap)",
+    "description": "Paintable socket (with gap)",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-inbouw/dtscr-2?variant=30725",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/downloads/TDS_NL-FR-EN_SOCK-PAINTABLE.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//Paintable%20socket%20%28with%20gap%29/IMG_4152_21.jpg",
+    "imageFile": "images/paintable-socket-with-gap.jpg"
+  },
+  {
+    "model": "Trimless",
+    "name": "Trimless afdekramen, stopcontacten",
+    "description": "Trimless afdekramen, stopcontacten",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-inbouw/dtscr-2?variant=30720",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCR-xxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/Ontwerp-zonder-titel-1.png",
+    "imageFile": "images/trimless.png"
+  },
+  {
+    "model": "DTSCR-1Ab",
+    "name": "Frontplaat voor stopcontact 6mm Aluminium zwart, enkelvoudig",
+    "description": "Frontplaat voor stopcontact 6mm Aluminium zwart, enkelvoudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=30709",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCR-xxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTSCR-1Ab/DTSCR-1AB_Wit-min-1.jpg",
+    "imageFile": "images/dtscr-1ab.jpg"
+  },
+  {
+    "model": "DTSCR-1ALw",
+    "name": "Frontplaat voor stopcontact 6mm Aluminium Lak Wit, enkelvoudig",
+    "description": "Frontplaat voor stopcontact 6mm Aluminium Lak Wit, enkelvoudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=30711",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTSCR-1Ab/DTSCR-1AW.png",
+    "imageFile": "images/dtscr-1alw.png"
+  },
+  {
+    "model": "DTSCR-1Ag",
+    "name": "Frontplaat voor stopcontact 6 mm Aluminium Grijs, enkelvoudig",
+    "description": "Frontplaat voor stopcontact 6 mm Aluminium Grijs, enkelvoudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=30713",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCR-xxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTSCR-1Ab/DTSCR-1AG.png",
+    "imageFile": "images/dtscr-1ag.png"
+  },
+  {
+    "model": "DTSCR-2ALw",
+    "name": "Frontplaat voor stopcontact 6mm Aluminium Lak Wit, 2-voudig",
+    "description": "Frontplaat voor stopcontact 6mm Aluminium Lak Wit, 2-voudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=30717",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCR-xxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTSCR-2ALw/DTSCR_2ALUW_DiskStation_Dec-15-0947-2020_Conflict-min.jpg",
+    "imageFile": "images/dtscr-2alw.jpg"
+  },
+  {
+    "model": "DTSCR-1Gm",
+    "name": "Frontplaat voor stopcontact 6mm Gun Metal, enkelvoudig",
+    "description": "Frontplaat voor stopcontact 6mm Gun Metal, enkelvoudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=30715",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCR-xxx.pdf"
+  },
+  {
+    "model": "DTSCR-1Br",
+    "name": "Frontplaat voor stopcontact 6mm Brons, enkelvoudig",
+    "description": "Frontplaat voor stopcontact 6mm Brons, enkelvoudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=60328",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/TDS_NL-FR-EN_DTSCR-xxx-Stopcontact-6mm.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-09-03T103849.621.png",
+    "imageFile": "images/dtscr-1br.png"
+  },
+  {
+    "model": "DTSCR-1Brl",
+    "name": "Frontplaat voor stopcontact 6mm Brons Light, enkelvoudig",
+    "description": "Frontplaat voor stopcontact 6mm Brons Light, enkelvoudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=60330",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/TDS_NL-FR-EN_DTSCR-xxx-Stopcontact-6mm.pdf"
+  },
+  {
+    "model": "DTSCN-1Ab",
+    "name": "Frontplaat voor stopcontact Aluminium zwart, enkelvoudig",
+    "description": "Frontplaat voor stopcontact Aluminium zwart, enkelvoudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=16812",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCN-xxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTSCN-1Ab/D53J7152-1-e1524949020581.png",
+    "imageFile": "images/dtscn-1ab.png"
+  },
+  {
+    "model": "DTSCN-2Ab",
+    "name": "Frontplaat voor stopcontact Aluminium zwart, 2-voudig",
+    "description": "Frontplaat voor stopcontact Aluminium zwart, 2-voudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=16813",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCN-xxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTSCN-2Ab/DTSCN-2Ab-002-e1524951035126.jpg",
+    "imageFile": "images/dtscn-2ab.jpg"
+  },
+  {
+    "model": "DTSCN-3Ab",
+    "name": "Frontplaat voor stopcontact Aluminium zwart, 3-voudig",
+    "description": "Frontplaat voor stopcontact Aluminium zwart, 3-voudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=16814",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCN-xxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTSCN-3Ab/DTSCN-3-Alu-Zwart_0001.jpg",
+    "imageFile": "images/dtscn-3ab.jpg"
+  },
+  {
+    "model": "DTSCN-1Ag",
+    "name": "Frontplaat voor stopcontact Aluminium, enkelvoudig",
+    "description": "Frontplaat voor stopcontact Aluminium, enkelvoudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=16818",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCN-xxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTSCN-1Ag/D53J7170-e1524948402196.jpg",
+    "imageFile": "images/dtscn-1ag.jpg"
+  },
+  {
+    "model": "DTSCN-2Ag",
+    "name": "Frontplaat voor stopcontact Aluminium, 2-voudig",
+    "description": "Frontplaat voor stopcontact Aluminium, 2-voudig",
+    "category": "cover",
+    "uiCategory": "Accessoire",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/afdekramen-stopcontacten/afdekramen-opbouw/dtscn?variant=16819",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTSCN-xxx.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTSCN-2Ag/D53J0368-copy-web-min.jpg",
+    "imageFile": "images/dtscn-2ag.jpg"
+  },
+  {
+    "model": "DT10-AU",
+    "name": "Audio Bluesound/Sonos interface + 8 kan. IR",
+    "description": "Audio Bluesound/Sonos interface + 8 kan. IR",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=17011",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/17011/ID_TDS_NL-FR-EN_DT10-AU-Audio-Interface_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-AU/DT13_AU_audio-interface-min-3.jpg",
+    "powerW": 5.8,
+    "imageFile": "images/dt10-au.jpg"
+  },
+  {
+    "model": "DT10-ARS",
+    "name": "Artsound interface + 8 kan. IR transmitter",
+    "description": "Artsound interface + 8 kan. IR transmitter",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16635",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16635/ID_TDS_NL-FR-EN_DT10-AU-Audio-Interface_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-ARS/DT10-ARS_groot-min.jpg",
+    "powerW": 5.8,
+    "imageFile": "images/dt10-ars.jpg"
+  },
+  {
+    "model": "DT10-BOE",
+    "name": "Bose interface + 8 kan. IR transceiver Extend",
+    "description": "Bose interface + 8 kan. IR transceiver Extend",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16636",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16636/ID_TDS_NL-FR-EN_DT10-INT-Integra-Interface-IR-Transm.-8-kanaals_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-BOE/DT10_BO20201-min.jpg",
+    "powerW": 5.8,
+    "imageFile": "images/dt10-boe.jpg"
+  },
+  {
+    "model": "DT10-INT",
+    "name": "Integra interface + 8 kan. IR tranceiver Extend",
+    "description": "Integra interface + 8 kan. IR tranceiver Extend",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16637",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16637/ID_TDS_NL-FR-EN_DT10-RTI-RTI-Interface-IR-Transmit.-8-kanaals_09032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-INT/DT10-INT_groot-min.jpg",
+    "powerW": 2.6,
+    "channels": 8,
+    "imageFile": "images/dt10-int.jpg"
+  },
+  {
+    "model": "DT10-MAR",
+    "name": "Marantz interface + 8 kan. IR transceiver Extend",
+    "description": "Marantz interface + 8 kan. IR transceiver Extend",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16638",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16638/TDS_NL-FR-EN_DT10-MAR_09032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-MAR/DT10-MAR_groot-min.jpg",
+    "powerW": 2.6,
+    "channels": 8,
+    "imageFile": "images/dt10-mar.jpg"
+  },
+  {
+    "model": "DT10-NUV",
+    "name": "Nuvo interface + 8 kan. IR tranceiver Extend",
+    "description": "Nuvo interface + 8 kan. IR tranceiver Extend",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16639",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT10-NUV.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-NUV/DT10-NUV_groot-min.jpg",
+    "powerW": 2.6,
+    "channels": 8,
+    "imageFile": "images/dt10-nuv.jpg"
+  },
+  {
+    "model": "DT10-OPU",
+    "name": "Opus interface + 8 kan. IR tranceiver Extend",
+    "description": "Opus interface + 8 kan. IR tranceiver Extend",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16640",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT10-OPU.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-OPU/DT10-OPU-e1527086737196.png",
+    "powerW": 2.6,
+    "channels": 8,
+    "imageFile": "images/dt10-opu.png"
+  },
+  {
+    "model": "DT10-RTI",
+    "name": "RTI interface + 8 kan. IR transceiver Extend",
+    "description": "RTI interface + 8 kan. IR transceiver Extend",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16641",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT10-RTI.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-RTI/DT10-RTI_groot-min.jpg",
+    "powerW": 2.6,
+    "channels": 8,
+    "imageFile": "images/dt10-rti.jpg"
+  },
+  {
+    "model": "DT10-B&O",
+    "name": "B&O interface + 8 kanaals IR transceiver Extend",
+    "description": "B&O interface + 8 kanaals IR transceiver Extend",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16963",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT10-BO.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-B%26O/DT10_BO20201-min-1.jpg",
+    "powerW": 2.6,
+    "channels": 8,
+    "imageFile": "images/dt10-b-o.jpg"
+  },
+  {
+    "model": "DT13-G3",
+    "name": "RS 232 interface Galaxy alarm",
+    "description": "RS 232 interface Galaxy alarm",
+    "category": "interface",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/camera-alarm/dt13-2?variant=16651",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16651/ID_TDS_NL-FR-EN_DT13-G3_Galaxy-Alarm-interface_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-G3/DT13-G3-WEB-min-1.jpg",
+    "powerW": 2.2,
+    "imageFile": "images/dt13-g3.jpg"
+  },
+  {
+    "model": "DT13-SAT",
+    "name": "TCP/IP Satel alarm interface",
+    "description": "TCP/IP Satel alarm interface",
+    "category": "interface",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/camera-alarm/dt13-2?variant=16652",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16652/ID_TDS_NL-FR-EN_DT13-SAT-Satel-Alarm-Interface_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-SAT/DT13-SAT-min-1-1.jpg",
+    "powerW": 2.9,
+    "imageFile": "images/dt13-sat.jpg"
+  },
+  {
+    "model": "DT13-TC",
+    "name": "RS 232 interface Texecom alarm",
+    "description": "RS 232 interface Texecom alarm",
+    "category": "interface",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/camera-alarm/dt13-2?variant=16840",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16840/ID_TDS_NL-FR-EN_DT13-TC-Texecom-Premier-Alarm-Interface_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-TC/DT13-TC_WEB-min.jpg",
+    "powerW": 2.9,
+    "imageFile": "images/dt13-tc.jpg"
+  },
+  {
+    "model": "DT13-MOD",
+    "name": "RS485 Modbus interface",
+    "description": "RS485 Modbus interface",
+    "category": "interface",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/hvac/dt13-3?variant=16653",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16653/ID_TDS_NL-FR-EN_DT13-MOD-Modbus-Interface-RS-485_31032026TP.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-MOD/DT13-MOD-1-min.jpg",
+    "powerW": 3.6,
+    "imageFile": "images/dt13-mod.jpg"
+  },
+  {
+    "model": "DT18-HS",
+    "name": "TCP/IP Homeserver inclusief Home Manager",
+    "description": "TCP/IP Homeserver inclusief Home Manager",
+    "category": "interface",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 4,
+    "lengthMm": 70,
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/tcp-ip/dt18?variant=16833",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT18-HS.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT18-HS/DT18-HS-WEB-min.jpg",
+    "powerW": 3.6,
+    "imageFile": "images/dt18-hs.jpg"
+  },
+  {
+    "model": "DT18-GT",
+    "name": "Duotecno Gateway",
+    "description": "Duotecno Gateway",
+    "category": "interface",
+    "uiCategory": "Infrastructuur",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/tcp-ip/dt18?variant=17009",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT18-GT.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT18-GT/DT18-GT-WEB.jpg",
+    "powerW": 4.8,
+    "imageFile": "images/dt18-gt.jpg"
+  },
+  {
+    "model": "DT18-PRO",
+    "name": "TCP/IP Pro Server",
+    "description": "TCP/IP Pro Server",
+    "category": "interface",
+    "uiCategory": "Infrastructuur",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/tcp-ip/dt18?variant=30589",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT18-PRO.pdf",
+    "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT18-PRO.jpg",
+    "powerW": 4.2,
+    "imageFile": "images/dt18-pro.jpg"
+  },
+  {
+    "model": "DT46-W HELO",
+    "name": "Helo inbouwdetector",
+    "description": "Helo inbouwdetector",
+    "category": "detector",
+    "uiCategory": "Bewegingsdetector",
+    "functionalModel": "DT46",
+    "productLine": "Helo detector",
+    "finish": "Helo inbouwdetector",
+    "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=60395",
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/60395/ID_TDS_NL-FR-EN_DT46_x-Bewegingssensor-HELO_18032026TP_2026-06-17-140029_xmoq.pdf",
+    "powerW": 0.1
+  }
+]

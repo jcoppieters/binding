@@ -1,0 +1,13 @@
+{
+  "model": "DT46-W HELO",
+  "name": "Helo inbouwdetector",
+  "description": "Helo inbouwdetector",
+  "category": "detector",
+  "uiCategory": "Bewegingsdetector",
+  "functionalModel": "DT46",
+  "productLine": "Helo detector",
+  "finish": "Helo inbouwdetector",
+  "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=60395",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/60395/ID_TDS_NL-FR-EN_DT46_x-Bewegingssensor-HELO_18032026TP_2026-06-17-140029_xmoq.pdf",
+  "powerW": 0.1
+}

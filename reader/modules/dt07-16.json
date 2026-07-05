@@ -1,0 +1,25 @@
+{
+  "model": "DT07-16",
+  "name": "16 kan. NO/NC + 2 kan. analoge input module",
+  "description": "16 kan. NO/NC + 2 kan. analoge input module",
+  "category": "module",
+  "uiCategory": "Input",
+  "channelGroups": [
+    {
+      "type": "input_digital",
+      "count": 16
+    },
+    {
+      "type": "input_analog",
+      "count": 2
+    }
+  ],
+  "dinUnits": 9,
+  "lengthMm": 157.7,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2-2/dt0e?variant=30771",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30771/TDS_NL-FR-EN_DT07-16-NO-NC-16-kanaals-analoog-2-kanaals_05032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT07-16/DT07-16-min.jpg",
+  "powerW": 3.4,
+  "channels": 16,
+  "imageFile": "images/dt07-16.jpg"
+}

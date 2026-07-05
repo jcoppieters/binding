@@ -1,0 +1,21 @@
+{
+  "model": "DT13-ANA",
+  "name": "8-kanaals analoge input module",
+  "description": "8-kanaals analoge input module",
+  "category": "module",
+  "uiCategory": "Input",
+  "channelGroups": [
+    {
+      "type": "input_analog",
+      "count": 8
+    }
+  ],
+  "dinUnits": 4,
+  "lengthMm": 70,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2-2/dt0e?variant=30773",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30773/ID_TDS_NL-FR-EN_DT13-ANA-Analoge-Input-module-8-kanaals_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-ANA/DT13-ANA_2020.jpg",
+  "powerW": 1.1,
+  "channels": 8,
+  "imageFile": "images/dt13-ana.jpg"
+}

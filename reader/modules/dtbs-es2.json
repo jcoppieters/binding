@@ -1,0 +1,25 @@
+{
+  "functionalModel": "DTBS-ES2",
+  "productLine": "Essence 2-knops",
+  "category": "switch",
+  "uiCategory": "Schakelaar",
+  "powerW": 0.5,
+  "variants": [
+    {
+      "model": "DTBS-ES2w",
+      "finish": "White",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66717",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66717/ID_TDS_NL-FR-EN_DTBS-ES2x_Essence_drukknop_bus_2kan_18062026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/66717/Essence_tweevoudig_wit_linkerzijaanzicht.png",
+      "imageFile": "images/dtbs-es2w.png"
+    },
+    {
+      "model": "DTBS-ES2b",
+      "finish": "Black",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66728",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66728/ID_TDS_NL-FR-EN_DTBS-ES2x_Essence_drukknop_bus_2kan_18062026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/66728/Essence_tweevoudig_van-links.png",
+      "imageFile": "images/dtbs-es2b.png"
+    }
+  ]
+}

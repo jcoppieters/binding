@@ -1,0 +1,14 @@
+{
+  "model": "DT13-MOD",
+  "name": "RS485 Modbus interface",
+  "description": "RS485 Modbus interface",
+  "category": "interface",
+  "uiCategory": "Infrastructuur",
+  "dinUnits": 4,
+  "lengthMm": 70,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/hvac/dt13-3?variant=16653",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16653/ID_TDS_NL-FR-EN_DT13-MOD-Modbus-Interface-RS-485_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-MOD/DT13-MOD-1-min.jpg",
+  "powerW": 3.6,
+  "imageFile": "images/dt13-mod.jpg"
+}

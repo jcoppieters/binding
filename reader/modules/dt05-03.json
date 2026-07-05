@@ -1,0 +1,23 @@
+{
+  "model": "DT05-03",
+  "name": "3 kan. 1000W leading-edge fase dimmer",
+  "description": "3 kan. 1000W leading-edge fase dimmer",
+  "category": "module",
+  "uiCategory": "Dimmer",
+  "channelGroups": [
+    {
+      "type": "dimmer_le",
+      "count": 3,
+      "maxLoadW": 1000
+    }
+  ],
+  "dinUnits": 9,
+  "lengthMm": 157.7,
+  "maxLoadPerChannel": 1000,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=16766",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16766/ID_TDS_NL-FR-EN_DT05-03-1000W-dimmodule-3-kanaals_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT05-03/DT05-03-e1525706816217.png",
+  "powerW": 2.4,
+  "channels": 3,
+  "imageFile": "images/dt05-03.png"
+}

@@ -1,0 +1,13 @@
+{
+  "model": "DT10-OPU",
+  "name": "Opus interface + 8 kan. IR tranceiver Extend",
+  "description": "Opus interface + 8 kan. IR tranceiver Extend",
+  "category": "interface",
+  "uiCategory": "Audio",
+  "sourceUrl": "https://www.duotecno.be/nl/producten/interfaces/audio-video/dt10?variant=16640",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT10-OPU.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-OPU/DT10-OPU-e1527086737196.png",
+  "powerW": 2.6,
+  "channels": 8,
+  "imageFile": "images/dt10-opu.png"
+}

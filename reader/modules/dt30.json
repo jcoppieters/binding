@@ -1,0 +1,80 @@
+{
+  "functionalModel": "DT30",
+  "productLine": "Temperatuursensor",
+  "category": "sensor",
+  "uiCategory": "Temperatuursensor",
+  "variants": [
+    {
+      "model": "DT30-te",
+      "finish": "BTicino tech",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16793",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Lx-_-TE-_-MG.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-TE/DT30-TE-min.jpg",
+      "imageFile": "images/dt30-te.jpg"
+    },
+    {
+      "model": "DT30-mg",
+      "finish": "BTicino magic",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16796",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Lx-_-TE-_-MG.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-MG/DT30-MG-min.jpg",
+      "imageFile": "images/dt30-mg.jpg"
+    },
+    {
+      "model": "DT30-na",
+      "finish": "Niko Anthracite",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16797",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Nx.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-NA/DT30-NA-min.jpg",
+      "imageFile": "images/dt30-na.jpg"
+    },
+    {
+      "model": "DT30-nc",
+      "finish": "Niko Cream",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16798",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Nx.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-NC/DT30-NC-min.jpg",
+      "imageFile": "images/dt30-nc.jpg"
+    },
+    {
+      "model": "DT30-nw",
+      "finish": "Niko White",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16799",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Nx.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-NW/DT30-NW-min.jpg",
+      "imageFile": "images/dt30-nw.jpg"
+    },
+    {
+      "model": "DT30-EX",
+      "finish": "los om in te bouwen",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16800",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-EX.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-EX/DT30-EX1-min.jpg",
+      "imageFile": "images/dt30-ex.jpg"
+    },
+    {
+      "model": "DT30-IN",
+      "finish": "ingebouwd in Duotecno schakelaar",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16801",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-EX.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-IN/IMG_0528-3-e1527089456679.jpg",
+      "imageFile": "images/dt30-in.jpg"
+    },
+    {
+      "model": "DT30-lg",
+      "finish": "BTicino light",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16836",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Lx-_-TE-_-MG.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-LG/DT30-LG-min.jpg",
+      "imageFile": "images/dt30-lg.jpg"
+    },
+    {
+      "model": "DT30-lv",
+      "finish": "BTicino living",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16837",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-Lx-_-TE-_-MG.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-LV/DT30-LV-min-1.jpg",
+      "imageFile": "images/dt30-lv.jpg"
+    }
+  ]
+}

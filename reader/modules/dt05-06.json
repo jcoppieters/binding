@@ -1,0 +1,23 @@
+{
+  "model": "DT05-06",
+  "name": "6 kan. 500W leading-edge fase dimmer module",
+  "description": "6 kan. 500W leading-edge fase dimmer module",
+  "category": "module",
+  "uiCategory": "Dimmer",
+  "channelGroups": [
+    {
+      "type": "dimmer_le",
+      "count": 6,
+      "maxLoadW": 500
+    }
+  ],
+  "dinUnits": 9,
+  "lengthMm": 157.7,
+  "maxLoadPerChannel": 500,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2/dt05?variant=16759",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16759/ID_TDS_NL-FR-EN_DT05-06-500W-dimmodule-6-kanaals_05032026TP_2026-07-03-070851_csio.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT05-06TE/DT05-06-min-web.jpg",
+  "powerW": 2.4,
+  "channels": 6,
+  "imageFile": "images/dt05-06.jpg"
+}

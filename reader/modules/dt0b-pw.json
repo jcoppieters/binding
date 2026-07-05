@@ -1,0 +1,18 @@
+{
+  "model": "DT0B-PW",
+  "name": "Smartbox+ Dimmer LED PWM",
+  "description": "Smartbox+ Dimmer LED PWM",
+  "category": "module",
+  "uiCategory": "Smartbox plugin",
+  "channelGroups": [
+    {
+      "type": "dimmer_pwm",
+      "count": 1
+    }
+  ],
+  "isSmartboxPlugin": true,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16623",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16623/TDS_NL-FR-EN_DT0B-PW_PWM-LED-dimmer_05032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T115948.179.png",
+  "imageFile": "images/dt0b-pw.png"
+}

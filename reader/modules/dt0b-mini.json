@@ -1,0 +1,16 @@
+{
+  "model": "DT0B-MINI",
+  "name": "Smartbox+ Mini",
+  "description": "Smartbox+ Mini",
+  "category": "module",
+  "uiCategory": "Smartbox",
+  "isSmartboxBase": true,
+  "slotCount": 3,
+  "dinUnits": 9,
+  "lengthMm": 162,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=17019",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/17019/ID_TDS_NL-FR-EN_DT0B-Smartbox-MINI_11022026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0B-Mini/Smartbox-Mini-Website-1.png",
+  "powerW": 9.9,
+  "imageFile": "images/dt0b-mini.png"
+}

@@ -1,0 +1,47 @@
+{
+  "functionalModel": "DTBS-B1",
+  "productLine": "Serenity 1-knop",
+  "category": "switch",
+  "uiCategory": "Schakelaar",
+  "channelGroups": [
+    {
+      "type": "input_digital",
+      "count": 1
+    }
+  ],
+  "powerW": 0.5,
+  "variants": [
+    {
+      "model": "DTBS-B1Ag",
+      "finish": "Aluminium Grey",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=29868",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/29868/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERA1-Schuin-Rechts.png",
+      "imageFile": "images/dtbs-b1ag.png"
+    },
+    {
+      "model": "DTBS-B1FA",
+      "finish": "Forged Aluminium Grey",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30399",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30399/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAF1-Schuin-Rechts.png",
+      "imageFile": "images/dtbs-b1fa.png"
+    },
+    {
+      "model": "DTBS-B1Ab",
+      "finish": "Aluminium Black",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30405",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30405/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAB1-Schuin-Rechts.png",
+      "imageFile": "images/dtbs-b1ab.png"
+    },
+    {
+      "model": "DTBS-B1FAb",
+      "finish": "Forged Aluminium Black",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30411",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30411/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERABF1-Schuin-Rechts.png",
+      "imageFile": "images/dtbs-b1fab.png"
+    }
+  ]
+}

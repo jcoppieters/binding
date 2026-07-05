@@ -1,0 +1,21 @@
+{
+  "model": "DT04-P3",
+  "name": "3 kan. 10A relaismodule met polariteitswissel",
+  "description": "3 kan. 10A relaismodule met polariteitswissel",
+  "category": "module",
+  "uiCategory": "Motor",
+  "channelGroups": [
+    {
+      "type": "motor_polar",
+      "count": 3
+    }
+  ],
+  "dinUnits": 9,
+  "lengthMm": 157.5,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2/dt04?variant=16775",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16775/ID_TDS_NL-FR-EN_DT04-P3-16A-Relais-module-3-kanaals-polariteitswissel_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT04-P3/DT04-P3-min2020-min.jpg",
+  "powerW": 3.8,
+  "channels": 3,
+  "imageFile": "images/dt04-p3.jpg"
+}

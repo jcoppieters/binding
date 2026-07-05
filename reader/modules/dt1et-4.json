@@ -1,0 +1,111 @@
+{
+  "functionalModel": "DT1ET-4",
+  "productLine": "Easy Touch",
+  "category": "switch",
+  "uiCategory": "Schakelaar",
+  "channelGroups": [
+    {
+      "type": "input_digital",
+      "count": 4
+    }
+  ],
+  "powerW": 1.3,
+  "variants": [
+    {
+      "model": "DT1ET-4Ab",
+      "finish": "Aluminium Zwart",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16873",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DT1ET-4Ab/FR-DE-EN-NL-DT1ET-4x-20181030.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Ab/DT1ET-4AB.png",
+      "imageFile": "images/dt1et-4ab.png"
+    },
+    {
+      "model": "DT1ET-4BRL",
+      "finish": "Bronze Light",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16951",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Brl/DT1ET-4BRL.png",
+      "imageFile": "images/dt1et-4brl.png"
+    },
+    {
+      "model": "DT1ET-4Ag",
+      "finish": "Aluminium Grijs",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16876",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-Ag/DT1ET-4Ag.png",
+      "imageFile": "images/dt1et-4ag.png"
+    },
+    {
+      "model": "DT1ET-4FAB",
+      "finish": "Forged Aluminium Black",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16971",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4FAB/DT1ET_4FAB.png",
+      "imageFile": "images/dt1et-4fab.png"
+    },
+    {
+      "model": "DT1ET-4ALw",
+      "finish": "Aluminium Lak Wit",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16877",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Alw/DT1ET-4ALW-4.png",
+      "imageFile": "images/dt1et-4alw.png"
+    },
+    {
+      "model": "DT1ET-4FBr",
+      "finish": "Forged Bronze",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16970",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4FBr/DT1ET-FBr.png",
+      "imageFile": "images/dt1et-4fbr.png"
+    },
+    {
+      "model": "DT1ET-4FF",
+      "finish": "Fer Forgé",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16972",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4FF/DT1ET-FF.png",
+      "imageFile": "images/dt1et-4ff.png"
+    },
+    {
+      "model": "DT1ET-4Br",
+      "finish": "Brons",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16883",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Br/DT1ET-4BR.png",
+      "imageFile": "images/dt1et-4br.png"
+    },
+    {
+      "model": "DT1ET-4Cw",
+      "finish": "Corian Wit",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16882",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Cw/DT1ET-4CW.png",
+      "imageFile": "images/dt1et-4cw.png"
+    },
+    {
+      "model": "DT1ET-BCr",
+      "finish": "Brushed Copper Rose",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16969",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-BCr/DT1ET-4BCR.png",
+      "imageFile": "images/dt1et-bcr.png"
+    },
+    {
+      "model": "DT1ET-Bg",
+      "finish": "Brushed Gold",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et-2?variant=16937",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-Bg/DT1ET-4BG.png",
+      "imageFile": "images/dt1et-bg.png"
+    },
+    {
+      "model": "DT1ET-4FBrl",
+      "finish": "Forged Bronze Light",
+      "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16879",
+      "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
+      "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4FBrl/DT1ET-4FBRL.psd.jpg",
+      "imageFile": "images/dt1et-4fbrl.jpg"
+    }
+  ]
+}

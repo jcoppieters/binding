@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Duotecno – Binding Software Demo</title>
+<title>Duotecno – Demo 5 (volledig)</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:#eef1f8;color:#1a1f2e;height:100vh;display:flex;flex-direction:column;overflow:hidden}
@@ -304,21 +304,47 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
 ═══════════════════════════════════════════ */
 .bw-hidden{display:none!important}
 #bw-overlay{position:fixed;inset:0;background:rgba(15,22,50,.55);display:flex;align-items:center;justify-content:center;z-index:150;backdrop-filter:blur(3px)}
-#bw-dialog{background:#fff;width:560px;max-width:calc(100vw - 32px);max-height:calc(100vh - 48px);border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.22),0 6px 16px rgba(0,0,0,.1);display:flex;flex-direction:column;overflow:hidden}
+#bw-dialog{background:#fff;width:920px;max-width:calc(100vw - 32px);max-height:calc(100vh - 48px);border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.22),0 6px 16px rgba(0,0,0,.1);display:flex;flex-direction:column;overflow:hidden}
 #bw-hdr{padding:16px 20px 12px;border-bottom:1px solid #f0f2f7;display:flex;align-items:center;gap:12px}
+#bw-title{flex:1;font-size:16px;font-weight:700;color:#1a2540}
+#bw-close{width:30px;height:30px;border:none;background:#f4f5f8;border-radius:50%;cursor:pointer;font-size:14px;color:#999;transition:all .15s;flex-shrink:0;line-height:1;display:flex;align-items:center;justify-content:center}
+#bw-close:hover{background:#ffe0e0;color:#c62828}
+#bw-body{padding:30px;flex:1;overflow-y:auto;min-height:0;display:flex;align-items:center;justify-content:center;gap:30px;position:relative}
+.bw-panel{background:#f8f9fd;border:2px solid #dde3ef;border-radius:12px;padding:20px;width:360px;min-height:320px;display:flex;flex-direction:column;transition:all .3s}
+.bw-panel.selected{border-color:#2060d0;box-shadow:0 0 0 3px rgba(32,96,208,.1)}
+.bw-panel-title{font-size:13px;font-weight:700;color:#1a2540;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.bw-panel-title .icon{font-size:18px}
+.bw-panel-subtitle{font-size:11px;color:#6a7899;margin-bottom:16px}
+.bw-panel-content{flex:1;display:flex;flex-direction:column;gap:12px}
+.bw-step-section{display:flex;flex-direction:column;gap:8px}
+.bw-step-label{font-size:11px;font-weight:600;color:#8090b0;text-transform:uppercase;letter-spacing:.5px}
+.bw-option-grid{display:flex;flex-wrap:wrap;gap:8px}
+.bw-option{border:2px solid #e0e4f0;border-radius:8px;padding:10px 14px;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:#4a5568;transition:all .15s;min-width:100px;text-align:center}
+.bw-option:hover{border-color:#2060d0;background:#f0f5ff;color:#2060d0}
+.bw-option.selected{border-color:#2060d0;background:#2060d0;color:#fff;box-shadow:0 0 0 3px rgba(32,96,208,.15)}
+.bw-option.disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+.bw-button-preview{background:#fff;border:1.5px solid #dde3ef;border-radius:8px;padding:12px;font-size:12px;color:#6a7899;text-align:center;min-height:60px;display:flex;align-items:center;justify-content:center}
+.bw-button-preview.selected{border-color:#2060d0;background:#f0f5ff;color:#2060d0;font-weight:600}
+.bw-connection-line{position:absolute;pointer-events:none;z-index:1}
+#bw-foot{padding:12px 20px;border-top:1px solid #f0f2f7;display:flex;align-items:center;justify-content:space-between;background:#f8f9fc}
+#bw-cancel{background:none;border:1.5px solid #dde3ef;border-radius:7px;padding:7px 14px;font-size:13px;cursor:pointer;color:#555;transition:all .15s}
+#bw-cancel:hover{background:#fff;border-color:#aaa;color:#1a2540}
+#bw-save{background:#2060d0;border:none;border-radius:7px;padding:8px 20px;font-size:13px;font-weight:600;cursor:pointer;color:#fff;transition:all .15s}
+#bw-save:hover{background:#1850c0}
+#bw-save:disabled{opacity:.4;cursor:not-allowed}
+.bw-progress{font-size:12px;color:#bbb}
+
+/* Legacy styles for fallback */
 #bw-src-icon{width:36px;height:36px;background:#eef2fd;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 #bw-src-info{flex:1;min-width:0}
 #bw-src-name{font-weight:700;font-size:14px;color:#1a2540}
 #bw-src-sub{font-size:11px;color:#aaa;margin-top:2px}
-#bw-close{width:30px;height:30px;border:none;background:#f4f5f8;border-radius:50%;cursor:pointer;font-size:14px;color:#999;transition:all .15s;flex-shrink:0;line-height:1;display:flex;align-items:center;justify-content:center}
-#bw-close:hover{background:#ffe0e0;color:#c62828}
 #bw-bc{display:flex;align-items:center;flex-wrap:wrap;gap:4px;padding:8px 20px;background:#f8f9fc;border-bottom:1px solid #f0f2f7;min-height:40px}
 .bw-chip{display:inline-flex;align-items:center;gap:3px;background:#e8edf8;border-radius:16px;padding:3px 10px 3px 8px;font-size:11.5px;cursor:pointer;color:#2060d0;font-weight:500;transition:background .15s;white-space:nowrap}
 .bw-chip:hover{background:#c8d8f8}
 .bw-chip-key{color:#8aa0c8;font-weight:400;margin-right:1px}
 .bw-sep{color:#c8d0e0;font-size:14px}
 .bw-bc-empty{font-size:12px;color:#bbb;font-style:italic}
-#bw-body{padding:20px;flex:1;overflow-y:auto;min-height:0}
 #bw-step-hdr{display:flex;align-items:center;gap:8px;margin-bottom:16px}
 .bw-step-num{width:22px;height:22px;background:#2060d0;color:#fff;border-radius:50%;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 #bw-step-label{font-size:14px;font-weight:700;color:#1a2540}
@@ -360,10 +386,8 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
 .bw-action-btn{border:2px solid #e4e8f4;border-radius:11px;padding:14px 20px;cursor:pointer;background:#fff;font-size:14px;font-weight:700;transition:all .15s;display:flex;align-items:center;gap:9px;color:#1a2540}
 .bw-action-btn:hover{border-color:#2060d0;background:#2060d0;color:#fff;box-shadow:0 4px 12px rgba(32,96,208,.3)}
 .bw-act-icon{font-size:22px}
-#bw-foot{padding:12px 20px;border-top:1px solid #f0f2f7;display:flex;align-items:center;justify-content:space-between;background:#f8f9fc}
 #bw-back{background:none;border:1.5px solid #dde3ef;border-radius:7px;padding:7px 14px;font-size:13px;cursor:pointer;color:#555;transition:all .15s}
 #bw-back:hover{background:#fff;border-color:#aaa;color:#1a2540}
-.bw-progress{font-size:12px;color:#bbb}
 </style>
 </head>
 <body>
@@ -861,7 +885,6 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
       <button class="cat-btn" onclick="selectCat(this,'Motor')">Motor</button>
       <button class="cat-btn" onclick="selectCat(this,'Audio')">Audio</button>
       <button class="cat-btn" onclick="selectCat(this,'DALI')">DALI</button>
-      <button class="cat-btn" onclick="selectCat(this,'Master')">Master</button>
       <button class="cat-btn" onclick="selectCat(this,'Voeding')">Voeding</button>
     </div>
     <div class="module-grid" id="module-grid"></div>
@@ -880,24 +903,76 @@ tfoot td{padding:10px 12px;background:#fef8ee;font-weight:600;border-top:2px sol
 <div id="bw-overlay" class="bw-hidden">
   <div id="bw-dialog" role="dialog" aria-modal="true">
     <div id="bw-hdr">
-      <div id="bw-src-icon">🔲</div>
-      <div id="bw-src-info">
-        <div id="bw-src-name"></div>
-        <div id="bw-src-sub"></div>
-      </div>
+      <div id="bw-title">Binding aanmaken</div>
       <button id="bw-close" onclick="closeBW()">✕</button>
     </div>
-    <div id="bw-bc"></div>
     <div id="bw-body">
-      <div id="bw-step-hdr">
-        <span class="bw-step-num" id="bw-step-num">1</span>
-        <span id="bw-step-label"></span>
+      <!-- Left panel: Switch source -->
+      <div class="bw-panel" id="bw-panel-switch">
+        <div class="bw-panel-title">
+          <span class="icon">🔲</span>
+          <span id="bw-switch-name"></span>
+        </div>
+        <div class="bw-panel-subtitle" id="bw-switch-info"></div>
+        <div class="bw-panel-content">
+          <!-- Step 1: Choose button -->
+          <div class="bw-step-section" id="bw-switch-buttons">
+            <div class="bw-step-label">Kies drukknop</div>
+            <div id="bw-switch-buttons-grid"></div>
+          </div>
+          <!-- Step 2: Choose trigger type -->
+          <div class="bw-step-section" id="bw-switch-trigger" style="display:none">
+            <div class="bw-step-label">Trigger type</div>
+            <div class="bw-option-grid" id="bw-switch-trigger-grid"></div>
+          </div>
+        </div>
       </div>
-      <div id="bw-grid"></div>
+
+      <!-- Connection line (SVG) -->
+      <svg class="bw-connection-line" id="bw-connection" width="60" height="400" style="display:none">
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#2060d0"/>
+          </marker>
+        </defs>
+        <line x1="10" y1="200" x2="50" y2="200" stroke="#2060d0" stroke-width="3" stroke-dasharray="5 5" marker-end="url(#arrowhead)"/>
+      </svg>
+
+      <!-- Right panel: Unit target -->
+      <div class="bw-panel" id="bw-panel-unit">
+        <div class="bw-panel-title">
+          <span class="icon">💡</span>
+          <span id="bw-unit-name">Kies een unit</span>
+        </div>
+        <div class="bw-panel-subtitle" id="bw-unit-info"></div>
+        <div class="bw-panel-content">
+          <!-- Step 1: Choose module type -->
+          <div class="bw-step-section" id="bw-unit-type">
+            <div class="bw-step-label">Unit type</div>
+            <div class="bw-option-grid" id="bw-unit-type-grid"></div>
+          </div>
+          <!-- Step 2: Choose module -->
+          <div class="bw-step-section" id="bw-unit-module" style="display:none">
+            <div class="bw-step-label">Kies module</div>
+            <div id="bw-unit-module-grid"></div>
+          </div>
+          <!-- Step 3: Choose channel -->
+          <div class="bw-step-section" id="bw-unit-channel" style="display:none">
+            <div class="bw-step-label">Kies kanaal</div>
+            <div class="bw-option-grid" id="bw-unit-channel-grid"></div>
+          </div>
+          <!-- Step 4: Choose action -->
+          <div class="bw-step-section" id="bw-unit-action" style="display:none">
+            <div class="bw-step-label">Actie</div>
+            <div class="bw-option-grid" id="bw-unit-action-grid"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div id="bw-foot">
-      <button id="bw-back" onclick="bwGoBack()">← Terug</button>
-      <span class="bw-progress" id="bw-progress"></span>
+      <button id="bw-cancel" onclick="closeBW()">Annuleren</button>
+      <span class="bw-progress" id="bw-progress-text"></span>
+      <button id="bw-save" onclick="saveBW()" disabled>Opslaan</button>
     </div>
   </div>
 </div>
@@ -929,9 +1004,9 @@ const MODULE_DB = {
     {model:'DT13-DAL',name:'DALI bus interface',info:'64 app. - 4 DIN',width:4,power:8},
   ],
   Master:[
-    {model:'DT18-HOME',name:'TCP/IP Home server',info:'Master - 4 DIN',width:4,power:30},
-    {model:'DT18-PRO', name:'TCP/IP Pro server', info:'Master - 6 DIN',width:6,power:40},
-    {model:'DT18-GTWY',name:'Duotecno Gateway',   info:'Master - 4 DIN',width:4,power:20},
+    {model:'DT-18-HS',name:'TCP/IP Home server',info:'Master - 4 DIN',width:4,power:30},
+    {model:'DT-18-PRO',name:'TCP/IP Pro server',info:'Master - 6 DIN',width:6,power:40},
+    {model:'DT-18-GT',name:'Duotecno Gateway',info:'Master - 4 DIN',width:4,power:20},
   ],
   Voeding:[
     {model:'DT-PSU-CAN',name:'PSU + 2-ch CAN Switch',info:'2x24VAC - 6 DIN',width:6,power:0},
@@ -1215,7 +1290,7 @@ function showToast(msg,type) {
 }
 
 // ═══════════════════════════════════════════
-// BINDING WIZARD
+// BINDING WIZARD (NEW TWO-PANEL VISUAL FLOW)
 // ═══════════════════════════════════════════
 const BW_SWITCHES = {
   sw1:{ name:'Schakelaar Living',  model:'DT-SW-04', node:8,  buttons:['Eettafel','Alles uit','Hall','—'] },
@@ -1232,8 +1307,8 @@ const BW_MODULES = {
     {id:'m3',name:'DT02-08',desc:'8× relaisuitgang',node:3,channels:['Relais 1','Relais 2','Relais 3','Relais 4','Relais 5','Relais 6','Relais 7','Relais 8'],bindings:{}},
   ],
   Motor:[
-    {id:'m4',name:'Up/Down 1',desc:'DT04-04 · ch 1–4',node:5,channels:['Motor 1','Motor 2','Motor 3','Motor 4'],bindings:{0:'Living · Eettafel · Kort',1:'Living · Eettafel · Lang'}},
-    {id:'m5',name:'Up/Down 2',desc:'DT04-04 · ch 1–4',node:5,channels:['Motor 1','Motor 2','Motor 3','Motor 4'],bindings:{}},
+    {id:'m4',name:'Rolluik Zaal',desc:'DT04-04 · ch 1',node:5,channels:['Motor 1','Motor 2','Motor 3','Motor 4'],bindings:{0:'Living · Eettafel · Kort',1:'Living · Eettafel · Lang'}},
+    {id:'m5',name:'Rolluik Slaapkamer',desc:'DT04-04 · ch 2',node:5,channels:['Motor 1','Motor 2','Motor 3','Motor 4'],bindings:{}},
   ],
   Input:[
     {id:'m6',name:'DT03-16',desc:'16× dig. ingang',node:4,channels:Array.from({length:16},(_,i)=>'Input '+(i+1)),bindings:{}},
@@ -1244,171 +1319,273 @@ const BW_MODULES = {
 };
 
 const BW_MODTYPES = [
-  {id:'Dimmer',icon:'💡'},{id:'Relais',icon:'🔌'},{id:'Motor',icon:'⬆️'},{id:'DALI',icon:'✨'},
+  {id:'Dimmer',icon:'💡',label:'Lamp'},
+  {id:'Relais',icon:'🔌',label:'Relais'},
+  {id:'Motor',icon:'🪟',label:'Rolluik'},
+  {id:'DALI',icon:'✨',label:'DALI'},
 ];
 
 const BW_ACTIONS = {
-  Dimmer:[{icon:'🔄',a:'Toggle'},{icon:'☀️',a:'Aan (100%)'},{icon:'⛅',a:'Aan (50%)'},{icon:'⭕',a:'Uit'}],
-  Relais:[{icon:'🔄',a:'Toggle'},{icon:'🟢',a:'Aan'},{icon:'⭕',a:'Uit'}],
-  Motor: [{icon:'⬆️',a:'Omhoog'},{icon:'⬇️',a:'Omlaag'},{icon:'⏹',a:'Stop'}],
-  Input: [{icon:'📡',a:'Korte puls'},{icon:'📡',a:'Lange puls'}],
-  DALI:  [{icon:'🔄',a:'Toggle'},{icon:'☀️',a:'Aan (100%)'},{icon:'⛅',a:'Aan (50%)'},{icon:'⭕',a:'Uit'}],
+  Dimmer:[{id:'toggle',icon:'🔄',label:'Toggle'},{id:'on',icon:'☀️',label:'Aan'},{id:'off',icon:'⭕',label:'Uit'}],
+  Relais:[{id:'toggle',icon:'🔄',label:'Toggle'},{id:'on',icon:'🟢',label:'Aan'},{id:'off',icon:'⭕',label:'Uit'}],
+  Motor: [{id:'up',icon:'⬆️',label:'Omhoog'},{id:'down',icon:'⬇️',label:'Omlaag'},{id:'stop',icon:'⏹',label:'Stop'},{id:'toggle',icon:'🔄',label:'Toggle'}],
+  Input: [{id:'short',icon:'📡',label:'Korte puls'},{id:'long',icon:'📡',label:'Lange puls'}],
+  DALI:  [{id:'toggle',icon:'🔄',label:'Toggle'},{id:'on',icon:'☀️',label:'Aan'},{id:'off',icon:'⭕',label:'Uit'}],
 };
 
-const BW_STEPS = ['button','trigger','modtype','module','channel','action'];
-let bwSel = {};
+// State for the new wizard
+let bwState = {
+  sw: null,
+  button: null,
+  trigger: null,
+  unitType: null,
+  module: null,
+  channel: null,
+  action: null
+};
 
 function openBW(swId) {
   const sw = BW_SWITCHES[swId];
-  bwSel = { sw, button:null, trigger:null, modType:null, module:null, channel:null };
-  document.getElementById('bw-src-name').textContent = sw.name;
-  document.getElementById('bw-src-sub').textContent  = sw.model + ' · N:' + sw.node;
+  bwState = { sw, button:null, trigger:null, unitType:null, module:null, channel:null, action:null };
+  
+  // Set switch info
+  document.getElementById('bw-switch-name').textContent = sw.name;
+  document.getElementById('bw-switch-info').textContent = sw.model + ' · N:' + sw.node;
+  
+  // Reset unit panel
+  document.getElementById('bw-unit-name').textContent = 'Kies een unit';
+  document.getElementById('bw-unit-info').textContent = '';
+  
+  // Show the dialog
   document.getElementById('bw-overlay').classList.remove('bw-hidden');
-  bwRender();
+  
+  // Render initial state
+  renderBW();
 }
 
-function closeBW() { document.getElementById('bw-overlay').classList.add('bw-hidden'); }
+function closeBW() {
+  document.getElementById('bw-overlay').classList.add('bw-hidden');
+}
+
+function renderBW() {
+  // Render switch panel
+  renderSwitchPanel();
+  
+  // Render unit panel
+  renderUnitPanel();
+  
+  // Update connection line visibility
+  updateConnectionLine();
+  
+  // Update save button state
+  updateSaveButton();
+  
+  // Update progress text
+  updateProgress();
+}
+
+function renderSwitchPanel() {
+  const { sw, button, trigger } = bwState;
+  
+  // Render buttons grid
+  const buttonsGrid = document.getElementById('bw-switch-buttons-grid');
+  buttonsGrid.innerHTML = sw.buttons.map((btnLabel, idx) => 
+    `<div class="bw-button-preview ${button === idx ? 'selected' : ''}" 
+          onclick="selectButton(${idx})">
+      ${btnLabel}
+    </div>`
+  ).join('');
+  
+  // Show/hide trigger section
+  const triggerSection = document.getElementById('bw-switch-trigger');
+  if (button !== null) {
+    triggerSection.style.display = 'block';
+    
+    // Render trigger options
+    const triggerGrid = document.getElementById('bw-switch-trigger-grid');
+    triggerGrid.innerHTML = ['Kort', 'Lang'].map(t => 
+      `<div class="bw-option ${trigger === t ? 'selected' : ''}" 
+            onclick="selectTrigger('${t}')">
+        ${t}
+      </div>`
+    ).join('');
+  } else {
+    triggerSection.style.display = 'none';
+  }
+  
+  // Update panel selection state
+  document.getElementById('bw-panel-switch').classList.toggle('selected', button !== null && trigger !== null);
+}
+
+function renderUnitPanel() {
+  const { unitType, module, channel, action } = bwState;
+  
+  // Step 1: Unit type selection
+  const typeGrid = document.getElementById('bw-unit-type-grid');
+  typeGrid.innerHTML = BW_MODTYPES.map(t => 
+    `<div class="bw-option ${unitType === t.id ? 'selected' : ''}" 
+          onclick="selectUnitType('${t.id}')">
+      ${t.icon} ${t.label}
+    </div>`
+  ).join('');
+  
+  // Step 2: Module selection
+  const moduleSection = document.getElementById('bw-unit-module');
+  const moduleGrid = document.getElementById('bw-unit-module-grid');
+  if (unitType !== null) {
+    moduleSection.style.display = 'block';
+    const modules = BW_MODULES[unitType] || [];
+    moduleGrid.innerHTML = modules.map((m, idx) => {
+      const total = m.channels.length;
+      const used = Object.keys(m.bindings).length;
+      const free = total - used;
+      return `<div class="bw-option ${module === m ? 'selected' : ''}" 
+                   onclick='selectModule(${JSON.stringify(m).replace(/'/g, "&apos;")})'>
+        ${m.name}
+        <div style="font-size:10px;color:#8090b0;margin-top:4px">${free} vrij / ${total}</div>
+      </div>`;
+    }).join('');
+  } else {
+    moduleSection.style.display = 'none';
+  }
+  
+  // Step 3: Channel selection
+  const channelSection = document.getElementById('bw-unit-channel');
+  const channelGrid = document.getElementById('bw-unit-channel-grid');
+  if (module !== null) {
+    channelSection.style.display = 'block';
+    channelGrid.innerHTML = module.channels.map((ch, idx) => {
+      const isBound = module.bindings[idx];
+      return `<div class="bw-option ${channel === idx ? 'selected' : ''} ${isBound ? 'disabled' : ''}" 
+                   onclick="${isBound ? '' : `selectChannel(${idx})`}">
+        ${ch}
+        ${isBound ? '<div style="font-size:9px;margin-top:2px;opacity:.7">bezet</div>' : ''}
+      </div>`;
+    }).join('');
+    
+    // Update unit name
+    document.getElementById('bw-unit-name').textContent = module.name;
+    document.getElementById('bw-unit-info').textContent = module.desc + ' · N:' + module.node;
+  } else {
+    channelSection.style.display = 'none';
+  }
+  
+  // Step 4: Action selection
+  const actionSection = document.getElementById('bw-unit-action');
+  const actionGrid = document.getElementById('bw-unit-action-grid');
+  if (channel !== null && unitType !== null) {
+    actionSection.style.display = 'block';
+    const actions = BW_ACTIONS[unitType] || [];
+    actionGrid.innerHTML = actions.map(a => 
+      `<div class="bw-option ${action === a.id ? 'selected' : ''}" 
+            onclick="selectAction('${a.id}')">
+        ${a.icon} ${a.label}
+      </div>`
+    ).join('');
+  } else {
+    actionSection.style.display = 'none';
+  }
+  
+  // Update panel selection state
+  document.getElementById('bw-panel-unit').classList.toggle('selected', 
+    unitType !== null && module !== null && channel !== null && action !== null);
+}
+
+function selectButton(idx) {
+  bwState.button = idx;
+  bwState.trigger = null;
+  renderBW();
+}
+
+function selectTrigger(t) {
+  bwState.trigger = t;
+  renderBW();
+}
+
+function selectUnitType(type) {
+  bwState.unitType = type;
+  bwState.module = null;
+  bwState.channel = null;
+  bwState.action = null;
+  renderBW();
+}
+
+function selectModule(m) {
+  bwState.module = m;
+  bwState.channel = null;
+  bwState.action = null;
+  renderBW();
+}
+
+function selectChannel(idx) {
+  bwState.channel = idx;
+  bwState.action = null;
+  renderBW();
+}
+
+function selectAction(a) {
+  bwState.action = a;
+  renderBW();
+}
+
+function updateConnectionLine() {
+  const { button, trigger, unitType, module, channel, action } = bwState;
+  const line = document.getElementById('bw-connection');
+  
+  // Show line if both panels have selections
+  if (button !== null && trigger !== null && unitType !== null && module !== null && channel !== null && action !== null) {
+    line.style.display = 'block';
+  } else {
+    line.style.display = 'none';
+  }
+}
+
+function updateSaveButton() {
+  const { button, trigger, unitType, module, channel, action } = bwState;
+  const saveBtn = document.getElementById('bw-save');
+  const isComplete = button !== null && trigger !== null && unitType !== null && 
+                     module !== null && channel !== null && action !== null;
+  saveBtn.disabled = !isComplete;
+}
+
+function updateProgress() {
+  const { button, trigger, unitType, module, channel, action } = bwState;
+  let steps = 0;
+  let total = 6;
+  
+  if (button !== null) steps++;
+  if (trigger !== null) steps++;
+  if (unitType !== null) steps++;
+  if (module !== null) steps++;
+  if (channel !== null) steps++;
+  if (action !== null) steps++;
+  
+  document.getElementById('bw-progress-text').textContent = `${steps} / ${total} stappen voltooid`;
+}
+
+function saveBW() {
+  const { sw, button, trigger, module, channel, action } = bwState;
+  
+  // Save the binding
+  const bindingDesc = `${sw.name} · ${sw.buttons[button]} · ${trigger}`;
+  module.bindings[channel] = bindingDesc;
+  
+  // Show success message
+  const actionLabel = BW_ACTIONS[bwState.unitType].find(a => a.id === action)?.label || action;
+  showToast(`✓ Binding opgeslagen: ${bindingDesc} → ${module.name} · ${module.channels[channel]} · ${actionLabel}`, 'success');
+  
+  // Close dialog
+  closeBW();
+}
 
 document.getElementById('bw-overlay').addEventListener('click', e => {
   if (e.target.id === 'bw-overlay') closeBW();
 });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeBW(); });
-
-function bwStep() {
-  if (bwSel.button  === null) return 'button';
-  if (bwSel.trigger === null) return 'trigger';
-  if (bwSel.modType === null) return 'modtype';
-  if (bwSel.module  === null) return 'module';
-  if (bwSel.channel === null) return 'channel';
-  return 'action';
-}
-
-function bwGoBack() {
-  const i = BW_STEPS.indexOf(bwStep());
-  if (i === 0) { closeBW(); return; }
-  bwJump(BW_STEPS[i - 1]);
-}
-
-function bwJump(step) {
-  const from = BW_STEPS.indexOf(step);
-  if (from <= 0) bwSel.button  = null;
-  if (from <= 1) bwSel.trigger = null;
-  if (from <= 2) bwSel.modType = null;
-  if (from <= 3) bwSel.module  = null;
-  if (from <= 4) bwSel.channel = null;
-  bwRender();
-}
-
-function bwRender() {
-  const step = bwStep();
-  const idx  = BW_STEPS.indexOf(step) + 1;
-  document.getElementById('bw-step-num').textContent   = idx;
-  document.getElementById('bw-progress').textContent   = 'Stap ' + idx + ' / 6';
-  document.getElementById('bw-back').textContent       = idx === 1 ? 'Annuleer' : '← Terug';
-  document.getElementById('bw-step-label').textContent = {
-    button:'Kies een knop', trigger:'Kies trigger-type', modtype:'Kies module-type',
-    module:'Kies module',   channel:'Kies kanaal',       action:'Kies actie',
-  }[step];
-  bwRenderBC();
-  const g = document.getElementById('bw-grid');
-  if (step === 'button')  g.innerHTML = bwStepButton();
-  if (step === 'trigger') g.innerHTML = bwStepTrigger();
-  if (step === 'modtype') g.innerHTML = bwStepModType();
-  if (step === 'module')  g.innerHTML = bwStepModule();
-  if (step === 'channel') g.innerHTML = bwStepChannel();
-  if (step === 'action')  g.innerHTML = bwStepAction();
-}
-
-function bwRenderBC() {
-  const chips = [];
-  if (bwSel.button  !== null) chips.push({key:'Knop',    val:bwSel.sw.buttons[bwSel.button],       step:'button'  });
-  if (bwSel.trigger !== null) chips.push({key:'Trigger', val:bwSel.trigger,                        step:'trigger' });
-  if (bwSel.modType !== null) chips.push({key:'Type',    val:bwSel.modType,                        step:'modtype' });
-  if (bwSel.module  !== null) chips.push({key:'Module',  val:bwSel.module.name,                    step:'module'  });
-  if (bwSel.channel !== null) chips.push({key:'Kanaal',  val:bwSel.module.channels[bwSel.channel], step:'channel' });
-  const bc = document.getElementById('bw-bc');
-  if (!chips.length) { bc.innerHTML = '<span class="bw-bc-empty">Selecteer stap voor stap</span>'; return; }
-  bc.innerHTML = chips.map((c, i) =>
-    (i > 0 ? '<span class="bw-sep">›</span>' : '') +
-    '<span class="bw-chip" onclick="bwJump(\'' + c.step + '\')">' +
-      '<span class="bw-chip-key">' + c.key + ':</span>' + c.val +
-    '</span>'
-  ).join('');
-}
-
-function bwStepButton() {
-  const sw = bwSel.sw;
-  const is4 = sw.model === 'DT-SW-04';
-  const btns = sw.buttons.map((l, i) =>
-    '<div class="bw-sw-btn" onclick="bwSelButton(' + i + ')">' + l + '</div>'
-  ).join('');
-  const center = is4 ? '<div class="bw-sw4-center"><span>21°C</span><span>▲▼</span></div>' : '';
-  return '<div class="bw-sw-wrap"><div class="' + (is4 ? 'bw-sw4' : 'bw-sw2') + '">' +
-    btns + center + '</div><div class="bw-sw-hint">Klik op de gewenste knop</div></div>';
-}
-
-function bwStepTrigger() {
-  return '<div class="bw-trigger-grid">' +
-    '<div class="bw-trigger-btn" onclick="bwSelTrigger(\'Kort\')"><span class="bw-tri-icon">👆</span><span class="bw-tri-name">Kort</span><span class="bw-tri-desc">Korte druk · &lt; 1 s</span></div>' +
-    '<div class="bw-trigger-btn" onclick="bwSelTrigger(\'Lang\')"><span class="bw-tri-icon">✋</span><span class="bw-tri-name">Lang</span><span class="bw-tri-desc">Lange druk · ≥ 1 s</span></div>' +
-  '</div>';
-}
-
-function bwStepModType() {
-  return '<div class="bw-modtype-grid">' +
-    BW_MODTYPES.map(t =>
-      '<div class="bw-modtype-tab" onclick="bwSelModType(\'' + t.id + '\')">' +
-        '<span style="font-size:18px">' + t.icon + '</span>' + t.id + '</div>'
-    ).join('') + '</div>';
-}
-
-function bwStepModule() {
-  const mods = BW_MODULES[bwSel.modType] || [];
-  if (!mods.length) return '<p style="color:#bbb;font-style:italic;padding:12px 0">Geen modules van dit type.</p>';
-  return '<div class="bw-mod-cards">' + mods.map((m, i) => {
-    const total = m.channels.length, used = Object.keys(m.bindings).length, free = total - used;
-    const cls = free === 0 ? 'full' : used === 0 ? 'free' : 'partial';
-    const txt = free === 0 ? 'Volledig bezet' : free + ' vrij / ' + total;
-    return '<div class="bw-mod-card" onclick="bwSelModule(' + i + ')">' +
-      '<div class="bw-mc-name">' + m.name + '</div>' +
-      '<div class="bw-mc-desc">' + m.desc + '</div>' +
-      '<div class="bw-mc-node">N:' + m.node + '</div>' +
-      '<span class="bw-mc-badge ' + cls + '">' + txt + '</span></div>';
-  }).join('') + '</div>';
-}
-
-function bwStepChannel() {
-  const m = bwSel.module;
-  return '<div class="bw-ch-grid">' + m.channels.map((ch, i) => {
-    const bound = m.bindings[i];
-    const cls   = bound ? 'used' : 'free';
-    const oc    = bound ? '' : ' onclick="bwSelChannel(' + i + ')"';
-    const info  = bound ? '<span class="bw-ch-bound" title="' + bound + '">↳ ' + bound + '</span>' : '';
-    return '<div class="bw-ch ' + cls + '"' + oc + '><span class="bw-ch-name">' + ch + '</span>' + info + '</div>';
-  }).join('') + '</div>';
-}
-
-function bwStepAction() {
-  return '<div class="bw-action-grid">' +
-    (BW_ACTIONS[bwSel.modType] || []).map(a =>
-      '<div class="bw-action-btn" onclick="bwSelAction(\'' + a.a + '\')">' +
-        '<span class="bw-act-icon">' + a.icon + '</span>' + a.a + '</div>'
-    ).join('') + '</div>';
-}
-
-function bwSelButton(i)  { bwSel.button  = i;                              bwRender(); }
-function bwSelTrigger(t) { bwSel.trigger = t;                              bwRender(); }
-function bwSelModType(t) { bwSel.modType = t;                              bwRender(); }
-function bwSelModule(i)  { bwSel.module  = (BW_MODULES[bwSel.modType]||[])[i]; bwRender(); }
-function bwSelChannel(i) { bwSel.channel = i;                              bwRender(); }
-
-function bwSelAction(action) {
-  const m = bwSel.module;
-  m.bindings[bwSel.channel] = bwSel.sw.name + ' · ' + bwSel.sw.buttons[bwSel.button] + ' · ' + bwSel.trigger;
-  closeBW();
-  showToast('✓ ' + bwSel.sw.buttons[bwSel.button] + ' ' + bwSel.trigger +
-    ' → ' + m.name + ' · ' + m.channels[bwSel.channel] + ' · ' + action, 'success');
-}
+document.addEventListener('keydown', e => { 
+  if (e.key === 'Escape' && !document.getElementById('bw-overlay').classList.contains('bw-hidden')) {
+    closeBW(); 
+  }
+});
 
 // Init
 renderModuleGrid('Dimmer');

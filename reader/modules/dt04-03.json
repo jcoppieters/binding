@@ -1,0 +1,22 @@
+{
+  "model": "DT04-03",
+  "name": "3 kan. 16A realis NO up/down module",
+  "description": "3 kan. 16A realis NO up/down module",
+  "category": "module",
+  "uiCategory": "Motor",
+  "channelGroups": [
+    {
+      "type": "motor_updown",
+      "count": 3,
+      "maxCurrentA": 16
+    }
+  ],
+  "dinUnits": 9,
+  "lengthMm": 157.5,
+  "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2-2-2-2/dt04?variant=16772",
+  "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16772/ID_TDS_NL-FR-EN_DT04-03-16A-Relais-module-3-kanaals-UP-DOWN_31032026TP.pdf",
+  "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT04-03/DT04-03-min-1.jpg",
+  "powerW": 3.8,
+  "channels": 3,
+  "imageFile": "images/dt04-03.jpg"
+}
