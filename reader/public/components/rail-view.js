@@ -116,7 +116,7 @@ function reflowToRails(cabinet, moduleDefs) {
   let used = 0;
 
   for (const m of cabinet.modules) {
-    const w = lookupModule(m.model, moduleDefs)?.dinUnits ?? 2;
+    const w = lookupModule(m.model, moduleDefs)?.dinUnits ?? 9; // unknown modules assumed 9M (default rendering size)
     if (!rail || used + w > maxM) {
       rail = { id: `${cabinet.id}-r${rails.length}`, label: `Rail ${rails.length + 1}`, modules: [] };
       rails.push(rail);
@@ -327,13 +327,20 @@ function buildWoningPanel(woningDevices, modules) {
   hdr.textContent = '🏠 Woning – schakelaars & LCD';
   panel.append(hdr);
 
-  // Split devices into rows (max WONING_MAX_PER_ROW per row)
+  // Compute max items per row dynamically from canvas width
+  const canvas = document.getElementById('rail-canvas');
+  const panelInner = (canvas?.clientWidth ?? 800) - 76; // subtract canvas pad(40) + panel pad(36)
+  const avgItemW = 116; // avg device card + margin + gap
+  const endOverhead = 240; // terminator + 2 add buttons + margin buffer
+  const maxPerRow = Math.max(3, Math.floor((panelInner - endOverhead) / avgItemW));
+
+  // Split devices into rows of maxPerRow
   const rows = [];
   if (woningDevices.length === 0) {
     rows.push([]);
   } else {
-    for (let i = 0; i < woningDevices.length; i += WONING_MAX_PER_ROW) {
-      rows.push(woningDevices.slice(i, i + WONING_MAX_PER_ROW));
+    for (let i = 0; i < woningDevices.length; i += maxPerRow) {
+      rows.push(woningDevices.slice(i, i + maxPerRow));
     }
   }
 
@@ -527,7 +534,8 @@ function drawCANBus(canvas) {
     const lastRect = lastModulesEl ? relRect(lastModulesEl) : null;
     if (lastRect) {
       const isLastOdd = lastRailIdx % 2 === 1;
-      const dropX = isLastOdd ? lastRect.left + 30 : lastRect.right - 30;
+    // Exit x: left edge of odd last rail, right edge of even last rail (exact CAN bus endpoint)
+      const dropX = isLastOdd ? lastRect.left : lastRect.right;
       svgLine(dropX, lastRect.bottom + 4, dropX, woningRowRects[0].top - 4, CAN1);
       svgDot(dropX, lastRect.bottom + 4, CAN1);
       svgDot(dropX, woningRowRects[0].top - 4, CAN1);
@@ -571,7 +579,7 @@ function updateSidebarCounts(railView, modules) {
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
 
-const PX_PER_M = 18; // pixels per DIN M-unit (9M module = 160px → 1M ≈ 18px)
+const PX_PER_M = 22; // pixels per DIN M-unit (9M module=160px visual + ~40px overhead → ~22px/M)
 const CABINET_WIDTHS = [18, 36, 54, 82]; // standard cabinet widths in M-units
 
 export function addCabinet(name = 'Nieuwe kast', widthUnits = 36) {
@@ -592,6 +600,8 @@ export function wireButtons() {
   const btnCabinet = document.getElementById('btn-add-cabinet');
   const btnCabinetEmpty = document.getElementById('btn-add-cabinet-empty');
   const btnModule = document.getElementById('btn-add-module');
+  const btnSwitch = document.getElementById('btn-add-switch');
+  const btnLcd = document.getElementById('btn-add-lcd');
 
   btnCabinet?.addEventListener('click', () => promptAddCabinet());
   btnCabinetEmpty?.addEventListener('click', () => promptAddCabinet());
@@ -601,6 +611,8 @@ export function wireButtons() {
     if (!c) { alert('Voeg eerst een kast toe.'); return; }
     openModulePicker({ cabinetId: c.id });
   });
+  btnSwitch?.addEventListener('click', () => openModulePicker({ woningType: 'switch' }));
+  btnLcd?.addEventListener('click', () => openModulePicker({ woningType: 'lcd' }));
 }
 
 function promptAddCabinet() {
