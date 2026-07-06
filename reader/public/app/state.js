@@ -13,7 +13,7 @@ const EMPTY_PROJECT = {
     cabinets: [{
       id: 'cabinet-0',
       name: 'Hoofdkast',
-      widthUnits: 12,
+      widthUnits: 36,
       modules: [],
     }],
     woningDevices: [],

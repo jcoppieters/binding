@@ -73,6 +73,8 @@ function buildCabinetCard(cabinet, modules) {
 
   const card = el('div', 'cabinet-card');
   card.dataset.cabinetId = cabinet.id;
+  // Fixed width based on capacity (keeps SVG snake at predictable x-coordinate)
+  card.style.width = `${cabinet.widthUnits * PX_PER_M + 80}px`;
 
   // Header — click to edit cabinet properties
   const hdr = el('div', 'cabinet-header');
@@ -322,13 +324,13 @@ function buildWoningPanel(woningDevices, modules) {
   panel.id = 'woning-panel';
 
   const hdr = el('div', 'woning-header');
-  hdr.innerHTML = '🏠 Woning – schakelaars &amp; LCD <span class="seg2-badge">CAN Segment 2</span>';
+  hdr.textContent = '🏠 Woning – schakelaars & LCD';
   panel.append(hdr);
 
   // Split devices into rows (max WONING_MAX_PER_ROW per row)
   const rows = [];
   if (woningDevices.length === 0) {
-    rows.push([]); // always at least one row for the + buttons
+    rows.push([]);
   } else {
     for (let i = 0; i < woningDevices.length; i += WONING_MAX_PER_ROW) {
       rows.push(woningDevices.slice(i, i + WONING_MAX_PER_ROW));
@@ -339,27 +341,20 @@ function buildWoningPanel(woningDevices, modules) {
 
   rows.forEach((rowDevices, rowIdx) => {
     const isLastRow = rowIdx === rows.length - 1;
-    const isOdd = rowIdx % 2 === 1; // odd rows go R→L (devices reversed in display)
+    const isOdd = rowIdx % 2 === 1; // odd rows run R→L (flex-direction:row-reverse)
 
     const rowEl = el('div', 'woning-row');
     rowEl.id = rowIdx === 0 ? 'woning-row' : `woning-row-${rowIdx}`;
     if (isOdd) rowEl.classList.add('woning-row-reverse');
 
-    // CAN line (seg2 color)
-    const canLine = el('div', 'can-line seg2');
-    rowEl.append(canLine);
+    // CAN line (same segment as cabinet — orange)
+    rowEl.append(el('div', 'can-line'));
 
-    // For odd rows the CAN enters from the RIGHT — reverse display so logical order is preserved
-    const displayDevices = isOdd ? [...rowDevices].reverse() : rowDevices;
+    // Devices in logical order; flex-direction handles visual reversal for odd rows
+    rowDevices.forEach(wd => rowEl.append(buildFieldDevice(wd, modules)));
 
-    // Left terminator on the very first row — REMOVED:
-    // Segment 2 has no left terminator; it continues from the last cabinet rail.
-    // The only terminator is at the far end of the last woning row.
-
-    // Devices
-    displayDevices.forEach(wd => rowEl.append(buildFieldDevice(wd, modules)));
-
-    // Last row: + buttons then end terminator
+    // Last row: + buttons and terminator
+    // For even rows: append to right end; for odd rows (row-reverse): append = visually left end
     if (isLastRow) {
       const addSwBtn = el('div', 'add-fd-btn');
       addSwBtn.innerHTML = '<span style="font-size:10px">＋ SW</span>';
@@ -371,26 +366,18 @@ function buildWoningPanel(woningDevices, modules) {
       addLcdBtn.title = 'LCD toevoegen';
       addLcdBtn.onclick = () => openModulePicker({ woningType: 'lcd' });
 
-      // On even last row: append right; on odd last row: prepend left
-      if (isOdd) {
-        rowEl.prepend(addLcdBtn);
-        rowEl.prepend(addSwBtn);
-      } else {
-        rowEl.append(addSwBtn, addLcdBtn);
-      }
-
-      // End 60Ω terminator
-      const termR = buildTerminator('SEG2');
+      const termR = buildTerminator('SEG1');
       termR.id = 'woning-term-r';
-      if (isOdd) rowEl.prepend(termR); else rowEl.append(termR);
+
+      // Always append — row-reverse handles visual position for odd rows
+      rowEl.append(addSwBtn, addLcdBtn, termR);
     }
 
     rowsWrap.append(rowEl);
 
-    // Snake connector between rows
+    // CSS spacer div between rows (visual snake handled by SVG)
     if (!isLastRow) {
-      const conn = el('div', isOdd ? 'woning-snake-conn left' : 'woning-snake-conn right');
-      rowsWrap.append(conn);
+      rowsWrap.append(el('div', isOdd ? 'woning-snake-conn left' : 'woning-snake-conn right'));
     }
   });
 
@@ -500,68 +487,68 @@ function drawCANBus(canvas) {
     svg.appendChild(c);
   }
 
-  // Collect rail-modules bounding rects for bidirectional snake
-  const railRows = [...canvas.querySelectorAll('.rail-row')];
-  const railInfos = railRows.map((row, idx) => {
-    const modulesEl = row.querySelector('.rail-modules');
-    const rect = modulesEl ? relRect(modulesEl) : null;
-    return rect ? { rect, isOdd: idx % 2 === 1 } : null;
-  }).filter(Boolean);
-
-  // Draw snake between consecutive cabinet rails (alternating L/R)
-  for (let i = 0; i + 1 < railInfos.length; i++) {
-    const curr = railInfos[i], next = railInfos[i + 1];
-    if (curr.isOdd) {
-      // Odd→Even: snake on LEFT side
-      const x = Math.min(curr.rect.left, next.rect.left) - 18;
-      svgLine(curr.rect.left, curr.rect.cy, x, curr.rect.cy, CAN1);
-      svgLine(x, curr.rect.cy, x, next.rect.cy, CAN1);
-      svgLine(x, next.rect.cy, next.rect.left, next.rect.cy, CAN1);
-      svgDot(x, curr.rect.cy, CAN1);
-      svgDot(x, next.rect.cy, CAN1);
-    } else {
-      // Even→Odd: snake on RIGHT side
-      const x = Math.max(curr.rect.right, next.rect.right) + 18;
-      svgLine(curr.rect.right, curr.rect.cy, x, curr.rect.cy, CAN1);
-      svgLine(x, curr.rect.cy, x, next.rect.cy, CAN1);
-      svgLine(x, next.rect.cy, next.rect.right, next.rect.cy, CAN1);
-      svgDot(x, curr.rect.cy, CAN1);
-      svgDot(x, next.rect.cy, CAN1);
+  // Cabinet rail snakes — one set of snakes per cabinet, using cabinet card edges for the bend
+  const cabinetEls = [...canvas.querySelectorAll('.cabinet-card')];
+  cabinetEls.forEach(cabinetEl => {
+    const cabRect = relRect(cabinetEl);
+    const railRowEls = [...cabinetEl.querySelectorAll('.rail-row')];
+    for (let i = 0; i + 1 < railRowEls.length; i++) {
+      const m1 = railRowEls[i].querySelector('.rail-modules');
+      const m2 = railRowEls[i + 1].querySelector('.rail-modules');
+      if (!m1 || !m2) continue;
+      const r1 = relRect(m1), r2 = relRect(m2);
+      if (i % 2 === 0) {
+        // Even→Odd: right-side snake (bend just outside cabinet right edge)
+        const x = cabRect.right + 18;
+        svgLine(r1.right, r1.cy, x, r1.cy, CAN1);
+        svgLine(x, r1.cy, x, r2.cy, CAN1);
+        svgLine(x, r2.cy, r2.right, r2.cy, CAN1);
+        svgDot(x, r1.cy, CAN1); svgDot(x, r2.cy, CAN1);
+      } else {
+        // Odd→Even: left-side snake (bend just outside cabinet left edge)
+        const x = cabRect.left - 18;
+        svgLine(r1.left, r1.cy, x, r1.cy, CAN1);
+        svgLine(x, r1.cy, x, r2.cy, CAN1);
+        svgLine(x, r2.cy, r2.left, r2.cy, CAN1);
+        svgDot(x, r1.cy, CAN1); svgDot(x, r2.cy, CAN1);
+      }
     }
-  }
+  });
 
-  // Drop from last cabinet rail to woning panel (Segment 2)
+  // Drop from last cabinet’s last rail to first woning row (single CAN segment = orange)
   const woningRows = canvas.querySelectorAll('[id^="woning-row"]');
   const woningRowRects = [...woningRows].map(r => relRect(r)).filter(Boolean);
 
-  if (woningRowRects.length > 0 && railInfos.length > 0) {
-    const lastRail = railInfos[railInfos.length - 1];
-    const firstWoning = woningRowRects[0];
-    // Exit x: left side of odd last rail, right side of even last rail
-    const dropX = lastRail.isOdd ? lastRail.rect.left + 20 : lastRail.rect.right - 20;
-    svgLine(dropX, lastRail.rect.bottom + 4, dropX, firstWoning.top - 4, CAN2);
-    svgDot(dropX, lastRail.rect.bottom + 4, CAN2);
-    svgDot(dropX, firstWoning.top - 4, CAN2);
+  if (cabinetEls.length > 0 && woningRowRects.length > 0) {
+    const lastCabEl = cabinetEls[cabinetEls.length - 1];
+    const lastRailEls = [...lastCabEl.querySelectorAll('.rail-row')];
+    const lastRailIdx = lastRailEls.length - 1;
+    const lastModulesEl = lastRailEls[lastRailIdx]?.querySelector('.rail-modules');
+    const lastRect = lastModulesEl ? relRect(lastModulesEl) : null;
+    if (lastRect) {
+      const isLastOdd = lastRailIdx % 2 === 1;
+      const dropX = isLastOdd ? lastRect.left + 30 : lastRect.right - 30;
+      svgLine(dropX, lastRect.bottom + 4, dropX, woningRowRects[0].top - 4, CAN1);
+      svgDot(dropX, lastRect.bottom + 4, CAN1);
+      svgDot(dropX, woningRowRects[0].top - 4, CAN1);
+    }
   }
 
-  // Woning row-to-row snake connectors
+  // Woning row-to-row snake connectors (single CAN segment = orange)
   for (let i = 0; i + 1 < woningRowRects.length; i++) {
     const r1 = woningRowRects[i], r2 = woningRowRects[i + 1];
-    const isOddRow = i % 2 === 0; // after even row → right side connector
-    if (isOddRow) {
+    if (i % 2 === 0) {
       const x = Math.max(r1.right, r2.right) + 10;
-      svgLine(r1.right, r1.cy, x, r1.cy, CAN2);
-      svgLine(x, r1.cy, x, r2.cy, CAN2);
-      svgLine(x, r2.cy, r2.right, r2.cy, CAN2);
-      svgDot(x, r1.cy, CAN2);
-      svgDot(x, r2.cy, CAN2);
+      svgLine(r1.right, r1.cy, x, r1.cy, CAN1);
+      svgLine(x, r1.cy, x, r2.cy, CAN1);
+      svgLine(x, r2.cy, r2.right, r2.cy, CAN1);
+      svgDot(x, r1.cy, CAN1); svgDot(x, r2.cy, CAN1);
     } else {
       const x = Math.min(r1.left, r2.left) - 10;
-      svgLine(r1.left, r1.cy, x, r1.cy, CAN2);
-      svgLine(x, r1.cy, x, r2.cy, CAN2);
-      svgLine(x, r2.cy, r2.left, r2.cy, CAN2);
-      svgDot(x, r1.cy, CAN2);
-      svgDot(x, r2.cy, CAN2);
+      svgLine(r1.left, r1.cy, x, r1.cy, CAN1);
+      svgLine(x, r1.cy, x, r2.cy, CAN1);
+      svgLine(x, r2.cy, r2.left, r2.cy, CAN1);
+      svgDot(x, r1.cy, CAN1); svgDot(x, r2.cy, CAN1);
     }
   }
 }
@@ -584,7 +571,10 @@ function updateSidebarCounts(railView, modules) {
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
 
-export function addCabinet(name = 'Nieuwe kast', widthUnits = 12) {
+const PX_PER_M = 18; // pixels per DIN M-unit (9M module = 160px → 1M ≈ 18px)
+const CABINET_WIDTHS = [18, 36, 54, 82]; // standard cabinet widths in M-units
+
+export function addCabinet(name = 'Nieuwe kast', widthUnits = 36) {
   dispatch({
     type: 'ADD_CABINET',
     cabinet: { id: makeId(), name, widthUnits, modules: [] },
@@ -616,8 +606,9 @@ export function wireButtons() {
 function promptAddCabinet() {
   const name = prompt('Naam van de kast:', 'Hoofdkast');
   if (!name) return;
-  const widthStr = prompt('Breedte in M-eenheden (bijv. 12, 18, 24):', '12');
-  const widthUnits = Math.max(4, Math.min(72, parseInt(widthStr, 10) || 12));
+  const widthStr = prompt('Breedte in M-eenheden (18, 36, 54 of 82):', '36');
+  const w = parseInt(widthStr, 10);
+  const widthUnits = CABINET_WIDTHS.includes(w) ? w : (CABINET_WIDTHS.reduce((a, b) => Math.abs(b - w) < Math.abs(a - w) ? b : a, 36));
   addCabinet(name, widthUnits);
 }
 

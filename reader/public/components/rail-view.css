@@ -81,25 +81,23 @@
 .modal-btn:hover{background:#f0f2f8}
 .modal-btn-primary:hover{background:#c07800}
 
-/* Woning panel (Segment 2 field devices) */
-.woning-panel{background:#fff;border:2px dashed #2060d0;border-radius:10px;padding:14px 18px;position:relative;box-shadow:0 2px 8px rgba(32,96,208,.08)}
-.woning-header{font-size:11px;font-weight:600;color:#2060d0;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.seg2-badge{background:#e8f0fe;color:#2060d0;font-size:10px;padding:2px 8px;border-radius:10px}
+/* Woning panel (same CAN segment as cabinet — orange) */
+.woning-panel{background:#fff;border:2px dashed #e08c00;border-radius:10px;padding:14px 18px;position:relative;box-shadow:0 2px 8px rgba(224,140,0,.08)}
+.woning-header{font-size:11px;font-weight:600;color:#e08c00;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 
 /* Multi-row snake layout */
 .woning-rows{display:flex;flex-direction:column;gap:0}
 .woning-row{display:flex;align-items:center;gap:16px;position:relative;padding:8px 0;flex-wrap:nowrap}
 .woning-row.woning-row-reverse{flex-direction:row-reverse}
 
-/* Snake connector between rows: right-side for even rows, left-side for odd rows */
-.woning-snake-conn{height:20px;display:flex;align-items:stretch;padding:0 20px}
-.woning-snake-conn::after{content:'';display:block;width:4px;background:#2060d0;border-radius:0 0 3px 3px}
+/* Snake connector between woning rows (spacing only; visual snake drawn by SVG) */
+.woning-snake-conn{height:24px;display:flex;align-items:stretch;padding:0 20px}
 .woning-snake-conn.right{justify-content:flex-end}
 .woning-snake-conn.left{justify-content:flex-start}
 
 /* Field device card */
 .field-device{position:relative;z-index:2;flex-shrink:0;margin:0 4px;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
-.field-device .cdl,.field-device .cdr{position:absolute;width:12px;height:12px;border-radius:50%;background:#2060d0;border:2px solid #fff;z-index:4;top:50%;transform:translateY(-50%);box-shadow:0 0 0 1px #2060d0}
+.field-device .cdl,.field-device .cdr{position:absolute;width:12px;height:12px;border-radius:50%;background:#e08c00;border:2px solid #fff;z-index:4;top:50%;transform:translateY(-50%);box-shadow:0 0 0 1px #e08c00}
 .field-device .cdl{left:-6px}
 .field-device .cdr{right:-6px}
 .fd-label{font-size:9px;color:#6a7899;text-align:center;line-height:1.3;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
