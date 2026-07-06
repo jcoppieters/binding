@@ -228,7 +228,9 @@ function buildModuleCard(moduleInstance, def) {
   return card;
 }
 
-// ─── Woning panel ─────────────────────────────────────────────────────────────
+// ─── Woning panel (multi-row snake) ──────────────────────────────────────────
+
+const WONING_MAX_PER_ROW = 6;
 
 function buildWoningPanel(woningDevices, modules) {
   const panel = el('div', 'woning-panel');
@@ -238,44 +240,123 @@ function buildWoningPanel(woningDevices, modules) {
   hdr.innerHTML = '🏠 Woning – schakelaars &amp; LCD <span class="seg2-badge">CAN Segment 2</span>';
   panel.append(hdr);
 
-  const row = el('div', 'woning-row');
-  row.id = 'woning-row';
-  const canLine = el('div', 'can-line seg2'); row.append(canLine);
+  // Split devices into rows (max WONING_MAX_PER_ROW per row)
+  const rows = [];
+  if (woningDevices.length === 0) {
+    rows.push([]); // always at least one row for the + buttons
+  } else {
+    for (let i = 0; i < woningDevices.length; i += WONING_MAX_PER_ROW) {
+      rows.push(woningDevices.slice(i, i + WONING_MAX_PER_ROW));
+    }
+  }
 
-  woningDevices.forEach(wd => {
-    const def = lookupModule(wd.model, modules);
-    const fd = el('div', 'field-device');
-    fd.dataset.deviceId = wd.id;
-    fd.append(el('div', 'cdl'));
+  const rowsWrap = el('div', 'woning-rows');
 
-    const icon = el('div', def?.category === 'lcd' ? 'fd-lcd' : 'fd-switch');
-    icon.textContent = def?.category === 'lcd' ? '🖥' : '🔲';
-    fd.append(icon);
+  rows.forEach((rowDevices, rowIdx) => {
+    const isLastRow = rowIdx === rows.length - 1;
+    const isOdd = rowIdx % 2 === 1; // odd rows go R→L (devices reversed in display)
 
-    const lbl = el('div', 'fd-label');
-    lbl.textContent = wd.name ?? def?.productLine ?? wd.model;
-    fd.append(lbl);
+    const rowEl = el('div', 'woning-row');
+    rowEl.id = rowIdx === 0 ? 'woning-row' : `woning-row-${rowIdx}`;
+    if (isOdd) rowEl.classList.add('woning-row-reverse');
 
-    if (wd.nodeAddress != null) {
-      const addr = el('div', 'fd-addr');
-      addr.textContent = `N:${wd.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`;
-      fd.append(addr);
+    // CAN line (seg2 color)
+    const canLine = el('div', 'can-line seg2');
+    rowEl.append(canLine);
+
+    // For odd rows the CAN enters from the RIGHT — reverse display so logical order is preserved
+    const displayDevices = isOdd ? [...rowDevices].reverse() : rowDevices;
+
+    // Left terminator on the very first row
+    if (rowIdx === 0) {
+      const termL = buildTerminator('SEG2');
+      termL.id = 'woning-term-l';
+      rowEl.append(termL);
     }
 
-    fd.append(el('div', 'cdr'));
-    row.append(fd);
+    // Devices
+    displayDevices.forEach(wd => rowEl.append(buildFieldDevice(wd, modules)));
+
+    // Last row: + buttons then end terminator
+    if (isLastRow) {
+      const addSwBtn = el('div', 'add-fd-btn');
+      addSwBtn.innerHTML = '<span style="font-size:10px">＋ SW</span>';
+      addSwBtn.title = 'Schakelaar toevoegen';
+      addSwBtn.onclick = () => openModulePicker({ woningType: 'switch' });
+
+      const addLcdBtn = el('div', 'add-fd-btn');
+      addLcdBtn.innerHTML = '<span style="font-size:10px">＋ LCD</span>';
+      addLcdBtn.title = 'LCD toevoegen';
+      addLcdBtn.onclick = () => openModulePicker({ woningType: 'lcd' });
+
+      // On even last row: append right; on odd last row: prepend left
+      if (isOdd) {
+        rowEl.prepend(addLcdBtn);
+        rowEl.prepend(addSwBtn);
+      } else {
+        rowEl.append(addSwBtn, addLcdBtn);
+      }
+
+      // End 60Ω terminator
+      const termR = buildTerminator('SEG2');
+      termR.id = 'woning-term-r';
+      if (isOdd) rowEl.prepend(termR); else rowEl.append(termR);
+    }
+
+    rowsWrap.append(rowEl);
+
+    // Snake connector between rows
+    if (!isLastRow) {
+      const conn = el('div', isOdd ? 'woning-snake-conn left' : 'woning-snake-conn right');
+      rowsWrap.append(conn);
+    }
   });
 
-  // Add device buttons
-  const addSwBtn = el('div', 'add-fd-btn'); addSwBtn.textContent = '＋🔲'; addSwBtn.title = 'Schakelaar toevoegen';
-  addSwBtn.onclick = () => openModulePicker({ woningType: 'switch' });
-  const addLcdBtn = el('div', 'add-fd-btn'); addLcdBtn.textContent = '＋🖥'; addLcdBtn.title = 'LCD toevoegen';
-  addLcdBtn.onclick = () => openModulePicker({ woningType: 'lcd' });
-  row.append(addSwBtn, addLcdBtn);
-
-  panel.append(row);
+  panel.append(rowsWrap);
   return panel;
 }
+
+// ─── Field device card (with real product image) ──────────────────────────────
+
+function buildFieldDevice(wd, modules) {
+  const def = lookupModule(wd.model, modules);
+  const isLcd = def?.category === 'lcd';
+
+  const fd = el('div', 'field-device');
+  fd.dataset.deviceId = wd.id;
+  fd.append(el('div', 'cdl'));
+
+  // Device card — try to show actual product image
+  const card = el('div', isLcd ? 'fd-card fd-card-lcd' : 'fd-card');
+
+  if (def?.imageFile) {
+    const img = document.createElement('img');
+    img.src = `/modules/images/${def.imageFile.replace('images/', '')}`;
+    img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;padding:4px';
+    img.onerror = () => { card.textContent = isLcd ? '🖥' : '🔲'; card.style.fontSize = '28px'; };
+    card.append(img);
+  } else {
+    card.textContent = isLcd ? '🖥' : '🔲';
+    card.style.fontSize = '28px';
+  }
+
+  fd.append(card);
+
+  const lbl = el('div', 'fd-label');
+  lbl.textContent = wd.name ?? def?.productLine ?? def?.name?.slice(0, 18) ?? wd.model;
+  fd.append(lbl);
+
+  if (wd.nodeAddress != null) {
+    const addr = el('div', 'fd-addr');
+    addr.textContent = `N:${wd.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}`;
+    fd.append(addr);
+  }
+
+  fd.append(el('div', 'cdr'));
+  return fd;
+}
+
+
 
 // ─── Terminator ───────────────────────────────────────────────────────────────
 
@@ -357,21 +438,44 @@ function drawCANBus(canvas) {
     svgDot(x, r2.cy, CAN1);
   }
 
-  // PSU → woning panel drop (Segment 2)
-  const woningRow = relRect(document.getElementById('woning-row'));
-  if (woningRow && railRects.length > 0) {
+  // PSU → woning panel drop (Segment 2) + woning row-to-row snake
+  const woningRows = canvas.querySelectorAll('[id^="woning-row"]');
+  const woningRowRects = [...woningRows].map(r => relRect(r)).filter(Boolean);
+
+  if (woningRowRects.length > 0 && railRects.length > 0) {
     const lastRail = railRects[railRects.length - 1];
-    // Find PSU module if any
-    const psuSlot = canvas.querySelector('[data-module-id]') &&
-      [...canvas.querySelectorAll('[data-module-id]')].find(s => {
-        const m = s.querySelector('.m-model'); return m && m.textContent.includes('PSU');
-      });
-    const anchor = psuSlot ? relRect(psuSlot) : (lastRail ?? null);
+    const firstWoning = woningRowRects[0];
+    // Drop from last cabinet rail (or PSU) to first woning row
+    const psuSlot = [...canvas.querySelectorAll('[data-module-id]')].find(s => {
+      const m = s.querySelector('.m-model'); return m && m.textContent.includes('PSU');
+    });
+    const anchor = psuSlot ? relRect(psuSlot) : lastRail;
     if (anchor) {
-      const x = anchor.cx, y1 = anchor.bottom + 4, y2 = woningRow.top - 4;
+      const x = anchor.cx, y1 = anchor.bottom + 4, y2 = firstWoning.top - 4;
       svgLine(x, y1, x, y2, CAN2);
       svgDot(x, y1, CAN2);
       svgDot(x, y2, CAN2);
+    }
+  }
+
+  // Woning row-to-row snake connectors
+  for (let i = 0; i + 1 < woningRowRects.length; i++) {
+    const r1 = woningRowRects[i], r2 = woningRowRects[i + 1];
+    const isOddRow = i % 2 === 0; // after even row → right side connector
+    if (isOddRow) {
+      const x = Math.max(r1.right, r2.right) + 10;
+      svgLine(r1.right, r1.cy, x, r1.cy, CAN2);
+      svgLine(x, r1.cy, x, r2.cy, CAN2);
+      svgLine(x, r2.cy, r2.right, r2.cy, CAN2);
+      svgDot(x, r1.cy, CAN2);
+      svgDot(x, r2.cy, CAN2);
+    } else {
+      const x = Math.min(r1.left, r2.left) - 10;
+      svgLine(r1.left, r1.cy, x, r1.cy, CAN2);
+      svgLine(x, r1.cy, x, r2.cy, CAN2);
+      svgLine(x, r2.cy, r2.left, r2.cy, CAN2);
+      svgDot(x, r1.cy, CAN2);
+      svgDot(x, r2.cy, CAN2);
     }
   }
 }
