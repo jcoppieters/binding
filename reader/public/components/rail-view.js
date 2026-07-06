@@ -341,9 +341,9 @@ function buildWoningPanel(woningDevices, modules) {
   // Compute max items per row dynamically from canvas width
   const canvas = document.getElementById('rail-canvas');
   const panelInner = (canvas?.clientWidth ?? 800) - 76; // subtract canvas pad(40) + panel pad(36)
-  const avgItemW = 116; // avg device card + margin + gap
-  const endOverhead = 240; // terminator + 2 add buttons + margin buffer
-  const maxPerRow = Math.max(3, Math.floor((panelInner - endOverhead) / avgItemW));
+  const maxItemW = 154; // worst-case: LCD card (130px) + margin (8px) + gap (16px)
+  const endOverhead = 280; // terminator + 2 add-buttons + margins/gaps + buffer
+  const maxPerRow = Math.max(3, Math.floor((panelInner - endOverhead) / maxItemW));
 
   // Split devices into rows of maxPerRow
   const rows = [];
