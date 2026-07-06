@@ -255,7 +255,7 @@ function buildModuleSlot(cabinetId, moduleInstance, idx, modules) {
   const cdl = el('div', 'cdl'); slot.append(cdl);
 
   const card = buildModuleCard(moduleInstance, def);
-  card.onclick = () => openModuleConfig(moduleInstance);
+  card.onclick = () => openModuleDetail(moduleInstance, cabinetId);
   slot.append(card);
 
   const cdr = el('div', 'cdr'); slot.append(cdr);
@@ -600,9 +600,169 @@ export function addCabinet(name = 'Nieuwe kast', widthUnits = 36) {
   });
 }
 
-function openModuleConfig(moduleInstance) {
-  // TODO P6-1: open per-module config modal
-  alert(`Config voor ${moduleInstance.model} (nodeAddress: ${moduleInstance.nodeAddress ?? 'niet toegewezen'})`);
+function openModuleDetail(moduleInstance, cabinetId) {
+  document.getElementById('module-detail-overlay')?.remove();
+
+  const s = state.get();
+  const def = lookupModule(moduleInstance.model, s.modules);
+  const cabinet = s.project.railView.cabinets.find(c => c.id === cabinetId);
+  const moduleIdx = cabinet?.modules.findIndex(m => m.id === moduleInstance.id) ?? -1;
+  const totalModules = cabinet?.modules.length ?? 0;
+
+  const overlay = el('div', 'modal-overlay');
+  overlay.id = 'module-detail-overlay';
+
+  const dlg = el('div', 'modal-dialog');
+  dlg.style.cssText = 'width:660px;max-width:95vw';
+
+  // Header
+  const hdr = el('div', 'modal-header');
+  hdr.innerHTML = `<strong>${def?.productLine ?? def?.name ?? moduleInstance.model}</strong>`;
+  const closeBtn = el('button', 'modal-close'); closeBtn.textContent = '✕';
+  closeBtn.onclick = () => overlay.remove();
+  hdr.append(closeBtn);
+
+  // Body
+  const body = el('div', 'modal-body');
+  body.style.cssText = 'display:flex;gap:20px;flex-direction:row';
+
+  // -- Left: image + specs
+  const left = el('div', '');
+  left.style.cssText = 'flex:0 0 180px;display:flex;flex-direction:column;gap:10px';
+
+  if (def?.imageFile) {
+    const imgWrap = el('div', '');
+    imgWrap.style.cssText = 'width:180px;height:140px;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;background:#f8f9fd;display:flex;align-items:center;justify-content:center';
+    const img = document.createElement('img');
+    img.src = `/modules/images/${def.imageFile.replace('images/','')}`;
+    img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;padding:6px';
+    imgWrap.append(img);
+    left.append(imgWrap);
+  }
+
+  const specs = el('div', '');
+  specs.style.cssText = 'font-size:12px;color:#6a7899;display:flex;flex-direction:column;gap:4px';
+  if (def?.uiCategory)  specs.innerHTML += `<div><b>${def.uiCategory}</b></div>`;
+  if (def?.dinUnits)    specs.innerHTML += `<div>Breedte: <b>${def.dinUnits}M</b></div>`;
+  if (def?.powerW)      specs.innerHTML += `<div>Verbruik: <b>${def.powerW}W</b></div>`;
+  if (def?.lengthMm)    specs.innerHTML += `<div>Lengte: ${def.lengthMm}mm</div>`;
+  if (moduleInstance.nodeAddress != null) {
+    specs.innerHTML += `<div>Node: <b>0x${moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}</b></div>`;
+  }
+  left.append(specs);
+
+  // -- Right: channel groups + form fields
+  const right = el('div', '');
+  right.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:14px';
+
+  // Channel groups
+  if (def?.channelGroups?.length) {
+    const chSect = el('div', '');
+    const chTitle = el('div', ''); chTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px';
+    chTitle.textContent = 'Kanalen';
+    chSect.append(chTitle);
+    const CH_LABELS = { dimmer_te:'Dimmer TE', dimmer_le:'Dimmer LE', dimmer_pwm:'Dimmer PWM', dimmer_dc:'0-10V', relay_no:'Relais NO', relay_nc:'Relais NC', relay_ssr:'Relais SSR', motor_updown:'Motor Op/neer', motor_polar:'Motor Polar', input_digital:'Digitale ingang', input_analog:'Analoge ingang', dali:'DALI', dmx:'DMX', audio:'Audio' };
+    const CH_COLORS = { dimmer_te:'#f59e0b', dimmer_le:'#f59e0b', dimmer_pwm:'#f59e0b', dimmer_dc:'#f59e0b', relay_no:'#3b82f6', relay_nc:'#3b82f6', relay_ssr:'#3b82f6', motor_updown:'#ef4444', motor_polar:'#ef4444', input_digital:'#10b981', input_analog:'#10b981', dali:'#eab308', dmx:'#eab308', audio:'#8b5cf6' };
+    def.channelGroups.forEach(g => {
+      const row = el('div', '');
+      row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px';
+      const dots = el('div', ''); dots.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;max-width:100px';
+      for (let i = 0; i < Math.min(g.count, 16); i++) {
+        const d = el('div', '');
+        d.style.cssText = `width:10px;height:10px;border-radius:2px;background:${CH_COLORS[g.type] ?? '#999'};flex-shrink:0`;
+        dots.append(d);
+      }
+      const lbl = el('div', '');
+      lbl.style.cssText = 'font-size:12px;color:#1a1f2e';
+      lbl.textContent = `${g.count}× ${CH_LABELS[g.type] ?? g.type}`;
+      if (g.maxLoadW) { const sub = el('span',''); sub.style.cssText='font-size:10px;color:#a0aaba'; sub.textContent=` (max ${g.maxLoadW}W)`; lbl.append(sub); }
+      if (g.maxCurrentA) { const sub = el('span',''); sub.style.cssText='font-size:10px;color:#a0aaba'; sub.textContent=` (max ${g.maxCurrentA}A)`; lbl.append(sub); }
+      row.append(dots, lbl);
+      chSect.append(row);
+    });
+    right.append(chSect);
+  }
+
+  // Fields: name + nodeAddress
+  const nameLabel = el('label', 'modal-label'); nameLabel.textContent = 'Label (optioneel)';
+  const nameInput = el('input', 'modal-input');
+  nameInput.value = moduleInstance.name ?? '';
+  nameInput.placeholder = def?.productLine ?? moduleInstance.model;
+  nameInput.type = 'text';
+
+  const addrLabel = el('label', 'modal-label'); addrLabel.textContent = 'Node adres (hex, bijv. 01)';
+  const addrInput = el('input', 'modal-input');
+  addrInput.value = moduleInstance.nodeAddress != null ? moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2,'0') : '';
+  addrInput.placeholder = '--';
+  addrInput.maxLength = 2;
+  addrInput.style.width = '80px';
+  addrInput.pattern = '[0-9a-fA-F]{1,2}';
+
+  right.append(nameLabel, nameInput, addrLabel, addrInput);
+  body.append(left, right);
+
+  // Footer
+  const footer = el('div', 'modal-footer');
+  footer.style.justifyContent = 'space-between';
+
+  const leftBtns = el('div', '');
+  leftBtns.style.cssText = 'display:flex;gap:6px';
+
+  const moveLeftBtn = el('button', 'modal-btn');
+  moveLeftBtn.innerHTML = '← Links';
+  moveLeftBtn.title = 'Verschuif module naar links';
+  moveLeftBtn.disabled = moduleIdx <= 0;
+  moveLeftBtn.onclick = () => {
+    dispatch({ type: 'MOVE_MODULE', cabinetId, moduleId: moduleInstance.id, direction: -1 });
+    overlay.remove();
+  };
+
+  const moveRightBtn = el('button', 'modal-btn');
+  moveRightBtn.innerHTML = 'Rechts →';
+  moveRightBtn.title = 'Verschuif module naar rechts';
+  moveRightBtn.disabled = moduleIdx < 0 || moduleIdx >= totalModules - 1;
+  moveRightBtn.onclick = () => {
+    dispatch({ type: 'MOVE_MODULE', cabinetId, moduleId: moduleInstance.id, direction: +1 });
+    overlay.remove();
+  };
+
+  const deleteBtn = el('button', 'modal-btn');
+  deleteBtn.textContent = '🗑 Verwijder';
+  deleteBtn.style.cssText += 'color:#ef4444;border-color:#fca5a5';
+  deleteBtn.onclick = () => {
+    if (confirm(`Verwijder ${moduleInstance.model}?`)) {
+      dispatch({ type: 'REMOVE_MODULE', cabinetId, moduleId: moduleInstance.id });
+      overlay.remove();
+    }
+  };
+
+  leftBtns.append(moveLeftBtn, moveRightBtn, deleteBtn);
+
+  const rightBtns = el('div', '');
+  rightBtns.style.cssText = 'display:flex;gap:6px';
+
+  const cancelBtn = el('button', 'modal-btn'); cancelBtn.textContent = 'Sluiten';
+  cancelBtn.onclick = () => overlay.remove();
+
+  const saveBtn = el('button', 'modal-btn-primary'); saveBtn.textContent = 'Opslaan';
+  saveBtn.onclick = () => {
+    const name = nameInput.value.trim() || null;
+    const addrStr = addrInput.value.trim();
+    const nodeAddress = addrStr ? parseInt(addrStr, 16) : undefined;
+    const patch = { name };
+    if (nodeAddress != null && !isNaN(nodeAddress)) patch.nodeAddress = nodeAddress;
+    dispatch({ type: 'UPDATE_MODULE', cabinetId, moduleId: moduleInstance.id, patch });
+    overlay.remove();
+  };
+
+  rightBtns.append(cancelBtn, saveBtn);
+  footer.append(leftBtns, rightBtns);
+
+  dlg.append(hdr, body, footer);
+  overlay.append(dlg);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.append(overlay);
+  nameInput.focus();
 }
 
 // ─── Wire buttons ─────────────────────────────────────────────────────────────

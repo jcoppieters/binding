@@ -94,16 +94,24 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 ### Phase 1 — Rail View
 
-- [x] **P1-1** Render Rail View from project data \u2014 **DONE**
+- [x] **P1-1** Render Rail View from project data — **DONE**
   - `public/components/rail-view.js` + `rail-view.css`
   - Cabinet cards, rail rows, module slots, woning panel, CAN SVG snake
-  - State-driven: re-renders on every `dispatch()` call
-- [x] **P1-2** Add module: picker → choose model → save to project \u2014 **DONE**
+  - Cabinet has fixed width (PX_PER_M=22); modules auto-reflow across rails by dinUnits
+  - Odd rails run R→L (snake CAN bus visual); SVG snake scrolls with content (position:relative on rail-canvas)
+  - State-driven: re-renders on every `dispatch()` call + on window resize (woning row count)
+- [x] **P1-2** Add module: picker → choose model → save to project — **DONE**
   - `public/components/module-picker.js`
   - Groups by `uiCategory`, shows family cards with finish dropdown, product images
   - Dispatches `ADD_MODULE` or `ADD_WONING_DEVICE` to state
-- [x] **P1-3** Add cabinet + add rail \u2014 **DONE** (via `promptAddCabinet()` / dispatch)
-- [ ] **P1-4** Add switch / LCD to woning panel (via module picker, `woningType` context)
+- [x] **P1-3** Add cabinet — **DONE** (via `promptAddCabinet()` / dispatch; widths: 18/36/54/82M)
+- [x] **P1-4** Add switch / LCD to woning panel — **DONE**
+  - `+ Schakelaar` / `+ LCD` buttons in toolbar AND in woning panel both work
+  - Woning rows snake L→R / R→L; row count is dynamic (canvas width); rows reflow on resize
+- [x] **P1-7** Delete module from Rail View — **DONE** (in module detail modal)
+  - Confirm dialog → `REMOVE_MODULE` dispatch
+- [x] **P1-8** Reorder modules within cabinet — **DONE** (via detail modal ←/→ buttons)
+  - `MOVE_MODULE` action swaps adjacent modules; reflow regenerates rails automatically
 - [ ] **P1-5** Resources panel in sidebar: used vs. available counts per type
 - [ ] **P1-6** DIN rail space bar (M-units used vs. cabinet width)
 
@@ -151,11 +159,16 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 ### Phase 6 — Per-module config modals
 
-- [ ] **P6-1** Module config modal (click module in Rail View)
-  - Fields: name, IP address, firmware version; from UDP discovery + TCP query
-- [ ] **P6-2** LCD / Touchscreen config modal
+- [x] **P6-1** Module detail modal (click module in Rail View) — **DONE**
+  - Product image, channel groups with colour-coded dots + counts, dinUnits + powerW
+  - Rename (label), node address (hex) input
+  - Reorder: ← Links / Rechts → buttons (triggers `MOVE_MODULE`)
+  - Delete button with confirm (triggers `REMOVE_MODULE`)
+- [ ] **P6-2** Woning device detail modal (click switch/LCD in woning panel)
+  - Same pattern: image, rename, address, delete (`REMOVE_WONING_DEVICE`)
+- [ ] **P6-3** LCD / Touchscreen config modal
   - Multi-pane (one pane per screen page); link to mood/schedule editors for this node
-- [ ] **P6-3** Switch config modal: button labels, room assignment
+- [ ] **P6-4** Switch config modal: button labels, room assignment
 
 ### Phase 7 — Save & Upload
 

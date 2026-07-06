@@ -94,9 +94,52 @@ export function dispatch(action) {
       _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
       break;
     }
+    case 'UPDATE_MODULE': {
+      const railView = { ..._state.project.railView };
+      railView.cabinets = railView.cabinets.map(c =>
+        c.id === action.cabinetId ? {
+          ...c, modules: c.modules.map(m =>
+            m.id === action.moduleId ? { ...m, ...action.patch } : m
+          )
+        } : c
+      );
+      _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
+      break;
+    }
+    case 'REMOVE_MODULE': {
+      const railView = { ..._state.project.railView };
+      railView.cabinets = railView.cabinets.map(c =>
+        c.id === action.cabinetId
+          ? { ...c, modules: c.modules.filter(m => m.id !== action.moduleId) }
+          : c
+      );
+      _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
+      break;
+    }
+    case 'MOVE_MODULE': {
+      // Swap module at index with its neighbour (direction: -1=left, +1=right)
+      const railView = { ..._state.project.railView };
+      railView.cabinets = railView.cabinets.map(c => {
+        if (c.id !== action.cabinetId) return c;
+        const mods = [...c.modules];
+        const idx = mods.findIndex(m => m.id === action.moduleId);
+        const target = idx + action.direction;
+        if (idx < 0 || target < 0 || target >= mods.length) return c;
+        [mods[idx], mods[target]] = [mods[target], mods[idx]];
+        return { ...c, modules: mods };
+      });
+      _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
+      break;
+    }
     case 'ADD_WONING_DEVICE': {
       const railView = { ..._state.project.railView };
       railView.woningDevices = [...railView.woningDevices, action.device];
+      _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
+      break;
+    }
+    case 'REMOVE_WONING_DEVICE': {
+      const railView = { ..._state.project.railView };
+      railView.woningDevices = railView.woningDevices.filter(d => d.id !== action.deviceId);
       _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
       break;
     }
