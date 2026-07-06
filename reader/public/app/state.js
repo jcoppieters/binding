@@ -13,7 +13,8 @@ const EMPTY_PROJECT = {
     cabinets: [{
       id: 'cabinet-0',
       name: 'Hoofdkast',
-      rails: [{ id: 'rail-0', label: 'Rail 1', modules: [] }],
+      widthUnits: 12,
+      modules: [],
     }],
     woningDevices: [],
   },
@@ -75,10 +76,10 @@ export function dispatch(action) {
       _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
       break;
     }
-    case 'ADD_RAIL': {
+    case 'SET_CABINET': {
       const railView = { ..._state.project.railView };
       railView.cabinets = railView.cabinets.map(c =>
-        c.id === action.cabinetId ? { ...c, rails: [...c.rails, action.rail] } : c
+        c.id === action.cabinetId ? { ...c, ...action.patch } : c
       );
       _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
       break;
@@ -86,11 +87,9 @@ export function dispatch(action) {
     case 'ADD_MODULE': {
       const railView = { ..._state.project.railView };
       railView.cabinets = railView.cabinets.map(c =>
-        c.id === action.cabinetId ? {
-          ...c, rails: c.rails.map(r =>
-            r.id === action.railId ? { ...r, modules: [...r.modules, action.module] } : r
-          )
-        } : c
+        c.id === action.cabinetId
+          ? { ...c, modules: [...c.modules, action.module] }
+          : c
       );
       _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
       break;

@@ -65,53 +65,132 @@ function render(s) {
 // ─── Cabinet card ─────────────────────────────────────────────────────────────
 
 function buildCabinetCard(cabinet, modules) {
-  const totalDIN = cabinet.rails
-    .flatMap(r => r.modules)
-    .reduce((s, m) => s + (lookupModule(m.model, modules)?.dinUnits ?? 0), 0);
-  const totalW = cabinet.rails
-    .flatMap(r => r.modules)
+  const rails = reflowToRails(cabinet, modules);
+
+  const totalW = cabinet.modules
     .reduce((s, m) => s + (lookupModule(m.model, modules)?.powerW ?? 0), 0);
   const psusNeeded = Math.ceil(totalW / 60);
 
   const card = el('div', 'cabinet-card');
   card.dataset.cabinetId = cabinet.id;
 
-  // Header
+  // Header — click to edit cabinet properties
   const hdr = el('div', 'cabinet-header');
-  const h3 = el('h3'); h3.textContent = `🗄️ ${cabinet.name}` + (cabinet.location ? ` — ${cabinet.location}` : '');
+  hdr.title = 'Klik om kast eigenschappen te bewerken';
+  hdr.style.cursor = 'pointer';
+  hdr.onclick = () => openCabinetModal(cabinet);
+  const h3 = el('h3');
+  h3.textContent = `🗄️ ${cabinet.name}`;
   const stats = el('div', 'cabinet-stats');
   stats.innerHTML = `
-    <div class="cabinet-stat"><span>Rails:</span><span class="val">${cabinet.rails.length}</span></div>
-    <div class="cabinet-stat"><span>Modules:</span><span class="val">${cabinet.rails.flatMap(r=>r.modules).length}</span></div>
+    <div class="cabinet-stat"><span>Rails:</span><span class="val">${rails.length}</span></div>
+    <div class="cabinet-stat"><span>Breedte:</span><span class="val">${cabinet.widthUnits}M</span></div>
+    <div class="cabinet-stat"><span>Modules:</span><span class="val">${cabinet.modules.length}</span></div>
     ${totalW > 0 ? `<div class="cabinet-stat warn"><span>Verbruik:</span><span class="val">${totalW.toFixed(1)} W</span></div>` : ''}
   `;
   hdr.append(h3, stats);
   card.append(hdr);
 
-  // PSU summary
   if (totalW > 0) {
     const psu = el('div', 'psu-summary');
     psu.innerHTML = `⚡ Totaalverbruik: <strong>${totalW.toFixed(1)} W</strong> &nbsp;|&nbsp; Voedingen nodig: <strong>${psusNeeded}×60W</strong>`;
     card.append(psu);
   }
 
-  // Rails
-  cabinet.rails.forEach((rail, railIdx) => {
-    card.append(buildRailRow(cabinet.id, rail, railIdx, modules));
+  // Render reflowed rails
+  rails.forEach((rail, railIdx) => {
+    card.append(buildRailRow(cabinet.id, rail, railIdx, railIdx === rails.length - 1, modules));
   });
-
-  // Add rail button
-  const addRailBtn = el('button', 'add-rail-btn');
-  addRailBtn.textContent = '＋ Rail toevoegen';
-  addRailBtn.onclick = () => addRail(cabinet.id);
-  card.append(addRailBtn);
 
   return card;
 }
 
+// ─── Reflow modules into virtual rails ────────────────────────────────────────
+
+function reflowToRails(cabinet, moduleDefs) {
+  const maxM = cabinet.widthUnits ?? 12;
+  const rails = [];
+  let rail = null;
+  let used = 0;
+
+  for (const m of cabinet.modules) {
+    const w = lookupModule(m.model, moduleDefs)?.dinUnits ?? 2;
+    if (!rail || used + w > maxM) {
+      rail = { id: `${cabinet.id}-r${rails.length}`, label: `Rail ${rails.length + 1}`, modules: [] };
+      rails.push(rail);
+      used = 0;
+    }
+    rail.modules.push(m);
+    used += w;
+  }
+
+  // Always at least one rail (for the + button)
+  if (rails.length === 0) {
+    rails.push({ id: `${cabinet.id}-r0`, label: 'Rail 1', modules: [] });
+  }
+
+  return rails;
+}
+
+// ─── Cabinet config modal ─────────────────────────────────────────────────────
+
+function openCabinetModal(cabinet) {
+  document.getElementById('cabinet-modal-overlay')?.remove();
+
+  const overlay = el('div', 'modal-overlay');
+  overlay.id = 'cabinet-modal-overlay';
+
+  const dlg = el('div', 'modal-dialog');
+  dlg.style.width = '340px';
+
+  const hdr = el('div', 'modal-header');
+  hdr.innerHTML = `<strong>Kast configuratie</strong>`;
+  const closeBtn = el('button', 'modal-close'); closeBtn.textContent = '✕';
+  closeBtn.onclick = () => overlay.remove();
+  hdr.append(closeBtn);
+
+  const body = el('div', 'modal-body');
+
+  // Name
+  const nameLabel = el('label', 'modal-label'); nameLabel.textContent = 'Naam';
+  const nameInput = el('input', 'modal-input');
+  nameInput.value = cabinet.name;
+  nameInput.type = 'text';
+
+  // Width
+  const wLabel = el('label', 'modal-label'); wLabel.textContent = 'Breedte (M-eenheden)';
+  const wInput = el('input', 'modal-input');
+  wInput.type = 'number'; wInput.min = '4'; wInput.max = '72'; wInput.step = '1';
+  wInput.value = String(cabinet.widthUnits ?? 12);
+
+  const hint = el('p', 'modal-hint');
+  hint.textContent = 'Typische waarden: 12M (compact), 18M (standaard), 24M (breed). Modules worden automatisch herverdeeld.';
+
+  body.append(nameLabel, nameInput, wLabel, wInput, hint);
+
+  const footer = el('div', 'modal-footer');
+  const saveBtn = el('button', 'modal-btn-primary'); saveBtn.textContent = 'Opslaan';
+  saveBtn.onclick = () => {
+    const name = nameInput.value.trim() || cabinet.name;
+    const widthUnits = Math.max(4, Math.min(72, parseInt(wInput.value, 10) || cabinet.widthUnits));
+    dispatch({ type: 'SET_CABINET', cabinetId: cabinet.id, patch: { name, widthUnits } });
+    overlay.remove();
+  };
+  const cancelBtn = el('button', 'modal-btn'); cancelBtn.textContent = 'Annuleren';
+  cancelBtn.onclick = () => overlay.remove();
+  footer.append(cancelBtn, saveBtn);
+
+  dlg.append(hdr, body, footer);
+  overlay.append(dlg);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.append(overlay);
+  nameInput.focus();
+  nameInput.select();
+}
+
 // ─── Rail row ─────────────────────────────────────────────────────────────────
 
-function buildRailRow(cabinetId, rail, railIdx, modules) {
+function buildRailRow(cabinetId, rail, railIdx, isLastRail, modules) {
   const row = el('div', 'rail-row');
   row.dataset.railId = rail.id;
 
@@ -123,25 +202,28 @@ function buildRailRow(cabinetId, rail, railIdx, modules) {
   railModules.style.position = 'relative';
   const canLine = el('div', 'can-line'); railModules.append(canLine);
 
-  // Left terminator
-  const termL = buildTerminator('SEG1');
-  termL.id = `term-l-${rail.id}`;
-  railModules.append(termL);
+  // Single 60Ω terminator — only on the very first rail (left end of Segment 1)
+  if (railIdx === 0) {
+    const termL = buildTerminator('SEG1');
+    termL.id = `term-l-${rail.id}`;
+    railModules.append(termL);
+  }
 
   // Module slots
   rail.modules.forEach((m, idx) => {
-    const slot = buildModuleSlot(cabinetId, rail.id, m, idx, modules);
+    const slot = buildModuleSlot(cabinetId, m, idx, modules);
     railModules.append(slot);
-    // Mark last slot for CAN SVG anchoring
     if (idx === rail.modules.length - 1) slot.id = `last-slot-${rail.id}`;
   });
 
-  // Add module button
-  const addBtn = el('div', 'add-module-btn');
-  addBtn.textContent = '＋';
-  addBtn.title = 'Module toevoegen';
-  addBtn.onclick = () => openModulePicker({ cabinetId, railId: rail.id });
-  railModules.append(addBtn);
+  // Add module button — only on the last rail
+  if (isLastRail) {
+    const addBtn = el('div', 'add-module-btn');
+    addBtn.textContent = '＋';
+    addBtn.title = 'Module toevoegen';
+    addBtn.onclick = () => openModulePicker({ cabinetId });
+    railModules.append(addBtn);
+  }
 
   row.append(railModules);
   return row;
@@ -149,7 +231,7 @@ function buildRailRow(cabinetId, rail, railIdx, modules) {
 
 // ─── Module slot ──────────────────────────────────────────────────────────────
 
-function buildModuleSlot(cabinetId, railId, moduleInstance, idx, modules) {
+function buildModuleSlot(cabinetId, moduleInstance, idx, modules) {
   const def = lookupModule(moduleInstance.model, modules);
   const slot = el('div', 'module-slot');
   slot.dataset.moduleId = moduleInstance.id;
@@ -267,12 +349,9 @@ function buildWoningPanel(woningDevices, modules) {
     // For odd rows the CAN enters from the RIGHT — reverse display so logical order is preserved
     const displayDevices = isOdd ? [...rowDevices].reverse() : rowDevices;
 
-    // Left terminator on the very first row
-    if (rowIdx === 0) {
-      const termL = buildTerminator('SEG2');
-      termL.id = 'woning-term-l';
-      rowEl.append(termL);
-    }
+    // Left terminator on the very first row — REMOVED:
+    // Segment 2 has no left terminator; it continues from the last cabinet rail.
+    // The only terminator is at the far end of the last woning row.
 
     // Devices
     displayDevices.forEach(wd => rowEl.append(buildFieldDevice(wd, modules)));
@@ -485,32 +564,24 @@ function drawCANBus(canvas) {
 function updateSidebarCounts(railView, modules) {
   const cabinetsEl = document.getElementById('cabinets-list');
   if (cabinetsEl) {
-    cabinetsEl.innerHTML = railView.cabinets.map(c =>
-      `<div class="sidebar-item active"><span class="icon">🗄️</span> ${c.name} <span class="badge">${c.rails.length} rails</span></div>`
-    ).join('');
+    cabinetsEl.innerHTML = railView.cabinets.map(c => {
+      const rails = reflowToRails(c, modules);
+      return `<div class="sidebar-item active"><span class="icon">🗄️</span> ${c.name} <span class="badge">${rails.length} rails, ${c.widthUnits}M</span></div>`;
+    }).join('');
   }
   const seg1 = document.getElementById('seg1-count');
   const seg2 = document.getElementById('seg2-count');
-  if (seg1) seg1.textContent = String(railView.cabinets.flatMap(c => c.rails.flatMap(r => r.modules)).length);
+  if (seg1) seg1.textContent = String(railView.cabinets.reduce((s, c) => s + c.modules.length, 0));
   if (seg2) seg2.textContent = String(railView.woningDevices.length);
 }
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
 
-export function addCabinet(name = 'Nieuwe kast') {
-  const cabinet = {
-    id: makeId(),
-    name,
-    rails: [{ id: makeId(), label: 'Rail 1', modules: [] }],
-  };
-  dispatch({ type: 'ADD_CABINET', cabinet });
-}
-
-function addRail(cabinetId) {
-  const s = state.get();
-  const cabinet = s.project.railView.cabinets.find(c => c.id === cabinetId);
-  const n = cabinet ? cabinet.rails.length + 1 : 1;
-  dispatch({ type: 'ADD_RAIL', cabinetId, rail: { id: makeId(), label: `Rail ${n}`, modules: [] } });
+export function addCabinet(name = 'Nieuwe kast', widthUnits = 12) {
+  dispatch({
+    type: 'ADD_CABINET',
+    cabinet: { id: makeId(), name, widthUnits, modules: [] },
+  });
 }
 
 function openModuleConfig(moduleInstance) {
@@ -530,15 +601,17 @@ export function wireButtons() {
   btnModule?.addEventListener('click', () => {
     const s = state.get();
     const c = s.project.railView.cabinets[0];
-    const r = c?.rails[0];
-    if (!c || !r) { alert('Voeg eerst een kast toe.'); return; }
-    openModulePicker({ cabinetId: c.id, railId: r.id });
+    if (!c) { alert('Voeg eerst een kast toe.'); return; }
+    openModulePicker({ cabinetId: c.id });
   });
 }
 
 function promptAddCabinet() {
   const name = prompt('Naam van de kast:', 'Hoofdkast');
-  if (name) addCabinet(name);
+  if (!name) return;
+  const widthStr = prompt('Breedte in M-eenheden (bijv. 12, 18, 24):', '12');
+  const widthUnits = Math.max(4, Math.min(72, parseInt(widthStr, 10) || 12));
+  addCabinet(name, widthUnits);
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

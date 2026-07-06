@@ -261,7 +261,6 @@ function onConfirm(context, model, variant) {
     dispatch({
       type: 'ADD_MODULE',
       cabinetId: context.cabinetId,
-      railId: context.railId,
       module: { id: makeId(), model, position: 99 },
     });
   }

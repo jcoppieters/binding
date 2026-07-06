@@ -46,20 +46,13 @@ export interface ModuleInstance {
   slots?: (string | null)[];
 }
 
-/** One horizontal DIN rail within a cabinet. */
-export interface Rail {
-  id: LocalId;
-  label: string;              // display label, e.g. "Rail 1"
-  modules: ModuleInstance[];
-}
-
-/** Physical cabinet. Can have multiple rails. */
+/** Physical cabinet. Modules are stored flat; rails are computed from widthUnits at render time. */
 export interface Cabinet {
   id: LocalId;
   name: string;               // e.g. "Hoofdkast"
   location?: string;          // free text, e.g. "Technische ruimte"
-  widthUnits?: number;        // cabinet width in DIN M-units (1M ≈ 18mm)
-  rails: Rail[];
+  widthUnits: number;         // cabinet width in DIN M-units (1M ≈ 18mm), default 12
+  modules: ModuleInstance[];  // ordered flat list — reflowed into rails at render time
 }
 
 /**
