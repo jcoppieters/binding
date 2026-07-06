@@ -191,6 +191,7 @@ function openCabinetModal(cabinet) {
 // ─── Rail row ─────────────────────────────────────────────────────────────────
 
 function buildRailRow(cabinetId, rail, railIdx, isLastRail, modules) {
+  const isOddRail = railIdx % 2 === 1;
   const row = el('div', 'rail-row');
   row.dataset.railId = rail.id;
 
@@ -200,6 +201,8 @@ function buildRailRow(cabinetId, rail, railIdx, isLastRail, modules) {
 
   const railModules = el('div', 'rail-modules');
   railModules.style.position = 'relative';
+  // Odd rails run R→L so the CAN bus snake continues unbroken
+  if (isOddRail) railModules.style.flexDirection = 'row-reverse';
   const canLine = el('div', 'can-line'); railModules.append(canLine);
 
   // Single 60Ω terminator — only on the very first rail (left end of Segment 1)
@@ -312,7 +315,7 @@ function buildModuleCard(moduleInstance, def) {
 
 // ─── Woning panel (multi-row snake) ──────────────────────────────────────────
 
-const WONING_MAX_PER_ROW = 6;
+const WONING_MAX_PER_ROW = 4;
 
 function buildWoningPanel(woningDevices, modules) {
   const panel = el('div', 'woning-panel');
@@ -497,44 +500,48 @@ function drawCANBus(canvas) {
     svg.appendChild(c);
   }
 
-  // Collect last-slot positions per rail (for snake connectors)
-  const rails = canvas.querySelectorAll('.rail-row');
-  const railRects = [];
-  rails.forEach(r => {
-    const lastSlot = r.querySelector('[id^="last-slot-"]');
-    if (lastSlot) railRects.push(relRect(lastSlot));
-  });
+  // Collect rail-modules bounding rects for bidirectional snake
+  const railRows = [...canvas.querySelectorAll('.rail-row')];
+  const railInfos = railRows.map((row, idx) => {
+    const modulesEl = row.querySelector('.rail-modules');
+    const rect = modulesEl ? relRect(modulesEl) : null;
+    return rect ? { rect, isOdd: idx % 2 === 1 } : null;
+  }).filter(Boolean);
 
-  // Draw snake: last slot of rail N → first slot of rail N+1
-  for (let i = 0; i + 1 < railRects.length; i++) {
-    const r1 = railRects[i], r2 = railRects[i + 1];
-    if (!r1 || !r2) continue;
-    const x = Math.max(r1.right, r2.right) + 18;
-    svgLine(r1.cx, r1.cy, x, r1.cy, CAN1);
-    svgLine(x, r1.cy, x, r2.cy, CAN1);
-    svgLine(x, r2.cy, r2.cx, r2.cy, CAN1);
-    svgDot(x, r1.cy, CAN1);
-    svgDot(x, r2.cy, CAN1);
+  // Draw snake between consecutive cabinet rails (alternating L/R)
+  for (let i = 0; i + 1 < railInfos.length; i++) {
+    const curr = railInfos[i], next = railInfos[i + 1];
+    if (curr.isOdd) {
+      // Odd→Even: snake on LEFT side
+      const x = Math.min(curr.rect.left, next.rect.left) - 18;
+      svgLine(curr.rect.left, curr.rect.cy, x, curr.rect.cy, CAN1);
+      svgLine(x, curr.rect.cy, x, next.rect.cy, CAN1);
+      svgLine(x, next.rect.cy, next.rect.left, next.rect.cy, CAN1);
+      svgDot(x, curr.rect.cy, CAN1);
+      svgDot(x, next.rect.cy, CAN1);
+    } else {
+      // Even→Odd: snake on RIGHT side
+      const x = Math.max(curr.rect.right, next.rect.right) + 18;
+      svgLine(curr.rect.right, curr.rect.cy, x, curr.rect.cy, CAN1);
+      svgLine(x, curr.rect.cy, x, next.rect.cy, CAN1);
+      svgLine(x, next.rect.cy, next.rect.right, next.rect.cy, CAN1);
+      svgDot(x, curr.rect.cy, CAN1);
+      svgDot(x, next.rect.cy, CAN1);
+    }
   }
 
-  // PSU → woning panel drop (Segment 2) + woning row-to-row snake
+  // Drop from last cabinet rail to woning panel (Segment 2)
   const woningRows = canvas.querySelectorAll('[id^="woning-row"]');
   const woningRowRects = [...woningRows].map(r => relRect(r)).filter(Boolean);
 
-  if (woningRowRects.length > 0 && railRects.length > 0) {
-    const lastRail = railRects[railRects.length - 1];
+  if (woningRowRects.length > 0 && railInfos.length > 0) {
+    const lastRail = railInfos[railInfos.length - 1];
     const firstWoning = woningRowRects[0];
-    // Drop from last cabinet rail (or PSU) to first woning row
-    const psuSlot = [...canvas.querySelectorAll('[data-module-id]')].find(s => {
-      const m = s.querySelector('.m-model'); return m && m.textContent.includes('PSU');
-    });
-    const anchor = psuSlot ? relRect(psuSlot) : lastRail;
-    if (anchor) {
-      const x = anchor.cx, y1 = anchor.bottom + 4, y2 = firstWoning.top - 4;
-      svgLine(x, y1, x, y2, CAN2);
-      svgDot(x, y1, CAN2);
-      svgDot(x, y2, CAN2);
-    }
+    // Exit x: left side of odd last rail, right side of even last rail
+    const dropX = lastRail.isOdd ? lastRail.rect.left + 20 : lastRail.rect.right - 20;
+    svgLine(dropX, lastRail.rect.bottom + 4, dropX, firstWoning.top - 4, CAN2);
+    svgDot(dropX, lastRail.rect.bottom + 4, CAN2);
+    svgDot(dropX, firstWoning.top - 4, CAN2);
   }
 
   // Woning row-to-row snake connectors
