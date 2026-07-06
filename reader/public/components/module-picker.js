@@ -48,7 +48,8 @@ function buildAndShow(modules, context) {
   overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;display:flex;align-items:center;justify-content:center';
 
   const dialog = el('div', '');
-  dialog.style.cssText = 'background:#fff;border-radius:12px;width:720px;max-width:95vw;max-height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.3)';
+  // Explicit height needed for flex:1 children to work correctly inside max-height containers
+  dialog.style.cssText = 'background:#fff;border-radius:12px;width:720px;max-width:95vw;height:min(80vh,640px);display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.3)';
 
   // Header
   const hdr = el('div', '');
@@ -67,7 +68,8 @@ function buildAndShow(modules, context) {
 
   // Module grid (content area)
   const content = el('div', '');
-  content.style.cssText = 'flex:1;overflow:auto;padding:16px 20px';
+  // min-height:0 is required for flex:1 children to scroll properly in flex containers
+  content.style.cssText = 'flex:1;min-height:0;overflow-y:auto;padding:16px 20px';
 
   // Selected state
   let selectedModel = null;
@@ -75,7 +77,6 @@ function buildAndShow(modules, context) {
 
   function renderGrid(cat) {
     activeTab = cat;
-    // Update tab styles
     tabs.querySelectorAll('button').forEach(b => {
       b.style.background = b.dataset.cat === cat ? '#e08c00' : '#f0f2f8';
       b.style.color = b.dataset.cat === cat ? '#fff' : '#4a5568';
@@ -91,25 +92,32 @@ function buildAndShow(modules, context) {
       return;
     }
 
-    // Grid
     const grid = el('div', '');
     grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px';
 
-    items.forEach(item => {
-      const card = buildPickerCard(item, (model, variant) => {
-        selectedModel = model;
-        selectedVariant = variant;
-        // Deselect all, select this
-        grid.querySelectorAll('.picker-card').forEach(c => {
-          c.style.border = '2px solid #dde3ef';
-          c.style.background = '#f8f9fd';
+    for (const item of items) {
+      try {
+        const card = buildPickerCard(item, (model, variant) => {
+          selectedModel = model;
+          selectedVariant = variant;
+          grid.querySelectorAll('.picker-card').forEach(c => {
+            c.style.border = '2px solid #dde3ef';
+            c.style.background = '#f8f9fd';
+          });
+          const found = grid.querySelector(`[data-picker-model="${model}"]`);
+          if (found) { found.style.border = '2px solid #e08c00'; found.style.background = '#fef3e0'; }
+          updateConfirmBtn();
         });
-        const el = grid.querySelector(`[data-picker-model="${model}"]`);
-        if (el) { el.style.border = '2px solid #e08c00'; el.style.background = '#fef3e0'; }
-        updateConfirmBtn();
-      });
-      grid.append(card);
-    });
+        grid.append(card);
+      } catch (err) {
+        console.error('[picker] buildPickerCard failed for', item.model ?? item.functionalModel, err);
+      }
+    }
+
+    if (!grid.children.length) {
+      content.innerHTML = '<p style="color:#f05050;font-size:12px;padding:8px">Fout bij laden van modules. Zie browser console.</p>';
+      return;
+    }
 
     content.append(grid);
   }
@@ -155,8 +163,8 @@ function buildAndShow(modules, context) {
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   document.body.append(overlay);
 
-  // Show first tab
-  const firstCat = Object.keys(groups)[0];
+  // Show first available category (in targetCategories order, not insertion order)
+  const firstCat = targetCategories.find(cat => groups[cat]?.length);
   if (firstCat) renderGrid(firstCat);
 }
 
@@ -178,6 +186,7 @@ function buildPickerCard(item, onSelect) {
   imgEl.style.cssText = 'width:100%;height:80px;border-radius:4px;background:#e8ecf5;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0';
   const firstVariant = isFamily ? item.variants[0] : item;
   if (firstVariant?.imageFile) {
+    const img = document.createElement('img');
     img.src = `/modules/images/${firstVariant.imageFile.replace('images/','')}`;
     img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;padding:4px';
     img.onerror = () => { imgEl.textContent = categoryIcon(item.uiCategory); imgEl.style.fontSize = '28px'; };

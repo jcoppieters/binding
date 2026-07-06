@@ -9,7 +9,14 @@
 
 const EMPTY_PROJECT = {
   meta: { name: 'Nieuw project', created: new Date().toISOString(), modified: new Date().toISOString(), version: '1' },
-  railView: { cabinets: [], woningDevices: [] },
+  railView: {
+    cabinets: [{
+      id: 'cabinet-0',
+      name: 'Hoofdkast',
+      rails: [{ id: 'rail-0', label: 'Rail 1', modules: [] }],
+    }],
+    woningDevices: [],
+  },
   homeView: { floors: [{ id: 'floor-0', name: 'Gelijkvloers' }], rooms: [] },
   bindings: [],
 };
