@@ -22,11 +22,22 @@ function ensureCSS() {
 // ─── Activation ───────────────────────────────────────────────────────────────
 
 let _unsubscribe = null;
+let _resizeCleanup = null;
 
 export function activate() {
   ensureCSS();
   if (!_unsubscribe) {
     _unsubscribe = state.subscribe(s => render(s));
+  }
+  // Re-render on window resize so woning rows reflow to the new canvas width
+  if (!_resizeCleanup) {
+    let _resizeTimer = null;
+    const handler = () => {
+      clearTimeout(_resizeTimer);
+      _resizeTimer = setTimeout(() => render(state.get()), 120);
+    };
+    window.addEventListener('resize', handler, { passive: true });
+    _resizeCleanup = () => window.removeEventListener('resize', handler);
   }
   wireSVG();
 }
