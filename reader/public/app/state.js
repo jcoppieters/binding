@@ -143,6 +143,26 @@ export function dispatch(action) {
       _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
       break;
     }
+    case 'UPDATE_WONING_DEVICE': {
+      const railView = { ..._state.project.railView };
+      railView.woningDevices = railView.woningDevices.map(d =>
+        d.id === action.deviceId ? { ...d, ...action.patch } : d
+      );
+      _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
+      break;
+    }
+    case 'MOVE_WONING_DEVICE': {
+      const railView = { ..._state.project.railView };
+      const devs = [...railView.woningDevices];
+      const idx = devs.findIndex(d => d.id === action.deviceId);
+      const target = idx + action.direction;
+      if (idx >= 0 && target >= 0 && target < devs.length) {
+        [devs[idx], devs[target]] = [devs[target], devs[idx]];
+        railView.woningDevices = devs;
+      }
+      _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
+      break;
+    }
     case 'ADD_ROOM': {
       const homeView = { ..._state.project.homeView };
       homeView.rooms = [...homeView.rooms, action.room];

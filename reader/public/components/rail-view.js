@@ -326,7 +326,127 @@ function buildModuleCard(moduleInstance, def) {
   return card;
 }
 
-// ─── Woning panel (multi-row snake) ──────────────────────────────────────────
+// ─── Woning device detail modal ───────────────────────────────────────────────
+
+function openWoningDeviceDetail(wd, modules) {
+  document.getElementById('woning-device-overlay')?.remove();
+
+  const s = state.get();
+  const def = lookupModule(wd.model, modules);
+  const devs = s.project.railView.woningDevices;
+  const idx = devs.findIndex(d => d.id === wd.id);
+
+  const overlay = el('div', 'modal-overlay');
+  overlay.id = 'woning-device-overlay';
+
+  const dlg = el('div', 'modal-dialog');
+  dlg.style.cssText = 'width:520px;max-width:95vw';
+
+  const hdr = el('div', 'modal-header');
+  hdr.innerHTML = `<strong>${def?.productLine ?? def?.name ?? wd.model}</strong>`;
+  const closeBtn = el('button', 'modal-close'); closeBtn.textContent = '✕';
+  closeBtn.onclick = () => overlay.remove();
+  hdr.append(closeBtn);
+
+  const body = el('div', 'modal-body');
+  body.style.cssText = 'display:flex;gap:20px';
+
+  // Left: image
+  const left = el('div', '');
+  left.style.cssText = 'flex:0 0 130px;display:flex;flex-direction:column;gap:8px';
+  if (def?.imageFile) {
+    const imgWrap = el('div', '');
+    imgWrap.style.cssText = 'width:130px;height:100px;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;background:#f8f9fd;display:flex;align-items:center;justify-content:center';
+    const img = document.createElement('img');
+    img.src = `/modules/images/${def.imageFile.replace('images/', '')}`;
+    img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;padding:4px';
+    imgWrap.append(img);
+    left.append(imgWrap);
+  }
+  const specDiv = el('div', '');
+  specDiv.style.cssText = 'font-size:11px;color:#6a7899;line-height:1.6';
+  if (def?.uiCategory) specDiv.innerHTML += `<div>${def.uiCategory}</div>`;
+  if (def?.powerW) specDiv.innerHTML += `<div>${def.powerW}W</div>`;
+  left.append(specDiv);
+
+  // Right: fields
+  const right = el('div', '');
+  right.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:12px';
+
+  const nameLabel = el('label', 'modal-label'); nameLabel.textContent = 'Label';
+  const nameInput = el('input', 'modal-input');
+  nameInput.value = wd.name ?? '';
+  nameInput.placeholder = def?.productLine ?? wd.model;
+
+  const addrLabel = el('label', 'modal-label'); addrLabel.textContent = 'Node adres (hex)';
+  const addrInput = el('input', 'modal-input');
+  addrInput.value = wd.nodeAddress != null ? wd.nodeAddress.toString(16).toUpperCase().padStart(2, '0') : '';
+  addrInput.placeholder = '--';
+  addrInput.maxLength = 2;
+  addrInput.style.width = '80px';
+
+  right.append(nameLabel, nameInput, addrLabel, addrInput);
+  body.append(left, right);
+
+  const footer = el('div', 'modal-footer');
+  footer.style.justifyContent = 'space-between';
+
+  const leftBtns = el('div', '');
+  leftBtns.style.cssText = 'display:flex;gap:6px';
+
+  const moveLeftBtn = el('button', 'modal-btn');
+  moveLeftBtn.innerHTML = '\u2190';
+  moveLeftBtn.disabled = idx <= 0;
+  moveLeftBtn.onclick = () => {
+    dispatch({ type: 'MOVE_WONING_DEVICE', deviceId: wd.id, direction: -1 });
+    overlay.remove();
+  };
+
+  const moveRightBtn = el('button', 'modal-btn');
+  moveRightBtn.innerHTML = '\u2192';
+  moveRightBtn.disabled = idx < 0 || idx >= devs.length - 1;
+  moveRightBtn.onclick = () => {
+    dispatch({ type: 'MOVE_WONING_DEVICE', deviceId: wd.id, direction: +1 });
+    overlay.remove();
+  };
+
+  const deleteBtn = el('button', 'modal-btn');
+  deleteBtn.textContent = '\ud83d\uddd1 Verwijder';
+  deleteBtn.style.cssText += 'color:#ef4444;border-color:#fca5a5';
+  deleteBtn.onclick = () => {
+    if (confirm(`Verwijder ${wd.model}?`)) {
+      dispatch({ type: 'REMOVE_WONING_DEVICE', deviceId: wd.id });
+      overlay.remove();
+    }
+  };
+
+  leftBtns.append(moveLeftBtn, moveRightBtn, deleteBtn);
+
+  const rightBtns = el('div', '');
+  rightBtns.style.cssText = 'display:flex;gap:6px';
+  const cancelBtn = el('button', 'modal-btn'); cancelBtn.textContent = 'Sluiten';
+  cancelBtn.onclick = () => overlay.remove();
+  const saveBtn = el('button', 'modal-btn-primary'); saveBtn.textContent = 'Opslaan';
+  saveBtn.onclick = () => {
+    const name = nameInput.value.trim() || null;
+    const addrStr = addrInput.value.trim();
+    const nodeAddress = addrStr ? parseInt(addrStr, 16) : undefined;
+    const patch = { name };
+    if (nodeAddress != null && !isNaN(nodeAddress)) patch.nodeAddress = nodeAddress;
+    dispatch({ type: 'UPDATE_WONING_DEVICE', deviceId: wd.id, patch });
+    overlay.remove();
+  };
+  rightBtns.append(cancelBtn, saveBtn);
+
+  footer.append(leftBtns, rightBtns);
+  dlg.append(hdr, body, footer);
+  overlay.append(dlg);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.append(overlay);
+  nameInput.focus();
+}
+
+
 
 const WONING_MAX_PER_ROW = 4;
 
@@ -411,6 +531,9 @@ function buildFieldDevice(wd, modules) {
 
   const fd = el('div', 'field-device');
   fd.dataset.deviceId = wd.id;
+  fd.style.cursor = 'pointer';
+  fd.title = 'Klik voor details';
+  fd.onclick = (e) => { e.stopPropagation(); openWoningDeviceDetail(wd, modules); };
   fd.append(el('div', 'cdl'));
 
   // Device card — try to show actual product image

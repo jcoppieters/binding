@@ -20,6 +20,7 @@ import { createMasterAPI } from './api/masterAPI.js';
 import { createUnitsAPI } from './api/unitsAPI.js';
 import { createStatsAPI } from './api/statsAPI.js';
 import { createModulesAPI } from './api/modulesAPI.js';
+import { createProjectAPI } from './api/projectAPI.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -126,6 +127,9 @@ app.use('/api/editor', bindingEditorAPI);
 
 // Module database (product catalogue)
 app.use('/api', createModulesAPI());
+
+// Project save / load
+app.use('/api', createProjectAPI());
 
 // ==================== End API Routes ====================
 
