@@ -29,6 +29,7 @@ let _state = {
   dirty: false,        // unsaved changes
   connected: false,    // TCP connection to master
   masterIp: null,
+  discoveredNodes: [], // runtime-only: DiscoveredNode[] after TCP discovery
 };
 
 const _listeners = new Set();
@@ -61,8 +62,19 @@ export function dispatch(action) {
       _state = { ..._state, dirty: action.dirty ?? true };
       break;
     case 'SET_CONNECTION':
-      _state = { ..._state, connected: action.connected, masterIp: action.ip ?? _state.masterIp };
+      _state = {
+        ..._state,
+        connected: action.connected,
+        masterIp: action.ip ?? _state.masterIp,
+        discoveredNodes: action.nodes ?? _state.discoveredNodes,
+      };
       break;
+    case 'SET_MASTER_CONFIG': {
+      const meta = { ..._state.project.meta, masterIp: action.masterIp };
+      if (action.masterPassword !== undefined) meta.masterPassword = action.masterPassword;
+      _state = { ..._state, dirty: true, project: { ..._state.project, meta } };
+      break;
+    }
     case 'SET_PROJECT_NAME':
       _state = {
         ..._state,

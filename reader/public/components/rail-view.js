@@ -313,7 +313,18 @@ function buildModuleCard(moduleInstance, def) {
   dinEl.textContent = def?.powerW ? `${def.powerW}W` : '';
   const addrEl = el('span', 'm-addr');
   addrEl.textContent = moduleInstance.nodeAddress ? `N:${moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}` : '—';
-  footer.append(dinEl, addrEl);
+
+  // Discovery status badge (runtime — based on state.discoveredNodes)
+  const discovered = state.get().discoveredNodes;
+  if (discovered.length > 0 && moduleInstance.nodeAddress != null) {
+    const found = discovered.some(n => n.nodeAddress === moduleInstance.nodeAddress);
+    const badge = el('span', found ? 'm-badge-found' : 'm-badge-missing');
+    badge.textContent = found ? '✓' : '!';
+    badge.title = found ? 'Node gevonden in netwerk' : 'Node NIET gevonden in netwerk';
+    footer.append(dinEl, addrEl, badge);
+  } else {
+    footer.append(dinEl, addrEl);
+  }
   face.append(footer);
 
   card.append(face);

@@ -188,10 +188,22 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 ### Phase 8 — UDP Discovery & connection status
 
-- [ ] **P8-1** UDP discovery: broadcast `[184,0,0]` on port 5002 → collect responses → `GET /api/discover`
-  - Returns: `{ name, mac, ip, dhcp, netmask, gateway }[]`
-- [ ] **P8-2** "Connect" flow: enter IP + password → TCP connect + HTTP auth; show status in header
-- [ ] **P8-3** Compare discovery results vs. project: show matched / missing in design / extra on network
+- [ ] **P8-0** Subnet scan: TCP-probe port 5001 on all 254 addresses of the local subnet
+  - Send a small test packet to x.x.x.1…x.x.x.254 port 5001 with short timeout (~300ms)
+  - Return list of responding IPs for the user to select
+  - Useful when the installer doesn't know the master IP
+- [x] **P8-1** Connect modal (click connection status in header) — **DONE**
+  - IP address + password inputs (pre-filled from project.meta.masterIp / masterPassword)
+  - Calls `POST /api/master/connect` → polls `GET /api/master/status` until 'ready'
+  - Fetches `GET /api/master/nodes`, dispatches SET_CONNECTION with nodes
+  - Summary toast: X nodes found, Y matched, Z not in project
+  - masterIp + masterPassword saved in project meta via SET_MASTER_CONFIG
+- [x] **P8-2** Map discovered nodes to project modules — **DONE**
+  - `state.discoveredNodes[]` holds runtime DiscoveredNode[] (not persisted)
+  - Module card shows ✓ badge (green) if node found, ! badge (red pulse) if nodeAddress set but not found
+  - Header connection-status shows IP even when disconnected (last used)
+- [ ] **P8-3** Compare discovery results vs. project: full diff panel
+  - Show matched / missing in design / extra on network
 - [ ] **P8-4** Auto-populate Rail View from discovery (unmatched nodes → add as "Unknown" module placeholder)
 
 ### Phase 9 — Materiaallijst

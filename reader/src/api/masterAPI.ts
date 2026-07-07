@@ -77,5 +77,12 @@ export function createMasterAPI(deps: MasterAPIDependencies): Router {
     });
   });
 
+  /**
+   * API: Get discovered nodes with full unit details
+   */
+  router.get('/master/nodes', (_req, res) => {
+    res.json(deps.masterService.getNodes());
+  });
+
   return router;
 }

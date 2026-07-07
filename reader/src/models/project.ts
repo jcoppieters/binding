@@ -22,6 +22,8 @@ export interface ProjectMeta {
   created: string;   // ISO 8601
   modified: string;  // ISO 8601
   version: '1';
+  masterIp?: string;       // last used master IP address
+  masterPassword?: string; // last used master password (stored for installer convenience)
 }
 
 // ─── Rail View ───────────────────────────────────────────────────────────────
