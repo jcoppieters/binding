@@ -296,11 +296,39 @@ function capabilitySummary(discoveredNode) {
 function suggestModules(discoveredNode, moduleDefs) {
   if (!discoveredNode?.units?.length || !moduleDefs?.length) return [];
   const counts = unitCountsByType(discoveredNode);
+  const total = discoveredNode.units.length;
 
-  // Build a flat list of all modules (standalone + family variants collapsed to family)
+  // 0xFC = always the master node (TCP server, LCD home controller, etc.)
+  if (discoveredNode.nodeAddress === 0xFC) {
+    return moduleDefs
+      .filter(m => ['DT18-PRO', 'DT18-HS', 'DT18-GT', 'DT0C-7', 'DT0C-10'].includes(m.functionalModel ?? m.model))
+      .map(m => ({ model: m.functionalModel ?? m.model, name: m.productLine ?? m.name ?? (m.functionalModel ?? m.model), score: 10 }))
+      .filter((m, i, arr) => arr.findIndex(x => x.model === m.model) === i);
+  }
+
+  // Mostly LCD_VIRTUAL units (type=7) → LCD touchscreen or home server
+  const lcdVirtual = counts[7] ?? 0;
+  if (lcdVirtual > 0 && lcdVirtual >= total * 0.7) {
+    return moduleDefs
+      .filter(m => m.category === 'lcd' || m.uiCategory === 'LCD/Touchscreen')
+      .map(m => ({ model: m.functionalModel ?? m.model, name: m.productLine ?? m.name ?? (m.functionalModel ?? m.model), score: 10 }))
+      .filter((m, i, arr) => arr.findIndex(x => x.model === m.model) === i)
+      .slice(0, 5);
+  }
+
+  // Mostly AUDIO units (type=5) → audio interface
+  const audioUnits = counts[5] ?? 0;
+  if (audioUnits > 0 && audioUnits >= total * 0.7) {
+    return moduleDefs
+      .filter(m => m.uiCategory === 'Audio')
+      .map(m => ({ model: m.model, name: m.name ?? m.model, score: 10 }))
+      .slice(0, 5);
+  }
+
+  // General: score by channelGroups composition (for modules that have them)
   const candidates = [];
   for (const m of moduleDefs) {
-    if (!m.channelGroups?.length) continue; // skip modules without channel info
+    if (!m.channelGroups?.length) continue;
     let score = 0;
     for (const g of m.channelGroups) {
       const unitTypeEntry = Object.entries(UNIT_TYPE_INFO)
@@ -308,11 +336,10 @@ function suggestModules(discoveredNode, moduleDefs) {
       if (!unitTypeEntry) continue;
       const unitType = Number(unitTypeEntry[0]);
       const discovered = counts[unitType] ?? 0;
-      if (discovered === 0) { score -= 10; continue; } // has channels we didn't see
+      if (discovered === 0) { score -= 10; continue; }
       const diff = Math.abs(discovered - g.count);
       score += (diff === 0) ? 10 : (diff <= 2 ? 5 : 1);
     }
-    // Penalty for extra unit types not in the module
     for (const [uType, cnt] of Object.entries(counts)) {
       if (cnt === 0) continue;
       const info = UNIT_TYPE_INFO[uType];
@@ -362,6 +389,14 @@ function buildUnknownModuleCard(moduleInstance) {
   if (moduleInstance.name) {
     const nameEl = el('div', 'm-desc'); nameEl.textContent = moduleInstance.name;
     face.append(nameEl);
+  }
+
+  // Special marker for the master node (always 0xFC in Duotecno)
+  if (moduleInstance.nodeAddress === 0xFC) {
+    const masterEl = el('div', 'm-desc');
+    masterEl.style.cssText = 'font-size:6px;font-weight:700;color:#e08c00;background:#2a1800;border-radius:3px;padding:1px 4px;display:inline-block;margin-top:2px';
+    masterEl.textContent = '★ MASTER';
+    face.append(masterEl);
   }
 
   // Show unit type breakdown
@@ -952,9 +987,12 @@ function openModuleDetail(moduleInstance, cabinetId) {
       }
 
       const nodeInfo = el('div', ''); nodeInfo.style.cssText = 'font-size:11px;color:#6a7899;margin-top:6px';
-      nodeInfo.innerHTML = `<b>Node type:</b> 0x${discoveredNode.type?.toString(16)?.toUpperCase() ?? '?'}`
+      const isMaster = discoveredNode.nodeAddress === 0xFC;
+      nodeInfo.innerHTML = (isMaster ? '<div style="color:#e08c00;font-weight:700;margin-bottom:4px">★ Master node — altijd 0xFC (TCP-server of LCD-controller)</div>' : '')
+        + `<b>Node type:</b> 0x${discoveredNode.type?.toString(16)?.toUpperCase() ?? '?'}`
         + `<br><b>Fysiek adres:</b> 0x${(moduleInstance.physicalAddress ?? discoveredNode.physicalAddress ?? 0).toString(16).toUpperCase().padStart(2,'0')}`
-        + `<br><b>Naam:</b> ${discoveredNode.name || '\u2014'}`;
+        + `<br><b>Naam:</b> ${discoveredNode.name || '\u2014'}`
+        + `<br><b>Units:</b> ${discoveredNode.units?.length ?? 0} (${capabilitySummary(discoveredNode) || '—'})`;
       capSect.append(nodeInfo);
       right.append(capSect);
 
