@@ -84,8 +84,8 @@ export function dispatch(action) {
         const total = types.length || 1;
         const ctrlCount = types.filter(t => t === 3).length;  // CONTROL (switch)
         const lcdCount  = types.filter(t => t === 7).length;  // LCD_VIRTUAL
-        const isMaster  = node.nodeAddress === 0xFC;
-        if (!isMaster && (ctrlCount + lcdCount) / total >= 0.5) {
+        // Unit types decide: 0xFC LCD master also goes to woning when it has LCD_VIRTUAL units
+        if ((ctrlCount + lcdCount) / total >= 0.5) {
           woningNodes.push(node);
         } else {
           cabinetNodes.push(node);
