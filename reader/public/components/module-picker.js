@@ -257,6 +257,16 @@ function onConfirm(context, model, variant) {
       type: 'ADD_WONING_DEVICE',
       device: { id: makeId(), model, name: null, position: 99 },
     });
+  } else if (context._replaceModuleId) {
+    // Replace UNKNOWN module with the chosen model, keeping nodeAddress
+    const patch = { model };
+    if (context._keepNodeAddress != null) patch.nodeAddress = context._keepNodeAddress;
+    dispatch({
+      type: 'UPDATE_MODULE',
+      cabinetId: context.cabinetId,
+      moduleId: context._replaceModuleId,
+      patch,
+    });
   } else {
     dispatch({
       type: 'ADD_MODULE',

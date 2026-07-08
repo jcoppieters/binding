@@ -262,7 +262,67 @@ function buildModuleSlot(cabinetId, moduleInstance, idx, modules) {
   return slot;
 }
 
+function buildUnknownModuleCard(moduleInstance) {
+  const card = el('div', 'module-card module-unknown');
+
+  // Screw terminals top (4 generic)
+  const termsTop = el('div', 'm-terms');
+  for (let i = 0; i < 4; i++) termsTop.append(el('div', 'm-screw'));
+  card.append(termsTop);
+
+  const face = el('div', 'm-face');
+
+  const badge = el('div', 'm-type');
+  badge.textContent = '⚠ Onbekend';
+  badge.style.color = '#f59e0b';
+  face.append(badge);
+
+  const addrEl = el('div', 'm-model');
+  addrEl.textContent = moduleInstance.nodeAddress != null
+    ? `N:0x${moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}`
+    : 'Geen adres';
+  face.append(addrEl);
+
+  // Name from discovery
+  if (moduleInstance.name) {
+    const nameEl = el('div', 'm-desc');
+    nameEl.textContent = moduleInstance.name;
+    face.append(nameEl);
+  }
+
+  // Look up discovered node units for extra info
+  const discovered = state.get().discoveredNodes;
+  const discoveredNode = moduleInstance.nodeAddress != null
+    ? discovered.find(n => n.nodeAddress === moduleInstance.nodeAddress)
+    : null;
+
+  if (discoveredNode?.units?.length) {
+    const hint = el('div', 'm-desc');
+    hint.style.color = '#f59e0b';
+    hint.textContent = `${discoveredNode.units.length} units`;
+    face.append(hint);
+  }
+
+  const hint2 = el('div', 'm-desc');
+  hint2.style.cssText = 'font-size:6px;color:#a0a880;margin-top:4px';
+  hint2.textContent = 'Klik → wijzig module type';
+  face.append(hint2);
+
+  card.append(face);
+
+  const termsBot = el('div', 'm-terms bot');
+  for (let i = 0; i < 4; i++) termsBot.append(el('div', 'm-screw'));
+  card.append(termsBot);
+
+  return card;
+}
+
 function buildModuleCard(moduleInstance, def) {
+  // Special handling for UNKNOWN (auto-discovered, unidentified) modules
+  if (moduleInstance.model === 'UNKNOWN') {
+    return buildUnknownModuleCard(moduleInstance);
+  }
+
   const card = el('div', 'module-card');
   if (def?.dinUnits >= 12) card.classList.add('wide');
   else if (def?.dinUnits <= 4) card.classList.add('narrow');
@@ -751,7 +811,8 @@ function openModuleDetail(moduleInstance, cabinetId) {
 
   // Header
   const hdr = el('div', 'modal-header');
-  hdr.innerHTML = `<strong>${def?.productLine ?? def?.name ?? moduleInstance.model}</strong>`;
+  const isUnknown = moduleInstance.model === 'UNKNOWN';
+  hdr.innerHTML = `<strong>${isUnknown ? '⚠ Onbekende node' : (def?.productLine ?? def?.name ?? moduleInstance.model)}</strong>`;
   const closeBtn = el('button', 'modal-close'); closeBtn.textContent = '✕';
   closeBtn.onclick = () => overlay.remove();
   hdr.append(closeBtn);
@@ -875,10 +936,28 @@ function openModuleDetail(moduleInstance, cabinetId) {
   const rightBtns = el('div', '');
   rightBtns.style.cssText = 'display:flex;gap:6px';
 
+  // For UNKNOWN modules: offer a "Assign module type" button
+  if (isUnknown) {
+    const assignBtn = el('button', 'modal-btn-primary');
+    assignBtn.textContent = '🔍 Wijs module toe';
+    assignBtn.title = 'Kies het correcte module type voor deze node';
+    assignBtn.onclick = () => {
+      overlay.remove();
+      // Open module picker, and on confirm UPDATE_MODULE with the chosen model
+      openModulePicker({
+        cabinetId,
+        _replaceModuleId: moduleInstance.id,
+        _keepNodeAddress: moduleInstance.nodeAddress,
+      });
+    };
+    rightBtns.append(assignBtn);
+  }
+
   const cancelBtn = el('button', 'modal-btn'); cancelBtn.textContent = 'Sluiten';
   cancelBtn.onclick = () => overlay.remove();
 
   const saveBtn = el('button', 'modal-btn-primary'); saveBtn.textContent = 'Opslaan';
+  saveBtn.style.display = isUnknown ? 'none' : '';
   saveBtn.onclick = () => {
     const name = nameInput.value.trim() || null;
     const addrStr = addrInput.value.trim();

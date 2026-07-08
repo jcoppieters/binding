@@ -38,6 +38,13 @@
 .module-card:hover{transform:translateY(-4px);box-shadow:1px 6px 14px rgba(0,0,0,.2)}
 .module-card.wide{width:220px}
 .module-card.narrow{width:100px}
+
+/* Unknown (auto-discovered, unidentified) module */
+.module-unknown{background:#2a1a00;border-color:#f59e0b;border-width:2px;animation:pulse-amber 2s infinite}
+.module-unknown .m-face{background:#1a1200}
+.module-unknown .m-terms{background:#4a2f00}
+.module-unknown .m-screw{background:radial-gradient(circle at 33% 33%,#c89040,#6a4010);border-color:#a06020}
+@keyframes pulse-amber{0%,100%{box-shadow:1px 2px 5px rgba(245,158,11,.3)}50%{box-shadow:1px 2px 12px rgba(245,158,11,.7)}}
 .m-terms{display:flex;padding:3px 4px;gap:3px;background:#b8c0d0;flex-shrink:0;justify-content:flex-start}
 .m-screw{width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 33% 33%,#e5e8f0,#8898b0);border:1px solid #6878a0;flex-shrink:0}
 .m-face{background:#111;color:#fff;flex:1;display:flex;flex-direction:column;padding:5px 7px;gap:2px;overflow:hidden}

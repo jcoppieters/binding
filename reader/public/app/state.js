@@ -75,6 +75,28 @@ export function dispatch(action) {
       _state = { ..._state, dirty: true, project: { ..._state.project, meta } };
       break;
     }
+    case 'ADD_DISCOVERED_NODES': {
+      // Append unmatched discovered nodes as UNKNOWN modules to the last cabinet
+      const railView = { ..._state.project.railView };
+      let cabinets = [...railView.cabinets];
+      if (cabinets.length === 0) {
+        cabinets.push({ id: makeId(), name: 'Hoofdkast', widthUnits: 36, modules: [] });
+      }
+      const last = { ...cabinets[cabinets.length - 1], modules: [...cabinets[cabinets.length - 1].modules] };
+      for (const node of action.nodes) {
+        last.modules.push({
+          id: makeId(),
+          model: 'UNKNOWN',
+          nodeAddress: node.nodeAddress,
+          name: node.name || null,
+          position: last.modules.length,
+        });
+      }
+      cabinets[cabinets.length - 1] = last;
+      railView.cabinets = cabinets;
+      _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
+      break;
+    }
     case 'SET_PROJECT_NAME':
       _state = {
         ..._state,

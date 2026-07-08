@@ -249,18 +249,22 @@ async function openConnectModal() {
 
       dispatch({ type: 'SET_CONNECTION', connected: true, ip, nodes });
 
-      // Show discovery summary
+      // Auto-add unmatched discovered nodes to project as UNKNOWN modules
       const projectModules = state.get().project.railView.cabinets
         .flatMap(c => c.modules)
         .filter(m => m.nodeAddress != null);
       const discoveredAddrs = new Set(nodes.map(n => n.nodeAddress));
       const matched = projectModules.filter(m => discoveredAddrs.has(m.nodeAddress)).length;
       const unmatched = projectModules.filter(m => !discoveredAddrs.has(m.nodeAddress)).length;
-      const extra = nodes.filter(n => !projectModules.some(m => m.nodeAddress === n.nodeAddress)).length;
+      const extraNodes = nodes.filter(n => !projectModules.some(m => m.nodeAddress === n.nodeAddress));
+
+      if (extraNodes.length > 0) {
+        dispatch({ type: 'ADD_DISCOVERED_NODES', nodes: extraNodes });
+      }
 
       overlay.remove();
       showToast(
-        `Verbonden met ${ip} — ${nodes.length} nodes gevonden, ${matched} gekoppeld${unmatched ? `, ${unmatched} niet gevonden` : ''}${extra ? `, ${extra} nieuw` : ''}`,
+        `Verbonden met ${ip} — ${nodes.length} nodes: ${matched} gekoppeld${unmatched ? `, ${unmatched} niet gevonden` : ''}${extraNodes.length ? `, ${extraNodes.length} nieuw toegevoegd` : ''}`,
         'success'
       );
     } catch (err) {
