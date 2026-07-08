@@ -4,6 +4,61 @@
 
 ---
 
+## Current Status (2026-07-08)
+
+### ✅ Completed
+
+**Rail View – core**
+- Cabinet cards with configurable width (12/18/24/36/54/82M), add/rename/delete
+- Rails auto-calculated from cabinet width; modules auto-reflowed across rails
+- Module cards: product image, model name, DIN-unit count, node address badge
+- CAN bus snake (orange) connects rails with terminator blocks (60Ω) at each end
+- Add / change / delete / reorder modules per rail
+- Module picker: searchable, filterable by category, shows product images
+
+**Woning panel**
+- Field devices (schakelaars + LCD panels) on their own CAN panel below the cabinet
+- Product images loaded from module DB; UNKNOWN cards with amber pulse animation
+- Add switcher / LCD buttons; multi-row snake layout for many devices
+- Devices + add-buttons vertically aligned to card center on the CAN line
+
+**Discovery (TCP connect)**
+- Connect modal: "Verbinden" (quick 3 polls) + "🔍 Scan alles" (full 20 polls)
+- Discovered nodes matched to existing project modules / woning devices
+- Unmatched nodes auto-added as UNKNOWN cards (cabinet or woning)
+- Classification uses **node.type** first: type 32 (kGUINode) → woning; type 8 (kModemNode) → cabinet; others use unit-type heuristic (any DIM/SWITCH/MOTOR/AUDIO → cabinet)
+- UNKNOWN module modal: hardware info, unit type breakdown, auto-suggestions
+- UNKNOWN woning modal: auto-suggestions, "🗄 Naar kast" escape button
+- When assigning a woning-type model (switch/lcd) to a cabinet UNKNOWN → auto-moves to woning panel
+- Node address shown as `0xFC` (hex), node type shown as `0x20 (GUI (LCD))`
+- Badges: ✓ (matched), ! (UNKNOWN), ? (not yet scanned)
+
+**Project file**
+- Save / load `.duo` JSON project files
+- Project name in header; modified indicator
+
+**Module DB**
+- 115 modules, 17 families + 98 standalone entries
+- scraped from duotecno.com with images, DIN widths, wattages
+- `reader/modules/_index.json`
+
+### ❌ Pending
+
+| ID | Feature | Notes |
+|----|---------|-------|
+| P1-5 | Resources sidebar | Sidebar panel listing all modules/families |
+| P2 | Home View | Rooms, floors, floor-plan, device placement |
+| P9 | Materiaallijst | Auto-generated BOM from Rail View |
+| P8-5 | Rename node via TCP | Write new name back to hardware |
+| P8-6 | Node-type → model auto-lookup | Engineer-provided table (firmware name → model) |
+| P10 | Upload naar hardware | Generate & upload binding files via TCP |
+| P11 | Undo / redo | Command stack (Ctrl+Z / Ctrl+Y) |
+| — | Ethernet port counting | Switch sizing from Rail View |
+| — | Multi-cabinet support | Multiple kast cards per project |
+| — | PDF/Excel export | Rail View + Materiaallijst print-ready |
+
+---
+
 ## Overview
 
 The new binding software has **three views** that together cover the full project workflow:

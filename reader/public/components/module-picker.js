@@ -254,6 +254,12 @@ function buildPickerCard(item, onSelect) {
 // ─── Confirm action ───────────────────────────────────────────────────────────
 
 function onConfirm(context, model, variant) {
+  // Helper: is this model a woning-type (switch/LCD field device)?
+  const moduleDB = state.get().modules;
+  const def = moduleDB.find(m => m.model === model || m.functionalModel === model
+    || m.variants?.some(v => v.model === model));
+  const isWoningModel = def?.category === 'switch' || def?.category === 'lcd';
+
   if (context.woningType) {
     if (context._replaceWoningId) {
       dispatch({ type: 'UPDATE_WONING_DEVICE', deviceId: context._replaceWoningId, patch: { model } });
@@ -261,21 +267,20 @@ function onConfirm(context, model, variant) {
       dispatch({ type: 'ADD_WONING_DEVICE', device: { id: makeId(), model, name: null, position: 99 } });
     }
   } else if (context._replaceModuleId) {
-    // Replace UNKNOWN module with the chosen model, keeping nodeAddress
-    const patch = { model };
-    if (context._keepNodeAddress != null) patch.nodeAddress = context._keepNodeAddress;
-    dispatch({
-      type: 'UPDATE_MODULE',
-      cabinetId: context.cabinetId,
-      moduleId: context._replaceModuleId,
-      patch,
-    });
+    if (isWoningModel) {
+      // Selected model is a field device (LCD/switch) — move from cabinet to woning
+      dispatch({ type: 'REMOVE_MODULE', cabinetId: context.cabinetId, moduleId: context._replaceModuleId });
+      dispatch({ type: 'ADD_WONING_DEVICE', device: {
+        id: makeId(), model, name: null, position: 99,
+        nodeAddress: context._keepNodeAddress ?? undefined,
+      }});
+    } else {
+      const patch = { model };
+      if (context._keepNodeAddress != null) patch.nodeAddress = context._keepNodeAddress;
+      dispatch({ type: 'UPDATE_MODULE', cabinetId: context.cabinetId, moduleId: context._replaceModuleId, patch });
+    }
   } else {
-    dispatch({
-      type: 'ADD_MODULE',
-      cabinetId: context.cabinetId,
-      module: { id: makeId(), model, position: 99 },
-    });
+    dispatch({ type: 'ADD_MODULE', cabinetId: context.cabinetId, module: { id: makeId(), model, position: 99 } });
   }
 }
 

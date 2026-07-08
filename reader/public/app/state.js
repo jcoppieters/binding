@@ -79,18 +79,23 @@ export function dispatch(action) {
       // Classify: CONTROL/LCD_VIRTUAL non-master nodes go to woning; rest to cabinet
       const cabinetNodes = [];
       const woningNodes = [];
+      // NodeType constants (from Duotecno protocol)
+      // 1=Standard, 4=Gateway(TCP server), 8=Modem(config only), 32=GUI(LCD touchscreen)
       for (const node of action.nodes) {
+        // NodeType 32 (kGUINode) = LCD/touchscreen field device -> always woning
+        if (node.type === 32) { woningNodes.push(node); continue; }
+        // NodeType 8 (kModemNode) = config modem -> always cabinet
+        if (node.type === 8)  { cabinetNodes.push(node); continue; }
+        // For Standard (1) and Gateway (4): check unit types
         const types = (node.units ?? []).map(u => u.type);
-        const total = types.length || 1;
-        const dimCount   = types.filter(t => t === 1).length; // DIM (dimmer output)
-        const swCount    = types.filter(t => t === 2).length; // SWITCH (relay output)
-        const ctrlCount  = types.filter(t => t === 3).length; // CONTROL (button/input)
-        const lcdCount   = types.filter(t => t === 7).length; // LCD_VIRTUAL (moods/virtuals)
-        const motorCount = types.filter(t => t === 8).length; // DUOSWITCH (motor)
-        const audioCount = types.filter(t => t === 5).length; // AUDIO
-        // Cabinet hardware = any OUTPUT type (dimmer/relay/motor/audio) — never found on a wall switch or LCD panel
+        const dimCount   = types.filter(t => t === 1).length;  // kDimmer
+        const swCount    = types.filter(t => t === 2).length;  // kSwitch (relay)
+        const ctrlCount  = types.filter(t => t === 3).length;  // kInput (button)
+        const lcdCount   = types.filter(t => t === 7).length;  // kMood (virtual)
+        const motorCount = types.filter(t => t === 8).length;  // kSwitchingMotor
+        const audioCount = types.filter(t => t === 5).length   // kExtendedAudio
+                         + types.filter(t => t === 10).length; // kAudio
         const hasCabinetHardware = dimCount > 0 || swCount > 0 || motorCount > 0 || audioCount > 0;
-        // Woning device = only inputs + moods + sensors, no output hardware
         if (!hasCabinetHardware && (ctrlCount > 0 || lcdCount > 0)) {
           woningNodes.push(node);
         } else {

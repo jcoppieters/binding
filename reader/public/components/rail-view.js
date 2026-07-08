@@ -266,15 +266,22 @@ function buildModuleSlot(cabinetId, moduleInstance, idx, modules) {
 
 // Map Duotecno UnitType byte → human label + channel-group type
 const UNIT_TYPE_INFO = {
-  1: { label: 'Dimmer',           icon: '💡', channelTypes: ['dimmer_le','dimmer_te','dimmer_pwm','dimmer_dc'] },
-  2: { label: 'Relais',           icon: '⚡', channelTypes: ['relay_no','relay_nc','relay_ssr'] },
-  3: { label: 'Input',            icon: '🔲', channelTypes: ['input_digital','input_analog'] },
-  4: { label: 'Sensor',           icon: '🌡', channelTypes: [] },
-  5: { label: 'Audio',            icon: '🔊', channelTypes: ['audio'] },
-  7: { label: 'Virtueel (moods)', icon: '🌙', channelTypes: [] },
-  8: { label: 'Motor',            icon: '🔄', channelTypes: ['motor_updown','motor_polar'] },
-  18: { label: 'Alarm',           icon: '🚨', channelTypes: [] },
+  1:  { label: 'Dimmer',           icon: '💡', channelTypes: ['dimmer_le','dimmer_te','dimmer_pwm','dimmer_dc'] },
+  2:  { label: 'Relais',           icon: '⚡', channelTypes: ['relay_no','relay_nc','relay_ssr'] },
+  3:  { label: 'Input',            icon: '🔲', channelTypes: ['input_digital','input_analog'] },
+  4:  { label: 'Sensor',           icon: '🌡', channelTypes: [] },
+  5:  { label: 'Audio ext.',       icon: '🔊', channelTypes: ['audio'] },
+  7:  { label: 'Virtueel (moods)', icon: '🌙', channelTypes: [] },
+  8:  { label: 'Motor',            icon: '🔄', channelTypes: ['motor_updown','motor_polar'] },
+  10: { label: 'Audio',            icon: '🎵', channelTypes: ['audio'] },
+  11: { label: 'AV Matrix',        icon: '📺', channelTypes: [] },
+  12: { label: 'IR TX',            icon: '📡', channelTypes: [] },
+  14: { label: 'Video',            icon: '📹', channelTypes: [] },
+  18: { label: 'Alarm',            icon: '🚨', channelTypes: [] },
 };
+
+// NodeType names (from Duotecno IP protocol)
+const NODE_TYPE_NAMES = { 1: 'Standard', 4: 'Gateway (master)', 8: 'Modem', 32: 'GUI (LCD)' };
 
 function unitCountsByType(discoveredNode) {
   const counts = {};
@@ -387,7 +394,7 @@ function buildUnknownModuleCard(moduleInstance) {
 
   const addrEl = el('div', 'm-model');
   addrEl.textContent = moduleInstance.nodeAddress != null
-    ? `N:0x${moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}`
+    ? `0x${moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}`
     : 'Geen adres';
   face.append(addrEl);
 
@@ -484,7 +491,7 @@ function buildModuleCard(moduleInstance, def) {
   const dinEl = el('span', 'm-din');
   dinEl.textContent = def?.powerW ? `${def.powerW}W` : '';
   const addrEl = el('span', 'm-addr');
-  addrEl.textContent = moduleInstance.nodeAddress ? `N:${moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}` : '—';
+  addrEl.textContent = moduleInstance.nodeAddress ? `0x${moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}` : '—';
 
   // Discovery status badge (runtime — based on state.discoveredNodes)
   const discovered = state.get().discoveredNodes;
@@ -576,7 +583,7 @@ function openWoningDeviceDetail(wd, modules) {
       const nodeInfo2 = el('div', ''); nodeInfo2.style.cssText = 'font-size:11px;color:#6a7899;margin-top:4px;line-height:1.6';
       nodeInfo2.innerHTML = `<b>Node adres:</b> 0x${dn2.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`
         + (dn2.physicalAddress != null ? `<br><b>Fysiek adres:</b> 0x${dn2.physicalAddress.toString(16).toUpperCase().padStart(2,'0')}` : '')
-        + `<br><b>Node type:</b> 0x${dn2.type?.toString(16)?.toUpperCase() ?? '?'}`
+        + `<br><b>Node type:</b> 0x${dn2.type?.toString(16)?.toUpperCase() ?? '?'}${NODE_TYPE_NAMES[dn2.type] ? ` (${NODE_TYPE_NAMES[dn2.type]})` : ''}`
         + (dn2.name ? `<br><b>Firmware naam:</b> ${dn2.name}` : '');
       capSect.append(nodeInfo2);
       right.append(capSect);
@@ -829,7 +836,7 @@ function buildFieldDevice(wd, modules) {
 
   if (wd.nodeAddress != null) {
     const addr = el('div', 'fd-addr');
-    addr.textContent = `N:${wd.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}`;
+    addr.textContent = `0x${wd.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}`;
     fd.append(addr);
   }
 
@@ -1082,7 +1089,7 @@ function openModuleDetail(moduleInstance, cabinetId) {
       const nodeInfo = el('div', ''); nodeInfo.style.cssText = 'font-size:11px;color:#6a7899;margin-top:6px';
       const isMaster = discoveredNode.nodeAddress === 0xFC;
       nodeInfo.innerHTML = (isMaster ? '<div style="color:#e08c00;font-weight:700;margin-bottom:4px">★ Master node — altijd 0xFC (TCP-server of LCD-controller)</div>' : '')
-        + `<b>Node type:</b> 0x${discoveredNode.type?.toString(16)?.toUpperCase() ?? '?'}`
+        + `<b>Node type:</b> 0x${discoveredNode.type?.toString(16)?.toUpperCase() ?? '?'}${NODE_TYPE_NAMES[discoveredNode.type] ? ` (${NODE_TYPE_NAMES[discoveredNode.type]})` : ''}`
         + `<br><b>Fysiek adres:</b> 0x${(moduleInstance.physicalAddress ?? discoveredNode.physicalAddress ?? 0).toString(16).toUpperCase().padStart(2,'0')}`
         + `<br><b>Naam:</b> ${discoveredNode.name || '\u2014'}`
         + `<br><b>Units:</b> ${discoveredNode.units?.length ?? 0} (${capabilitySummary(discoveredNode) || '—'})`;
@@ -1158,7 +1165,7 @@ function openModuleDetail(moduleInstance, cabinetId) {
         + `<br><b>Node adres:</b> 0x${dn.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`
         + (physAddr != null ? `<br><b>Fysiek adres:</b> 0x${physAddr.toString(16).toUpperCase().padStart(2,'0')}` : '')
         + (dn.name ? `<br><b>Naam:</b> ${dn.name}` : '')
-        + `<br><b>Node type:</b> 0x${dn.type?.toString(16)?.toUpperCase() ?? '?'}`
+        + `<br><b>Node type:</b> 0x${dn.type?.toString(16)?.toUpperCase() ?? '?'}${NODE_TYPE_NAMES[dn.type] ? ` (${NODE_TYPE_NAMES[dn.type]})` : ''}`
         + (dn.units?.length ? `<br><b>Units:</b> ${dn.units.length} (${capabilitySummary(dn) || '—'})` : '');
     } else if (s2.discoveredNodes.length > 0) {
       dInfo.innerHTML = `<span style="color:#f05050;font-weight:700">✗ Niet gevonden in laatste scan</span>`;
