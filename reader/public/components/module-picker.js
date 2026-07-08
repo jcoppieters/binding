@@ -55,7 +55,9 @@ function buildAndShow(modules, context) {
   const hdr = el('div', '');
   hdr.style.cssText = 'display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #dde3ef;background:#f8f9fd;border-radius:12px 12px 0 0';
   const title = el('h2', ''); title.style.cssText = 'font-size:16px;font-weight:700;color:#1a1f2e;flex:1';
-  title.textContent = isWoning ? (context.woningType === 'switch' ? '＋ Schakelaar toevoegen' : '＋ LCD toevoegen') : '＋ Module toevoegen';
+  title.textContent = isWoning
+    ? (context.woningType === 'switch' ? '＋ Schakelaar toevoegen' : '＋ LCD toevoegen')
+    : (context._replaceModuleId ? '🔄 Module type wijzigen' : '＋ Module toevoegen');
   const closeBtn = el('button', ''); closeBtn.textContent = '✕';
   closeBtn.style.cssText = 'background:none;border:none;font-size:18px;cursor:pointer;color:#6a7899;padding:4px 8px';
   closeBtn.onclick = () => overlay.remove();

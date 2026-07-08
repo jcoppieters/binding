@@ -1049,6 +1049,35 @@ function openModuleDetail(moduleInstance, cabinetId) {
     right.append(chSect);
   }
 
+  // Hardware / discovery data (shown for ALL modules that have a node address)
+  if (!isUnknown && moduleInstance.nodeAddress != null) {
+    const s2 = state.get();
+    const dn = s2.discoveredNodes.find(n => n.nodeAddress === moduleInstance.nodeAddress);
+    const dSect = el('div', '');
+    const dTitle = el('div', ''); dTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px';
+    dTitle.textContent = 'Hardware info';
+    dSect.append(dTitle);
+    const dInfo = el('div', '');
+    dInfo.style.cssText = 'font-size:11px;color:#6a7899;line-height:1.7';
+    if (dn) {
+      const physAddr = moduleInstance.physicalAddress ?? dn.physicalAddress;
+      const isMaster2 = dn.nodeAddress === 0xFC;
+      dInfo.innerHTML = `<span style="color:#4cd04c;font-weight:700">✓ Gevonden in netwerk</span>`
+        + (isMaster2 ? ' <span style="color:#e08c00;font-weight:700">★ MASTER</span>' : '')
+        + `<br><b>Node adres:</b> 0x${dn.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`
+        + (physAddr != null ? `<br><b>Fysiek adres:</b> 0x${physAddr.toString(16).toUpperCase().padStart(2,'0')}` : '')
+        + (dn.name ? `<br><b>Naam:</b> ${dn.name}` : '')
+        + `<br><b>Node type:</b> 0x${dn.type?.toString(16)?.toUpperCase() ?? '?'}`
+        + (dn.units?.length ? `<br><b>Units:</b> ${dn.units.length} (${capabilitySummary(dn) || '—'})` : '');
+    } else if (s2.discoveredNodes.length > 0) {
+      dInfo.innerHTML = `<span style="color:#f05050;font-weight:700">✗ Niet gevonden in laatste scan</span>`;
+    } else {
+      dInfo.textContent = 'Nog niet gescand (klik » Verbinden« om te scannen)';
+    }
+    dSect.append(dInfo);
+    right.append(dSect);
+  }
+
   // Fields: name + nodeAddress
   const nameLabel = el('label', 'modal-label'); nameLabel.textContent = 'Label (optioneel)';
   const nameInput = el('input', 'modal-input');
@@ -1107,21 +1136,26 @@ function openModuleDetail(moduleInstance, cabinetId) {
   const rightBtns = el('div', '');
   rightBtns.style.cssText = 'display:flex;gap:6px';
 
-  // For UNKNOWN modules: offer a "Assign module type" button
+  // For UNKNOWN modules: offer a "Assign module type" button (primary)
+  // For ALL modules: offer a "Change module type" button
   if (isUnknown) {
     const assignBtn = el('button', 'modal-btn-primary');
     assignBtn.textContent = '🔍 Wijs module toe';
     assignBtn.title = 'Kies het correcte module type voor deze node';
     assignBtn.onclick = () => {
       overlay.remove();
-      // Open module picker, and on confirm UPDATE_MODULE with the chosen model
-      openModulePicker({
-        cabinetId,
-        _replaceModuleId: moduleInstance.id,
-        _keepNodeAddress: moduleInstance.nodeAddress,
-      });
+      openModulePicker({ cabinetId, _replaceModuleId: moduleInstance.id, _keepNodeAddress: moduleInstance.nodeAddress });
     };
     rightBtns.append(assignBtn);
+  } else {
+    const changeTypeBtn = el('button', 'modal-btn');
+    changeTypeBtn.textContent = '🔄 Wijzig type';
+    changeTypeBtn.title = 'Vervang dit module type (behoudt node adres en label)';
+    changeTypeBtn.onclick = () => {
+      overlay.remove();
+      openModulePicker({ cabinetId, _replaceModuleId: moduleInstance.id, _keepNodeAddress: moduleInstance.nodeAddress });
+    };
+    rightBtns.append(changeTypeBtn);
   }
 
   const cancelBtn = el('button', 'modal-btn'); cancelBtn.textContent = 'Sluiten';
