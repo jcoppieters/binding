@@ -113,6 +113,8 @@
 .fd-card{width:80px;height:80px;border-radius:6px;background:#f0f2f8;border:1px solid #c0c8d8;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;transition:box-shadow .12s}
 .fd-card:hover{box-shadow:0 4px 12px rgba(32,96,208,.2)}
 .fd-card-lcd{width:130px}
+/* Unknown woning device (amber warning) */
+.fd-unknown{width:80px;height:80px;border-radius:6px;border:2px solid #f59e0b;background:#2a1a00;display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;animation:pulse-amber 2s infinite}
 
 /* Add field device button */
 .add-fd-btn{width:54px;height:80px;border:2px dashed #2060d0;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#5080c0;font-size:11px;cursor:pointer;flex-shrink:0;background:#f0f4fe;transition:all .15s;text-align:center;position:relative;z-index:3}

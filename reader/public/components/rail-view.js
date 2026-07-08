@@ -529,10 +529,12 @@ function openWoningDeviceDetail(wd, modules) {
   const body = el('div', 'modal-body');
   body.style.cssText = 'display:flex;gap:20px';
 
+  const isUnknownWD = wd.model === 'UNKNOWN';
+
   // Left: image
   const left = el('div', '');
   left.style.cssText = 'flex:0 0 130px;display:flex;flex-direction:column;gap:8px';
-  if (def?.imageFile) {
+  if (!isUnknownWD && def?.imageFile) {
     const imgWrap = el('div', '');
     imgWrap.style.cssText = 'width:130px;height:100px;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;background:#f8f9fd;display:flex;align-items:center;justify-content:center';
     const img = document.createElement('img');
@@ -547,9 +549,32 @@ function openWoningDeviceDetail(wd, modules) {
   if (def?.powerW) specDiv.innerHTML += `<div>${def.powerW}W</div>`;
   left.append(specDiv);
 
-  // Right: fields
+  // Right: discovery data for UNKNOWN woning devices + fields
   const right = el('div', '');
   right.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:12px';
+
+  if (isUnknownWD) {
+    const s = state.get();
+    const dn2 = wd.nodeAddress != null ? s.discoveredNodes.find(n => n.nodeAddress === wd.nodeAddress) : null;
+    if (dn2) {
+      const capSect = el('div', '');
+      const capTitle = el('div', ''); capTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px';
+      capTitle.textContent = 'Ontdekte kanalen';
+      capSect.append(capTitle);
+      const counts = unitCountsByType(dn2);
+      for (const [uType, count] of Object.entries(counts)) {
+        const info = UNIT_TYPE_INFO[uType] ?? { icon: '?', label: `Type ${uType}` };
+        const row = el('div', ''); row.style.cssText = 'font-size:12px;color:#1a1f2e;margin-bottom:3px';
+        row.textContent = `${info.icon} ${count}× ${info.label}`;
+        capSect.append(row);
+      }
+      const nodeInfo2 = el('div', ''); nodeInfo2.style.cssText = 'font-size:11px;color:#6a7899;margin-top:4px;line-height:1.6';
+      nodeInfo2.innerHTML = `<b>Node type:</b> 0x${dn2.type?.toString(16)?.toUpperCase() ?? '?'}`
+        + (dn2.name ? `<br><b>Naam:</b> ${dn2.name}` : '');
+      capSect.append(nodeInfo2);
+      right.append(capSect);
+    }
+  }
 
   const nameLabel = el('label', 'modal-label'); nameLabel.textContent = 'Label';
   const nameInput = el('input', 'modal-input');
@@ -602,9 +627,26 @@ function openWoningDeviceDetail(wd, modules) {
 
   const rightBtns = el('div', '');
   rightBtns.style.cssText = 'display:flex;gap:6px';
+
+  // Assign / change type button
+  const typeBtn = el('button', isUnknownWD ? 'modal-btn-primary' : 'modal-btn');
+  typeBtn.textContent = isUnknownWD ? '🔍 Wijs toe' : '🔄 Wijzig type';
+  typeBtn.onclick = () => {
+    overlay.remove();
+    const s3 = state.get();
+    const dn3 = wd.nodeAddress != null ? s3.discoveredNodes.find(n => n.nodeAddress === wd.nodeAddress) : null;
+    const types3 = (dn3?.units ?? []).map(u => u.type);
+    const lcdScore = types3.filter(t => t === 7).length;
+    const ctrlScore = types3.filter(t => t === 3).length;
+    const existingDef = lookupModule(wd.model, s3.modules);
+    const pickerType = existingDef?.category === 'lcd' ? 'lcd' : (lcdScore > ctrlScore ? 'lcd' : 'switch');
+    openModulePicker({ woningType: pickerType, _replaceWoningId: wd.id });
+  };
+
   const cancelBtn = el('button', 'modal-btn'); cancelBtn.textContent = 'Sluiten';
   cancelBtn.onclick = () => overlay.remove();
   const saveBtn = el('button', 'modal-btn-primary'); saveBtn.textContent = 'Opslaan';
+  saveBtn.style.display = isUnknownWD ? 'none' : '';
   saveBtn.onclick = () => {
     const name = nameInput.value.trim() || null;
     const addrStr = addrInput.value.trim();
@@ -614,7 +656,7 @@ function openWoningDeviceDetail(wd, modules) {
     dispatch({ type: 'UPDATE_WONING_DEVICE', deviceId: wd.id, patch });
     overlay.remove();
   };
-  rightBtns.append(cancelBtn, saveBtn);
+  rightBtns.append(typeBtn, cancelBtn, saveBtn);
 
   footer.append(leftBtns, rightBtns);
   dlg.append(hdr, body, footer);

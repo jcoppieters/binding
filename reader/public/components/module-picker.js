@@ -255,10 +255,11 @@ function buildPickerCard(item, onSelect) {
 
 function onConfirm(context, model, variant) {
   if (context.woningType) {
-    dispatch({
-      type: 'ADD_WONING_DEVICE',
-      device: { id: makeId(), model, name: null, position: 99 },
-    });
+    if (context._replaceWoningId) {
+      dispatch({ type: 'UPDATE_WONING_DEVICE', deviceId: context._replaceWoningId, patch: { model } });
+    } else {
+      dispatch({ type: 'ADD_WONING_DEVICE', device: { id: makeId(), model, name: null, position: 99 } });
+    }
   } else if (context._replaceModuleId) {
     // Replace UNKNOWN module with the chosen model, keeping nodeAddress
     const patch = { model };

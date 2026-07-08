@@ -76,25 +76,40 @@ export function dispatch(action) {
       break;
     }
     case 'ADD_DISCOVERED_NODES': {
-      // Append unmatched discovered nodes as UNKNOWN modules to the last cabinet
-      const railView = { ..._state.project.railView };
-      let cabinets = [...railView.cabinets];
-      if (cabinets.length === 0) {
-        cabinets.push({ id: makeId(), name: 'Hoofdkast', widthUnits: 36, modules: [] });
-      }
-      const last = { ...cabinets[cabinets.length - 1], modules: [...cabinets[cabinets.length - 1].modules] };
+      // Classify: CONTROL/LCD_VIRTUAL non-master nodes go to woning; rest to cabinet
+      const cabinetNodes = [];
+      const woningNodes = [];
       for (const node of action.nodes) {
-        last.modules.push({
-          id: makeId(),
-          model: 'UNKNOWN',
-          nodeAddress: node.nodeAddress,
-          physicalAddress: node.physicalAddress,
-          name: node.name || null,
-          position: last.modules.length,
-        });
+        const types = (node.units ?? []).map(u => u.type);
+        const total = types.length || 1;
+        const ctrlCount = types.filter(t => t === 3).length;  // CONTROL (switch)
+        const lcdCount  = types.filter(t => t === 7).length;  // LCD_VIRTUAL
+        const isMaster  = node.nodeAddress === 0xFC;
+        if (!isMaster && (ctrlCount + lcdCount) / total >= 0.5) {
+          woningNodes.push(node);
+        } else {
+          cabinetNodes.push(node);
+        }
       }
-      cabinets[cabinets.length - 1] = last;
-      railView.cabinets = cabinets;
+      const railView = { ..._state.project.railView };
+      // Cabinet modules
+      if (cabinetNodes.length > 0) {
+        let cabinets = [...railView.cabinets];
+        if (cabinets.length === 0) cabinets.push({ id: makeId(), name: 'Hoofdkast', widthUnits: 36, modules: [] });
+        const last = { ...cabinets[cabinets.length - 1], modules: [...cabinets[cabinets.length - 1].modules] };
+        for (const node of cabinetNodes) {
+          last.modules.push({ id: makeId(), model: 'UNKNOWN', nodeAddress: node.nodeAddress, physicalAddress: node.physicalAddress, name: node.name || null, position: last.modules.length });
+        }
+        cabinets[cabinets.length - 1] = last;
+        railView.cabinets = cabinets;
+      }
+      // Woning devices
+      if (woningNodes.length > 0) {
+        railView.woningDevices = [
+          ...railView.woningDevices,
+          ...woningNodes.map(node => ({ id: makeId(), model: 'UNKNOWN', nodeAddress: node.nodeAddress, name: node.name || null, position: 99 }))
+        ];
+      }
       _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
       break;
     }
