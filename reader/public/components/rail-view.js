@@ -6,6 +6,7 @@
 
 import { state, dispatch, makeId } from '../app/state.js';
 import { openModulePicker } from './module-picker.js';
+import { UNIT_TYPE_INFO, NODE_TYPE_NAMES, NodeType, unitTypeInfo, hasCabinetUnits } from '../app/unit-types.js';
 
 // ─── CSS injection ────────────────────────────────────────────────────────────
 
@@ -263,25 +264,7 @@ function buildModuleSlot(cabinetId, moduleInstance, idx, modules) {
 }
 
 // ─── Unit-type capability helpers ────────────────────────────────────────────
-
-// Map Duotecno UnitType byte → human label + channel-group type
-const UNIT_TYPE_INFO = {
-  1:  { label: 'Dimmer',           icon: '💡', channelTypes: ['dimmer_le','dimmer_te','dimmer_pwm','dimmer_dc'] },
-  2:  { label: 'Relais',           icon: '⚡', channelTypes: ['relay_no','relay_nc','relay_ssr'] },
-  3:  { label: 'Input',            icon: '🔲', channelTypes: ['input_digital','input_analog'] },
-  4:  { label: 'Sensor',           icon: '🌡', channelTypes: [] },
-  5:  { label: 'Audio ext.',       icon: '🔊', channelTypes: ['audio'] },
-  7:  { label: 'Virtueel (moods)', icon: '🌙', channelTypes: [] },
-  8:  { label: 'Motor',            icon: '🔄', channelTypes: ['motor_updown','motor_polar'] },
-  10: { label: 'Audio',            icon: '🎵', channelTypes: ['audio'] },
-  11: { label: 'AV Matrix',        icon: '📺', channelTypes: [] },
-  12: { label: 'IR TX',            icon: '📡', channelTypes: [] },
-  14: { label: 'Video',            icon: '📹', channelTypes: [] },
-  18: { label: 'Alarm',            icon: '🚨', channelTypes: [] },
-};
-
-// NodeType names (from Duotecno IP protocol)
-const NODE_TYPE_NAMES = { 1: 'Standard', 4: 'Gateway (master)', 8: 'Modem', 32: 'GUI (LCD)' };
+// UNIT_TYPE_INFO and NODE_TYPE_NAMES are imported from ../app/unit-types.js
 
 function unitCountsByType(discoveredNode) {
   const counts = {};

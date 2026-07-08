@@ -7,6 +7,8 @@
  *   state.subscribe(s => console.log(s.project));
  */
 
+import { NodeType, hasCabinetUnits } from './unit-types.js';
+
 const EMPTY_PROJECT = {
   meta: { name: 'Nieuw project', created: new Date().toISOString(), modified: new Date().toISOString(), version: '1' },
   railView: {
@@ -83,20 +85,13 @@ export function dispatch(action) {
       // 1=Standard, 4=Gateway(TCP server), 8=Modem(config only), 32=GUI(LCD touchscreen)
       for (const node of action.nodes) {
         // NodeType 32 (kGUINode) = LCD/touchscreen field device -> always woning
-        if (node.type === 32) { woningNodes.push(node); continue; }
+        if (node.type === NodeType.kGUINode)  { woningNodes.push(node); continue; }
         // NodeType 8 (kModemNode) = config modem -> always cabinet
-        if (node.type === 8)  { cabinetNodes.push(node); continue; }
-        // For Standard (1) and Gateway (4): check unit types
-        const types = (node.units ?? []).map(u => u.type);
-        const dimCount   = types.filter(t => t === 1).length;  // kDimmer
-        const swCount    = types.filter(t => t === 2).length;  // kSwitch (relay)
-        const ctrlCount  = types.filter(t => t === 3).length;  // kInput (button)
-        const lcdCount   = types.filter(t => t === 7).length;  // kMood (virtual)
-        const motorCount = types.filter(t => t === 8).length;  // kSwitchingMotor
-        const audioCount = types.filter(t => t === 5).length   // kExtendedAudio
-                         + types.filter(t => t === 10).length; // kAudio
-        const hasCabinetHardware = dimCount > 0 || swCount > 0 || motorCount > 0 || audioCount > 0;
-        if (!hasCabinetHardware && (ctrlCount > 0 || lcdCount > 0)) {
+        if (node.type === NodeType.kModemNode){ cabinetNodes.push(node); continue; }
+        // For Standard (1) and Gateway (4): cabinet if any output hardware present
+        const ctrlCount = (node.units ?? []).filter(u => u.type === 3).length; // kInput
+        const moodCount = (node.units ?? []).filter(u => u.type === 7).length; // kMood
+        if (!hasCabinetUnits(node.units) && (ctrlCount > 0 || moodCount > 0)) {
           woningNodes.push(node);
         } else {
           cabinetNodes.push(node);
