@@ -262,10 +262,86 @@ function buildModuleSlot(cabinetId, moduleInstance, idx, modules) {
   return slot;
 }
 
+// ─── Unit-type capability helpers ────────────────────────────────────────────
+
+// Map Duotecno UnitType byte → human label + channel-group type
+const UNIT_TYPE_INFO = {
+  1: { label: 'Dimmer',     icon: '💡', channelTypes: ['dimmer_le','dimmer_te','dimmer_pwm','dimmer_dc'] },
+  2: { label: 'Relais',     icon: '⚡', channelTypes: ['relay_no','relay_nc','relay_ssr'] },
+  3: { label: 'Input',      icon: '🔲', channelTypes: ['input_digital','input_analog'] },
+  4: { label: 'Sensor',     icon: '🌡', channelTypes: [] },
+  5: { label: 'Audio',      icon: '🔊', channelTypes: ['audio'] },
+  7: { label: 'LCD',        icon: '🖥',  channelTypes: [] },
+  8: { label: 'Motor',      icon: '🔄', channelTypes: ['motor_updown','motor_polar'] },
+  18: { label: 'Alarm',     icon: '🚨', channelTypes: [] },
+};
+
+function unitCountsByType(discoveredNode) {
+  const counts = {};
+  for (const u of (discoveredNode?.units ?? [])) {
+    counts[u.type] = (counts[u.type] || 0) + 1;
+  }
+  return counts;
+}
+
+function capabilitySummary(discoveredNode) {
+  const counts = unitCountsByType(discoveredNode);
+  return Object.entries(counts).map(([type, count]) => {
+    const info = UNIT_TYPE_INFO[type] ?? { label: `Type ${type}`, icon: '?', channelTypes: [] };
+    return `${info.icon} ${count}× ${info.label}`;
+  }).join('  ');
+}
+
+/** Suggest module models from the DB based on discovered unit types */
+function suggestModules(discoveredNode, moduleDefs) {
+  if (!discoveredNode?.units?.length || !moduleDefs?.length) return [];
+  const counts = unitCountsByType(discoveredNode);
+
+  // Build a flat list of all modules (standalone + family variants collapsed to family)
+  const candidates = [];
+  for (const m of moduleDefs) {
+    if (!m.channelGroups?.length) continue; // skip modules without channel info
+    let score = 0;
+    for (const g of m.channelGroups) {
+      const unitTypeEntry = Object.entries(UNIT_TYPE_INFO)
+        .find(([, info]) => info.channelTypes.includes(g.type));
+      if (!unitTypeEntry) continue;
+      const unitType = Number(unitTypeEntry[0]);
+      const discovered = counts[unitType] ?? 0;
+      if (discovered === 0) { score -= 10; continue; } // has channels we didn't see
+      const diff = Math.abs(discovered - g.count);
+      score += (diff === 0) ? 10 : (diff <= 2 ? 5 : 1);
+    }
+    // Penalty for extra unit types not in the module
+    for (const [uType, cnt] of Object.entries(counts)) {
+      if (cnt === 0) continue;
+      const info = UNIT_TYPE_INFO[uType];
+      if (!info) continue;
+      const hasMatchingGroup = m.channelGroups.some(g => info.channelTypes.includes(g.type));
+      if (!hasMatchingGroup) score -= 5;
+    }
+    if (score > 0) {
+      const model = m.functionalModel ?? m.model;
+      if (!candidates.find(c => c.model === model)) {
+        candidates.push({ model, name: m.productLine ?? m.name ?? model, score });
+      }
+    }
+  }
+  return candidates.sort((a, b) => b.score - a.score).slice(0, 5);
+}
+
+// ─── Unknown module card ──────────────────────────────────────────────────────
+
 function buildUnknownModuleCard(moduleInstance) {
   const card = el('div', 'module-card module-unknown');
 
-  // Screw terminals top (4 generic)
+  const discovered = state.get().discoveredNodes;
+  const discoveredNode = moduleInstance.nodeAddress != null
+    ? discovered.find(n => n.nodeAddress === moduleInstance.nodeAddress)
+    : null;
+  const counts = discoveredNode ? unitCountsByType(discoveredNode) : {};
+
+  // Screw terminals top
   const termsTop = el('div', 'm-terms');
   for (let i = 0; i < 4; i++) termsTop.append(el('div', 'm-screw'));
   card.append(termsTop);
@@ -283,30 +359,26 @@ function buildUnknownModuleCard(moduleInstance) {
     : 'Geen adres';
   face.append(addrEl);
 
-  // Name from discovery
   if (moduleInstance.name) {
-    const nameEl = el('div', 'm-desc');
-    nameEl.textContent = moduleInstance.name;
+    const nameEl = el('div', 'm-desc'); nameEl.textContent = moduleInstance.name;
     face.append(nameEl);
   }
 
-  // Look up discovered node units for extra info
-  const discovered = state.get().discoveredNodes;
-  const discoveredNode = moduleInstance.nodeAddress != null
-    ? discovered.find(n => n.nodeAddress === moduleInstance.nodeAddress)
-    : null;
-
-  if (discoveredNode?.units?.length) {
-    const hint = el('div', 'm-desc');
-    hint.style.color = '#f59e0b';
-    hint.textContent = `${discoveredNode.units.length} units`;
-    face.append(hint);
+  // Show unit type breakdown
+  if (Object.keys(counts).length) {
+    const capsEl = el('div', 'm-desc');
+    capsEl.style.cssText = 'font-size:6.5px;color:#f0c060;margin-top:3px;line-height:1.5';
+    capsEl.textContent = Object.entries(counts).map(([t, n]) => {
+      const info = UNIT_TYPE_INFO[t] ?? { icon: '?', label: `T${t}` };
+      return `${info.icon}${n}`;
+    }).join(' ');
+    face.append(capsEl);
   }
 
-  const hint2 = el('div', 'm-desc');
-  hint2.style.cssText = 'font-size:6px;color:#a0a880;margin-top:4px';
-  hint2.textContent = 'Klik → wijzig module type';
-  face.append(hint2);
+  const hint = el('div', 'm-desc');
+  hint.style.cssText = 'font-size:6px;color:#a0a880;margin-top:4px';
+  hint.textContent = 'Klik → wijs module toe';
+  face.append(hint);
 
   card.append(face);
 
@@ -850,8 +922,69 @@ function openModuleDetail(moduleInstance, cabinetId) {
   const right = el('div', '');
   right.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:14px';
 
-  // Channel groups
-  if (def?.channelGroups?.length) {
+  // For UNKNOWN modules: show discovered capabilities + auto-suggestions
+  if (isUnknown) {
+    const s = state.get();
+    const discoveredNode = moduleInstance.nodeAddress != null
+      ? s.discoveredNodes.find(n => n.nodeAddress === moduleInstance.nodeAddress)
+      : null;
+
+    if (discoveredNode) {
+      // Capabilities breakdown
+      const capSect = el('div', '');
+      const capTitle = el('div', ''); capTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px';
+      capTitle.textContent = 'Ontdekte kanalen';
+      capSect.append(capTitle);
+
+      const counts = unitCountsByType(discoveredNode);
+      for (const [uType, count] of Object.entries(counts)) {
+        const info = UNIT_TYPE_INFO[uType] ?? { icon: '?', label: `Type ${uType}` };
+        const row = el('div', ''); row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:5px';
+        const dots = el('div', ''); dots.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;max-width:80px';
+        for (let i = 0; i < Math.min(count, 12); i++) {
+          const d = el('div', ''); d.style.cssText = 'width:10px;height:10px;border-radius:2px;background:#f59e0b;flex-shrink:0';
+          dots.append(d);
+        }
+        const lbl = el('div', ''); lbl.style.cssText = 'font-size:12px;color:#1a1f2e';
+        lbl.textContent = `${count}× ${info.icon} ${info.label}`;
+        row.append(dots, lbl);
+        capSect.append(row);
+      }
+
+      const nodeInfo = el('div', ''); nodeInfo.style.cssText = 'font-size:11px;color:#6a7899;margin-top:6px';
+      nodeInfo.innerHTML = `<b>Node type:</b> 0x${discoveredNode.type?.toString(16)?.toUpperCase() ?? '?'}`
+        + `<br><b>Fysiek adres:</b> 0x${(moduleInstance.physicalAddress ?? discoveredNode.physicalAddress ?? 0).toString(16).toUpperCase().padStart(2,'0')}`
+        + `<br><b>Naam:</b> ${discoveredNode.name || '\u2014'}`;
+      capSect.append(nodeInfo);
+      right.append(capSect);
+
+      // Auto-suggestions
+      const suggestions = suggestModules(discoveredNode, s.modules);
+      if (suggestions.length) {
+        const sugSect = el('div', '');
+        const sugTitle = el('div', ''); sugTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px';
+        sugTitle.textContent = 'Mogelijke modules';
+        sugSect.append(sugTitle);
+        suggestions.forEach(sug => {
+          const btn = el('button', 'modal-btn');
+          btn.style.cssText = 'display:block;width:100%;text-align:left;margin-bottom:4px;font-size:12px';
+          btn.textContent = `${sug.model} — ${sug.name}`;
+          btn.onclick = () => {
+            const s2 = state.get();
+            const m2 = s2.modules;
+            // Find if this model is in a family (use functionalModel)
+            const familyOrStandalone = m2.find(m => (m.functionalModel ?? m.model) === sug.model);
+            const specificModel = familyOrStandalone?.variants?.[0]?.model ?? sug.model;
+            dispatch({ type: 'UPDATE_MODULE', cabinetId, moduleId: moduleInstance.id, patch: { model: specificModel } });
+            overlay.remove();
+          };
+          sugSect.append(btn);
+        });
+        right.append(sugSect);
+      }
+    }
+  } else if (def?.channelGroups?.length) {
+    // Known module: show channel groups (existing code)
     const chSect = el('div', '');
     const chTitle = el('div', ''); chTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px';
     chTitle.textContent = 'Kanalen';

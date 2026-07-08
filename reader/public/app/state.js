@@ -88,6 +88,7 @@ export function dispatch(action) {
           id: makeId(),
           model: 'UNKNOWN',
           nodeAddress: node.nodeAddress,
+          physicalAddress: node.physicalAddress,
           name: node.name || null,
           position: last.modules.length,
         });

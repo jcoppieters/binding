@@ -34,8 +34,9 @@ export interface ProjectMeta {
  */
 export interface ModuleInstance {
   id: LocalId;
-  model: string;              // e.g. "DT05-06TE"
+  model: string;              // e.g. "DT05-06TE" or 'UNKNOWN'
   nodeAddress?: number;       // IP node address (hex), assigned after discovery
+  physicalAddress?: number;   // Physical hardware address from discovery (hex)
   name?: string;              // optional label shown in config modal
   position: number;           // slot index within the rail (0-indexed)
 
