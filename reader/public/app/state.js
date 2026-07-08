@@ -82,10 +82,16 @@ export function dispatch(action) {
       for (const node of action.nodes) {
         const types = (node.units ?? []).map(u => u.type);
         const total = types.length || 1;
-        const ctrlCount = types.filter(t => t === 3).length;  // CONTROL (switch)
-        const lcdCount  = types.filter(t => t === 7).length;  // LCD_VIRTUAL
-        // Unit types decide: 0xFC LCD master also goes to woning when it has LCD_VIRTUAL units
-        if ((ctrlCount + lcdCount) / total >= 0.5) {
+        const dimCount   = types.filter(t => t === 1).length; // DIM (dimmer output)
+        const swCount    = types.filter(t => t === 2).length; // SWITCH (relay output)
+        const ctrlCount  = types.filter(t => t === 3).length; // CONTROL (button/input)
+        const lcdCount   = types.filter(t => t === 7).length; // LCD_VIRTUAL (moods/virtuals)
+        const motorCount = types.filter(t => t === 8).length; // DUOSWITCH (motor)
+        const audioCount = types.filter(t => t === 5).length; // AUDIO
+        // Cabinet hardware = any OUTPUT type (dimmer/relay/motor/audio) — never found on a wall switch or LCD panel
+        const hasCabinetHardware = dimCount > 0 || swCount > 0 || motorCount > 0 || audioCount > 0;
+        // Woning device = only inputs + moods + sensors, no output hardware
+        if (!hasCabinetHardware && (ctrlCount > 0 || lcdCount > 0)) {
           woningNodes.push(node);
         } else {
           cabinetNodes.push(node);

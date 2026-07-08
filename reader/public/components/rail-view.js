@@ -266,14 +266,14 @@ function buildModuleSlot(cabinetId, moduleInstance, idx, modules) {
 
 // Map Duotecno UnitType byte → human label + channel-group type
 const UNIT_TYPE_INFO = {
-  1: { label: 'Dimmer',     icon: '💡', channelTypes: ['dimmer_le','dimmer_te','dimmer_pwm','dimmer_dc'] },
-  2: { label: 'Relais',     icon: '⚡', channelTypes: ['relay_no','relay_nc','relay_ssr'] },
-  3: { label: 'Input',      icon: '🔲', channelTypes: ['input_digital','input_analog'] },
-  4: { label: 'Sensor',     icon: '🌡', channelTypes: [] },
-  5: { label: 'Audio',      icon: '🔊', channelTypes: ['audio'] },
-  7: { label: 'LCD',        icon: '🖥',  channelTypes: [] },
-  8: { label: 'Motor',      icon: '🔄', channelTypes: ['motor_updown','motor_polar'] },
-  18: { label: 'Alarm',     icon: '🚨', channelTypes: [] },
+  1: { label: 'Dimmer',           icon: '💡', channelTypes: ['dimmer_le','dimmer_te','dimmer_pwm','dimmer_dc'] },
+  2: { label: 'Relais',           icon: '⚡', channelTypes: ['relay_no','relay_nc','relay_ssr'] },
+  3: { label: 'Input',            icon: '🔲', channelTypes: ['input_digital','input_analog'] },
+  4: { label: 'Sensor',           icon: '🌡', channelTypes: [] },
+  5: { label: 'Audio',            icon: '🔊', channelTypes: ['audio'] },
+  7: { label: 'Virtueel (moods)', icon: '🌙', channelTypes: [] },
+  8: { label: 'Motor',            icon: '🔄', channelTypes: ['motor_updown','motor_polar'] },
+  18: { label: 'Alarm',           icon: '🚨', channelTypes: [] },
 };
 
 function unitCountsByType(discoveredNode) {
@@ -293,20 +293,25 @@ function capabilitySummary(discoveredNode) {
 }
 
 /** Suggest module models from the DB based on discovered unit types */
-function suggestModules(discoveredNode, moduleDefs) {
+function suggestModules(discoveredNode, moduleDefs, woningContext = false) {
   if (!discoveredNode?.units?.length || !moduleDefs?.length) return [];
   const counts = unitCountsByType(discoveredNode);
   const total = discoveredNode.units.length;
 
-  // 0xFC = always the master node (TCP server, LCD home controller, etc.)
+  const isWoningDef = m => m.category === 'switch' || m.category === 'lcd'
+    || m.uiCategory === 'Schakelaar' || m.uiCategory === 'LCD/Touchscreen';
+
+  // 0xFC = always the master node
   if (discoveredNode.nodeAddress === 0xFC) {
-    return moduleDefs
-      .filter(m => ['DT18-PRO', 'DT18-HS', 'DT18-GT', 'DT0C-7', 'DT0C-10'].includes(m.functionalModel ?? m.model))
+    const all = moduleDefs
+      .filter(m => ['DT18-PRO','DT18-HS','DT18-GT','DT0C-7','DT0C-10'].includes(m.functionalModel ?? m.model))
       .map(m => ({ model: m.functionalModel ?? m.model, name: m.productLine ?? m.name ?? (m.functionalModel ?? m.model), score: 10 }))
       .filter((m, i, arr) => arr.findIndex(x => x.model === m.model) === i);
+    // In woning context only suggest LCD variants
+    return woningContext ? all.filter(s => ['DT0C-7','DT0C-10'].includes(s.model)) : all;
   }
 
-  // Mostly LCD_VIRTUAL units (type=7) → LCD touchscreen or home server
+  // Mostly LCD_VIRTUAL → LCD
   const lcdVirtual = counts[7] ?? 0;
   if (lcdVirtual > 0 && lcdVirtual >= total * 0.7) {
     return moduleDefs
@@ -316,7 +321,7 @@ function suggestModules(discoveredNode, moduleDefs) {
       .slice(0, 5);
   }
 
-  // Mostly AUDIO units (type=5) → audio interface
+  // Mostly AUDIO → audio interface
   const audioUnits = counts[5] ?? 0;
   if (audioUnits > 0 && audioUnits >= total * 0.7) {
     return moduleDefs
@@ -325,14 +330,15 @@ function suggestModules(discoveredNode, moduleDefs) {
       .slice(0, 5);
   }
 
-  // General: score by channelGroups composition (for modules that have them)
+  // General: score by channelGroups, filtered by context
   const candidates = [];
   for (const m of moduleDefs) {
     if (!m.channelGroups?.length) continue;
+    if (woningContext && !isWoningDef(m)) continue;
+    if (!woningContext && isWoningDef(m)) continue;
     let score = 0;
     for (const g of m.channelGroups) {
-      const unitTypeEntry = Object.entries(UNIT_TYPE_INFO)
-        .find(([, info]) => info.channelTypes.includes(g.type));
+      const unitTypeEntry = Object.entries(UNIT_TYPE_INFO).find(([, info]) => info.channelTypes.includes(g.type));
       if (!unitTypeEntry) continue;
       const unitType = Number(unitTypeEntry[0]);
       const discovered = counts[unitType] ?? 0;
@@ -344,8 +350,7 @@ function suggestModules(discoveredNode, moduleDefs) {
       if (cnt === 0) continue;
       const info = UNIT_TYPE_INFO[uType];
       if (!info) continue;
-      const hasMatchingGroup = m.channelGroups.some(g => info.channelTypes.includes(g.type));
-      if (!hasMatchingGroup) score -= 5;
+      if (!m.channelGroups.some(g => info.channelTypes.includes(g.type))) score -= 5;
     }
     if (score > 0) {
       const model = m.functionalModel ?? m.model;
@@ -575,6 +580,29 @@ function openWoningDeviceDetail(wd, modules) {
         + (dn2.name ? `<br><b>Firmware naam:</b> ${dn2.name}` : '');
       capSect.append(nodeInfo2);
       right.append(capSect);
+
+      // Auto-suggestions for woning context
+      const woningSuggestions = suggestModules(dn2, s.discoveredNodes.length ? s.modules : [], true);
+      if (woningSuggestions.length) {
+        const sugSect2 = el('div', '');
+        const sugTitle2 = el('div', ''); sugTitle2.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:6px';
+        sugTitle2.textContent = 'Mogelijke toestellen';
+        sugSect2.append(sugTitle2);
+        woningSuggestions.forEach(sug => {
+          const btn2 = el('button', 'modal-btn');
+          btn2.style.cssText = 'display:block;width:100%;text-align:left;margin-bottom:4px;font-size:12px';
+          btn2.textContent = `${sug.model} — ${sug.name}`;
+          btn2.onclick = () => {
+            const s3 = state.get();
+            const def3 = s3.modules.find(m => (m.functionalModel ?? m.model) === sug.model);
+            const specificModel = def3?.variants?.[0]?.model ?? sug.model;
+            dispatch({ type: 'UPDATE_WONING_DEVICE', deviceId: wd.id, patch: { model: specificModel } });
+            overlay.remove();
+          };
+          sugSect2.append(btn2);
+        });
+        right.append(sugSect2);
+      }
     }
   }
 
@@ -645,6 +673,27 @@ function openWoningDeviceDetail(wd, modules) {
     openModulePicker({ woningType: pickerType, _replaceWoningId: wd.id });
   };
 
+  // "Verplaats naar kast" — for UNKNOWN nodes that turn out to be cabinet modules (e.g. Smartbox misclassified as woning)
+  const moveToCabinetBtn = el('button', 'modal-btn');
+  moveToCabinetBtn.textContent = '🗄 Naar kast';
+  moveToCabinetBtn.title = 'Verplaats dit toestel naar de kast (bijv. als het een module is)';
+  moveToCabinetBtn.style.display = isUnknownWD ? '' : 'none';
+  moveToCabinetBtn.onclick = () => {
+    if (!confirm('Verplaatsen naar de kast?')) return;
+    const s4 = state.get();
+    const dn4 = wd.nodeAddress != null ? s4.discoveredNodes.find(n => n.nodeAddress === wd.nodeAddress) : null;
+    // Remove from woning
+    dispatch({ type: 'REMOVE_WONING_DEVICE', deviceId: wd.id });
+    // Add to cabinet as UNKNOWN module
+    const cabinets = s4.project.railView.cabinets;
+    const lastCab = cabinets[cabinets.length - 1];
+    if (lastCab) {
+      dispatch({ type: 'ADD_MODULE', cabinetId: lastCab.id, module: { id: wd.id, model: 'UNKNOWN', nodeAddress: wd.nodeAddress, physicalAddress: dn4?.physicalAddress, name: wd.name, position: 99 } });
+    }
+    overlay.remove();
+    openModulePicker({ cabinetId: lastCab?.id, _replaceModuleId: wd.id, _keepNodeAddress: wd.nodeAddress });
+  };
+
   const cancelBtn = el('button', 'modal-btn'); cancelBtn.textContent = 'Sluiten';
   cancelBtn.onclick = () => overlay.remove();
   const saveBtn = el('button', 'modal-btn-primary'); saveBtn.textContent = 'Opslaan';
@@ -658,7 +707,7 @@ function openWoningDeviceDetail(wd, modules) {
     dispatch({ type: 'UPDATE_WONING_DEVICE', deviceId: wd.id, patch });
     overlay.remove();
   };
-  rightBtns.append(typeBtn, cancelBtn, saveBtn);
+  rightBtns.append(typeBtn, moveToCabinetBtn, cancelBtn, saveBtn);
 
   footer.append(leftBtns, rightBtns);
   dlg.append(hdr, body, footer);
@@ -1053,9 +1102,7 @@ function openModuleDetail(moduleInstance, cabinetId) {
           btn.textContent = `${sug.model} — ${sug.name}`;
           btn.onclick = () => {
             const s2 = state.get();
-            const m2 = s2.modules;
-            // Find if this model is in a family (use functionalModel)
-            const familyOrStandalone = m2.find(m => (m.functionalModel ?? m.model) === sug.model);
+            const familyOrStandalone = s2.modules.find(m => (m.functionalModel ?? m.model) === sug.model);
             const specificModel = familyOrStandalone?.variants?.[0]?.model ?? sug.model;
             dispatch({ type: 'UPDATE_MODULE', cabinetId, moduleId: moduleInstance.id, patch: { model: specificModel } });
             overlay.remove();
