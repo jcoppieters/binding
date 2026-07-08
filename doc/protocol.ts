@@ -1,9 +1,9 @@
 import {Master} from './master';
 import {temp} from '../pipes/temp.pipe';
 import {CommRecord, DBInfo, LogFunction, Message, NodeInfo, NodeType, UnitState, WriteError} from "./types";
-import {NodeConfig} from "../models/nodes";
+import {NodeConfig} from "./nodes";
 import {Sanitizers} from "./sanitizers";
-import {UnitInfo, UnitType} from "../models/unit";
+import {UnitInfo, UnitType} from "./unit";
 import {hex, two} from "./helper_functions";
 import {BasicAudioSources, Destination, LimitBasicAudioType} from "../models/audio";
 import {kEmptyMasterMood, MasterMood, masterUnitDefaults, MoodUnit, UnitToMoodType} from "../models/mood";
