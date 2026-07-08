@@ -202,19 +202,26 @@ async function openConnectModal() {
 
   const connectBtn = document.createElement('button');
   connectBtn.textContent = 'Verbinden';
-  connectBtn.style.cssText = 'padding:7px 16px;border-radius:6px;border:none;background:#e08c00;color:#fff;cursor:pointer;font-size:13px;font-weight:600';
-  connectBtn.onclick = async () => {
+  connectBtn.title = 'Snel verbinden: haalt node-adressen op (geen volledige unit-scan)';
+  connectBtn.style.cssText = 'padding:7px 14px;border-radius:6px;border:1px solid #dde3ef;background:#fff;color:#4a5568;cursor:pointer;font-size:13px';
+
+  const fullScanBtn = document.createElement('button');
+  fullScanBtn.textContent = '🔍 Scan alles';
+  fullScanBtn.title = 'Verbinden + volledige scan van alle nodes en units (voor automatische type-herkenning)';
+  fullScanBtn.style.cssText = 'padding:7px 16px;border-radius:6px;border:none;background:#e08c00;color:#fff;cursor:pointer;font-size:13px;font-weight:600';
+
+  // Shared connect logic
+  async function doConnect(fullScan) {
     const ip = ipInput.value.trim();
     const pw = pwInput.value;
     if (!ip) { ipInput.style.borderColor = '#ef4444'; return; }
 
     connectBtn.disabled = true;
-    connectBtn.textContent = 'Verbinden…';
+    fullScanBtn.disabled = true;
     statusDiv.style.color = '#6a7899';
     statusDiv.textContent = 'TCP verbinding opzetten…';
 
     try {
-      // Save credentials to project
       dispatch({ type: 'SET_MASTER_CONFIG', masterIp: ip, masterPassword: pw });
 
       const res = await fetch('/api/master/connect', {
@@ -226,37 +233,45 @@ async function openConnectModal() {
       if (!res.ok || !data.success) {
         statusDiv.style.color = '#ef4444';
         statusDiv.textContent = `Verbinding mislukt: ${data.message ?? data.error ?? 'onbekende fout'}`;
-        connectBtn.disabled = false;
-        connectBtn.textContent = 'Verbinden';
+        connectBtn.disabled = false; fullScanBtn.disabled = false;
         return;
       }
 
-      // Poll until status = ready (max 20 × 1.5s = 30s)
-      statusDiv.textContent = 'Nodes ontdekken…';
+      // Poll: quick = 3 polls (4.5s), full = 20 polls (30s)
+      const maxPolls = fullScan ? 20 : 3;
+      statusDiv.textContent = fullScan ? 'Nodes + units ontdekken…' : 'Nodes zoeken…';
       let nodes = [];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < maxPolls; i++) {
         await new Promise(r => setTimeout(r, 1500));
         const statusRes = await fetch('/api/master/status');
         const statusData = await statusRes.json();
-        if (statusData.status === 'ready') {
+        const nodeCount = statusData.nodes ?? 0;
+        statusDiv.textContent = fullScan
+          ? `Ontdekken… (${nodeCount} nodes)`
+          : `Verbonden — ${nodeCount} nodes gevonden`;
+        if (statusData.status === 'ready' || (!fullScan && nodeCount > 0)) {
           const nodesRes = await fetch('/api/master/nodes');
           nodes = await nodesRes.json();
           break;
         }
         if (statusData.status === 'error') break;
-        statusDiv.textContent = `Nodes ontdekken… (${statusData.nodes ?? 0} gevonden)`;
+      }
+      if (!nodes.length) {
+        // Last attempt
+        const nodesRes = await fetch('/api/master/nodes');
+        nodes = await nodesRes.json();
       }
 
       dispatch({ type: 'SET_CONNECTION', connected: true, ip, nodes });
 
-      // Auto-add unmatched discovered nodes to project as UNKNOWN modules
-      const projectModules = state.get().project.railView.cabinets
-        .flatMap(c => c.modules)
-        .filter(m => m.nodeAddress != null);
+      // Auto-add unmatched discovered nodes to project
+      const projectModules = state.get().project.railView.cabinets.flatMap(c => c.modules).filter(m => m.nodeAddress != null);
+      const projectWoning = state.get().project.railView.woningDevices.filter(d => d.nodeAddress != null);
+      const allProjectNodes = new Set([...projectModules, ...projectWoning].map(m => m.nodeAddress));
       const discoveredAddrs = new Set(nodes.map(n => n.nodeAddress));
-      const matched = projectModules.filter(m => discoveredAddrs.has(m.nodeAddress)).length;
-      const unmatched = projectModules.filter(m => !discoveredAddrs.has(m.nodeAddress)).length;
-      const extraNodes = nodes.filter(n => !projectModules.some(m => m.nodeAddress === n.nodeAddress));
+      const matched = [...projectModules, ...projectWoning].filter(m => discoveredAddrs.has(m.nodeAddress)).length;
+      const unmatched = [...projectModules, ...projectWoning].filter(m => !discoveredAddrs.has(m.nodeAddress)).length;
+      const extraNodes = nodes.filter(n => !allProjectNodes.has(n.nodeAddress));
 
       if (extraNodes.length > 0) {
         dispatch({ type: 'ADD_DISCOVERED_NODES', nodes: extraNodes });
@@ -264,18 +279,20 @@ async function openConnectModal() {
 
       overlay.remove();
       showToast(
-        `Verbonden met ${ip} — ${nodes.length} nodes: ${matched} gekoppeld${unmatched ? `, ${unmatched} niet gevonden` : ''}${extraNodes.length ? `, ${extraNodes.length} nieuw toegevoegd` : ''}`,
+        `Verbonden met ${ip}${fullScan ? ' (volledig)' : ' (snel)'} — ${nodes.length} nodes: ${matched} gekoppeld${unmatched ? `, ${unmatched} niet gevonden` : ''}${extraNodes.length ? `, ${extraNodes.length} nieuw` : ''}`,
         'success'
       );
     } catch (err) {
       statusDiv.style.color = '#ef4444';
       statusDiv.textContent = `Fout: ${err.message}`;
-      connectBtn.disabled = false;
-      connectBtn.textContent = 'Verbinden';
+      connectBtn.disabled = false; fullScanBtn.disabled = false;
     }
-  };
+  }
 
-  footer.append(disconnectBtn, connectBtn);
+  connectBtn.onclick = () => doConnect(false);
+  fullScanBtn.onclick = () => doConnect(true);
+
+  footer.append(disconnectBtn, connectBtn, fullScanBtn);
   dlg.append(hdr, body, footer);
   overlay.append(dlg);
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });

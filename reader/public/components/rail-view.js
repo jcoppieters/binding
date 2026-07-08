@@ -569,8 +569,10 @@ function openWoningDeviceDetail(wd, modules) {
         capSect.append(row);
       }
       const nodeInfo2 = el('div', ''); nodeInfo2.style.cssText = 'font-size:11px;color:#6a7899;margin-top:4px;line-height:1.6';
-      nodeInfo2.innerHTML = `<b>Node type:</b> 0x${dn2.type?.toString(16)?.toUpperCase() ?? '?'}`
-        + (dn2.name ? `<br><b>Naam:</b> ${dn2.name}` : '');
+      nodeInfo2.innerHTML = `<b>Node adres:</b> 0x${dn2.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`
+        + (dn2.physicalAddress != null ? `<br><b>Fysiek adres:</b> 0x${dn2.physicalAddress.toString(16).toUpperCase().padStart(2,'0')}` : '')
+        + `<br><b>Node type:</b> 0x${dn2.type?.toString(16)?.toUpperCase() ?? '?'}`
+        + (dn2.name ? `<br><b>Firmware naam:</b> ${dn2.name}` : '');
       capSect.append(nodeInfo2);
       right.append(capSect);
     }

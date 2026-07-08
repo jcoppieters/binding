@@ -205,6 +205,14 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 - [ ] **P8-3** Compare discovery results vs. project: full diff panel
   - Show matched / missing in design / extra on network
 - [ ] **P8-4** Auto-populate Rail View from discovery (unmatched nodes → add as "Unknown" module placeholder)
+- [ ] **P8-5** Update node firmware name via TCP hardware command
+  - Module/woning device modals show "Firmware naam" from discovery (read-only for now)
+  - Future: allow editing → send new name to hardware via TCP protocol
+  - Needed: TCP command for writing node name string (ask engineers)
+- [ ] **P8-6** Node type code → module model lookup table (from Duotecno engineers)
+  - `DiscoveredNode.type` byte identifies hardware type (e.g. 0x12 = DT05-06, etc.)
+  - With this table: auto-assign correct module model without unit-composition guessing
+  - Also resolves the CONTROL-type ambiguity (wall switch vs. input module in cabinet)
 
 ### Phase 9 — Materiaallijst
 
