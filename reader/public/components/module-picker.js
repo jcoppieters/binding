@@ -142,7 +142,8 @@ function buildAndShow(modules, context) {
   cancelBtn.style.cssText = 'padding:7px 18px;border-radius:6px;border:1px solid #dde3ef;background:#fff;color:#4a5568;cursor:pointer;font-size:13px';
   cancelBtn.onclick = () => overlay.remove();
 
-  const confirmBtn = el('button', ''); confirmBtn.textContent = 'Toevoegen';
+  const confirmBtn = el('button', '');
+  confirmBtn.textContent = (context._replaceWoningId || context._replaceModuleId) ? 'OK' : 'Toevoegen';
   confirmBtn.style.cssText = 'padding:7px 18px;border-radius:6px;border:none;background:#e08c00;color:#fff;cursor:pointer;font-size:13px;font-weight:600;opacity:.4';
   confirmBtn.disabled = true;
   confirmBtn.id = 'picker-confirm';

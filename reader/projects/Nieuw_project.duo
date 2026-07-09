@@ -2,7 +2,7 @@
   "meta": {
     "name": "Nieuw project",
     "created": "2026-07-08T16:31:21.633Z",
-    "modified": "2026-07-08T16:32:39.530Z",
+    "modified": "2026-07-09T10:58:34.043Z",
     "version": "1",
     "masterIp": "192.168.0.97",
     "masterPassword": "GMTecno"
@@ -28,14 +28,14 @@
     "woningDevices": [
       {
         "id": "pa5xriyo",
-        "model": "DT0C-10Ag",
+        "model": "DT0C-10ALw",
         "nodeAddress": 252,
         "name": " 20260624",
         "position": 99
       },
       {
         "id": "baf3unn2",
-        "model": "UNKNOWN",
+        "model": "DT1E-4Ab",
         "nodeAddress": 4,
         "name": "oled",
         "position": 99
