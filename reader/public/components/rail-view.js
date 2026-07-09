@@ -82,6 +82,8 @@ function buildCabinetCard(cabinet, modules) {
   const totalW = cabinet.modules
     .reduce((s, m) => s + (lookupModule(m.model, modules)?.powerW ?? 0), 0);
   const psusNeeded = Math.ceil(totalW / 60);
+  const usedM = cabinet.modules
+    .reduce((s, m) => s + (lookupModule(m.model, modules)?.dinUnits ?? 9), 0);
 
   const card = el('div', 'cabinet-card');
   card.dataset.cabinetId = cabinet.id;
@@ -96,14 +98,23 @@ function buildCabinetCard(cabinet, modules) {
   const h3 = el('h3');
   h3.textContent = `🗄️ ${cabinet.name}`;
   const stats = el('div', 'cabinet-stats');
+  const overfull = usedM > cabinet.widthUnits;
   stats.innerHTML = `
     <div class="cabinet-stat"><span>Rails:</span><span class="val">${rails.length}</span></div>
     <div class="cabinet-stat"><span>Breedte:</span><span class="val">${cabinet.widthUnits}M</span></div>
     <div class="cabinet-stat"><span>Modules:</span><span class="val">${cabinet.modules.length}</span></div>
+    <div class="cabinet-stat${overfull ? ' warn' : ''}"><span>Bezet:</span><span class="val">${usedM}/${cabinet.widthUnits}M</span></div>
     ${totalW > 0 ? `<div class="cabinet-stat warn"><span>Verbruik:</span><span class="val">${totalW.toFixed(1)} W</span></div>` : ''}
   `;
   hdr.append(h3, stats);
   card.append(hdr);
+
+  // DIN rail space bar
+  const dinBar = el('div', 'din-bar');
+  const pct = Math.min(100, Math.round(usedM / cabinet.widthUnits * 100));
+  const fillClass = overfull ? 'din-fill overfull' : pct >= 85 ? 'din-fill warn' : 'din-fill';
+  dinBar.innerHTML = `<div class="din-track"><div class="${fillClass}" style="width:${pct}%"></div></div>`;
+  card.append(dinBar);
 
   if (totalW > 0) {
     const psu = el('div', 'psu-summary');
@@ -958,6 +969,27 @@ function drawCANBus(canvas) {
 
 // ─── Sidebar counts ───────────────────────────────────────────────────────────
 
+// ─── Channel type labels / colors for resources panel ────────────────────────
+const CH_LABELS = {
+  dimmer_le: 'Dimmer LE', dimmer_te: 'Dimmer TE', dimmer_pwm: 'Dimmer PWM', dimmer_dc: 'Dimmer 0-10V',
+  relay_no: 'Relais NO', relay_nc: 'Relais NC', relay_ssr: 'Relais SSR',
+  motor_updown: 'Motor omhoog/omlaag', motor_polar: 'Motor polair',
+  dali: 'DALI', dmx: 'DMX',
+  input_digital: 'Drukknop/detector', input_analog: 'Analoge ingang',
+};
+
+function computeChannelTotals(railView, modules) {
+  const totals = {};
+  const addGroups = groups => {
+    for (const g of groups ?? []) totals[g.type] = (totals[g.type] ?? 0) + g.count;
+  };
+  for (const c of railView.cabinets) {
+    for (const m of c.modules) addGroups(lookupModule(m.model, modules)?.channelGroups);
+  }
+  for (const w of railView.woningDevices) addGroups(lookupModule(w.model, modules)?.channelGroups);
+  return totals;
+}
+
 function updateSidebarCounts(railView, modules) {
   const cabinetsEl = document.getElementById('cabinets-list');
   if (cabinetsEl) {
@@ -970,6 +1002,32 @@ function updateSidebarCounts(railView, modules) {
   const seg2 = document.getElementById('seg2-count');
   if (seg1) seg1.textContent = String(railView.cabinets.reduce((s, c) => s + c.modules.length, 0));
   if (seg2) seg2.textContent = String(railView.woningDevices.length);
+
+  // Resources panel
+  const resSection = document.getElementById('resources-section');
+  const resList = document.getElementById('resources-list');
+  if (!resSection || !resList) return;
+
+  const totals = computeChannelTotals(railView, modules);
+  const types = Object.keys(totals).filter(t => totals[t] > 0);
+
+  if (!types.length) {
+    resSection.style.display = 'none';
+    return;
+  }
+  resSection.style.display = '';
+  resList.innerHTML = types.map(t => {
+    const cls = t.startsWith('dimmer') ? 'dimmer_le'
+              : t.startsWith('relay')  ? 'relay_no'
+              : t.startsWith('motor')  ? 'motor_updown'
+              : t.startsWith('input')  ? 'input_digital'
+              : t;
+    return `<div class="resource-row">
+      <span class="ch ${cls}" style="flex-shrink:0"></span>
+      <span class="resource-label">${CH_LABELS[t] ?? t}</span>
+      <span class="badge">${totals[t]}</span>
+    </div>`;
+  }).join('');
 }
 
 // ─── Actions ──────────────────────────────────────────────────────────────────

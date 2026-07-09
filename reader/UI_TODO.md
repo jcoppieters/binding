@@ -115,8 +115,13 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Confirm dialog → `REMOVE_MODULE` dispatch
 - [x] **P1-8** Reorder modules within cabinet — **DONE** (via detail modal ←/→ buttons)
   - `MOVE_MODULE` action swaps adjacent modules; reflow regenerates rails automatically
-- [ ] **P1-5** Resources panel in sidebar: used vs. available counts per type
-- [ ] **P1-6** DIN rail space bar (M-units used vs. cabinet width)
+- [x] **P1-5** Resources panel in sidebar: used vs. available counts per type
+  - Sidebar shows all channel types present in the project (relay, dimmer, motor, dali, input…)
+  - Counts computed from all cabinet modules + woning devices via `computeChannelTotals()`
+  - Section hidden when no modules are placed
+- [x] **P1-6** DIN rail space bar (M-units used vs. cabinet width)
+  - Thin progress bar below cabinet header: green → orange (≥85%) → red (overfull)
+  - "Bezet: Xm/Ym" stat added to cabinet header stats
 
 ### Phase 2 — Home View
 
@@ -188,8 +193,12 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 ### Phase 7 — Save & Upload
 
-- [ ] **P7-1** "Save" button → serialize project to `.duo` JSON → `POST /api/project/save`
-- [ ] **P7-2** "Open project" → load `.duo` file
+- [x] **P7-1** "Save" button → serialize project to `.duo` JSON → `POST /api/project/save`
+  - `src/api/projectAPI.ts` handles save + list + load
+  - Frontend in `main.js → saveProject()`
+- [x] **P7-2** "Open project" → load `.duo` file
+  - Lists `.duo` files from `reader/projects/` directory
+  - Frontend in `main.js → openProject()`
 - [ ] **P7-3** Import existing installation (no `.duo`, only `bind*.txt` + node DB)
   - Parse binding strings → reconstruct what's possible into wiring diagram
   - Unknown/complex bindings kept as "legacy bindings" visible but not visually editable until re-wired
