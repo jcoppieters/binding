@@ -141,6 +141,9 @@
     "productLine": "Essence 2-knops",
     "category": "switch",
     "uiCategory": "Schakelaar",
+    "channelGroups": [
+      { "type": "input_digital", "count": 2 }
+    ],
     "powerW": 0.5,
     "variants": [
       {
@@ -166,6 +169,9 @@
     "productLine": "Essence 4-knops",
     "category": "switch",
     "uiCategory": "Schakelaar",
+    "channelGroups": [
+      { "type": "input_digital", "count": 4 }
+    ],
     "powerW": 0.5,
     "variants": [
       {
@@ -238,6 +244,9 @@
     "productLine": "Serenity 2-knops",
     "category": "switch",
     "uiCategory": "Schakelaar",
+    "channelGroups": [
+      { "type": "input_digital", "count": 2 }
+    ],
     "powerW": 0.5,
     "variants": [
       {
@@ -279,6 +288,9 @@
     "productLine": "Serenity 4-knops",
     "category": "switch",
     "uiCategory": "Schakelaar",
+    "channelGroups": [
+      { "type": "input_digital", "count": 4 }
+    ],
     "powerW": 0.5,
     "variants": [
       {
@@ -875,6 +887,9 @@
     "productLine": "Bewegingsdetector inbouw",
     "category": "detector",
     "uiCategory": "Bewegingsdetector",
+    "channelGroups": [
+      { "type": "input_digital", "count": 1 }
+    ],
     "powerW": 0.1,
     "variants": [
       {
@@ -970,6 +985,9 @@
     "productLine": "Bewegingsdetector opbouw",
     "category": "detector",
     "uiCategory": "Bewegingsdetector",
+    "channelGroups": [
+      { "type": "input_digital", "count": 1 }
+    ],
     "powerW": 0.1,
     "variants": [
       {
@@ -1038,7 +1056,14 @@
     "description": "Smartbox+",
     "category": "module",
     "uiCategory": "Smartbox",
+    "channelGroups": [
+      { "type": "input_digital", "count": 16 },
+      { "type": "input_analog", "count": 2 },
+      { "type": "relay_no", "count": 8 },
+      { "type": "motor_updown", "count": 1 }
+    ],
     "isSmartboxBase": true,
+    "poweredFromMains": true,
     "slotCount": 4,
     "dinUnits": 12,
     "lengthMm": 210,
@@ -1054,7 +1079,14 @@
     "description": "Smartbox+ Lite",
     "category": "module",
     "uiCategory": "Smartbox",
+    "channelGroups": [
+      { "type": "input_digital", "count": 16 },
+      { "type": "input_analog", "count": 2 },
+      { "type": "relay_no", "count": 8 },
+      { "type": "motor_updown", "count": 1 }
+    ],
     "isSmartboxBase": true,
+    "poweredFromMains": true,
     "slotCount": 4,
     "dinUnits": 12,
     "lengthMm": 210,
@@ -1070,7 +1102,13 @@
     "description": "Smartbox+ Mini",
     "category": "module",
     "uiCategory": "Smartbox",
+    "channelGroups": [
+      { "type": "input_digital", "count": 14 },
+      { "type": "input_analog", "count": 2 },
+      { "type": "relay_no", "count": 8 }
+    ],
     "isSmartboxBase": true,
+    "poweredFromMains": true,
     "slotCount": 3,
     "dinUnits": 9,
     "lengthMm": 162,
@@ -1085,7 +1123,18 @@
     "name": "Smartbox+ Ultra",
     "description": "Smartbox+ Ultra",
     "category": "module",
-    "uiCategory": "Infrastructuur",
+    "uiCategory": "Smartbox",
+    "channelGroups": [
+      { "type": "input_digital", "count": 16 },
+      { "type": "relay_no", "count": 16 },
+      { "type": "motor_updown", "count": 1 },
+      { "type": "dali", "count": 64 }
+    ],
+    "isSmartboxBase": true,
+    "poweredFromMains": true,
+    "slotCount": 4,
+    "dinUnits": 15,
+    "powerW": 20,
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=59887",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0B-ULTRA/SM-ULTRA-met-verschillende-dimmerprintjes-en-DALI-1.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T111600.084.png",
@@ -2345,8 +2394,154 @@
     "functionalModel": "DT46",
     "productLine": "Helo detector",
     "finish": "Helo inbouwdetector",
+    "channelGroups": [
+      { "type": "input_digital", "count": 1 }
+    ],
     "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=60395",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/60395/ID_TDS_NL-FR-EN_DT46_x-Bewegingssensor-HELO_18032026TP_2026-06-17-140029_xmoq.pdf",
     "powerW": 0.1
+  },
+  {
+    "functionalModel": "DT1C-4",
+    "productLine": "Smarttouch 4-kanaals",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      { "type": "input_digital", "count": 4 }
+    ],
+    "powerW": 1.3,
+    "variants": [
+      { "model": "DT1C-4Ag",  "finish": "Aluminium Grijs" },
+      { "model": "DT1C-4Ab",  "finish": "Aluminium Zwart" },
+      { "model": "DT1C-4ALw", "finish": "Aluminium Lak Wit" },
+      { "model": "DT1C-4Br",  "finish": "Brons" },
+      { "model": "DT1C-4BrL", "finish": "Brons Light" },
+      { "model": "DT1C-4GM",  "finish": "Gun Metal" },
+      { "model": "DT1C-4Cw",  "finish": "Corian Wit" }
+    ]
+  },
+  {
+    "functionalModel": "DT43",
+    "productLine": "Bewegingsdetector inbouw lijn",
+    "category": "detector",
+    "uiCategory": "Bewegingsdetector",
+    "channelGroups": [
+      { "type": "input_digital", "count": 1 }
+    ],
+    "powerW": 0.1,
+    "variants": [
+      {
+        "model": "DT43-W",
+        "finish": "Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40"
+      },
+      {
+        "model": "DT43-B",
+        "finish": "Zwart",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40"
+      }
+    ]
+  },
+  {
+    "model": "DT13-ARI",
+    "name": "RS 232 Alarminterface Aritech",
+    "description": "RS 232 Alarminterface Aritech",
+    "category": "interface",
+    "uiCategory": "Infrastructuur",
+    "dinUnits": 4,
+    "lengthMm": 70
+  },
+  {
+    "model": "DMX-PWM",
+    "name": "DMX naar PWM omvormer 24 kanalen",
+    "description": "DMX naar PWM omvormer 24 kanalen",
+    "category": "module",
+    "uiCategory": "DMX",
+    "channelGroups": [
+      { "type": "dimmer_pwm", "count": 24 }
+    ]
+  },
+  {
+    "model": "DT13-BO",
+    "name": "RS 232 interface matrix Bose",
+    "description": "RS 232 interface matrix Bose",
+    "category": "interface",
+    "uiCategory": "Audio",
+    "dinUnits": 4,
+    "lengthMm": 70
+  },
+  {
+    "model": "DT0D-10",
+    "name": "TFT VoIP/SIP binnenpost",
+    "description": "TFT VoIP/SIP binnenpost",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire"
+  },
+  {
+    "model": "DT0D-7AG",
+    "name": "SIP binnenpost opbouw",
+    "description": "SIP binnenpost opbouw",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire"
+  },
+  {
+    "model": "DT0D-7ATG",
+    "name": "SIP binnenpost android opbouw",
+    "description": "SIP binnenpost android opbouw",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire"
+  },
+  {
+    "model": "DT20-LIC",
+    "name": "Licentie videofonie (smartphone/tablet)",
+    "description": "Licentie voor videofonie op smartphone of tablet",
+    "category": "video-intercom",
+    "uiCategory": "Accessoire"
+  },
+  {
+    "model": "DT00-DAL",
+    "name": "DALI voeding",
+    "description": "DALI voeding",
+    "category": "module",
+    "uiCategory": "DALI"
+  },
+  {
+    "model": "DT07-DAL",
+    "name": "DALI 6 input print",
+    "description": "DALI 6 input print",
+    "category": "module",
+    "uiCategory": "DALI",
+    "channelGroups": [
+      { "type": "input_digital", "count": 6 }
+    ]
+  },
+  {
+    "model": "DT0B-DAL12",
+    "name": "Interface SIM DALI 12 adressen (4 groepen)",
+    "description": "Interface SIM DALI 12 adressen (4 groepen)",
+    "category": "module",
+    "uiCategory": "Smartbox plugin",
+    "channelGroups": [
+      { "type": "dali", "count": 12 }
+    ],
+    "isSmartboxPlugin": true
+  },
+  {
+    "model": "DT0B-DAL64",
+    "name": "Interface SIM DALI 64 adressen (16 groepen)",
+    "description": "Interface SIM DALI 64 adressen (16 groepen)",
+    "category": "module",
+    "uiCategory": "Smartbox plugin",
+    "channelGroups": [
+      { "type": "dali", "count": 64 }
+    ],
+    "isSmartboxPlugin": true
+  },
+  {
+    "model": "DT00-12",
+    "name": "12V DC voeding 4A",
+    "description": "12V DC voeding 4A",
+    "category": "module",
+    "uiCategory": "Infrastructuur"
   }
 ]

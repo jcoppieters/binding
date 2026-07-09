@@ -28,16 +28,5 @@ export function createModulesAPI(): Router {
     }
   });
 
-  /** GET /api/modules/:slug — single module/family file */
-  router.get('/modules/:slug', async (req, res) => {
-    try {
-      const raw = await readFile(join(MODULES_DIR, `${req.params.slug}.json`), 'utf-8');
-      res.setHeader('Content-Type', 'application/json');
-      res.send(raw);
-    } catch {
-      res.status(404).json({ error: `Module '${req.params.slug}' not found` });
-    }
-  });
-
   return router;
 }
