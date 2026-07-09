@@ -6,7 +6,7 @@
 
 import { state, dispatch, makeId } from '../app/state.js';
 import { openModulePicker } from './module-picker.js';
-import { UNIT_TYPE_INFO, NODE_TYPE_NAMES, NodeType, unitTypeInfo, hasCabinetUnits } from '../app/unit-types.js';
+import { UNIT_TYPE_INFO, NODE_TYPE_NAMES, NodeType, UnitType, unitTypeInfo, hasCabinetUnits } from '../app/unit-types.js';
 
 // ─── CSS injection ────────────────────────────────────────────────────────────
 
@@ -312,14 +312,25 @@ function suggestModules(discoveredNode, moduleDefs, woningContext = false) {
     return woningContext ? all.filter(s => ['DT0C-7','DT0C-10'].includes(s.model)) : all;
   }
 
-  // Mostly LCD_VIRTUAL → LCD
+  // Mostly LCD_VIRTUAL (kMood=7) → could be LCD touchscreen OR a wall switch with
+  // OLED display. Both have kGUINode type and 32 mood virtual channels.
+  // Distinguisher: kTemperature (type 4) = built-in DT30 sensor → almost certainly
+  // a wall switch (DTBS-4 / DT1ET-4 / DT1C-4 etc.). Pure LCD panels have no sensor.
   const lcdVirtual = counts[7] ?? 0;
+  const hasTemp = (counts[UnitType.kTemperature] ?? 0) > 0;
   if (lcdVirtual > 0 && lcdVirtual >= total * 0.7) {
-    return moduleDefs
+    const lcdScore    = hasTemp ? 6 : 10;
+    const switchScore = hasTemp ? 10 : 6;
+    const lcds = moduleDefs
       .filter(m => m.category === 'lcd' || m.uiCategory === 'LCD/Touchscreen')
-      .map(m => ({ model: m.functionalModel ?? m.model, name: m.productLine ?? m.name ?? (m.functionalModel ?? m.model), score: 10 }))
+      .map(m => ({ model: m.functionalModel ?? m.model, name: m.productLine ?? m.name ?? (m.functionalModel ?? m.model), score: lcdScore }));
+    const switches = moduleDefs
+      .filter(m => m.category === 'switch' || m.uiCategory === 'Schakelaar')
+      .map(m => ({ model: m.functionalModel ?? m.model, name: m.productLine ?? m.name ?? (m.functionalModel ?? m.model), score: switchScore }));
+    return [...lcds, ...switches]
       .filter((m, i, arr) => arr.findIndex(x => x.model === m.model) === i)
-      .slice(0, 5);
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 7);
   }
 
   // Mostly AUDIO → audio interface
