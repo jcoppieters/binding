@@ -799,27 +799,39 @@ function buildWoningPanel(woningDevices, modules) {
     // CAN line (same segment as cabinet — orange)
     rowEl.append(el('div', 'can-line'));
 
-    // Devices in logical order; flex-direction handles visual reversal for odd rows
-    rowDevices.forEach(wd => rowEl.append(buildFieldDevice(wd, modules)));
-
-    // Last row: + buttons and terminator
-    // For even rows: append to right end; for odd rows (row-reverse): append = visually left end
+    // Last row: build + buttons and terminator
+    let addSwBtn, addLcdBtn, termR;
     if (isLastRow) {
-      const addSwBtn = el('div', 'add-fd-btn');
+      addSwBtn = el('div', 'add-fd-btn');
       addSwBtn.innerHTML = '<span style="font-size:10px">＋ SW</span>';
       addSwBtn.title = 'Schakelaar toevoegen';
       addSwBtn.onclick = () => openModulePicker({ woningType: 'switch' });
 
-      const addLcdBtn = el('div', 'add-fd-btn');
+      addLcdBtn = el('div', 'add-fd-btn');
       addLcdBtn.innerHTML = '<span style="font-size:10px">＋ LCD</span>';
       addLcdBtn.title = 'LCD toevoegen';
       addLcdBtn.onclick = () => openModulePicker({ woningType: 'lcd' });
 
-      const termR = buildTerminator('SEG1');
+      termR = buildTerminator('SEG1');
       termR.id = 'woning-term-r';
 
-      // Always append — row-reverse handles visual position for odd rows
-      rowEl.append(addSwBtn, addLcdBtn, termR);
+      if (isOdd) {
+        // For row-reverse rows: DOM-first = visual-right.
+        // We want buttons at the visual-right end (after devices in reading direction).
+        // So append buttons BEFORE devices: DOM [+LCD, +SW, devices, term] → visual [term, devices, +SW, +LCD]
+        rowEl.append(addLcdBtn, addSwBtn);
+      }
+    }
+
+    // Devices in logical order; flex-direction handles visual reversal for odd rows
+    rowDevices.forEach(wd => rowEl.append(buildFieldDevice(wd, modules)));
+
+    if (isLastRow) {
+      if (!isOdd) {
+        // Even rows: buttons after devices (natural L→R order)
+        rowEl.append(addSwBtn, addLcdBtn);
+      }
+      rowEl.append(termR);
     }
 
     rowsWrap.append(rowEl);
