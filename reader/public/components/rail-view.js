@@ -769,79 +769,66 @@ function buildWoningPanel(woningDevices, modules) {
   hdr.textContent = '🏠 Woning – schakelaars & LCD';
   panel.append(hdr);
 
-  // Compute max items per row dynamically from canvas width.
-  // Use || not ?? so that clientWidth=0 (not-yet-laid-out) falls back to the default.
+  // Compute max devices per row based ONLY on device width.
+  // The + buttons and terminator always go on their own separate trailing row,
+  // so we don't need to reserve space for them here.
   const canvas = document.getElementById('rail-canvas');
-  const panelInner = (canvas?.clientWidth || 1400) - 76; // subtract canvas pad(40) + panel pad(36)
+  const panelInner = (canvas?.clientWidth || 1400) - 76;
   const maxItemW = 154; // worst-case: LCD card (130px) + margin (8px) + gap (16px)
-  const endOverhead = 280; // terminator + 2 add-buttons + margins/gaps + buffer
-  const maxPerRow = Math.max(3, Math.floor((panelInner - endOverhead) / maxItemW));
+  const maxPerRow = Math.max(3, Math.floor(panelInner / maxItemW));
 
-  // Split devices into rows of maxPerRow
-  const rows = [];
-  if (woningDevices.length === 0) {
-    rows.push([]);
-  } else {
-    for (let i = 0; i < woningDevices.length; i += maxPerRow) {
-      rows.push(woningDevices.slice(i, i + maxPerRow));
-    }
+  // Build device-only rows
+  const deviceRows = [];
+  for (let i = 0; i < woningDevices.length; i += maxPerRow) {
+    deviceRows.push(woningDevices.slice(i, i + maxPerRow));
   }
+
+  // Buttons row always follows all device rows
+  const btnRowIdx = deviceRows.length;
+  const btnRowIsOdd = btnRowIdx % 2 === 1;
 
   const rowsWrap = el('div', 'woning-rows');
 
-  rows.forEach((rowDevices, rowIdx) => {
-    const isLastRow = rowIdx === rows.length - 1;
-    const isOdd = rowIdx % 2 === 1; // odd rows run R→L (flex-direction:row-reverse)
-
+  // Render device-only rows
+  deviceRows.forEach((rowDevices, rowIdx) => {
+    const isOdd = rowIdx % 2 === 1;
     const rowEl = el('div', 'woning-row');
     rowEl.id = rowIdx === 0 ? 'woning-row' : `woning-row-${rowIdx}`;
     if (isOdd) rowEl.classList.add('woning-row-reverse');
-
-    // CAN line (same segment as cabinet — orange)
     rowEl.append(el('div', 'can-line'));
-
-    // Last row: build + buttons and terminator
-    let addSwBtn, addLcdBtn, termR;
-    if (isLastRow) {
-      addSwBtn = el('div', 'add-fd-btn');
-      addSwBtn.innerHTML = '<span style="font-size:10px">＋ SW</span>';
-      addSwBtn.title = 'Schakelaar toevoegen';
-      addSwBtn.onclick = () => openModulePicker({ woningType: 'switch' });
-
-      addLcdBtn = el('div', 'add-fd-btn');
-      addLcdBtn.innerHTML = '<span style="font-size:10px">＋ LCD</span>';
-      addLcdBtn.title = 'LCD toevoegen';
-      addLcdBtn.onclick = () => openModulePicker({ woningType: 'lcd' });
-
-      termR = buildTerminator('SEG1');
-      termR.id = 'woning-term-r';
-
-      if (isOdd) {
-        // For row-reverse rows: DOM-first = visual-right.
-        // Desired visual (L→R): [devices, +SW, +LCD, term]
-        // DOM order (reversed): [term, +LCD, +SW, devices]
-        // terminator first in DOM → appears at visual far-right
-        rowEl.append(termR, addLcdBtn, addSwBtn);
-      }
-    }
-
-    // Devices in logical order; flex-direction handles visual reversal for odd rows
     rowDevices.forEach(wd => rowEl.append(buildFieldDevice(wd, modules)));
-
-    if (isLastRow) {
-      if (!isOdd) {
-        // Even rows: buttons then terminator after devices (natural L→R order)
-        rowEl.append(addSwBtn, addLcdBtn, termR);
-      }
-    }
-
     rowsWrap.append(rowEl);
-
-    // CSS spacer div between rows (visual snake handled by SVG)
-    if (!isLastRow) {
-      rowsWrap.append(el('div', isOdd ? 'woning-snake-conn left' : 'woning-snake-conn right'));
-    }
+    // Snake connector leading into the next row (buttons row or next device row)
+    rowsWrap.append(el('div', isOdd ? 'woning-snake-conn left' : 'woning-snake-conn right'));
   });
+
+  // Buttons row (always its own row)
+  const btnRow = el('div', 'woning-row');
+  btnRow.id = btnRowIdx === 0 ? 'woning-row' : `woning-row-${btnRowIdx}`;
+  if (btnRowIsOdd) btnRow.classList.add('woning-row-reverse');
+  btnRow.append(el('div', 'can-line'));
+
+  const addSwBtn = el('div', 'add-fd-btn');
+  addSwBtn.innerHTML = '<span style="font-size:10px">＋ SW</span>';
+  addSwBtn.title = 'Schakelaar toevoegen';
+  addSwBtn.onclick = () => openModulePicker({ woningType: 'switch' });
+
+  const addLcdBtn = el('div', 'add-fd-btn');
+  addLcdBtn.innerHTML = '<span style="font-size:10px">＋ LCD</span>';
+  addLcdBtn.title = 'LCD toevoegen';
+  addLcdBtn.onclick = () => openModulePicker({ woningType: 'lcd' });
+
+  const termR = buildTerminator('SEG1');
+  termR.id = 'woning-term-r';
+
+  if (btnRowIsOdd) {
+    // row-reverse: DOM [term, +LCD, +SW] → visual [+SW, +LCD, term]
+    btnRow.append(termR, addLcdBtn, addSwBtn);
+  } else {
+    btnRow.append(addSwBtn, addLcdBtn, termR);
+  }
+
+  rowsWrap.append(btnRow);
 
   panel.append(rowsWrap);
   return panel;
