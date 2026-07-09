@@ -775,7 +775,7 @@ function buildWoningPanel(woningDevices, modules) {
   const canvas = document.getElementById('rail-canvas');
   const panelInner = (canvas?.clientWidth || 1400) - 76;
   const maxItemW = 154; // worst-case: LCD card (130px) + margin (8px) + gap (16px)
-  const maxPerRow = Math.max(3, Math.floor(panelInner / maxItemW));
+  const maxPerRow = Math.max(1, Math.floor(panelInner / maxItemW));
 
   // Build device-only rows
   const deviceRows = [];
@@ -822,10 +822,11 @@ function buildWoningPanel(woningDevices, modules) {
   termR.id = 'woning-term-r';
 
   if (btnRowIsOdd) {
-    // row-reverse: DOM [term, +LCD, +SW] → visual [+SW, +LCD, term]
-    btnRow.append(termR, addLcdBtn, addSwBtn);
+    // row-reverse: DOM [+LCD, +SW, term] → visual [term, +SW, +LCD]
+    btnRow.append(addLcdBtn, addSwBtn, termR);
   } else {
-    btnRow.append(addSwBtn, addLcdBtn, termR);
+    // even: DOM [term, +SW, +LCD] → visual [term, +SW, +LCD]
+    btnRow.append(termR, addSwBtn, addLcdBtn);
   }
 
   rowsWrap.append(btnRow);
