@@ -314,26 +314,24 @@ function suggestModules(discoveredNode, moduleDefs, woningContext = false) {
 
   // Mostly LCD_VIRTUAL (kMood=7) → could be LCD touchscreen OR a wall switch with
   // OLED display. Both have kGUINode type and 32 mood virtual channels.
-  // Distinguisher: kTemperature (type 4) = built-in DT30 sensor → almost certainly
-  // a wall switch (DTBS-4 / DT1ET-4 / DT1C-4 etc.). Pure LCD panels have no sensor.
-  //
-  // OLED_SWITCH_FAMILIES: these specific product lines are the only Duotecno wall
-  // switches that actually have an OLED display (and therefore kGUINode type).
+  // OLED_SWITCH_FAMILIES: Duotecno wall switches that have an OLED display.
+  // They exist both with and without a built-in DT30 temperature sensor.
+  // kTemperature presence just adds extra confidence that it's a switch, not a
+  // pure LCD panel — but OLED switches always rank above LCD regardless.
   const OLED_SWITCH_FAMILIES = new Set(['DTBS-4', 'DT1ET-4', 'DT1E-4', 'DT1C-4']);
 
   const lcdVirtual = counts[7] ?? 0;
   const hasTemp = (counts[UnitType.kTemperature] ?? 0) > 0;
   if (lcdVirtual > 0 && lcdVirtual >= total * 0.7) {
-    // LCDs: always include top 2 regardless of temp presence
-    const lcdBaseScore = hasTemp ? 6 : 10;
+    // LCDs: always include top 2 at the end of the list
     const lcdSuggestions = moduleDefs
       .filter(m => m.category === 'lcd' || m.uiCategory === 'LCD/Touchscreen')
-      .map(m => ({ model: m.functionalModel ?? m.model, name: m.productLine ?? m.name ?? (m.functionalModel ?? m.model), score: lcdBaseScore }))
+      .map(m => ({ model: m.functionalModel ?? m.model, name: m.productLine ?? m.name ?? (m.functionalModel ?? m.model), score: 10 }))
       .filter((m, i, arr) => arr.findIndex(x => x.model === m.model) === i)
       .slice(0, 2);
 
-    // Switches: score by OLED likelihood (known OLED families >> 4-btn >> rest)
-    const switchBaseScore = hasTemp ? 10 : 6;
+    // Switches: OLED families always score highest (always appear before LCD).
+    // hasTemp adds a secondary +4 boost (extra confirmation it's a switch).
     const switchSuggestions = moduleDefs
       .filter(m => m.category === 'switch' || m.uiCategory === 'Schakelaar')
       .map(m => {
@@ -343,7 +341,8 @@ function suggestModules(discoveredNode, moduleDefs, woningContext = false) {
         return {
           model: fModel,
           name: m.productLine ?? m.name ?? fModel,
-          score: switchBaseScore + (hasTemp && isOled ? 6 : 0) + (hasTemp && maxCh >= 4 ? 2 : 0),
+          // OLED switch always 14+ (above LCD at 10); temp sensor adds +4; 4-ch adds +2
+          score: 6 + (isOled ? 8 : 0) + (hasTemp && isOled ? 4 : 0) + (maxCh >= 4 ? 2 : 0),
         };
       })
       .filter((m, i, arr) => arr.findIndex(x => x.model === m.model) === i)
@@ -702,10 +701,14 @@ function openWoningDeviceDetail(wd, modules) {
     const lcdScore3 = types3.filter(t => t === UnitType.kMood).length;
     const ctrlScore3 = types3.filter(t => t === UnitType.kInput).length;
     const existingDef = lookupModule(wd.model, s3.modules);
-    // If the node has a temperature sensor it's an OLED wall switch, not a pure LCD panel.
-    // Pure LCD (no temp): high lcdScore → open lcd picker. Switch: open switch picker.
+    const existingIsOledSwitch = ['DTBS-4', 'DT1ET-4', 'DT1E-4', 'DT1C-4'].includes(
+      existingDef?.functionalModel ?? existingDef?.model ?? ''
+    );
+    // Open switch picker when: already assigned as an OLED switch, OR temp sensor
+    // present (confirms it's a switch), OR existing model is a switch type.
+    // Only use LCD picker when node has no temp and existing model is lcd.
     const pickerType = existingDef?.category === 'lcd' ? 'lcd'
-      : hasTemp3 ? 'switch'
+      : (existingIsOledSwitch || hasTemp3 || existingDef?.category === 'switch') ? 'switch'
       : (lcdScore3 > ctrlScore3 ? 'lcd' : 'switch');
     openModulePicker({ woningType: pickerType, _replaceWoningId: wd.id });
   };
