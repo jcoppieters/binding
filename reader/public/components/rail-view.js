@@ -769,9 +769,10 @@ function buildWoningPanel(woningDevices, modules) {
   hdr.textContent = '🏠 Woning – schakelaars & LCD';
   panel.append(hdr);
 
-  // Compute max items per row dynamically from canvas width
+  // Compute max items per row dynamically from canvas width.
+  // Use || not ?? so that clientWidth=0 (not-yet-laid-out) falls back to the default.
   const canvas = document.getElementById('rail-canvas');
-  const panelInner = (canvas?.clientWidth ?? 800) - 76; // subtract canvas pad(40) + panel pad(36)
+  const panelInner = (canvas?.clientWidth || 1400) - 76; // subtract canvas pad(40) + panel pad(36)
   const maxItemW = 154; // worst-case: LCD card (130px) + margin (8px) + gap (16px)
   const endOverhead = 280; // terminator + 2 add-buttons + margins/gaps + buffer
   const maxPerRow = Math.max(3, Math.floor((panelInner - endOverhead) / maxItemW));
@@ -817,9 +818,10 @@ function buildWoningPanel(woningDevices, modules) {
 
       if (isOdd) {
         // For row-reverse rows: DOM-first = visual-right.
-        // We want buttons at the visual-right end (after devices in reading direction).
-        // So append buttons BEFORE devices: DOM [+LCD, +SW, devices, term] → visual [term, devices, +SW, +LCD]
-        rowEl.append(addLcdBtn, addSwBtn);
+        // Desired visual (L→R): [devices, +SW, +LCD, term]
+        // DOM order (reversed): [term, +LCD, +SW, devices]
+        // terminator first in DOM → appears at visual far-right
+        rowEl.append(termR, addLcdBtn, addSwBtn);
       }
     }
 
@@ -828,10 +830,9 @@ function buildWoningPanel(woningDevices, modules) {
 
     if (isLastRow) {
       if (!isOdd) {
-        // Even rows: buttons after devices (natural L→R order)
-        rowEl.append(addSwBtn, addLcdBtn);
+        // Even rows: buttons then terminator after devices (natural L→R order)
+        rowEl.append(addSwBtn, addLcdBtn, termR);
       }
-      rowEl.append(termR);
     }
 
     rowsWrap.append(rowEl);
