@@ -5,6 +5,7 @@
  */
 
 import { state, dispatch, makeId } from '../app/state.js';
+import { showToast } from '../app/main.js';
 import { openModulePicker } from './module-picker.js';
 import { UNIT_TYPE_INFO, NODE_TYPE_NAMES, NodeType, UnitType, unitTypeInfo, hasCabinetUnits } from '../app/unit-types.js';
 
@@ -540,221 +541,408 @@ function buildModuleCard(moduleInstance, def) {
   return card;
 }
 
-// ─── Woning device detail modal ───────────────────────────────────────────────
+// ─── Device detail modal (unified: cabinet modules + woning devices) ──────────
 
-function openWoningDeviceDetail(wd, modules) {
-  document.getElementById('woning-device-overlay')?.remove();
-
+/**
+ * Build discovery info section with fetch units button (shared by all devices)
+ */
+function buildDiscoverySection(device) {
   const s = state.get();
-  const def = lookupModule(wd.model, modules);
-  const devs = s.project.railView.woningDevices;
-  const idx = devs.findIndex(d => d.id === wd.id);
+  if (!device.nodeAddress) return null;
+  
+  const dn = s.discoveredNodes.find(n => n.nodeAddress === device.nodeAddress);
+  
+  const sect = el('div', '');
+  const title = el('div', '');
+  title.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px';
+  title.textContent = 'Hardware info';
+  sect.append(title);
+  
+  const info = el('div', '');
+  info.style.cssText = 'font-size:11px;color:#6a7899;line-height:1.7';
+  
+  if (dn) {
+    const physAddr = device.physicalAddress ?? dn.physicalAddress;
+    const isMaster = dn.nodeAddress === 0xFC;
+    info.innerHTML = `<span style="color:#4cd04c;font-weight:700">✓ Gevonden in netwerk</span>`
+      + (isMaster ? ' <span style="color:#e08c00;font-weight:700">★ MASTER</span>' : '')
+      + `<br><b>Node adres:</b> 0x${dn.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`
+      + (physAddr != null ? `<br><b>Fysiek adres:</b> 0x${physAddr.toString(16).toUpperCase().padStart(2,'0')}` : '')
+      + (dn.name ? `<br><b>Naam:</b> ${dn.name}` : '')
+      + `<br><b>Node type:</b> 0x${dn.type?.toString(16)?.toUpperCase() ?? '?'}${NODE_TYPE_NAMES[dn.type] ? ` (${NODE_TYPE_NAMES[dn.type]})` : ''}`
+      + (dn.units?.length ? `<br><b>Units:</b> ${dn.units.length} (${capabilitySummary(dn) || '—'})` : '');
+    
+    if (s.connected) {
+      const fetchBtn = el('button', 'modal-btn');
+      fetchBtn.textContent = dn.units?.length ? '🔄 Herlaad units' : '📥 Fetch units';
+      fetchBtn.title = 'Scan alleen deze node voor units (snel)';
+      fetchBtn.style.cssText = 'margin-top:8px;font-size:11px;padding:4px 10px';
+      fetchBtn.onclick = async () => {
+        fetchBtn.disabled = true;
+        fetchBtn.textContent = '⏳ Bezig...';
+        try {
+          const res = await fetch(`/api/master/node/${device.nodeAddress}/units`);
+          const data = await res.json();
+          if (!res.ok || !data.success) {
+            alert(`Fout bij ophalen units: ${data.error ?? 'onbekend'}`);
+            fetchBtn.textContent = '❌ Fout';
+            return;
+          }
+          const nodesRes = await fetch('/api/master/nodes');
+          const nodes = await nodesRes.json();
+          dispatch({ type: 'SET_CONNECTION', connected: true, ip: s.masterIp, nodes });
+          document.getElementById('device-detail-overlay')?.remove();
+          showToast(`Units opgehaald voor node 0x${device.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`, 'success');
+        } catch (err) {
+          alert(`Fout: ${err.message}`);
+          fetchBtn.textContent = '❌ Fout';
+        } finally {
+          fetchBtn.disabled = false;
+        }
+      };
+      info.append(fetchBtn);
+    }
+  } else if (s.discoveredNodes.length > 0) {
+    info.innerHTML = `<span style="color:#f05050;font-weight:700">✗ Niet gevonden in laatste scan</span>`;
+  } else {
+    info.textContent = 'Nog niet gescand (klik » Verbinden« om te scannen)';
+  }
+  
+  sect.append(info);
+  return sect;
+}
 
+/**
+ * Build capabilities section for UNKNOWN devices
+ */
+function buildCapabilitiesSection(device, isWoning) {
+  const s = state.get();
+  const dn = device.nodeAddress != null ? s.discoveredNodes.find(n => n.nodeAddress === device.nodeAddress) : null;
+  if (!dn) return null;
+  
+  const sect = el('div', '');
+  const title = el('div', '');
+  title.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px';
+  title.textContent = 'Ontdekte kanalen';
+  sect.append(title);
+  
+  const counts = unitCountsByType(dn);
+  for (const [uType, count] of Object.entries(counts)) {
+    const info = UNIT_TYPE_INFO[uType] ?? { icon: '?', label: `Type ${uType}` };
+    const row = el('div', '');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:5px';
+    const dots = el('div', '');
+    dots.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;max-width:80px';
+    for (let i = 0; i < Math.min(count, 12); i++) {
+      const d = el('div', '');
+      d.style.cssText = 'width:10px;height:10px;border-radius:2px;background:#f59e0b;flex-shrink:0';
+      dots.append(d);
+    }
+    const lbl = el('div', '');
+    lbl.style.cssText = 'font-size:12px;color:#1a1f2e';
+    lbl.textContent = `${count}× ${info.icon} ${info.label}`;
+    row.append(dots, lbl);
+    sect.append(row);
+  }
+  
+  const nodeInfo = el('div', '');
+  nodeInfo.style.cssText = 'font-size:11px;color:#6a7899;margin-top:6px';
+  const isMaster = dn.nodeAddress === 0xFC;
+  nodeInfo.innerHTML = (isMaster ? '<div style="color:#e08c00;font-weight:700;margin-bottom:4px">★ Master node — altijd 0xFC</div>' : '')
+    + `<b>Node type:</b> 0x${dn.type?.toString(16)?.toUpperCase() ?? '?'}${NODE_TYPE_NAMES[dn.type] ? ` (${NODE_TYPE_NAMES[dn.type]})` : ''}`
+    + `<br><b>Fysiek adres:</b> 0x${(device.physicalAddress ?? dn.physicalAddress ?? 0).toString(16).toUpperCase().padStart(2,'0')}`
+    + `<br><b>Naam:</b> ${dn.name || '—'}`;
+  sect.append(nodeInfo);
+  
+  // Suggestions
+  const suggestions = suggestModules(dn, s.modules, isWoning);
+  if (suggestions.length) {
+    const sugSect = el('div', '');
+    const sugTitle = el('div', '');
+    sugTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:8px';
+    sugTitle.textContent = isWoning ? 'Mogelijke toestellen' : 'Mogelijke modules';
+    sugSect.append(sugTitle);
+    suggestions.forEach(sug => {
+      const btn = el('button', 'modal-btn');
+      btn.style.cssText = 'display:block;width:100%;text-align:left;margin-bottom:4px;font-size:12px';
+      btn.textContent = `${sug.model} — ${sug.name}`;
+      btn.onclick = () => {
+        const familyOrStandalone = s.modules.find(m => (m.functionalModel ?? m.model) === sug.model);
+        const specificModel = familyOrStandalone?.variants?.[0]?.model ?? sug.model;
+        // Dispatch handled by parent
+        btn.dataset.selectedModel = specificModel;
+      };
+      sugSect.append(btn);
+    });
+    sect.append(sugSect);
+  }
+  
+  return sect;
+}
+
+/**
+ * Build channel groups section for known modules
+ */
+function buildChannelGroupsSection(def) {
+  if (!def?.channelGroups?.length) return null;
+  
+  const sect = el('div', '');
+  const title = el('div', '');
+  title.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px';
+  title.textContent = 'Kanalen';
+  sect.append(title);
+  
+  const CH_LABELS = { dimmer_te:'Dimmer TE', dimmer_le:'Dimmer LE', dimmer_pwm:'Dimmer PWM', dimmer_dc:'0-10V', relay_no:'Relais NO', relay_nc:'Relais NC', relay_ssr:'Relais SSR', motor_updown:'Motor Op/neer', motor_polar:'Motor Polar', input_digital:'Digitale ingang', input_analog:'Analoge ingang', dali:'DALI', dmx:'DMX', audio:'Audio' };
+  const CH_COLORS = { dimmer_te:'#f59e0b', dimmer_le:'#f59e0b', dimmer_pwm:'#f59e0b', dimmer_dc:'#f59e0b', relay_no:'#3b82f6', relay_nc:'#3b82f6', relay_ssr:'#3b82f6', motor_updown:'#ef4444', motor_polar:'#ef4444', input_digital:'#10b981', input_analog:'#10b981', dali:'#eab308', dmx:'#eab308', audio:'#8b5cf6' };
+  
+  def.channelGroups.forEach(g => {
+    const row = el('div', '');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px';
+    const dots = el('div', '');
+    dots.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;max-width:100px';
+    for (let i = 0; i < Math.min(g.count, 16); i++) {
+      const d = el('div', '');
+      d.style.cssText = `width:10px;height:10px;border-radius:2px;background:${CH_COLORS[g.type] ?? '#999'};flex-shrink:0`;
+      dots.append(d);
+    }
+    const lbl = el('div', '');
+    lbl.style.cssText = 'font-size:12px;color:#1a1f2e';
+    lbl.textContent = `${g.count}× ${CH_LABELS[g.type] ?? g.type}`;
+    if (g.maxLoadW) { const sub = el('span',''); sub.style.cssText='font-size:10px;color:#a0aaba'; sub.textContent=` (max ${g.maxLoadW}W)`; lbl.append(sub); }
+    if (g.maxCurrentA) { const sub = el('span',''); sub.style.cssText='font-size:10px;color:#a0aaba'; sub.textContent=` (max ${g.maxCurrentA}A)`; lbl.append(sub); }
+    row.append(dots, lbl);
+    sect.append(row);
+  });
+  
+  return sect;
+}
+
+/**
+ * Unified device detail modal (works for both cabinet modules and woning devices)
+ */
+function openDeviceDetailModal(device, context) {
+  // context: { type: 'module', cabinetId } or { type: 'woning' }
+  document.getElementById('device-detail-overlay')?.remove();
+  
+  const s = state.get();
+  const def = lookupModule(device.model, s.modules);
+  const isWoning = context.type === 'woning';
+  const isUnknown = device.model === 'UNKNOWN';
+  
+  // Get device list and index
+  const devices = isWoning ? s.project.railView.woningDevices 
+    : s.project.railView.cabinets.find(c => c.id === context.cabinetId)?.modules ?? [];
+  const idx = devices.findIndex(d => d.id === device.id);
+  
   const overlay = el('div', 'modal-overlay');
-  overlay.id = 'woning-device-overlay';
-
+  overlay.id = 'device-detail-overlay';
+  
   const dlg = el('div', 'modal-dialog');
-  dlg.style.cssText = 'width:520px;max-width:95vw';
-
+  dlg.style.cssText = 'width:620px;max-width:95vw';
+  
+  // Header
   const hdr = el('div', 'modal-header');
-  hdr.innerHTML = `<strong>${def?.productLine ?? def?.name ?? wd.model}</strong>`;
-  const closeBtn = el('button', 'modal-close'); closeBtn.textContent = '✕';
+  hdr.innerHTML = `<strong>${isUnknown ? '⚠ Onbekende node' : (def?.productLine ?? def?.name ?? device.model)}</strong>`;
+  const closeBtn = el('button', 'modal-close');
+  closeBtn.textContent = '✕';
   closeBtn.onclick = () => overlay.remove();
   hdr.append(closeBtn);
-
+  
+  // Body
   const body = el('div', 'modal-body');
   body.style.cssText = 'display:flex;gap:20px';
-
-  const isUnknownWD = wd.model === 'UNKNOWN';
-
-  // Left: image
+  
+  // Left: image + specs
   const left = el('div', '');
-  left.style.cssText = 'flex:0 0 130px;display:flex;flex-direction:column;gap:8px';
-  if (!isUnknownWD && def?.imageFile) {
+  left.style.cssText = 'flex:0 0 150px;display:flex;flex-direction:column;gap:8px';
+  
+  if (!isUnknown && def?.imageFile) {
     const imgWrap = el('div', '');
-    imgWrap.style.cssText = 'width:130px;height:100px;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;background:#f8f9fd;display:flex;align-items:center;justify-content:center';
+    imgWrap.style.cssText = 'width:150px;height:120px;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;background:#f8f9fd;display:flex;align-items:center;justify-content:center';
     const img = document.createElement('img');
-    img.src = `/modules/images/${def.imageFile.replace('images/', '')}`;
+    img.src = `/modules/images/${def.imageFile.replace('images/','')}`;
     img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;padding:4px';
     imgWrap.append(img);
     left.append(imgWrap);
   }
-  const specDiv = el('div', '');
-  specDiv.style.cssText = 'font-size:11px;color:#6a7899;line-height:1.6';
-  if (def?.uiCategory) specDiv.innerHTML += `<div>${def.uiCategory}</div>`;
-  if (def?.powerW) specDiv.innerHTML += `<div>${def.powerW}W</div>`;
-  left.append(specDiv);
-
-  // Right: discovery data for UNKNOWN woning devices + fields
+  
+  const specs = el('div', '');
+  specs.style.cssText = 'font-size:11px;color:#6a7899;line-height:1.6';
+  if (def?.uiCategory) specs.innerHTML += `<div><b>${def.uiCategory}</b></div>`;
+  if (def?.dinUnits) specs.innerHTML += `<div>Breedte: <b>${def.dinUnits}M</b></div>`;
+  if (def?.powerW) specs.innerHTML += `<div>Verbruik: <b>${def.powerW}W</b></div>`;
+  if (device.nodeAddress != null) {
+    specs.innerHTML += `<div>Node: <b>0x${device.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}</b></div>`;
+  }
+  left.append(specs);
+  
+  // Right: dynamic sections
   const right = el('div', '');
   right.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:12px';
-
-  if (isUnknownWD) {
-    const s = state.get();
-    const dn2 = wd.nodeAddress != null ? s.discoveredNodes.find(n => n.nodeAddress === wd.nodeAddress) : null;
-    if (dn2) {
-      const capSect = el('div', '');
-      const capTitle = el('div', ''); capTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px';
-      capTitle.textContent = 'Ontdekte kanalen';
-      capSect.append(capTitle);
-      const counts = unitCountsByType(dn2);
-      for (const [uType, count] of Object.entries(counts)) {
-        const info = UNIT_TYPE_INFO[uType] ?? { icon: '?', label: `Type ${uType}` };
-        const row = el('div', ''); row.style.cssText = 'font-size:12px;color:#1a1f2e;margin-bottom:3px';
-        row.textContent = `${info.icon} ${count}× ${info.label}`;
-        capSect.append(row);
-      }
-      const nodeInfo2 = el('div', ''); nodeInfo2.style.cssText = 'font-size:11px;color:#6a7899;margin-top:4px;line-height:1.6';
-      nodeInfo2.innerHTML = `<b>Node adres:</b> 0x${dn2.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`
-        + (dn2.physicalAddress != null ? `<br><b>Fysiek adres:</b> 0x${dn2.physicalAddress.toString(16).toUpperCase().padStart(2,'0')}` : '')
-        + `<br><b>Node type:</b> 0x${dn2.type?.toString(16)?.toUpperCase() ?? '?'}${NODE_TYPE_NAMES[dn2.type] ? ` (${NODE_TYPE_NAMES[dn2.type]})` : ''}`
-        + (dn2.name ? `<br><b>Firmware naam:</b> ${dn2.name}` : '');
-      capSect.append(nodeInfo2);
-      right.append(capSect);
-
-      // Auto-suggestions for woning context
-      const woningSuggestions = suggestModules(dn2, s.discoveredNodes.length ? s.modules : [], true);
-      if (woningSuggestions.length) {
-        const sugSect2 = el('div', '');
-        const sugTitle2 = el('div', ''); sugTitle2.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;margin-top:6px';
-        sugTitle2.textContent = 'Mogelijke toestellen';
-        sugSect2.append(sugTitle2);
-        woningSuggestions.forEach(sug => {
-          const btn2 = el('button', 'modal-btn');
-          btn2.style.cssText = 'display:block;width:100%;text-align:left;margin-bottom:4px;font-size:12px';
-          btn2.textContent = `${sug.model} — ${sug.name}`;
-          btn2.onclick = () => {
-            const s3 = state.get();
-            const def3 = s3.modules.find(m => (m.functionalModel ?? m.model) === sug.model);
-            const specificModel = def3?.variants?.[0]?.model ?? sug.model;
-            dispatch({ type: 'UPDATE_WONING_DEVICE', deviceId: wd.id, patch: { model: specificModel } });
-            overlay.remove();
-          };
-          sugSect2.append(btn2);
-        });
-        right.append(sugSect2);
-      }
-    }
+  
+  if (isUnknown) {
+    const capSect = buildCapabilitiesSection(device, isWoning);
+    if (capSect) right.append(capSect);
+  } else {
+    const chSect = buildChannelGroupsSection(def);
+    if (chSect) right.append(chSect);
   }
-
-  const nameLabel = el('label', 'modal-label'); nameLabel.textContent = 'Label';
+  
+  // Discovery section (for all devices with node address)
+  if (!isUnknown || device.nodeAddress) {
+    const discSect = buildDiscoverySection(device);
+    if (discSect) right.append(discSect);
+  }
+  
+  // Fields
+  const nameLabel = el('label', 'modal-label');
+  nameLabel.textContent = 'Label (optioneel)';
   const nameInput = el('input', 'modal-input');
-  nameInput.value = wd.name ?? '';
-  nameInput.placeholder = def?.productLine ?? wd.model;
-
-  const addrLabel = el('label', 'modal-label'); addrLabel.textContent = 'Node adres (hex)';
+  nameInput.value = device.name ?? '';
+  nameInput.placeholder = def?.productLine ?? device.model;
+  
+  const addrLabel = el('label', 'modal-label');
+  addrLabel.textContent = 'Node adres (hex)';
   const addrInput = el('input', 'modal-input');
-  addrInput.value = wd.nodeAddress != null ? wd.nodeAddress.toString(16).toUpperCase().padStart(2, '0') : '';
+  addrInput.value = device.nodeAddress != null ? device.nodeAddress.toString(16).toUpperCase().padStart(2,'0') : '';
   addrInput.placeholder = '--';
   addrInput.maxLength = 2;
   addrInput.style.width = '80px';
-
+  
   right.append(nameLabel, nameInput, addrLabel, addrInput);
   body.append(left, right);
-
+  
+  // Footer
   const footer = el('div', 'modal-footer');
   footer.style.justifyContent = 'space-between';
-
+  
   const leftBtns = el('div', '');
   leftBtns.style.cssText = 'display:flex;gap:6px';
-
+  
   const moveLeftBtn = el('button', 'modal-btn');
-  moveLeftBtn.innerHTML = '\u2190';
+  moveLeftBtn.innerHTML = '← Links';
   moveLeftBtn.disabled = idx <= 0;
   moveLeftBtn.onclick = () => {
-    dispatch({ type: 'MOVE_WONING_DEVICE', deviceId: wd.id, direction: -1 });
+    const action = isWoning 
+      ? { type: 'MOVE_WONING_DEVICE', deviceId: device.id, direction: -1 }
+      : { type: 'MOVE_MODULE', cabinetId: context.cabinetId, moduleId: device.id, direction: -1 };
+    dispatch(action);
     overlay.remove();
   };
-
+  
   const moveRightBtn = el('button', 'modal-btn');
-  moveRightBtn.innerHTML = '\u2192';
-  moveRightBtn.disabled = idx < 0 || idx >= devs.length - 1;
+  moveRightBtn.innerHTML = 'Rechts →';
+  moveRightBtn.disabled = idx < 0 || idx >= devices.length - 1;
   moveRightBtn.onclick = () => {
-    dispatch({ type: 'MOVE_WONING_DEVICE', deviceId: wd.id, direction: +1 });
+    const action = isWoning
+      ? { type: 'MOVE_WONING_DEVICE', deviceId: device.id, direction: +1 }
+      : { type: 'MOVE_MODULE', cabinetId: context.cabinetId, moduleId: device.id, direction: +1 };
+    dispatch(action);
     overlay.remove();
   };
-
+  
   const deleteBtn = el('button', 'modal-btn');
-  deleteBtn.textContent = '\ud83d\uddd1 Verwijder';
+  deleteBtn.textContent = '🗑 Verwijder';
   deleteBtn.style.cssText += 'color:#ef4444;border-color:#fca5a5';
   deleteBtn.onclick = () => {
-    if (confirm(`Verwijder ${wd.model}?`)) {
-      dispatch({ type: 'REMOVE_WONING_DEVICE', deviceId: wd.id });
+    if (confirm(`Verwijder ${device.model}?`)) {
+      const action = isWoning
+        ? { type: 'REMOVE_WONING_DEVICE', deviceId: device.id }
+        : { type: 'REMOVE_MODULE', cabinetId: context.cabinetId, moduleId: device.id };
+      dispatch(action);
       overlay.remove();
     }
   };
-
+  
   leftBtns.append(moveLeftBtn, moveRightBtn, deleteBtn);
-
+  
   const rightBtns = el('div', '');
   rightBtns.style.cssText = 'display:flex;gap:6px';
-
-  // Assign / change type button
-  const typeBtn = el('button', isUnknownWD ? 'modal-btn-primary' : 'modal-btn');
-  typeBtn.textContent = isUnknownWD ? '🔍 Wijs toe' : '🔄 Wijzig type';
+  
+  // Type change button
+  const typeBtn = el('button', isUnknown ? 'modal-btn-primary' : 'modal-btn');
+  typeBtn.textContent = isUnknown ? '🔍 Wijs toe' : '🔄 Wijzig type';
   typeBtn.onclick = () => {
     overlay.remove();
-    const s3 = state.get();
-    const dn3 = wd.nodeAddress != null ? s3.discoveredNodes.find(n => n.nodeAddress === wd.nodeAddress) : null;
-    const types3 = (dn3?.units ?? []).map(u => u.type);
-    const hasTemp3 = types3.some(t => t === UnitType.kTemperature);
-    const lcdScore3 = types3.filter(t => t === UnitType.kMood).length;
-    const ctrlScore3 = types3.filter(t => t === UnitType.kInput).length;
-    const existingDef = lookupModule(wd.model, s3.modules);
-    const existingIsOledSwitch = ['DTBS-4', 'DT1ET-4', 'DT1E-4', 'DT1C-4'].includes(
-      existingDef?.functionalModel ?? existingDef?.model ?? ''
-    );
-    // Open switch picker when: already assigned as an OLED switch, OR temp sensor
-    // present (confirms it's a switch), OR existing model is a switch type.
-    // Only use LCD picker when node has no temp and existing model is lcd.
-    const pickerType = existingDef?.category === 'lcd' ? 'lcd'
-      : (existingIsOledSwitch || hasTemp3 || existingDef?.category === 'switch') ? 'switch'
-      : (lcdScore3 > ctrlScore3 ? 'lcd' : 'switch');
-    openModulePicker({ woningType: pickerType, _replaceWoningId: wd.id });
-  };
-
-  // "Verplaats naar kast" — for UNKNOWN nodes that turn out to be cabinet modules (e.g. Smartbox misclassified as woning)
-  const moveToCabinetBtn = el('button', 'modal-btn');
-  moveToCabinetBtn.textContent = '🗄 Naar kast';
-  moveToCabinetBtn.title = 'Verplaats dit toestel naar de kast (bijv. als het een module is)';
-  moveToCabinetBtn.style.display = isUnknownWD ? '' : 'none';
-  moveToCabinetBtn.onclick = () => {
-    if (!confirm('Verplaatsen naar de kast?')) return;
-    const s4 = state.get();
-    const dn4 = wd.nodeAddress != null ? s4.discoveredNodes.find(n => n.nodeAddress === wd.nodeAddress) : null;
-    // Remove from woning
-    dispatch({ type: 'REMOVE_WONING_DEVICE', deviceId: wd.id });
-    // Add to cabinet as UNKNOWN module
-    const cabinets = s4.project.railView.cabinets;
-    const lastCab = cabinets[cabinets.length - 1];
-    if (lastCab) {
-      dispatch({ type: 'ADD_MODULE', cabinetId: lastCab.id, module: { id: wd.id, model: 'UNKNOWN', nodeAddress: wd.nodeAddress, physicalAddress: dn4?.physicalAddress, name: wd.name, position: 99 } });
+    if (isWoning) {
+      const dn = device.nodeAddress != null ? s.discoveredNodes.find(n => n.nodeAddress === device.nodeAddress) : null;
+      const types = (dn?.units ?? []).map(u => u.type);
+      const hasTemp = types.some(t => t === UnitType.kTemperature);
+      const lcdScore = types.filter(t => t === UnitType.kMood).length;
+      const ctrlScore = types.filter(t => t === UnitType.kInput).length;
+      const existingDef = lookupModule(device.model, s.modules);
+      const existingIsOledSwitch = ['DTBS-4', 'DT1ET-4', 'DT1E-4', 'DT1C-4'].includes(
+        existingDef?.functionalModel ?? existingDef?.model ?? ''
+      );
+      const pickerType = existingDef?.category === 'lcd' ? 'lcd'
+        : (existingIsOledSwitch || hasTemp || existingDef?.category === 'switch') ? 'switch'
+        : (lcdScore > ctrlScore ? 'lcd' : 'switch');
+      openModulePicker({ woningType: pickerType, _replaceWoningId: device.id });
+    } else {
+      openModulePicker({ cabinetId: context.cabinetId, _replaceModuleId: device.id, _keepNodeAddress: device.nodeAddress });
     }
-    overlay.remove();
-    openModulePicker({ cabinetId: lastCab?.id, _replaceModuleId: wd.id, _keepNodeAddress: wd.nodeAddress });
   };
-
-  const cancelBtn = el('button', 'modal-btn'); cancelBtn.textContent = 'Sluiten';
+  
+  // "Move to cabinet" button (only for UNKNOWN woning devices)
+  if (isWoning && isUnknown) {
+    const moveToCabinetBtn = el('button', 'modal-btn');
+    moveToCabinetBtn.textContent = '🗄 Naar kast';
+    moveToCabinetBtn.title = 'Verplaats dit toestel naar de kast';
+    moveToCabinetBtn.onclick = () => {
+      if (!confirm('Verplaatsen naar de kast?')) return;
+      const dn = device.nodeAddress != null ? s.discoveredNodes.find(n => n.nodeAddress === device.nodeAddress) : null;
+      dispatch({ type: 'REMOVE_WONING_DEVICE', deviceId: device.id });
+      const cabinets = s.project.railView.cabinets;
+      const lastCab = cabinets[cabinets.length - 1];
+      if (lastCab) {
+        dispatch({ type: 'ADD_MODULE', cabinetId: lastCab.id, module: { id: device.id, model: 'UNKNOWN', nodeAddress: device.nodeAddress, physicalAddress: dn?.physicalAddress, name: device.name, position: 99 } });
+      }
+      overlay.remove();
+      openModulePicker({ cabinetId: lastCab?.id, _replaceModuleId: device.id, _keepNodeAddress: device.nodeAddress });
+    };
+    rightBtns.append(typeBtn, moveToCabinetBtn);
+  } else {
+    rightBtns.append(typeBtn);
+  }
+  
+  const cancelBtn = el('button', 'modal-btn');
+  cancelBtn.textContent = 'Sluiten';
   cancelBtn.onclick = () => overlay.remove();
-  const saveBtn = el('button', 'modal-btn-primary'); saveBtn.textContent = 'Opslaan';
-  saveBtn.style.display = isUnknownWD ? 'none' : '';
+  
+  const saveBtn = el('button', 'modal-btn-primary');
+  saveBtn.textContent = 'Opslaan';
+  saveBtn.style.display = isUnknown ? 'none' : '';
   saveBtn.onclick = () => {
     const name = nameInput.value.trim() || null;
     const addrStr = addrInput.value.trim();
     const nodeAddress = addrStr ? parseInt(addrStr, 16) : undefined;
     const patch = { name };
     if (nodeAddress != null && !isNaN(nodeAddress)) patch.nodeAddress = nodeAddress;
-    dispatch({ type: 'UPDATE_WONING_DEVICE', deviceId: wd.id, patch });
+    
+    const action = isWoning
+      ? { type: 'UPDATE_WONING_DEVICE', deviceId: device.id, patch }
+      : { type: 'UPDATE_MODULE', cabinetId: context.cabinetId, moduleId: device.id, patch };
+    dispatch(action);
     overlay.remove();
   };
-  rightBtns.append(typeBtn, moveToCabinetBtn, cancelBtn, saveBtn);
-
+  
+  rightBtns.append(cancelBtn, saveBtn);
   footer.append(leftBtns, rightBtns);
+  
   dlg.append(hdr, body, footer);
   overlay.append(dlg);
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   document.body.append(overlay);
   nameInput.focus();
+}
+
+// Legacy wrappers for backward compatibility
+function openModuleDetail(moduleInstance, cabinetId) {
+  openDeviceDetailModal(moduleInstance, { type: 'module', cabinetId });
+}
+
+function openWoningDeviceDetail(wd, modules) {
+  openDeviceDetailModal(wd, { type: 'woning' });
 }
 
 
@@ -1016,6 +1204,9 @@ const CH_LABELS = {
   motor_updown: 'Motor omhoog/omlaag', motor_polar: 'Motor polair',
   dali: 'DALI', dmx: 'DMX',
   input_digital: 'Drukknop/detector', input_analog: 'Analoge ingang',
+  mood: 'Mood/Scene', temperature: 'Temperatuur',
+  audio: 'Audio', audio_ext: 'Audio (ext)', 
+  ir_tx: 'IR Zender', video: 'Video', camera: 'Camera',
 };
 
 function computeChannelTotals(railView, modules) {
@@ -1023,10 +1214,48 @@ function computeChannelTotals(railView, modules) {
   const addGroups = groups => {
     for (const g of groups ?? []) totals[g.type] = (totals[g.type] ?? 0) + g.count;
   };
+  // Count from module catalog definitions
   for (const c of railView.cabinets) {
     for (const m of c.modules) addGroups(lookupModule(m.model, modules)?.channelGroups);
   }
   for (const w of railView.woningDevices) addGroups(lookupModule(w.model, modules)?.channelGroups);
+  
+  // Also count from discovered units (for nodes with unknown models or virtual units like moods)
+  const s = state.get();
+  if (s.connected && s.discoveredNodes.length > 0) {
+    const allProjectNodeAddrs = new Set([
+      ...railView.cabinets.flatMap(c => c.modules).map(m => m.nodeAddress),
+      ...railView.woningDevices.map(w => w.nodeAddress)
+    ].filter(a => a != null));
+    
+    for (const node of s.discoveredNodes) {
+      // Only count discovered nodes that are in the project
+      if (!allProjectNodeAddrs.has(node.nodeAddress)) continue;
+      
+      for (const unit of node.units ?? []) {
+        const type = unit.type;
+        let channelType = null;
+        
+        // Map UnitType to channel type
+        if (type === UnitType.kDimmer) channelType = 'dimmer_le';
+        else if (type === UnitType.kSwitch) channelType = 'relay_no';
+        else if (type === UnitType.kInput) channelType = 'input_analog'; // Will show as "Analoge ingang"
+        else if (type === UnitType.kSwitchingMotor) channelType = 'motor_updown';
+        else if (type === UnitType.kMood) channelType = 'mood';
+        else if (type === UnitType.kTemperature) channelType = 'temperature';
+        else if (type === UnitType.kAudio) channelType = 'audio';
+        else if (type === UnitType.kExtendedAudio) channelType = 'audio_ext';
+        else if (type === UnitType.kIRTX) channelType = 'ir_tx';
+        else if (type === UnitType.kVideo) channelType = 'video';
+        else if (type === UnitType.kCamera) channelType = 'camera';
+        
+        if (channelType) {
+          totals[channelType] = (totals[channelType] ?? 0) + 1;
+        }
+      }
+    }
+  }
+  
   return totals;
 }
 
@@ -1080,286 +1309,6 @@ export function addCabinet(name = 'Nieuwe kast', widthUnits = 36) {
     type: 'ADD_CABINET',
     cabinet: { id: makeId(), name, widthUnits, modules: [] },
   });
-}
-
-function openModuleDetail(moduleInstance, cabinetId) {
-  document.getElementById('module-detail-overlay')?.remove();
-
-  const s = state.get();
-  const def = lookupModule(moduleInstance.model, s.modules);
-  const cabinet = s.project.railView.cabinets.find(c => c.id === cabinetId);
-  const moduleIdx = cabinet?.modules.findIndex(m => m.id === moduleInstance.id) ?? -1;
-  const totalModules = cabinet?.modules.length ?? 0;
-
-  const overlay = el('div', 'modal-overlay');
-  overlay.id = 'module-detail-overlay';
-
-  const dlg = el('div', 'modal-dialog');
-  dlg.style.cssText = 'width:660px;max-width:95vw';
-
-  // Header
-  const hdr = el('div', 'modal-header');
-  const isUnknown = moduleInstance.model === 'UNKNOWN';
-  hdr.innerHTML = `<strong>${isUnknown ? '⚠ Onbekende node' : (def?.productLine ?? def?.name ?? moduleInstance.model)}</strong>`;
-  const closeBtn = el('button', 'modal-close'); closeBtn.textContent = '✕';
-  closeBtn.onclick = () => overlay.remove();
-  hdr.append(closeBtn);
-
-  // Body
-  const body = el('div', 'modal-body');
-  body.style.cssText = 'display:flex;gap:20px;flex-direction:row';
-
-  // -- Left: image + specs
-  const left = el('div', '');
-  left.style.cssText = 'flex:0 0 180px;display:flex;flex-direction:column;gap:10px';
-
-  if (def?.imageFile) {
-    const imgWrap = el('div', '');
-    imgWrap.style.cssText = 'width:180px;height:140px;border-radius:8px;border:1px solid #e2e8f0;overflow:hidden;background:#f8f9fd;display:flex;align-items:center;justify-content:center';
-    const img = document.createElement('img');
-    img.src = `/modules/images/${def.imageFile.replace('images/','')}`;
-    img.style.cssText = 'max-width:100%;max-height:100%;object-fit:contain;padding:6px';
-    imgWrap.append(img);
-    left.append(imgWrap);
-  }
-
-  const specs = el('div', '');
-  specs.style.cssText = 'font-size:12px;color:#6a7899;display:flex;flex-direction:column;gap:4px';
-  if (def?.uiCategory)  specs.innerHTML += `<div><b>${def.uiCategory}</b></div>`;
-  if (def?.dinUnits)    specs.innerHTML += `<div>Breedte: <b>${def.dinUnits}M</b></div>`;
-  if (def?.powerW)      specs.innerHTML += `<div>Verbruik: <b>${def.powerW}W</b></div>`;
-  if (def?.lengthMm)    specs.innerHTML += `<div>Lengte: ${def.lengthMm}mm</div>`;
-  if (moduleInstance.nodeAddress != null) {
-    specs.innerHTML += `<div>Node: <b>0x${moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}</b></div>`;
-  }
-  left.append(specs);
-
-  // -- Right: channel groups + form fields
-  const right = el('div', '');
-  right.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:14px';
-
-  // For UNKNOWN modules: show discovered capabilities + auto-suggestions
-  if (isUnknown) {
-    const s = state.get();
-    const discoveredNode = moduleInstance.nodeAddress != null
-      ? s.discoveredNodes.find(n => n.nodeAddress === moduleInstance.nodeAddress)
-      : null;
-
-    if (discoveredNode) {
-      // Capabilities breakdown
-      const capSect = el('div', '');
-      const capTitle = el('div', ''); capTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px';
-      capTitle.textContent = 'Ontdekte kanalen';
-      capSect.append(capTitle);
-
-      const counts = unitCountsByType(discoveredNode);
-      for (const [uType, count] of Object.entries(counts)) {
-        const info = UNIT_TYPE_INFO[uType] ?? { icon: '?', label: `Type ${uType}` };
-        const row = el('div', ''); row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:5px';
-        const dots = el('div', ''); dots.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;max-width:80px';
-        for (let i = 0; i < Math.min(count, 12); i++) {
-          const d = el('div', ''); d.style.cssText = 'width:10px;height:10px;border-radius:2px;background:#f59e0b;flex-shrink:0';
-          dots.append(d);
-        }
-        const lbl = el('div', ''); lbl.style.cssText = 'font-size:12px;color:#1a1f2e';
-        lbl.textContent = `${count}× ${info.icon} ${info.label}`;
-        row.append(dots, lbl);
-        capSect.append(row);
-      }
-
-      const nodeInfo = el('div', ''); nodeInfo.style.cssText = 'font-size:11px;color:#6a7899;margin-top:6px';
-      const isMaster = discoveredNode.nodeAddress === 0xFC;
-      nodeInfo.innerHTML = (isMaster ? '<div style="color:#e08c00;font-weight:700;margin-bottom:4px">★ Master node — altijd 0xFC (TCP-server of LCD-controller)</div>' : '')
-        + `<b>Node type:</b> 0x${discoveredNode.type?.toString(16)?.toUpperCase() ?? '?'}${NODE_TYPE_NAMES[discoveredNode.type] ? ` (${NODE_TYPE_NAMES[discoveredNode.type]})` : ''}`
-        + `<br><b>Fysiek adres:</b> 0x${(moduleInstance.physicalAddress ?? discoveredNode.physicalAddress ?? 0).toString(16).toUpperCase().padStart(2,'0')}`
-        + `<br><b>Naam:</b> ${discoveredNode.name || '\u2014'}`
-        + `<br><b>Units:</b> ${discoveredNode.units?.length ?? 0} (${capabilitySummary(discoveredNode) || '—'})`;
-      capSect.append(nodeInfo);
-      right.append(capSect);
-
-      // Auto-suggestions
-      const suggestions = suggestModules(discoveredNode, s.modules);
-      if (suggestions.length) {
-        const sugSect = el('div', '');
-        const sugTitle = el('div', ''); sugTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px';
-        sugTitle.textContent = 'Mogelijke modules';
-        sugSect.append(sugTitle);
-        suggestions.forEach(sug => {
-          const btn = el('button', 'modal-btn');
-          btn.style.cssText = 'display:block;width:100%;text-align:left;margin-bottom:4px;font-size:12px';
-          btn.textContent = `${sug.model} — ${sug.name}`;
-          btn.onclick = () => {
-            const s2 = state.get();
-            const familyOrStandalone = s2.modules.find(m => (m.functionalModel ?? m.model) === sug.model);
-            const specificModel = familyOrStandalone?.variants?.[0]?.model ?? sug.model;
-            dispatch({ type: 'UPDATE_MODULE', cabinetId, moduleId: moduleInstance.id, patch: { model: specificModel } });
-            overlay.remove();
-          };
-          sugSect.append(btn);
-        });
-        right.append(sugSect);
-      }
-    }
-  } else if (def?.channelGroups?.length) {
-    // Known module: show channel groups (existing code)
-    const chSect = el('div', '');
-    const chTitle = el('div', ''); chTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px';
-    chTitle.textContent = 'Kanalen';
-    chSect.append(chTitle);
-    const CH_LABELS = { dimmer_te:'Dimmer TE', dimmer_le:'Dimmer LE', dimmer_pwm:'Dimmer PWM', dimmer_dc:'0-10V', relay_no:'Relais NO', relay_nc:'Relais NC', relay_ssr:'Relais SSR', motor_updown:'Motor Op/neer', motor_polar:'Motor Polar', input_digital:'Digitale ingang', input_analog:'Analoge ingang', dali:'DALI', dmx:'DMX', audio:'Audio' };
-    const CH_COLORS = { dimmer_te:'#f59e0b', dimmer_le:'#f59e0b', dimmer_pwm:'#f59e0b', dimmer_dc:'#f59e0b', relay_no:'#3b82f6', relay_nc:'#3b82f6', relay_ssr:'#3b82f6', motor_updown:'#ef4444', motor_polar:'#ef4444', input_digital:'#10b981', input_analog:'#10b981', dali:'#eab308', dmx:'#eab308', audio:'#8b5cf6' };
-    def.channelGroups.forEach(g => {
-      const row = el('div', '');
-      row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px';
-      const dots = el('div', ''); dots.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap;max-width:100px';
-      for (let i = 0; i < Math.min(g.count, 16); i++) {
-        const d = el('div', '');
-        d.style.cssText = `width:10px;height:10px;border-radius:2px;background:${CH_COLORS[g.type] ?? '#999'};flex-shrink:0`;
-        dots.append(d);
-      }
-      const lbl = el('div', '');
-      lbl.style.cssText = 'font-size:12px;color:#1a1f2e';
-      lbl.textContent = `${g.count}× ${CH_LABELS[g.type] ?? g.type}`;
-      if (g.maxLoadW) { const sub = el('span',''); sub.style.cssText='font-size:10px;color:#a0aaba'; sub.textContent=` (max ${g.maxLoadW}W)`; lbl.append(sub); }
-      if (g.maxCurrentA) { const sub = el('span',''); sub.style.cssText='font-size:10px;color:#a0aaba'; sub.textContent=` (max ${g.maxCurrentA}A)`; lbl.append(sub); }
-      row.append(dots, lbl);
-      chSect.append(row);
-    });
-    right.append(chSect);
-  }
-
-  // Hardware / discovery data (shown for ALL modules that have a node address)
-  if (!isUnknown && moduleInstance.nodeAddress != null) {
-    const s2 = state.get();
-    const dn = s2.discoveredNodes.find(n => n.nodeAddress === moduleInstance.nodeAddress);
-    const dSect = el('div', '');
-    const dTitle = el('div', ''); dTitle.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px';
-    dTitle.textContent = 'Hardware info';
-    dSect.append(dTitle);
-    const dInfo = el('div', '');
-    dInfo.style.cssText = 'font-size:11px;color:#6a7899;line-height:1.7';
-    if (dn) {
-      const physAddr = moduleInstance.physicalAddress ?? dn.physicalAddress;
-      const isMaster2 = dn.nodeAddress === 0xFC;
-      dInfo.innerHTML = `<span style="color:#4cd04c;font-weight:700">✓ Gevonden in netwerk</span>`
-        + (isMaster2 ? ' <span style="color:#e08c00;font-weight:700">★ MASTER</span>' : '')
-        + `<br><b>Node adres:</b> 0x${dn.nodeAddress.toString(16).toUpperCase().padStart(2,'0')}`
-        + (physAddr != null ? `<br><b>Fysiek adres:</b> 0x${physAddr.toString(16).toUpperCase().padStart(2,'0')}` : '')
-        + (dn.name ? `<br><b>Naam:</b> ${dn.name}` : '')
-        + `<br><b>Node type:</b> 0x${dn.type?.toString(16)?.toUpperCase() ?? '?'}${NODE_TYPE_NAMES[dn.type] ? ` (${NODE_TYPE_NAMES[dn.type]})` : ''}`
-        + (dn.units?.length ? `<br><b>Units:</b> ${dn.units.length} (${capabilitySummary(dn) || '—'})` : '');
-    } else if (s2.discoveredNodes.length > 0) {
-      dInfo.innerHTML = `<span style="color:#f05050;font-weight:700">✗ Niet gevonden in laatste scan</span>`;
-    } else {
-      dInfo.textContent = 'Nog niet gescand (klik » Verbinden« om te scannen)';
-    }
-    dSect.append(dInfo);
-    right.append(dSect);
-  }
-
-  // Fields: name + nodeAddress
-  const nameLabel = el('label', 'modal-label'); nameLabel.textContent = 'Label (optioneel)';
-  const nameInput = el('input', 'modal-input');
-  nameInput.value = moduleInstance.name ?? '';
-  nameInput.placeholder = def?.productLine ?? moduleInstance.model;
-  nameInput.type = 'text';
-
-  const addrLabel = el('label', 'modal-label'); addrLabel.textContent = 'Node adres (hex, bijv. 01)';
-  const addrInput = el('input', 'modal-input');
-  addrInput.value = moduleInstance.nodeAddress != null ? moduleInstance.nodeAddress.toString(16).toUpperCase().padStart(2,'0') : '';
-  addrInput.placeholder = '--';
-  addrInput.maxLength = 2;
-  addrInput.style.width = '80px';
-  addrInput.pattern = '[0-9a-fA-F]{1,2}';
-
-  right.append(nameLabel, nameInput, addrLabel, addrInput);
-  body.append(left, right);
-
-  // Footer
-  const footer = el('div', 'modal-footer');
-  footer.style.justifyContent = 'space-between';
-
-  const leftBtns = el('div', '');
-  leftBtns.style.cssText = 'display:flex;gap:6px';
-
-  const moveLeftBtn = el('button', 'modal-btn');
-  moveLeftBtn.innerHTML = '← Links';
-  moveLeftBtn.title = 'Verschuif module naar links';
-  moveLeftBtn.disabled = moduleIdx <= 0;
-  moveLeftBtn.onclick = () => {
-    dispatch({ type: 'MOVE_MODULE', cabinetId, moduleId: moduleInstance.id, direction: -1 });
-    overlay.remove();
-  };
-
-  const moveRightBtn = el('button', 'modal-btn');
-  moveRightBtn.innerHTML = 'Rechts →';
-  moveRightBtn.title = 'Verschuif module naar rechts';
-  moveRightBtn.disabled = moduleIdx < 0 || moduleIdx >= totalModules - 1;
-  moveRightBtn.onclick = () => {
-    dispatch({ type: 'MOVE_MODULE', cabinetId, moduleId: moduleInstance.id, direction: +1 });
-    overlay.remove();
-  };
-
-  const deleteBtn = el('button', 'modal-btn');
-  deleteBtn.textContent = '🗑 Verwijder';
-  deleteBtn.style.cssText += 'color:#ef4444;border-color:#fca5a5';
-  deleteBtn.onclick = () => {
-    if (confirm(`Verwijder ${moduleInstance.model}?`)) {
-      dispatch({ type: 'REMOVE_MODULE', cabinetId, moduleId: moduleInstance.id });
-      overlay.remove();
-    }
-  };
-
-  leftBtns.append(moveLeftBtn, moveRightBtn, deleteBtn);
-
-  const rightBtns = el('div', '');
-  rightBtns.style.cssText = 'display:flex;gap:6px';
-
-  // For UNKNOWN modules: offer a "Assign module type" button (primary)
-  // For ALL modules: offer a "Change module type" button
-  if (isUnknown) {
-    const assignBtn = el('button', 'modal-btn-primary');
-    assignBtn.textContent = '🔍 Wijs module toe';
-    assignBtn.title = 'Kies het correcte module type voor deze node';
-    assignBtn.onclick = () => {
-      overlay.remove();
-      openModulePicker({ cabinetId, _replaceModuleId: moduleInstance.id, _keepNodeAddress: moduleInstance.nodeAddress });
-    };
-    rightBtns.append(assignBtn);
-  } else {
-    const changeTypeBtn = el('button', 'modal-btn');
-    changeTypeBtn.textContent = '🔄 Wijzig type';
-    changeTypeBtn.title = 'Vervang dit module type (behoudt node adres en label)';
-    changeTypeBtn.onclick = () => {
-      overlay.remove();
-      openModulePicker({ cabinetId, _replaceModuleId: moduleInstance.id, _keepNodeAddress: moduleInstance.nodeAddress });
-    };
-    rightBtns.append(changeTypeBtn);
-  }
-
-  const cancelBtn = el('button', 'modal-btn'); cancelBtn.textContent = 'Sluiten';
-  cancelBtn.onclick = () => overlay.remove();
-
-  const saveBtn = el('button', 'modal-btn-primary'); saveBtn.textContent = 'Opslaan';
-  saveBtn.style.display = isUnknown ? 'none' : '';
-  saveBtn.onclick = () => {
-    const name = nameInput.value.trim() || null;
-    const addrStr = addrInput.value.trim();
-    const nodeAddress = addrStr ? parseInt(addrStr, 16) : undefined;
-    const patch = { name };
-    if (nodeAddress != null && !isNaN(nodeAddress)) patch.nodeAddress = nodeAddress;
-    dispatch({ type: 'UPDATE_MODULE', cabinetId, moduleId: moduleInstance.id, patch });
-    overlay.remove();
-  };
-
-  rightBtns.append(cancelBtn, saveBtn);
-  footer.append(leftBtns, rightBtns);
-
-  dlg.append(hdr, body, footer);
-  overlay.append(dlg);
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  document.body.append(overlay);
-  nameInput.focus();
 }
 
 // ─── Wire buttons ─────────────────────────────────────────────────────────────
