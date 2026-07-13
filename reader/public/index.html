@@ -168,17 +168,40 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
   </div>
 
   <!-- ── Home View ──────────────────────────────────────────────────────── -->
-  <div class="canvas-area" id="home-view" style="display:none">
+  <div class="canvas-area" id="home-view" style="display:none;flex-direction:column">
     <div class="toolbar">
       <button class="tool-btn" id="btn-add-room-toolbar">＋ Kamer</button>
       <button class="tool-btn" id="btn-import-floorplan">🗺️ Grondplan</button>
     </div>
-    <div id="home-canvas" style="flex:1;position:relative;overflow:hidden">
-      <div class="empty-state" id="home-empty">
-        <div class="empty-icon">🏠</div>
-        <h3>Geen kamers aangemaakt</h3>
-        <p>Voeg kamers toe en wijs apparaten toe aan de beschikbare kanalen.</p>
-        <button class="empty-btn" id="btn-add-room-empty">+ Kamer toevoegen</button>
+    
+    <!-- Top panel: Rooms with horizontal scroll -->
+    <div id="home-rooms-panel" style="flex:2;min-height:200px;display:flex;flex-direction:column;border-bottom:1px solid #dde3ef">
+      <div id="home-canvas" style="flex:1;overflow-x:auto;overflow-y:hidden;display:flex;align-items:flex-start;gap:24px;padding:20px">
+        <div class="empty-state" id="home-empty" style="margin:auto">
+          <div class="empty-icon">🏠</div>
+          <h3>Geen kamers aangemaakt</h3>
+          <p>Voeg kamers toe en wijs apparaten toe aan de beschikbare kanalen.</p>
+          <button class="empty-btn" id="btn-add-room-empty">+ Kamer toevoegen</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Resizable divider -->
+    <div id="home-divider" style="height:6px;background:#f5f7fb;cursor:row-resize;border-top:1px solid #dde3ef;border-bottom:1px solid #dde3ef;position:relative;z-index:10">
+      <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:40px;height:3px;background:#c0c8d8;border-radius:2px"></div>
+    </div>
+    
+    <!-- Bottom panel: Bindings -->
+    <div id="home-bindings-panel" style="flex:1;min-height:100px;display:flex;flex-direction:column;background:#f8f9fd">
+      <div style="padding:20px;flex:1;overflow:auto">
+        <div class="empty-state" id="bindings-empty">
+          <div class="empty-icon" style="font-size:32px">🔗</div>
+          <h3 style="font-size:14px;margin-top:8px">Bindingen</h3>
+          <p style="font-size:12px">Klik op een apparaat in een kamer om de bindingen te zien</p>
+        </div>
+        <div id="bindings-canvas" style="display:none">
+          <!-- Binding visualization will be rendered here -->
+        </div>
       </div>
     </div>
   </div>

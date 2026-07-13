@@ -13,6 +13,7 @@ export function activate() {
   const s = state.get();
   renderRoomsList(s.project.homeView);
   renderHomeCanvas(s.project.homeView);
+  initResizableDivider();
 
   // Subscribe to state changes if not already subscribed
   if (!_unsubscribe) {
@@ -308,7 +309,7 @@ function renderHomeCanvas(homeView) {
   const existing = canvas.querySelectorAll('.room-card');
   existing.forEach(el => el.remove());
 
-  // Render each room as a draggable card
+  // Render each room as a big horizontal card (80% of container width)
   for (const room of homeView.rooms) {
     const card = buildRoomCard(room);
     canvas.append(card);
@@ -317,58 +318,152 @@ function renderHomeCanvas(homeView) {
 
 function buildRoomCard(room) {
   const card = el('div', 'room-card');
+  
+  // Calculate width: 80% of parent container minus some margin
+  // Min-width ensures rooms don't get too small on narrow screens
   card.style.cssText = `
-    position:absolute;
-    left:${room.canvasX}px;
-    top:${room.canvasY}px;
-    width:${room.canvasWidth}px;
-    height:${room.canvasHeight}px;
+    width:80%;
+    min-width:600px;
+    max-width:1400px;
+    height:400px;
     background:#fff;
     border:2px solid #dde3ef;
-    border-radius:8px;
-    padding:12px;
-    cursor:move;
-    box-shadow:0 2px 8px rgba(0,0,0,0.08);
+    border-radius:12px;
+    padding:20px;
+    flex-shrink:0;
+    box-shadow:0 2px 12px rgba(0,0,0,0.08);
     transition:box-shadow .15s;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
   `;
-  card.onmouseenter = () => { card.style.boxShadow = '0 4px 16px rgba(0,0,0,0.12)'; };
-  card.onmouseleave = () => { card.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08)'; };
+  
+  // Future: Add background image support
+  // if (room.backgroundImage) {
+  //   card.style.backgroundImage = `url(${room.backgroundImage})`;
+  // }
+  
+  card.onmouseenter = () => { card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.12)'; };
+  card.onmouseleave = () => { card.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'; };
 
   const header = el('div', '');
-  header.style.cssText = 'font-size:14px;font-weight:600;color:#1a1f2e;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center';
+  header.style.cssText = 'font-size:18px;font-weight:600;color:#1a1f2e;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.95);padding:12px 16px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05)';
   header.innerHTML = `<span>${room.icon || '🚪'} ${room.name}</span>`;
 
   const menuBtn = el('button', '');
-  menuBtn.style.cssText = 'background:none;border:none;color:#6a7899;cursor:pointer;font-size:16px;padding:2px 4px';
+  menuBtn.style.cssText = 'background:none;border:none;color:#6a7899;cursor:pointer;font-size:18px;padding:4px 8px;border-radius:4px';
   menuBtn.textContent = '⋯';
+  menuBtn.title = 'Kamer opties';
+  menuBtn.onmouseenter = () => { menuBtn.style.background = '#f0f4fc'; };
+  menuBtn.onmouseleave = () => { menuBtn.style.background = 'none'; };
   menuBtn.onclick = (e) => {
     e.stopPropagation();
     openRoomMenu(room);
   };
   header.append(menuBtn);
 
-  const devicesList = el('div', '');
-  devicesList.style.cssText = 'font-size:11px;color:#6a7899;line-height:1.6';
+  // Devices area (will hold device cards in the future)
+  const devicesArea = el('div', '');
+  devicesArea.style.cssText = 'flex:1;display:flex;flex-wrap:wrap;gap:12px;align-content:flex-start;padding:16px;border-radius:8px;background:rgba(248,249,253,0.6);overflow:auto';
+  
   if (room.devices.length === 0) {
-    devicesList.textContent = 'Geen apparaten';
+    const emptyMsg = el('div', '');
+    emptyMsg.style.cssText = 'width:100%;text-align:center;color:#a0aaba;font-size:13px;padding:40px 0';
+    emptyMsg.textContent = 'Geen apparaten in deze kamer';
+    devicesArea.append(emptyMsg);
   } else {
-    devicesList.innerHTML = room.devices.map(d => `• ${d.name}`).join('<br>');
+    // Render device cards (placeholder for now)
+    room.devices.forEach(device => {
+      const deviceCard = el('div', '');
+      deviceCard.style.cssText = 'width:100px;height:100px;background:#fff;border:1px solid #dde3ef;border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s';
+      deviceCard.innerHTML = `<div style="font-size:28px;margin-bottom:4px">💡</div><div style="font-size:11px;color:#6a7899;text-align:center">${device.name}</div>`;
+      deviceCard.onmouseenter = () => { deviceCard.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)'; deviceCard.style.transform = 'translateY(-2px)'; };
+      deviceCard.onmouseleave = () => { deviceCard.style.boxShadow = 'none'; deviceCard.style.transform = 'translateY(0)'; };
+      deviceCard.onclick = () => showDeviceBindings(device, room);
+      devicesArea.append(deviceCard);
+    });
   }
 
-  const addDeviceBtn = el('button', 'modal-btn');
-  addDeviceBtn.textContent = '+ Apparaat';
-  addDeviceBtn.style.cssText = 'margin-top:8px;font-size:11px;padding:4px 10px;width:100%';
+  const addDeviceBtn = el('button', '');
+  addDeviceBtn.textContent = '+ Apparaat toevoegen';
+  addDeviceBtn.style.cssText = 'margin-top:12px;font-size:13px;padding:8px 16px;background:#fff;border:1px solid #dde3ef;border-radius:6px;cursor:pointer;align-self:flex-start;transition:all .15s;color:#4a5568';
+  addDeviceBtn.onmouseenter = () => { addDeviceBtn.style.background = '#f5f7fb'; addDeviceBtn.style.borderColor = '#c0c8d8'; };
+  addDeviceBtn.onmouseleave = () => { addDeviceBtn.style.background = '#fff'; addDeviceBtn.style.borderColor = '#dde3ef'; };
   addDeviceBtn.onclick = (e) => {
     e.stopPropagation();
     promptAddDevice(room);
   };
 
-  card.append(header, devicesList, addDeviceBtn);
-
-  // TODO: Implement drag to move
-  // makeDraggable(card, room);
+  card.append(header, devicesArea, addDeviceBtn);
 
   return card;
+}
+
+function showDeviceBindings(device, room) {
+  console.log('Show bindings for device:', device.name, 'in room:', room.name);
+  // TODO: Implement binding panel visualization
+  const bindingsCanvas = document.getElementById('bindings-canvas');
+  const bindingsEmpty = document.getElementById('bindings-empty');
+  if (bindingsCanvas && bindingsEmpty) {
+    bindingsEmpty.style.display = 'none';
+    bindingsCanvas.style.display = 'block';
+    bindingsCanvas.innerHTML = `<div style="padding:20px;text-align:center;color:#6a7899">Bindingen voor <strong>${device.name}</strong> in <strong>${room.name}</strong> worden hier getoond...</div>`;
+  }
+}
+
+// ─── Resizable Divider ────────────────────────────────────────────────────────
+
+let _dividerInitialized = false;
+
+function initResizableDivider() {
+  if (_dividerInitialized) return;
+  
+  const divider = document.getElementById('home-divider');
+  const topPanel = document.getElementById('home-rooms-panel');
+  const bottomPanel = document.getElementById('home-bindings-panel');
+  
+  if (!divider || !topPanel || !bottomPanel) return;
+  
+  let isResizing = false;
+  let startY = 0;
+  let startTopHeight = 0;
+  
+  divider.addEventListener('mousedown', (e) => {
+    isResizing = true;
+    startY = e.clientY;
+    startTopHeight = topPanel.offsetHeight;
+    document.body.style.cursor = 'row-resize';
+    e.preventDefault();
+  });
+  
+  document.addEventListener('mousemove', (e) => {
+    if (!isResizing) return;
+    
+    const deltaY = e.clientY - startY;
+    const newTopHeight = startTopHeight + deltaY;
+    const container = topPanel.parentElement;
+    const totalHeight = container.offsetHeight;
+    const minHeight = 200;
+    const bottomMinHeight = 100;
+    
+    if (newTopHeight >= minHeight && (totalHeight - newTopHeight) >= bottomMinHeight) {
+      const topFlex = newTopHeight / (totalHeight - newTopHeight);
+      topPanel.style.flex = topFlex.toFixed(3);
+      bottomPanel.style.flex = '1';
+    }
+  });
+  
+  document.addEventListener('mouseup', () => {
+    if (isResizing) {
+      isResizing = false;
+      document.body.style.cursor = '';
+    }
+  });
+  
+  _dividerInitialized = true;
 }
 
 function openRoomMenu(room) {
