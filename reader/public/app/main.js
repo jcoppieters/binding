@@ -46,10 +46,6 @@ async function init() {
 
   // Wire header interactions
   document.getElementById('connection-status')?.addEventListener('click', () => openConnectModal());
-  document.getElementById('project-name')?.addEventListener('dblclick', () => {
-    const name = prompt('Project naam:', state.get().project.meta.name);
-    if (name) dispatch({ type: 'SET_PROJECT_NAME', name });
-  });
 
   // Wire header dropdown menu
   const projectBtn = document.getElementById('btn-project');
@@ -74,6 +70,7 @@ async function init() {
     if (action === 'new') newProject();
     else if (action === 'open') openProject();
     else if (action === 'save') saveProject();
+    else if (action === 'rename') renameProject();
     
     projectMenu.classList.remove('show');
   });
@@ -117,6 +114,14 @@ function newProject() {
 
   dispatch({ type: 'SET_PROJECT', project: emptyProject });
   showToast('Nieuw project gestart', 'success');
+}
+
+function renameProject() {
+  const name = prompt('Project naam:', state.get().project.meta.name);
+  if (name && name.trim()) {
+    dispatch({ type: 'SET_PROJECT_NAME', name: name.trim() });
+    showToast('Project hernoemd', 'success');
+  }
 }
 
 async function openProject() {

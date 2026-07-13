@@ -15,7 +15,7 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
 .logo{font-size:19px;font-weight:700;color:#fff}
 .logo em{color:#e08c00;font-style:normal}
 .project-name-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#8090b0;cursor:default}
-#project-name{color:#c0ccdf;font-weight:600;cursor:text;padding:2px 4px;border-radius:3px}
+#project-name{color:#c0ccdf;font-weight:600;padding:2px 4px;border-radius:3px}
 #project-name:hover{background:rgba(255,255,255,.08)}
 .spacer{flex:1}
 .connection-status{font-size:11px;padding:4px 10px;border-radius:12px;background:#192035;color:#6a7899;cursor:pointer;transition:all .15s}
@@ -86,7 +86,7 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
   <div class="logo">Duo<em>tecno</em></div>
   <div class="project-name-wrap">
     <span>/</span>
-    <span id="project-name" title="Dubbelklik om te hernoemen">Nieuw project</span>
+    <span id="project-name">Nieuw project</span>
     <span id="save-dot" title="Niet-opgeslagen wijzigingen"></span>
   </div>
   <div class="spacer"></div>
@@ -97,6 +97,7 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
       <div class="dropdown-item" data-action="new">📄 Nieuw Project</div>
       <div class="dropdown-item" data-action="open">📂 Openen</div>
       <div class="dropdown-item" data-action="save">💾 Opslaan</div>
+      <div class="dropdown-item" data-action="rename">✏️ Hernoem</div>
     </div>
   </div>
   <button class="header-btn primary" id="btn-upload">📤 Verstuur bindings</button>

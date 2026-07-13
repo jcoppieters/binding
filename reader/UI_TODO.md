@@ -154,16 +154,67 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - TODO: List available channels grouped by type, show module origin
   - TODO: Prompt for device name; allow rename
 - [ ] **P2-5** Floor plan import (image overlay, toggle)
+- [ ] **P2-6** Bigger room cards with horizontal scroll
+  - Room cards should occupy ~80% of available canvas width (not small fixed-size cards)
+  - Multiple rooms flow horizontally → horizontal scroll to navigate between rooms
+  - Allows room interiors to be visible at a useful scale for device placement
+- [ ] **P2-7** Zoom in/out controls for Home View canvas
+  - Toolbar buttons or mouse wheel zoom
+  - Zoom affects room scale and device visibility
+  - Useful for detailed device placement and wiring work
 
-### Phase 3 — Visual wiring diagram
+### Phase 3 — Visual wiring diagram (Binding View)
+
+**Goal:** Replace the old binding wizard with a visual node-graph editor where devices show input/output "dots" (ports) and you draw wires between them.
+
+**Demo requirements:**
+- Add input buttons (switches), relays, dimmers to rooms
+- Each device shows its connection ports:
+  - **Input button**: outputs for `short press`, `long press` (and `double press` for 2+ button switches)
+  - **Relay**: inputs for `on`, `off`, `toggle`
+  - **Dimmer**: inputs for `dim+`, `dim-`, `on`, `off`, `set dim value`, `PIR trigger`
+- Click and drag from an output dot to an input dot → creates a wire (binding)
+- Wires are visual lines connecting the dots
+- Each wire represents one binding in the project file
+- Deleting a wire removes the binding
+
+**Implementation notes:**
+- Device ports are derived from `channelGroups` + unit type (use `unit-types.js` helpers)
+- Port layout: outputs on right side, inputs on left side of each device card
+- Port hover tooltip shows port name (e.g., "Short press", "Toggle input")
+- Wire drawing: SVG or canvas overlay for the lines
+- State: `bindings[]` array in project file, each binding has `{source, target, type, params}`
+- Visual element click → opens device detail panel with all its wires shown
 
 - [ ] **P3-1** Per-device wiring panel (click a device → opens panel)
   - Output ports per device type (switch: long, short, double; sensor: trigger; …)
   - Input ports per device type (dimmer: toggle/on/off/dim-up/dim-down/pir/set-val; relay: on/off; motor: up/down/stop; …)
   - PIR detectors (DT40/41/43/46): emit `input_digital` trigger → can wire to dimmer/relay/motor inputs; auto-off timer typically added on the receiving unit side
   - Port list driven by `bindingEditorAPI` actions/events per unit type
+- [ ] **P3-1a** Add demo devices to room for binding demonstration
+  - UI to add: input button (DT1E-4, 4-button switch), relay module (DT03-06), dimmer module (DT05-06TE)
+  - Each device card in room shows small colored dots representing ports (inputs left, outputs right)
+  - Tooltip on hover shows port name and function
+- [ ] **P3-1b** Device card port visualization in Home View
+  - Left side: input dots (dim+, dim-, on, off, toggle, PIR, set-value…)
+  - Right side: output dots (short press, long press, double press, trigger…)
+  - Color-coded by function type (e.g., relay=blue, dimmer=orange, input=green)
+  - Port count and position based on device's `channelGroups` + unit type
 - [ ] **P3-2** Draw wire: drag output port → input port
+  - Click and hold on output dot → shows dragging wire following mouse cursor
+  - Hover over compatible input dot → highlight as valid drop target
+  - Release on input dot → creates binding, wire snaps to connect the two dots
+  - Wire rendered as SVG path (curved or straight line)
+  - Multiple wires from same output → fan out visually
+- [ ] **P3-2a** Binding wire state management
+  - New state action: `ADD_BINDING` with `{sourceDeviceId, sourcePort, targetDeviceId, targetPort, bindingType}`
+  - Binding stored in `project.bindings[]` array
+  - Each binding maps to one or more `bind*.txt` entries on upload
+  - Wire color reflects binding type (N=normal gray, Td=timer orange, C=conditional purple)
 - [ ] **P3-3** Delete wire
+  - Click wire → highlight + show delete button or press Delete key
+  - Confirm deletion → removes binding from project
+  - State action: `REMOVE_BINDING`
 - [ ] **P3-4** Insert NOT/AND/OR logic block on wire → `C` (Conditional) binding type
 - [ ] **P3-5** Insert timer block on wire (delayed/flashing/repeat) → `Td`/`Tf`/`Tr` binding types
 - [ ] **P3-6** Serialize wiring diagram → structured bindings in project file
@@ -261,10 +312,20 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - **Per-node incremental fetch**: "Fetch units" button in device detail modals for on-demand unit loading
 - [x] **P8-2** Map discovered nodes to project modules — **DONE**
   - `state.discoveredNodes[]` holds runtime DiscoveredNode[] (not persisted)
-  - Module card shows ✓ badge (green) if node found, ! badge (red pulse) if nodeAddress set but not found
+  - Module card shows ✓ badge (green) if node found, ? badge (orange) if no nodeAddress assigned after scan, ! badge (red) if nodeAddress set but not found
+  - Three clear badge states: ✓ found (green), ? orphan (orange), ! missing (red — **no pulse animation**, symbols are clear enough)
+  - Woning devices: badges display inline after address: `0xFC ✓` (no overlap with device name)
   - Header connection-status shows IP even when disconnected (last used)
   - Hardware info section in device detail modals shows discovery status + unit counts
-- [ ] **P8-3** Compare discovery results vs. project: full diff panel
+  - Gateway nodes (NodeType 4) explicitly classified to cabinet — fixes issue where TCP server/master nodes were misclassified as woning devices
+- [x] **P8-3** Header dropdown menu for file operations — **DONE**
+  - Consolidated three buttons into `📁 Project ▾` dropdown: Nieuw Project, Openen, Opslaan, Hernoem
+  - Changed "Upload naar hardware" → "Verstuur bindings"
+  - Added `newProject()` function with confirmation dialog
+  - Added `renameProject()` function — replaces double-click on project name (removed to reduce code)
+  - Dropdown closes on outside click, styled to match header theme
+  - Frees up header space for additional functions
+- [ ] **P8-4** Compare discovery results vs. project: full diff panel
   - Show matched / missing in design / extra on network
 - [ ] **P8-4** Auto-populate Rail View from discovery (unmatched nodes → add as "Unknown" module placeholder)
 - [ ] **P8-5** Update node firmware name via TCP hardware command
