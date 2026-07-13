@@ -154,52 +154,98 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - TODO: List available channels grouped by type, show module origin
   - TODO: Prompt for device name; allow rename
 - [ ] **P2-5** Floor plan import (image overlay, toggle)
-- [ ] **P2-6** Bigger room cards with horizontal scroll
-  - Room cards should occupy ~80% of available canvas width (not small fixed-size cards)
+  - Per-room background image upload via room ... menu (🗺️ Grondplan toevoegen)
+  - File input → FileReader → save as data URL to room.backgroundImage
+  - CSS background-size:cover + background-position:center applied to room card
+  - "Verwijder grondplan" menu item appears when room.backgroundImage is set
+  - TODO LATER: Add crop/select step after upload — user selects portion of drawing for this room
+  - Global "Grondplan" button removed (per-room backgrounds replace it)
+- [x] **P2-6** Bigger room cards with horizontal scroll — **DONE**
+  - Room cards occupy ~80% of available canvas width (not small fixed-size cards)
   - Multiple rooms flow horizontally → horizontal scroll to navigate between rooms
+  - Rooms take full height above divider with flex:2 layout
+  - Device cards remain 100×100px fixed size
   - Allows room interiors to be visible at a useful scale for device placement
 - [ ] **P2-7** Zoom in/out controls for Home View canvas
   - Toolbar buttons or mouse wheel zoom
   - Zoom affects room scale and device visibility
   - Useful for detailed device placement and wiring work
+- [ ] **P2-8** Drag-and-drop device positioning in rooms
+  - Device cards should be draggable within room canvas
+  - Snap to grid option for alignment
+  - Position stored in device.x and device.y coordinates
+  - Essential for accurate positioning on ground plan backgrounds
+  - Allows visual representation of actual device locations in the room
+- [ ] **P2-9** Remove/move device between rooms
+  - Context menu or button to remove device from current room
+  - Device can be added to another room (effectively moving it)
+  - Bindings should remain intact when moving devices
+  - Allows reorganization of devices without losing wiring work
 
 ### Phase 3 — Visual wiring diagram (Binding View)
 
 **Goal:** Replace the old binding wizard with a visual node-graph editor where devices show input/output "dots" (ports) and you draw wires between them.
 
 **Demo requirements:**
-- Add input buttons (switches), relays, dimmers to rooms
-- Each device shows its connection ports:
-  - **Input button**: outputs for `short press`, `long press` (and `double press` for 2+ button switches)
-  - **Relay**: inputs for `on`, `off`, `toggle`
-  - **Dimmer**: inputs for `dim+`, `dim-`, `on`, `off`, `set dim value`, `PIR trigger`
-- Click and drag from an output dot to an input dot → creates a wire (binding)
-- Wires are visual lines connecting the dots
-- Each wire represents one binding in the project file
-- Deleting a wire removes the binding
+1. **Drag devices from rooms to binding panel**: Any device in a room card can be dragged and dropped into the binding area below the divider
+2. **Controllers (switches, sensors, buttons)**: Show colored dots on the RIGHT side of their card with RIGHT-ALIGNED labels (kort, lang, druk, trigger)
+3. **Controllable devices (lamps, relays, dimmers, motors)**: Show colored dots on the LEFT side of their card with LEFT-ALIGNED labels (aan, uit, schakel, dim+, dim-, op, neer, stop, PIR, stel waarde)
+4. **Wire drawing**: Click/drag from controller output dot → controllable device input dot. Wire color matches the source dot color.
+5. **Auto-save bindings**: Bindings automatically included when saving project to .duo file
+6. **Click device to see bindings**: Clicking a device in a room shows all connected devices in binding panel with wires visible
+7. **Binding area**: Takes full space under the divider (entire lower section)
+8. **Delete wire**: Click wire → delete button or press Delete key → removes binding
+9. **Floor plan upload**: Room ... menu has "🗺️ Grondplan toevoegen" → file upload → becomes room background (crop step TODO later)
+10. **Remove floor plan**: If room has background, ... menu shows "Verwijder grondplan" option
+11. **Room layout**: Always 80% width, full height above divider, horizontal scroll between rooms
+12. **Device types**: 💡 Lamp (controllable), 🔘 Schakelaar (controller), ⚡ Relais (controllable), 🎚️ Dimmer (controllable), 🪟 Motor (controllable), 🌡️ Sensor (controller), 🔳 Drukknop (controller)
+
+**Port definitions per device type:**
+- **Schakelaar** (switch): outputs = kort (blue), lang (purple) on RIGHT
+- **Drukknop** (button): outputs = druk (green) on RIGHT  
+- **Sensor** (PIR): outputs = trigger (orange) on RIGHT
+- **Lamp** (relay): inputs = aan (green), uit (red), schakel (blue) on LEFT
+- **Relais**: inputs = aan (green), uit (red), schakel (blue) on LEFT
+- **Dimmer**: inputs = aan (green), uit (red), schakel (blue), dim+ (orange), dim- (orange), PIR (yellow), stel waarde (purple) on LEFT
+- **Motor**: inputs = op (blue), neer (blue), stop (red) on LEFT
 
 **Implementation notes:**
-- Device ports are derived from `channelGroups` + unit type (use `unit-types.js` helpers)
-- Port layout: outputs on right side, inputs on left side of each device card
-- Port hover tooltip shows port name (e.g., "Short press", "Toggle input")
-- Wire drawing: SVG or canvas overlay for the lines
-- State: `bindings[]` array in project file, each binding has `{source, target, type, params}`
-- Visual element click → opens device detail panel with all its wires shown
+- Binding panel occupies full height under divider (not just a strip)
+- Device cards in binding panel: vertical stack with wrapping, not horizontal scroll
+- SVG overlay for wires, positioned absolutely over device container
+- State: `project.bindings[]` with `{id, from: {deviceId, portId}, to: {deviceId, portId}, color}`
+- Drag-drop: room devices have `draggable=true`, binding panel has drop zone handlers
+- Auto-load connected devices when opening binding panel for a device
 
-- [ ] **P3-1** Per-device wiring panel (click a device → opens panel)
+**Tasks breakdown:**
+
+- [x] **P3-0** Update UI_TODO with complete binding requirements — **DONE**
+- [ ] **P3-1** Device port system and DEVICE_PORTS constant
   - Output ports per device type (switch: long, short, double; sensor: trigger; …)
   - Input ports per device type (dimmer: toggle/on/off/dim-up/dim-down/pir/set-val; relay: on/off; motor: up/down/stop; …)
   - PIR detectors (DT40/41/43/46): emit `input_digital` trigger → can wire to dimmer/relay/motor inputs; auto-off timer typically added on the receiving unit side
   - Port list driven by `bindingEditorAPI` actions/events per unit type
-- [ ] **P3-1a** Add demo devices to room for binding demonstration
-  - UI to add: input button (DT1E-4, 4-button switch), relay module (DT03-06), dimmer module (DT05-06TE)
-  - Each device card in room shows small colored dots representing ports (inputs left, outputs right)
-  - Tooltip on hover shows port name and function
+- [x] **P3-1a** Add demo devices to room for binding demonstration — **DONE**
+  - UI to add: input button (switches), relay module, dimmer module, motors, sensors
+  - 7 device types available: 💡 Lamp, 🔘 Schakelaar, ⚡ Relais, 🎚️ Dimmer, 🪟 Motor, 🌡️ Sensor, 🔳 Drukknop
+  - Each device has icon, color, and type stored in room.devices[]
+  - Device cards show at 100×100px with colored backgrounds matching device type
+  - Clicking device triggers binding panel (placeholder implemented)
 - [ ] **P3-1b** Device card port visualization in Home View
   - Left side: input dots (dim+, dim-, on, off, toggle, PIR, set-value…)
   - Right side: output dots (short press, long press, double press, trigger…)
   - Color-coded by function type (e.g., relay=blue, dimmer=orange, input=green)
   - Port count and position based on device's `channelGroups` + unit type
+- [ ] **P3-1c** Visualize selected device in binding panel
+  - When device is clicked in room, show it in the bottom binding panel
+  - Device card with full port visualization (inputs on left, outputs on right)
+  - Port labels and hover tooltips showing port function
+  - Panel title shows device name and room name
+- [ ] **P3-1d** Add other devices to binding panel for wiring
+  - "Add device" button in binding panel
+  - Select from devices in same room or all rooms
+  - Multiple devices can be added to the binding canvas simultaneously
+  - Devices arranged in a flow layout for easy wiring visualization
 - [ ] **P3-2** Draw wire: drag output port → input port
   - Click and hold on output dot → shows dragging wire following mouse cursor
   - Hover over compatible input dot → highlight as valid drop target
@@ -215,8 +261,17 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Click wire → highlight + show delete button or press Delete key
   - Confirm deletion → removes binding from project
   - State action: `REMOVE_BINDING`
-- [ ] **P3-4** Insert NOT/AND/OR logic block on wire → `C` (Conditional) binding type
-- [ ] **P3-5** Insert timer block on wire (delayed/flashing/repeat) → `Td`/`Tf`/`Tr` binding types
+- [ ] **P3-4** Insert logic blocks on wires → `C` (Conditional) binding type
+  - **TODO LATER**: Add OR, XOR, AND+NOT logic operators to bindings
+  - Logic blocks appear as visual elements inserted on wire paths
+  - Double-click wire → opens logic block insertion menu
+  - Each logic type has distinct icon and color
+  - Maps to `C` binding type with appropriate parameters
+- [ ] **P3-5** Insert timer blocks on wire (delayed/flashing/repeat) → `Td`/`Tf`/`Tr` binding types
+  - **TODO LATER**: Add timer/delay blocks to bindings
+  - Timer blocks appear as visual elements on wire paths
+  - Configurable delay time, flash rate, repeat count
+  - Maps to `Td`, `Tf`, `Tr` binding types with time parameters
 - [ ] **P3-6** Serialize wiring diagram → structured bindings in project file
 - [ ] **P3-7** Deserialize structured bindings → wiring diagram (for existing `.duo` files)
 
