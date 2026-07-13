@@ -5,6 +5,7 @@
 // @ts-check
 
 import { state, dispatch, makeId } from '../app/state.js';
+import { showDeviceBindings } from './home-view-binding.js';
 
 let _unsubscribe = null;
 
@@ -375,14 +376,49 @@ function buildRoomCard(room) {
     emptyMsg.textContent = 'Geen apparaten in deze kamer';
     devicesArea.append(emptyMsg);
   } else {
-    // Render device cards (placeholder for now)
+    // Render device cards
     room.devices.forEach(device => {
       const deviceCard = el('div', '');
-      deviceCard.style.cssText = 'width:100px;height:100px;background:#fff;border:1px solid #dde3ef;border-radius:8px;padding:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s';
-      deviceCard.innerHTML = `<div style="font-size:28px;margin-bottom:4px">💡</div><div style="font-size:11px;color:#6a7899;text-align:center">${device.name}</div>`;
-      deviceCard.onmouseenter = () => { deviceCard.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)'; deviceCard.style.transform = 'translateY(-2px)'; };
-      deviceCard.onmouseleave = () => { deviceCard.style.boxShadow = 'none'; deviceCard.style.transform = 'translateY(0)'; };
-      deviceCard.onclick = () => showDeviceBindings(device, room);
+      deviceCard.style.cssText = `
+        width:100px;
+        height:100px;
+        background:${device.color || '#fff'}15;
+        border:2px solid ${device.color || '#dde3ef'}40;
+        border-radius:8px;
+        padding:8px;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        cursor:pointer;
+        transition:all .15s;
+      `;
+      deviceCard.innerHTML = `<div style="font-size:28px;margin-bottom:4px">${device.icon || '💡'}</div><div style="font-size:11px;color:#1a1f2e;font-weight:500;text-align:center;word-break:break-word">${device.name}</div>`;
+      deviceCard.onmouseenter = () => { 
+        deviceCard.style.borderColor = device.color || '#c0c8d8';
+        deviceCard.style.transform = 'translateY(-2px)'; 
+        deviceCard.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+      };
+      deviceCard.onmouseleave = () => { 
+        deviceCard.style.borderColor = `${device.color || '#dde3ef'}40`;
+        deviceCard.style.transform = 'translateY(0)'; 
+        deviceCard.style.boxShadow = 'none';
+      };
+  // This function is now imported from home-view-binding.js
+  // Kept here as a placeholder for backwards compatibility     }));
+        deviceCard.style.opacity = '0.5';
+      };
+      deviceCard.ondragend = () => {
+        deviceCard.style.opacity = '1';
+      };
+      
+      // Click to open binding panel
+      deviceCard.onclick = (e) => {
+        if (!e.defaultPrevented) {
+          showDeviceBindings(device, room);
+        }
+      };
+      
       devicesArea.append(deviceCard);
     });
   }

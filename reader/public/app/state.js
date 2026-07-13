@@ -273,6 +273,21 @@ export function dispatch(action) {
       _state = { ..._state, selectedRoomId: action.roomId };
       break;
     }
+    case 'ADD_BINDING': {
+      const bindings = [..._state.project.bindings, action.binding];
+      _state = { ..._state, dirty: true, project: { ..._state.project, bindings } };
+      break;
+    }
+    case 'REMOVE_BINDING': {
+      const bindings = _state.project.bindings.filter(b => 
+        !(b.from.deviceId === action.binding.from.deviceId && 
+          b.from.portId === action.binding.from.portId &&
+          b.to.deviceId === action.binding.to.deviceId &&
+          b.to.portId === action.binding.to.portId)
+      );
+      _state = { ..._state, dirty: true, project: { ..._state.project, bindings } };
+      break;
+    }
   }
   notify();
 }

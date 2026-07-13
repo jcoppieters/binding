@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-13T00:01:03.258Z",
+    "modified": "2026-07-13T13:11:15.058Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -85,7 +85,35 @@
         "canvasY": 50,
         "canvasWidth": 200,
         "canvasHeight": 150,
-        "devices": []
+        "devices": [
+          {
+            "id": "6vf0ndi8",
+            "name": "Schakelaar 1",
+            "type": "switch",
+            "icon": "🔘",
+            "color": "#8b5cf6",
+            "x": 50,
+            "y": 50
+          },
+          {
+            "id": "i2zrykxj",
+            "name": "Lamp 2",
+            "type": "lamp",
+            "icon": "💡",
+            "color": "#fbbf24",
+            "x": 170,
+            "y": 50
+          },
+          {
+            "id": "ig1l0i7q",
+            "name": "Motor 3",
+            "type": "motor",
+            "icon": "🪟",
+            "color": "#10b981",
+            "x": 290,
+            "y": 50
+          }
+        ]
       }
     ]
   },
