@@ -22,6 +22,7 @@ const EMPTY_PROJECT = {
   },
   homeView: { floors: [{ id: 'floor-0', name: 'Gelijkvloers' }], rooms: [] },
   bindings: [],
+  discoveredNodes: [], // Saved from last connection: nodes with units and their states
 };
 
 let _state = {
@@ -52,7 +53,13 @@ export const state = {
 export function dispatch(action) {
   switch (action.type) {
     case 'SET_PROJECT':
-      _state = { ..._state, project: action.project, dirty: false };
+      _state = { 
+        ..._state, 
+        project: action.project, 
+        dirty: false,
+        // Restore discovered nodes from project file (if any)
+        discoveredNodes: action.project.discoveredNodes ?? [],
+      };
       break;
     case 'SET_MODULES':
       _state = { ..._state, modules: action.modules };
@@ -74,6 +81,7 @@ export function dispatch(action) {
     case 'SET_MASTER_CONFIG': {
       const meta = { ..._state.project.meta, masterIp: action.masterIp };
       if (action.masterPassword !== undefined) meta.masterPassword = action.masterPassword;
+      if (action.masterPort !== undefined) meta.masterPort = action.masterPort;
       _state = { ..._state, dirty: true, project: { ..._state.project, meta } };
       break;
     }
@@ -223,6 +231,44 @@ export function dispatch(action) {
       const homeView = { ..._state.project.homeView };
       homeView.rooms = [...homeView.rooms, action.room];
       _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
+    case 'UPDATE_ROOM': {
+      const homeView = { ..._state.project.homeView };
+      homeView.rooms = homeView.rooms.map(r =>
+        r.id === action.roomId ? { ...r, ...action.patch } : r
+      );
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
+    case 'REMOVE_ROOM': {
+      const homeView = { ..._state.project.homeView };
+      homeView.rooms = homeView.rooms.filter(r => r.id !== action.roomId);
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
+    case 'ADD_FLOOR': {
+      const homeView = { ..._state.project.homeView };
+      homeView.floors = [...homeView.floors, action.floor];
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
+    case 'UPDATE_FLOOR': {
+      const homeView = { ..._state.project.homeView };
+      homeView.floors = homeView.floors.map(f =>
+        f.id === action.floorId ? { ...f, ...action.patch } : f
+      );
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
+    case 'REMOVE_FLOOR': {
+      const homeView = { ..._state.project.homeView };
+      homeView.floors = homeView.floors.filter(f => f.id !== action.floorId);
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
+    case 'SELECT_ROOM': {
+      _state = { ..._state, selectedRoomId: action.roomId };
       break;
     }
   }

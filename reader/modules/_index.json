@@ -11,7 +11,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16896",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-10Ab/DT0C-W10_Inbouwdoos-min.jpg",
-        "imageFile": "images/dt0c-10ag.jpg"
+        "imageFile": "images/dt0c-10ag.jpg",
+        "priceEur": 1800
       },
       {
         "model": "DT0C-10Ab",
@@ -19,7 +20,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16895",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-10Ab/DT0C-W10_Inbouwdoos-min.jpg",
-        "imageFile": "images/dt0c-10ab.jpg"
+        "imageFile": "images/dt0c-10ab.jpg",
+        "priceEur": 1800
       },
       {
         "model": "DT0C-10ALw",
@@ -27,13 +29,15 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16897",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-10Alw/PREV_DE-BEIR-MAATWERKER46.jpg",
-        "imageFile": "images/dt0c-10alw.jpg"
+        "imageFile": "images/dt0c-10alw.jpg",
+        "priceEur": 1800
       },
       {
         "model": "DT0C-10Br",
         "finish": "Brons",
         "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16908",
-        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf"
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
+        "priceEur": 1950
       },
       {
         "model": "DT0C-10Gm",
@@ -53,7 +57,8 @@
         "model": "DT0C-10Cw",
         "finish": "Corian wit",
         "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16898",
-        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf"
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Touchscreens/TDS_NL-FR-EN_DT0C-W10-10inch-touchscreen-Wallbox.pdf",
+        "priceEur": 1725
       },
       {
         "model": "DT0C-10FF",
@@ -77,7 +82,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16998",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT0C-W7_-7-inch-touchscreen-Wallbox_16122025TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-7Ag/interieur-alu-7-min-2.jpg",
-        "imageFile": "images/dt0c-7ag.jpg"
+        "imageFile": "images/dt0c-7ag.jpg",
+        "priceEur": 1000
       },
       {
         "model": "DT0C-7Ab",
@@ -85,7 +91,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=16997",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT0C-W7_-7-inch-touchscreen-Wallbox_16122025TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-7Ab/Duotecno-Dorine-Ghyselinck-%C2%A9-Pieter-DHoop-13-min.jpg",
-        "imageFile": "images/dt0c-7ab.jpg"
+        "imageFile": "images/dt0c-7ab.jpg",
+        "priceEur": 1000
       },
       {
         "model": "DT0C-7ALw",
@@ -93,7 +100,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=17016",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT0C-W7_-7-inch-touchscreen-Wallbox_16122025TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-7Alw/Foto-2-10-2020-15-22-06-min.jpg",
-        "imageFile": "images/dt0c-7alw.jpg"
+        "imageFile": "images/dt0c-7alw.jpg",
+        "priceEur": 1000
       },
       {
         "model": "DT0C-7Br",
@@ -101,7 +109,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/touchscreen/dt0c?variant=17018",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT0C-W7_-7-inch-touchscreen-Wallbox_16122025TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0C-7Ab/DT0C-W5-min.jpg",
-        "imageFile": "images/dt0c-7br.jpg"
+        "imageFile": "images/dt0c-7br.jpg",
+        "priceEur": 1200
       }
     ]
   },
@@ -124,7 +133,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66653",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66653/ID_TDS_NL-FR-EN_DTBS-ES1x_Essence_drukknop_bus_1kan_18062026TP_2026-06-22-075803_snyn.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/66653/Essence_enkelvoudig_wit_linkerzijaanzicht.png",
-        "imageFile": "images/dtbs-es1w.png"
+        "imageFile": "images/dtbs-es1w.png",
+        "priceEur": 120
       },
       {
         "model": "DTBS-ES1b",
@@ -132,7 +142,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66726",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66726/ID_TDS_NL-FR-EN_DTBS-ES1x_Essence_drukknop_bus_1kan_18062026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/66726/Essence_enkelvoudig_van-links.png",
-        "imageFile": "images/dtbs-es1b.png"
+        "imageFile": "images/dtbs-es1b.png",
+        "priceEur": 120
       }
     ]
   },
@@ -142,7 +153,10 @@
     "category": "switch",
     "uiCategory": "Schakelaar",
     "channelGroups": [
-      { "type": "input_digital", "count": 2 }
+      {
+        "type": "input_digital",
+        "count": 2
+      }
     ],
     "powerW": 0.5,
     "variants": [
@@ -152,7 +166,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66717",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66717/ID_TDS_NL-FR-EN_DTBS-ES2x_Essence_drukknop_bus_2kan_18062026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/66717/Essence_tweevoudig_wit_linkerzijaanzicht.png",
-        "imageFile": "images/dtbs-es2w.png"
+        "imageFile": "images/dtbs-es2w.png",
+        "priceEur": 125
       },
       {
         "model": "DTBS-ES2b",
@@ -160,7 +175,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66728",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66728/ID_TDS_NL-FR-EN_DTBS-ES2x_Essence_drukknop_bus_2kan_18062026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/66728/Essence_tweevoudig_van-links.png",
-        "imageFile": "images/dtbs-es2b.png"
+        "imageFile": "images/dtbs-es2b.png",
+        "priceEur": 125
       }
     ]
   },
@@ -170,7 +186,10 @@
     "category": "switch",
     "uiCategory": "Schakelaar",
     "channelGroups": [
-      { "type": "input_digital", "count": 4 }
+      {
+        "type": "input_digital",
+        "count": 4
+      }
     ],
     "powerW": 0.5,
     "variants": [
@@ -180,7 +199,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66723",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66723/ID_TDS_NL-FR-EN_-DTBS-ES4x_Essence_drukknop_bus_1kan_18062026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/66723/Essence_viervoudig_wit_linkerzijaanzicht.png",
-        "imageFile": "images/dtbs-es4w.png"
+        "imageFile": "images/dtbs-es4w.png",
+        "priceEur": 130
       },
       {
         "model": "DTBS-ES4b",
@@ -188,7 +208,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/essence-schakelaar/dtbs-es-essence?variant=66730",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/66730/ID_TDS_NL-FR-EN_-DTBS-ES4x_Essence_drukknop_bus_1kan_18062026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/66730/Essence_viervoudig_van-links.png",
-        "imageFile": "images/dtbs-es4b.png"
+        "imageFile": "images/dtbs-es4b.png",
+        "priceEur": 130
       }
     ]
   },
@@ -211,7 +232,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=29868",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/29868/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERA1-Schuin-Rechts.png",
-        "imageFile": "images/dtbs-b1ag.png"
+        "imageFile": "images/dtbs-b1ag.png",
+        "priceEur": 200
       },
       {
         "model": "DTBS-B1FA",
@@ -227,7 +249,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30405",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30405/ID_TDS_NL-FR-EN_DTBS-B1x-Serenity-enkelvoudig-BUS_10032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAB1-Schuin-Rechts.png",
-        "imageFile": "images/dtbs-b1ab.png"
+        "imageFile": "images/dtbs-b1ab.png",
+        "priceEur": 200
       },
       {
         "model": "DTBS-B1FAb",
@@ -245,7 +268,10 @@
     "category": "switch",
     "uiCategory": "Schakelaar",
     "channelGroups": [
-      { "type": "input_digital", "count": 2 }
+      {
+        "type": "input_digital",
+        "count": 2
+      }
     ],
     "powerW": 0.5,
     "variants": [
@@ -255,7 +281,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=29870",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/29870/TDS_NL-FR-EN_DTBS-B2x._10032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERA2-Schuin-Rechts.png",
-        "imageFile": "images/dtbs-b2ag.png"
+        "imageFile": "images/dtbs-b2ag.png",
+        "priceEur": 240
       },
       {
         "model": "DTBS-B2FA",
@@ -271,7 +298,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30407",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30407/TDS_NL-FR-EN_DTBS-B2x._10032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAB2-Schuin-Rechts.png",
-        "imageFile": "images/dtbs-b2ab.png"
+        "imageFile": "images/dtbs-b2ab.png",
+        "priceEur": 240
       },
       {
         "model": "DTBS-B2FAb",
@@ -289,7 +317,10 @@
     "category": "switch",
     "uiCategory": "Schakelaar",
     "channelGroups": [
-      { "type": "input_digital", "count": 4 }
+      {
+        "type": "input_digital",
+        "count": 4
+      }
     ],
     "powerW": 0.5,
     "variants": [
@@ -299,7 +330,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=29872",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/29872/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERA4-Schuin-Rechts.png",
-        "imageFile": "images/dtbs-b4ag.png"
+        "imageFile": "images/dtbs-b4ag.png",
+        "priceEur": 280
       },
       {
         "model": "DTBS-B4FA",
@@ -315,7 +347,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/serenity-schakelaar/ser?variant=30409",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30409/ID_TDS_NL-FR-EN_DTBS-B4x-Serenity-4-kanaals-BUS_10032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/Serenity/SERAB4.png",
-        "imageFile": "images/dtbs-b4ab.png"
+        "imageFile": "images/dtbs-b4ab.png",
+        "priceEur": 280
       },
       {
         "model": "DTBS-B4FAb",
@@ -344,7 +377,8 @@
         "model": "DTBS-H1Br",
         "finish": "Brons",
         "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63393",
-        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63393/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf"
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63393/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf",
+        "priceEur": 420
       },
       {
         "model": "DTBS-H1FBr",
@@ -358,7 +392,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30440",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30440/ID_TDS_NL-FR-EN_DTBS-H1x-Velocity-1-kanaals-BUS_10032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELB1.png",
-        "imageFile": "images/dtbs-h1gm.png"
+        "imageFile": "images/dtbs-h1gm.png",
+        "priceEur": 420
       },
       {
         "model": "DTBS-H1FGM",
@@ -387,7 +422,8 @@
         "model": "DTBS-H2Br",
         "finish": "Brons",
         "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63395",
-        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63395/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf"
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63395/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf",
+        "priceEur": 470
       },
       {
         "model": "DTBS-H2FBr",
@@ -401,7 +437,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30442",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30442/ID_TDS_NL-FR-EN_DTBS-S2x-Velocity-2-kanaals-BUS_10032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELB2-Schuin-Rechts.png",
-        "imageFile": "images/dtbs-h2gm.png"
+        "imageFile": "images/dtbs-h2gm.png",
+        "priceEur": 470
       },
       {
         "model": "DTBS-H2FGM",
@@ -430,7 +467,8 @@
         "model": "DTBS-H4Br",
         "finish": "Brons",
         "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=63397",
-        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63397/ID_TDS_NL-FR-EN_DTBS-S4x-Velocity-4-kanaals-BUS_10032026TP.pdf"
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/63397/ID_TDS_NL-FR-EN_DTBS-S4x-Velocity-4-kanaals-BUS_10032026TP.pdf",
+        "priceEur": 520
       },
       {
         "model": "DTBS-H4FBr",
@@ -444,7 +482,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/velocity-schakelaar/dtbs-hx?variant=30444",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30444/ID_TDS_NL-FR-EN_DTBS-S4x-Velocity-4-kanaals-BUS_10032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/Velocity/VELB4-Schuin-Rechts.png",
-        "imageFile": "images/dtbs-h4gm.png"
+        "imageFile": "images/dtbs-h4gm.png",
+        "priceEur": 520
       },
       {
         "model": "DTBS-H4FGM",
@@ -508,7 +547,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/temperatuursensoren/dt30?variant=16800",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT30-EX.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT30-EX/DT30-EX1-min.jpg",
-        "imageFile": "images/dt30-ex.jpg"
+        "imageFile": "images/dt30-ex.jpg",
+        "priceEur": 50
       },
       {
         "model": "DT30-IN",
@@ -555,7 +595,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16698",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Ag/DTBS-4Ag4gewit-1-2-e1528799487572.jpg",
-        "imageFile": "images/dtbs-4ag.jpg"
+        "imageFile": "images/dtbs-4ag.jpg",
+        "priceEur": 290
       },
       {
         "model": "DTBS-4Ab",
@@ -563,7 +604,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16699",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Ab/DTBS-4Ab.png",
-        "imageFile": "images/dtbs-4ab.png"
+        "imageFile": "images/dtbs-4ab.png",
+        "priceEur": 290
       },
       {
         "model": "DTBS-4ALw",
@@ -571,7 +613,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16700",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DTBS-4ALw/TDS_NL-FR-EN_DTBS_4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4ALw/DTBS_4Alw.png",
-        "imageFile": "images/dtbs-4alw.png"
+        "imageFile": "images/dtbs-4alw.png",
+        "priceEur": 320
       },
       {
         "model": "DTBS-4bg",
@@ -595,7 +638,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16852",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Brl/DTBS-4Brl.png",
-        "imageFile": "images/dtbs-4br.png"
+        "imageFile": "images/dtbs-4br.png",
+        "priceEur": 390
       },
       {
         "model": "DTBS-4Brl",
@@ -641,7 +685,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16704",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4Cw/DTBS_4CW.png",
-        "imageFile": "images/dtbs-4cw.png"
+        "imageFile": "images/dtbs-4cw.png",
+        "priceEur": 290
       },
       {
         "model": "DTBS-4INV",
@@ -649,7 +694,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/invisible/dtbs-2?variant=16927",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS-4INV.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4INV/DTBS_4INV-1.png",
-        "imageFile": "images/dtbs-4inv.png"
+        "imageFile": "images/dtbs-4inv.png",
+        "priceEur": 290
       },
       {
         "model": "DTBS-4X Trimless",
@@ -658,6 +704,135 @@
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16993/XILLO-TECHNISCHE-FICHE-TRIMLESS-SWITCH_INV_MCW_17032026TP.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-4X%20Trimless/Cat-page-1000x600-5.jpg",
         "imageFile": "images/dtbs-4x-trimless.jpg"
+      }
+    ]
+  },
+  {
+    "functionalModel": "DTBS-8",
+    "productLine": "Touchbutton 8-kanaals",
+    "category": "switch",
+    "uiCategory": "Schakelaar",
+    "channelGroups": [
+      {
+        "type": "input_digital",
+        "count": 8
+      },
+      {
+        "type": "xxinput_digital",
+        "count": 4
+      }
+    ],
+    "powerW": 1.2,
+    "variants": [
+      {
+        "model": "DTBS-8Ag",
+        "finish": "Aluminium Grijs",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16698",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8Ag/DTBS-8Ag4gewit-1-2-e1528799487572.jpg",
+        "imageFile": "images/dtbs-8ag.jpg"
+      },
+      {
+        "model": "DTBS-8Ab",
+        "finish": "Aluminium Zwart",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16699",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8Ab/DTBS-8Ab.png",
+        "imageFile": "images/dtbs-8ab.png"
+      },
+      {
+        "model": "DTBS-8ALw",
+        "finish": "Aluminium Lak Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16700",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DTBS-8ALw/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8ALw/DTBS_4Alw.png",
+        "imageFile": "images/dtbs-8alw.png"
+      },
+      {
+        "model": "DTBS-8bg",
+        "finish": "Brushed Gold",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16849",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8BG/DTBS-8BG.png",
+        "imageFile": "images/dtbs-8bg.png"
+      },
+      {
+        "model": "DTBS-8Gm",
+        "finish": "Gun Metal",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16701",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8Br/DTBS-8Br.png",
+        "imageFile": "images/dtbs-8gm.png"
+      },
+      {
+        "model": "DTBS-8Br",
+        "finish": "Brons",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16852",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8Brl/DTBS-8Brl.png",
+        "imageFile": "images/dtbs-8br.png"
+      },
+      {
+        "model": "DTBS-8Brl",
+        "finish": "Brons Light",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=60338",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/TDS_NL-FR-EN_DTBS-8x-touchbutton-8-voudig-BUS.pdf"
+      },
+      {
+        "model": "DTBS-8CCLw",
+        "finish": "Corian Claudia Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16859",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8CCLW/DTBS_4CCLW-2.png",
+        "imageFile": "images/dtbs-8cclw.png"
+      },
+      {
+        "model": "DTBS-8CLw",
+        "finish": "Corian Linea Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16861",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8CLIW/DTBS_4CLIW.png",
+        "imageFile": "images/dtbs-8clw.png"
+      },
+      {
+        "model": "DTBS-8Ch",
+        "finish": "Chroom",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16703",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8CH/DTBS-8CH_0001gewit3-e1526981207867.png",
+        "imageFile": "images/dtbs-8ch.png"
+      },
+      {
+        "model": "DTBS-8CRw",
+        "finish": "Corian Ronda Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16860",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8CORW/DTBS-8CROW.png",
+        "imageFile": "images/dtbs-8crw.png"
+      },
+      {
+        "model": "DTBS-8Cw",
+        "finish": "Corian Wit",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/touchbutton/dtbs?variant=16704",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS_4x.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8Cw/DTBS_4CW.png",
+        "imageFile": "images/dtbs-8cw.png"
+      },
+      {
+        "model": "DTBS-8INV",
+        "finish": "Aanraakschakelaar op bus 8 kanalen, 16 functies Invisible",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/invisible/dtbs-2?variant=16927",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DTBS-8INV.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8INV/DTBS_4INV-1.png",
+        "imageFile": "images/dtbs-8inv.png"
+      },
+      {
+        "model": "DTBS-8X Trimless",
+        "finish": "Trimless aanraakschakelaar op bus ingebouwd in de muur",
+        "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/trimless/dtbs-8?variant=16993",
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16993/XILLO-TECHNISCHE-FICHE-TRIMLESS-SWITCH_INV_MCW_17032026TP.pdf",
+        "imageUrl": "https://www.duotecno.be/uploads/images/Products//DTBS-8X%20Trimless/Cat-page-1000x600-5.jpg",
+        "imageFile": "images/dtbs-8x-trimless.jpg"
       }
     ]
   },
@@ -680,7 +855,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16873",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DT1ET-4Ab/FR-DE-EN-NL-DT1ET-4x-20181030.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Ab/DT1ET-4AB.png",
-        "imageFile": "images/dt1et-4ab.png"
+        "imageFile": "images/dt1et-4ab.png",
+        "priceEur": 460
       },
       {
         "model": "DT1ET-4BRL",
@@ -696,7 +872,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16876",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-Ag/DT1ET-4Ag.png",
-        "imageFile": "images/dt1et-4ag.png"
+        "imageFile": "images/dt1et-4ag.png",
+        "priceEur": 460
       },
       {
         "model": "DT1ET-4FAB",
@@ -712,7 +889,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16877",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Alw/DT1ET-4ALW-4.png",
-        "imageFile": "images/dt1et-4alw.png"
+        "imageFile": "images/dt1et-4alw.png",
+        "priceEur": 490
       },
       {
         "model": "DT1ET-4FBr",
@@ -736,7 +914,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16883",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Br/DT1ET-4BR.png",
-        "imageFile": "images/dt1et-4br.png"
+        "imageFile": "images/dt1et-4br.png",
+        "priceEur": 560
       },
       {
         "model": "DT1ET-4Cw",
@@ -744,7 +923,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/easy-touch/dt1et?variant=16882",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1ET-4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1ET-4Cw/DT1ET-4CW.png",
-        "imageFile": "images/dt1et-4cw.png"
+        "imageFile": "images/dt1et-4cw.png",
+        "priceEur": 460
       },
       {
         "model": "DT1ET-BCr",
@@ -791,7 +971,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16721",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Ag/DT1E_4Alg.jpg",
-        "imageFile": "images/dt1e-4ag.jpg"
+        "imageFile": "images/dt1e-4ag.jpg",
+        "priceEur": 460
       },
       {
         "model": "DT1E-4Ab",
@@ -799,7 +980,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16724",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Ab/DT1E_4Alb.jpg",
-        "imageFile": "images/dt1e-4ab.jpg"
+        "imageFile": "images/dt1e-4ab.jpg",
+        "priceEur": 460
       },
       {
         "model": "DT1E-4ALw",
@@ -807,7 +989,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16725",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4ALw/DT1E-4ALw-website.png",
-        "imageFile": "images/dt1e-4alw.png"
+        "imageFile": "images/dt1e-4alw.png",
+        "priceEur": 490
       },
       {
         "model": "DT1E-4BCR",
@@ -823,7 +1006,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16729",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Br/DT1E_4br.jpg",
-        "imageFile": "images/dt1e-4br.jpg"
+        "imageFile": "images/dt1e-4br.jpg",
+        "priceEur": 560
       },
       {
         "model": "DT1E-4Brl",
@@ -847,7 +1031,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/schakelaars/room-e/dt1e?variant=16728",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Schakelaar/TDS_NL-FR-EN_DT1E-4x.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT1E-4Cw/DT1E_4cw.jpg",
-        "imageFile": "images/dt1e-4cw.jpg"
+        "imageFile": "images/dt1e-4cw.jpg",
+        "priceEur": 460
       },
       {
         "model": "DT1E-4FAB",
@@ -888,7 +1073,10 @@
     "category": "detector",
     "uiCategory": "Bewegingsdetector",
     "channelGroups": [
-      { "type": "input_digital", "count": 1 }
+      {
+        "type": "input_digital",
+        "count": 1
+      }
     ],
     "powerW": 0.1,
     "variants": [
@@ -898,7 +1086,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16788",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT40-Bx-nieuw.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-A02S/Blauw-Vierkant-Pictogram-Abstract-Logo-3.png",
-        "imageFile": "images/dt40-bb.png"
+        "imageFile": "images/dt40-bb.png",
+        "priceEur": 140
       },
       {
         "model": "DT40-Bw",
@@ -906,13 +1095,15 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16787",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT40-Bx-nieuw.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-A02S/Blauw-Vierkant-Pictogram-Abstract-Logo-2.png",
-        "imageFile": "images/dt40-bw.png"
+        "imageFile": "images/dt40-bw.png",
+        "priceEur": 140
       },
       {
         "model": "DT40-PK",
         "finish": "Plaster kit voor DT40-Bx",
         "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=63500",
-        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT40-PK/ID_TDS_NL-FR-EN_DT40-PK-plaster-kit_15012026TP.pdf"
+        "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT40-PK/ID_TDS_NL-FR-EN_DT40-PK-plaster-kit_15012026TP.pdf",
+        "priceEur": 14
       },
       {
         "model": "DT40-lg",
@@ -968,7 +1159,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16838",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Sx.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-SB/Duotecno-catalogus-2018_NL_v17-min-1-2.jpg",
-        "imageFile": "images/dt40-sb.jpg"
+        "imageFile": "images/dt40-sb.jpg",
+        "priceEur": 140
       },
       {
         "model": "DT40-Sw",
@@ -976,7 +1168,8 @@
         "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=16894",
         "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Detectoren/TDS_NL-FR-EN_DT40-Sx.pdf",
         "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT40-SW/Duotecno-catalogus-2018_NL_v17-min-1-2-3.jpg",
-        "imageFile": "images/dt40-sw.jpg"
+        "imageFile": "images/dt40-sw.jpg",
+        "priceEur": 140
       }
     ]
   },
@@ -986,7 +1179,10 @@
     "category": "detector",
     "uiCategory": "Bewegingsdetector",
     "channelGroups": [
-      { "type": "input_digital", "count": 1 }
+      {
+        "type": "input_digital",
+        "count": 1
+      }
     ],
     "powerW": 0.1,
     "variants": [
@@ -1057,10 +1253,22 @@
     "category": "module",
     "uiCategory": "Smartbox",
     "channelGroups": [
-      { "type": "input_digital", "count": 16 },
-      { "type": "input_analog", "count": 2 },
-      { "type": "relay_no", "count": 8 },
-      { "type": "motor_updown", "count": 1 }
+      {
+        "type": "input_digital",
+        "count": 16
+      },
+      {
+        "type": "input_analog",
+        "count": 2
+      },
+      {
+        "type": "relay_no",
+        "count": 8
+      },
+      {
+        "type": "motor_updown",
+        "count": 1
+      }
     ],
     "isSmartboxBase": true,
     "poweredFromMains": true,
@@ -1071,7 +1279,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/TDS_NL-FR-EN_DT0B-01.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0B-01/DT0B-01_0002gewit-e1527080385216.png",
     "powerW": 9.9,
-    "imageFile": "images/dt0b-01.png"
+    "imageFile": "images/dt0b-01.png",
+    "priceEur": 1300
   },
   {
     "model": "DT0B-LITE",
@@ -1080,10 +1289,22 @@
     "category": "module",
     "uiCategory": "Smartbox",
     "channelGroups": [
-      { "type": "input_digital", "count": 16 },
-      { "type": "input_analog", "count": 2 },
-      { "type": "relay_no", "count": 8 },
-      { "type": "motor_updown", "count": 1 }
+      {
+        "type": "input_digital",
+        "count": 16
+      },
+      {
+        "type": "input_analog",
+        "count": 2
+      },
+      {
+        "type": "relay_no",
+        "count": 8
+      },
+      {
+        "type": "motor_updown",
+        "count": 1
+      }
     ],
     "isSmartboxBase": true,
     "poweredFromMains": true,
@@ -1094,7 +1315,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16780/ID_TDS_NL-FR-EN_DT0B-Smartbox-LITE_11022026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/Categories/Smartbox-LITE-Category-image.png",
     "powerW": 9.9,
-    "imageFile": "images/dt0b-lite.png"
+    "imageFile": "images/dt0b-lite.png",
+    "priceEur": 1000
   },
   {
     "model": "DT0B-MINI",
@@ -1103,9 +1325,18 @@
     "category": "module",
     "uiCategory": "Smartbox",
     "channelGroups": [
-      { "type": "input_digital", "count": 14 },
-      { "type": "input_analog", "count": 2 },
-      { "type": "relay_no", "count": 8 }
+      {
+        "type": "input_digital",
+        "count": 14
+      },
+      {
+        "type": "input_analog",
+        "count": 2
+      },
+      {
+        "type": "relay_no",
+        "count": 8
+      }
     ],
     "isSmartboxBase": true,
     "poweredFromMains": true,
@@ -1116,7 +1347,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/17019/ID_TDS_NL-FR-EN_DT0B-Smartbox-MINI_11022026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0B-Mini/Smartbox-Mini-Website-1.png",
     "powerW": 9.9,
-    "imageFile": "images/dt0b-mini.png"
+    "imageFile": "images/dt0b-mini.png",
+    "priceEur": 650
   },
   {
     "model": "DT0B-ULTRA",
@@ -1125,10 +1357,22 @@
     "category": "module",
     "uiCategory": "Smartbox",
     "channelGroups": [
-      { "type": "input_digital", "count": 16 },
-      { "type": "relay_no", "count": 16 },
-      { "type": "motor_updown", "count": 1 },
-      { "type": "dali", "count": 64 }
+      {
+        "type": "input_digital",
+        "count": 16
+      },
+      {
+        "type": "relay_no",
+        "count": 16
+      },
+      {
+        "type": "motor_updown",
+        "count": 1
+      },
+      {
+        "type": "dali",
+        "count": 64
+      }
     ],
     "isSmartboxBase": true,
     "poweredFromMains": true,
@@ -1138,7 +1382,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=59887",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0B-ULTRA/SM-ULTRA-met-verschillende-dimmerprintjes-en-DALI-1.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T111600.084.png",
-    "imageFile": "images/dt0b-ultra.png"
+    "imageFile": "images/dt0b-ultra.png",
+    "priceEur": 1650
   },
   {
     "model": "DT0B-LE",
@@ -1156,7 +1401,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16627",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Smartboxes/TDS_NL-FR-EN_DT0B-D1.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T115246.674.png",
-    "imageFile": "images/dt0b-le.png"
+    "imageFile": "images/dt0b-le.png",
+    "priceEur": 85
   },
   {
     "model": "DT0B-DC",
@@ -1174,7 +1420,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16782",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Smartboxes/TDS_NL-FR-EN_DT0B-DC1.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T115834.281.png",
-    "imageFile": "images/dt0b-dc.png"
+    "imageFile": "images/dt0b-dc.png",
+    "priceEur": 90
   },
   {
     "model": "DT0B-PW",
@@ -1192,7 +1439,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16623",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16623/TDS_NL-FR-EN_DT0B-PW_PWM-LED-dimmer_05032026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T115948.179.png",
-    "imageFile": "images/dt0b-pw.png"
+    "imageFile": "images/dt0b-pw.png",
+    "priceEur": 90
   },
   {
     "model": "DT0B-TE",
@@ -1210,7 +1458,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16626",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Smartboxes/TDS_NL-FR-EN_DT0B-TE1.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T120206.993.png",
-    "imageFile": "images/dt0b-te.png"
+    "imageFile": "images/dt0b-te.png",
+    "priceEur": 110
   },
   {
     "model": "DT0B-R",
@@ -1228,7 +1477,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=16781",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0B-ULTRA/TDS_NL-FR-EN_DT0B-R1-SB-Relais.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT0B-ULTRA/Ontwerp-zonder-titel-2025-07-15T120304.300.png",
-    "imageFile": "images/dt0b-r.png"
+    "imageFile": "images/dt0b-r.png",
+    "priceEur": 65
   },
   {
     "model": "DT0B-SSR",
@@ -1244,7 +1494,8 @@
     ],
     "isSmartboxPlugin": true,
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/smartbox/dt0b?variant=60415",
-    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0B-ULTRA/ID_TDS_NL-FR-EN_-DT0B-SSR-Sm-Solid-state-relais.pdf"
+    "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0B-ULTRA/ID_TDS_NL-FR-EN_-DT0B-SSR-Sm-Solid-state-relais.pdf",
+    "priceEur": 65
   },
   {
     "model": "Comparison tool",
@@ -1266,7 +1517,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=16730",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Modules/TDS_NL-FR-EN_DT00-01.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT00-01/DT00-01_0006-1-e1525254310433.jpg",
-    "imageFile": "images/dt00-01.jpg"
+    "imageFile": "images/dt00-01.jpg",
+    "priceEur": 30
   },
   {
     "model": "DTTL-00",
@@ -1279,7 +1531,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dttl?variant=16748",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DTTL-00-Twilight-module.pdf",
     "powerW": 3.4,
-    "channels": 8
+    "channels": 8,
+    "priceEur": 600
   },
   {
     "model": "DT00-24",
@@ -1292,7 +1545,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=16742",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16742/ID_TDS_NL-FR-EN_DT00-24-Power-Supply-module-voeding-24V-AC_11022026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT00-24/DT00_24_0001website3-e1527082209846.png",
-    "imageFile": "images/dt00-24.png"
+    "imageFile": "images/dt00-24.png",
+    "priceEur": 380
   },
   {
     "model": "DT00-24SW",
@@ -1304,7 +1558,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=16743",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16743/ID_TDS_NL-FR-EN_DT00-24SW-Power-Supply-Module-voeding-CAN-Switch_11022026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT00-24SW/DT00-24SW-min-1.jpg",
-    "imageFile": "images/dt00-24sw.jpg"
+    "imageFile": "images/dt00-24sw.jpg",
+    "priceEur": 500
   },
   {
     "model": "DT0E-00",
@@ -1317,19 +1572,21 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=30743",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products//DT0E-00/FR-DE-EN-NL-DT0E-00-20150914-1.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0E-00/DT0E-00-min.jpg",
-    "imageFile": "images/dt0e-00.jpg"
+    "imageFile": "images/dt0e-00.jpg",
+    "priceEur": 40
   },
   {
     "model": "DT0F-00",
-    "name": "USB programmatie modem inclusief bindingsoftware",
-    "description": "USB programmatie modem inclusief bindingsoftware",
+    "name": "USB programmatie modem",
+    "description": "USB programmatie modem",
     "category": "module",
     "uiCategory": "Infrastructuur",
     "sourceUrl": "https://www.duotecno.be/nl/producten/modules-smartbox/modules-2/dt00?variant=30745",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Modules/TDS_NL-FR-EN_DT0F-00.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0F-00/DT0F-00-min.jpg",
     "powerW": 3.6,
-    "imageFile": "images/dt0f-00.jpg"
+    "imageFile": "images/dt0f-00.jpg",
+    "priceEur": 500
   },
   {
     "model": "DT13-SW",
@@ -1341,7 +1598,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30747/TDS_NL-FR-EN_DT13-SW_CAN-Switch_31032026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT13-SW_fiche.png",
     "powerW": 3.1,
-    "imageFile": "images/dt13-sw.png"
+    "imageFile": "images/dt13-sw.png",
+    "priceEur": 950
   },
   {
     "model": "DT02-06",
@@ -1362,7 +1620,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT02-06/DT02-06-web-1.jpg",
     "powerW": 4.8,
     "channels": 6,
-    "imageFile": "images/dt02-06.jpg"
+    "imageFile": "images/dt02-06.jpg",
+    "priceEur": 700
   },
   {
     "model": "DT05-03",
@@ -1408,7 +1667,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT05-06TE/DT05-06-min-web.jpg",
     "powerW": 2.4,
     "channels": 6,
-    "imageFile": "images/dt05-06.jpg"
+    "imageFile": "images/dt05-06.jpg",
+    "priceEur": 700
   },
   {
     "model": "DT05-06TE",
@@ -1431,7 +1691,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT05-06TE/DT05-06TE-2-1-e1527077201170.png",
     "powerW": 2.4,
     "channels": 6,
-    "imageFile": "images/dt05-06te.png"
+    "imageFile": "images/dt05-06te.png",
+    "priceEur": 750
   },
   {
     "model": "DT06-06",
@@ -1452,7 +1713,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT06-06/DT06-06.png",
     "powerW": 2.4,
     "channels": 6,
-    "imageFile": "images/dt06-06.png"
+    "imageFile": "images/dt06-06.png",
+    "priceEur": 650
   },
   {
     "model": "DT13-DAL",
@@ -1472,7 +1734,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30760/ID_TDS_NL-FR-EN_DT13-DAL_DALI-Interface_17032026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-DAL/DT13-DAL.jpg",
     "powerW": 1.4,
-    "imageFile": "images/dt13-dal.jpg"
+    "imageFile": "images/dt13-dal.jpg",
+    "priceEur": 750
   },
   {
     "model": "DT13-DMX",
@@ -1492,7 +1755,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30762/ID_TDS_NL-FR-EN_DT13-DMX_DMX-Interface_17032026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-DMX/DT13-DMX-2020.jpg",
     "powerW": 1.1,
-    "imageFile": "images/dt13-dmx.jpg"
+    "imageFile": "images/dt13-dmx.jpg",
+    "priceEur": 750
   },
   {
     "model": "DT0E-01",
@@ -1531,7 +1795,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT0E-0S/DT0E-0S-web.jpg",
     "powerW": 0.6,
     "channels": 8,
-    "imageFile": "images/dt0e-0s.jpg"
+    "imageFile": "images/dt0e-0s.jpg",
+    "priceEur": 150
   },
   {
     "model": "DT07-16",
@@ -1556,7 +1821,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT07-16/DT07-16-min.jpg",
     "powerW": 3.4,
     "channels": 16,
-    "imageFile": "images/dt07-16.jpg"
+    "imageFile": "images/dt07-16.jpg",
+    "priceEur": 600
   },
   {
     "model": "DT13-ANA",
@@ -1577,7 +1843,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-ANA/DT13-ANA_2020.jpg",
     "powerW": 1.1,
     "channels": 8,
-    "imageFile": "images/dt13-ana.jpg"
+    "imageFile": "images/dt13-ana.jpg",
+    "priceEur": 550
   },
   {
     "model": "DT13-LC",
@@ -1635,7 +1902,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT03-06/DT03-06-min.jpg",
     "powerW": 3.8,
     "channels": 3,
-    "imageFile": "images/dt03-06.jpg"
+    "imageFile": "images/dt03-06.jpg",
+    "priceEur": 480
   },
   {
     "model": "DT03-06NC",
@@ -1657,7 +1925,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT03-06NC/DT03-06NC_2020.jpg",
     "powerW": 8.4,
     "channels": 12,
-    "imageFile": "images/dt03-06nc.jpg"
+    "imageFile": "images/dt03-06nc.jpg",
+    "priceEur": 480
   },
   {
     "model": "DT03-12",
@@ -1679,7 +1948,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT03-12/DT03-12_wit-min.jpg",
     "powerW": 8.4,
     "channels": 12,
-    "imageFile": "images/dt03-12.jpg"
+    "imageFile": "images/dt03-12.jpg",
+    "priceEur": 650
   },
   {
     "model": "DT04-03",
@@ -1701,7 +1971,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT04-03/DT04-03-min-1.jpg",
     "powerW": 3.8,
     "channels": 3,
-    "imageFile": "images/dt04-03.jpg"
+    "imageFile": "images/dt04-03.jpg",
+    "priceEur": 480
   },
   {
     "model": "DT04-06",
@@ -1723,7 +1994,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT04-06/DT04-06-2-min.jpg",
     "powerW": 5,
     "channels": 6,
-    "imageFile": "images/dt04-06.jpg"
+    "imageFile": "images/dt04-06.jpg",
+    "priceEur": 650
   },
   {
     "model": "DT04-P3",
@@ -1744,7 +2016,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT04-P3/DT04-P3-min2020-min.jpg",
     "powerW": 3.8,
     "channels": 3,
-    "imageFile": "images/dt04-p3.jpg"
+    "imageFile": "images/dt04-p3.jpg",
+    "priceEur": 480
   },
   {
     "model": "DT20-0DS",
@@ -1755,7 +2028,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16980",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-0DSx-SIP-Videofonie.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-BD/admin-ajax.jpg",
-    "imageFile": "images/dt20-0ds.jpg"
+    "imageFile": "images/dt20-0ds.jpg",
+    "priceEur": 1800
   },
   {
     "model": "DT20-0DSb",
@@ -1766,7 +2040,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16902",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-0DSx-SIP-Videofonie.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-BD/admin-ajax.jpg",
-    "imageFile": "images/dt20-0dsb.jpg"
+    "imageFile": "images/dt20-0dsb.jpg",
+    "priceEur": 1800
   },
   {
     "model": "DT20-0DSBr",
@@ -1777,7 +2052,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=65492",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/65492/TDS_NL-FR-EN_DT20-0DSx-SIP-Videofonie.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/65492/Videofoon-Brons-afwerking.png",
-    "imageFile": "images/dt20-0dsbr.png"
+    "imageFile": "images/dt20-0dsbr.png",
+    "priceEur": 2200
   },
   {
     "model": "DT20-CDS",
@@ -1788,7 +2064,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=59939",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-CDSx-SIP-Videofonie-codeklavier.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-CDS/Ontwerp-zonder-titel-2025-07-15T161323.350.png",
-    "imageFile": "images/dt20-cds.png"
+    "imageFile": "images/dt20-cds.png",
+    "priceEur": 2200
   },
   {
     "model": "DT20-CDSb",
@@ -1799,7 +2076,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16983",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-CDSx-SIP-Videofonie-codeklavier.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-BD/admin-ajax.jpg",
-    "imageFile": "images/dt20-cdsb.jpg"
+    "imageFile": "images/dt20-cdsb.jpg",
+    "priceEur": 2200
   },
   {
     "model": "DT20-CDSBr",
@@ -1810,7 +2088,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16981",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-CDSx-SIP-Videofonie-codeklavier.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-BD/admin-ajax.jpg",
-    "imageFile": "images/dt20-cdsbr.jpg"
+    "imageFile": "images/dt20-cdsbr.jpg",
+    "priceEur": 2800
   },
   {
     "model": "DT20-WB",
@@ -1821,7 +2100,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=30700",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/30700/ID_TDS_NL-FR-EN_DT20-WB-inbouwdoos-SIP-Videofonie_05052026TP_2026-05-11-074504_yqjm.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/30700/Kader.png",
-    "imageFile": "images/dt20-wb.png"
+    "imageFile": "images/dt20-wb.png",
+    "priceEur": 80
   },
   {
     "model": "DT20-TDS",
@@ -1832,7 +2112,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=16996",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT0C-W10-Recessed/TDS_NL-FR-EN_DT20-TDSb-IP-Videofonie-7-inch-scherm.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-TDS/wallbox-groter.png",
-    "imageFile": "images/dt20-tds.png"
+    "imageFile": "images/dt20-tds.png",
+    "priceEur": 2900
   },
   {
     "model": "DT20-TDSb",
@@ -1843,7 +2124,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=17017",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT20-TDS-Black/TDS_NL-FR-EN_DT20-TDSb-IP-Videofonie-7-inch-scherm.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-TDS-Black/DT20-CDSbr-3.png",
-    "imageFile": "images/dt20-tdsb.png"
+    "imageFile": "images/dt20-tdsb.png",
+    "priceEur": 2900
   },
   {
     "model": "DT20-WTD",
@@ -1853,7 +2135,8 @@
     "uiCategory": "Accessoire",
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=30698",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-TDS/wallbox-groter.png",
-    "imageFile": "images/dt20-wtd.png"
+    "imageFile": "images/dt20-wtd.png",
+    "priceEur": 80
   },
   {
     "model": "DT20-AK1",
@@ -1864,7 +2147,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/ip-videofonie/dt20-4?variant=51934",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT20-AK1/TDS_NL-FR-EN_DT20-AK1-Buitenpost-voIP-SIP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-AK1/DT20-AK1.png",
-    "imageFile": "images/dt20-ak1.png"
+    "imageFile": "images/dt20-ak1.png",
+    "priceEur": 600
   },
   {
     "model": "DT20-CKx",
@@ -1886,7 +2170,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16802",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-CSAx.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSA/DT20-CSA_0002-1.jpg",
-    "imageFile": "images/dt20-csa.jpg"
+    "imageFile": "images/dt20-csa.jpg",
+    "priceEur": 580
   },
   {
     "model": "DT20-CSAb",
@@ -1897,7 +2182,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16901",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-CSAx.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSAPB/2f66a181-d497-4919-a74a-56fc072d067d.jpg",
-    "imageFile": "images/dt20-csab.jpg"
+    "imageFile": "images/dt20-csab.jpg",
+    "priceEur": 580
   },
   {
     "model": "DT20-CSABr",
@@ -1908,7 +2194,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=16909",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Videofonie/TDS_NL-FR-EN_DT20-CSAx.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT20-CSABr/DT0C-w10II.jpg",
-    "imageFile": "images/dt20-csabr.jpg"
+    "imageFile": "images/dt20-csabr.jpg",
+    "priceEur": 750
   },
   {
     "model": "DT20-CSAPB",
@@ -1982,7 +2269,8 @@
     "sourceUrl": "https://www.duotecno.be/nl/producten/videofonie/toegangscontrole/dt20-3?variant=60512",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/DT20-CIP/TDS_NL-FR-EN_DT20-A02S-Toegangscontrole-codeklavier.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT20-TDS-Black/Ontwerp-zonder-titel-2025-09-24T130456.899.png",
-    "imageFile": "images/dt20-cip.png"
+    "imageFile": "images/dt20-cip.png",
+    "priceEur": 413
   },
   {
     "model": "DT21-BW",
@@ -2187,7 +2475,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/17011/ID_TDS_NL-FR-EN_DT10-AU-Audio-Interface_31032026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-AU/DT13_AU_audio-interface-min-3.jpg",
     "powerW": 5.8,
-    "imageFile": "images/dt10-au.jpg"
+    "imageFile": "images/dt10-au.jpg",
+    "priceEur": 950
   },
   {
     "model": "DT10-ARS",
@@ -2224,7 +2513,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-INT/DT10-INT_groot-min.jpg",
     "powerW": 2.6,
     "channels": 8,
-    "imageFile": "images/dt10-int.jpg"
+    "imageFile": "images/dt10-int.jpg",
+    "priceEur": 1295
   },
   {
     "model": "DT10-MAR",
@@ -2289,7 +2579,8 @@
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT10-B%26O/DT10_BO20201-min-1.jpg",
     "powerW": 2.6,
     "channels": 8,
-    "imageFile": "images/dt10-b-o.jpg"
+    "imageFile": "images/dt10-b-o.jpg",
+    "priceEur": 1295
   },
   {
     "model": "DT13-G3",
@@ -2303,7 +2594,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16651/ID_TDS_NL-FR-EN_DT13-G3_Galaxy-Alarm-interface_31032026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-G3/DT13-G3-WEB-min-1.jpg",
     "powerW": 2.2,
-    "imageFile": "images/dt13-g3.jpg"
+    "imageFile": "images/dt13-g3.jpg",
+    "priceEur": 500
   },
   {
     "model": "DT13-SAT",
@@ -2317,7 +2609,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16652/ID_TDS_NL-FR-EN_DT13-SAT-Satel-Alarm-Interface_31032026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-SAT/DT13-SAT-min-1-1.jpg",
     "powerW": 2.9,
-    "imageFile": "images/dt13-sat.jpg"
+    "imageFile": "images/dt13-sat.jpg",
+    "priceEur": 600
   },
   {
     "model": "DT13-TC",
@@ -2331,7 +2624,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16840/ID_TDS_NL-FR-EN_DT13-TC-Texecom-Premier-Alarm-Interface_31032026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-TC/DT13-TC_WEB-min.jpg",
     "powerW": 2.9,
-    "imageFile": "images/dt13-tc.jpg"
+    "imageFile": "images/dt13-tc.jpg",
+    "priceEur": 500
   },
   {
     "model": "DT13-MOD",
@@ -2345,12 +2639,13 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/16653/ID_TDS_NL-FR-EN_DT13-MOD-Modbus-Interface-RS-485_31032026TP.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT13-MOD/DT13-MOD-1-min.jpg",
     "powerW": 3.6,
-    "imageFile": "images/dt13-mod.jpg"
+    "imageFile": "images/dt13-mod.jpg",
+    "priceEur": 900
   },
   {
     "model": "DT18-HS",
-    "name": "TCP/IP Homeserver inclusief Home Manager",
-    "description": "TCP/IP Homeserver inclusief Home Manager",
+    "name": "TCP/IP Homeserver",
+    "description": "TCP/IP Homeserver",
     "category": "interface",
     "uiCategory": "Infrastructuur",
     "dinUnits": 4,
@@ -2371,7 +2666,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT18-GT.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products//DT18-GT/DT18-GT-WEB.jpg",
     "powerW": 4.8,
-    "imageFile": "images/dt18-gt.jpg"
+    "imageFile": "images/dt18-gt.jpg",
+    "priceEur": 650
   },
   {
     "model": "DT18-PRO",
@@ -2383,7 +2679,8 @@
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/aa-Productfiches/Interfaces/TDS_NL-FR-EN_DT18-PRO.pdf",
     "imageUrl": "https://www.duotecno.be/uploads/images/Products/DT18-PRO.jpg",
     "powerW": 4.2,
-    "imageFile": "images/dt18-pro.jpg"
+    "imageFile": "images/dt18-pro.jpg",
+    "priceEur": 950
   },
   {
     "model": "DT46-W HELO",
@@ -2395,7 +2692,10 @@
     "productLine": "Helo detector",
     "finish": "Helo inbouwdetector",
     "channelGroups": [
-      { "type": "input_digital", "count": 1 }
+      {
+        "type": "input_digital",
+        "count": 1
+      }
     ],
     "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40?variant=60395",
     "pdfUrl": "https://www.duotecno.be/uploads/files/Products/60395/ID_TDS_NL-FR-EN_DT46_x-Bewegingssensor-HELO_18032026TP_2026-06-17-140029_xmoq.pdf",
@@ -2407,17 +2707,48 @@
     "category": "switch",
     "uiCategory": "Schakelaar",
     "channelGroups": [
-      { "type": "input_digital", "count": 4 }
+      {
+        "type": "input_digital",
+        "count": 4
+      }
     ],
     "powerW": 1.3,
     "variants": [
-      { "model": "DT1C-4Ag",  "finish": "Aluminium Grijs" },
-      { "model": "DT1C-4Ab",  "finish": "Aluminium Zwart" },
-      { "model": "DT1C-4ALw", "finish": "Aluminium Lak Wit" },
-      { "model": "DT1C-4Br",  "finish": "Brons" },
-      { "model": "DT1C-4BrL", "finish": "Brons Light" },
-      { "model": "DT1C-4GM",  "finish": "Gun Metal" },
-      { "model": "DT1C-4Cw",  "finish": "Corian Wit" }
+      {
+        "model": "DT1C-4Ag",
+        "finish": "Aluminium Grijs",
+        "priceEur": 490
+      },
+      {
+        "model": "DT1C-4Ab",
+        "finish": "Aluminium Zwart",
+        "priceEur": 490
+      },
+      {
+        "model": "DT1C-4ALw",
+        "finish": "Aluminium Lak Wit",
+        "priceEur": 520
+      },
+      {
+        "model": "DT1C-4Br",
+        "finish": "Brons",
+        "priceEur": 590
+      },
+      {
+        "model": "DT1C-4BrL",
+        "finish": "Brons Light",
+        "priceEur": 590
+      },
+      {
+        "model": "DT1C-4GM",
+        "finish": "Gun Metal",
+        "priceEur": 590
+      },
+      {
+        "model": "DT1C-4Cw",
+        "finish": "Corian Wit",
+        "priceEur": 490
+      }
     ]
   },
   {
@@ -2426,19 +2757,24 @@
     "category": "detector",
     "uiCategory": "Bewegingsdetector",
     "channelGroups": [
-      { "type": "input_digital", "count": 1 }
+      {
+        "type": "input_digital",
+        "count": 1
+      }
     ],
     "powerW": 0.1,
     "variants": [
       {
         "model": "DT43-W",
         "finish": "Wit",
-        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40"
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40",
+        "priceEur": 140
       },
       {
         "model": "DT43-B",
         "finish": "Zwart",
-        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40"
+        "sourceUrl": "https://www.duotecno.be/nl/producten/detectoren/inbouw/dt40",
+        "priceEur": 140
       }
     ]
   },
@@ -2449,7 +2785,8 @@
     "category": "interface",
     "uiCategory": "Infrastructuur",
     "dinUnits": 4,
-    "lengthMm": 70
+    "lengthMm": 70,
+    "priceEur": 500
   },
   {
     "model": "DMX-PWM",
@@ -2458,8 +2795,12 @@
     "category": "module",
     "uiCategory": "DMX",
     "channelGroups": [
-      { "type": "dimmer_pwm", "count": 24 }
-    ]
+      {
+        "type": "dimmer_pwm",
+        "count": 24
+      }
+    ],
+    "priceEur": 599
   },
   {
     "model": "DT13-BO",
@@ -2468,42 +2809,48 @@
     "category": "interface",
     "uiCategory": "Audio",
     "dinUnits": 4,
-    "lengthMm": 70
+    "lengthMm": 70,
+    "priceEur": 950
   },
   {
     "model": "DT0D-10",
     "name": "TFT VoIP/SIP binnenpost",
     "description": "TFT VoIP/SIP binnenpost",
     "category": "video-intercom",
-    "uiCategory": "Accessoire"
+    "uiCategory": "Accessoire",
+    "priceEur": 270
   },
   {
     "model": "DT0D-7AG",
     "name": "SIP binnenpost opbouw",
     "description": "SIP binnenpost opbouw",
     "category": "video-intercom",
-    "uiCategory": "Accessoire"
+    "uiCategory": "Accessoire",
+    "priceEur": 290
   },
   {
     "model": "DT0D-7ATG",
     "name": "SIP binnenpost android opbouw",
     "description": "SIP binnenpost android opbouw",
     "category": "video-intercom",
-    "uiCategory": "Accessoire"
+    "uiCategory": "Accessoire",
+    "priceEur": 420
   },
   {
     "model": "DT20-LIC",
     "name": "Licentie videofonie (smartphone/tablet)",
     "description": "Licentie voor videofonie op smartphone of tablet",
     "category": "video-intercom",
-    "uiCategory": "Accessoire"
+    "uiCategory": "Accessoire",
+    "priceEur": 85
   },
   {
     "model": "DT00-DAL",
     "name": "DALI voeding",
     "description": "DALI voeding",
     "category": "module",
-    "uiCategory": "DALI"
+    "uiCategory": "DALI",
+    "priceEur": 99
   },
   {
     "model": "DT07-DAL",
@@ -2512,8 +2859,12 @@
     "category": "module",
     "uiCategory": "DALI",
     "channelGroups": [
-      { "type": "input_digital", "count": 6 }
-    ]
+      {
+        "type": "input_digital",
+        "count": 6
+      }
+    ],
+    "priceEur": 89
   },
   {
     "model": "DT0B-DAL12",
@@ -2522,9 +2873,13 @@
     "category": "module",
     "uiCategory": "Smartbox plugin",
     "channelGroups": [
-      { "type": "dali", "count": 12 }
+      {
+        "type": "dali",
+        "count": 12
+      }
     ],
-    "isSmartboxPlugin": true
+    "isSmartboxPlugin": true,
+    "priceEur": 250
   },
   {
     "model": "DT0B-DAL64",
@@ -2533,15 +2888,20 @@
     "category": "module",
     "uiCategory": "Smartbox plugin",
     "channelGroups": [
-      { "type": "dali", "count": 64 }
+      {
+        "type": "dali",
+        "count": 64
+      }
     ],
-    "isSmartboxPlugin": true
+    "isSmartboxPlugin": true,
+    "priceEur": 500
   },
   {
     "model": "DT00-12",
     "name": "12V DC voeding 4A",
     "description": "12V DC voeding 4A",
     "category": "module",
-    "uiCategory": "Infrastructuur"
+    "uiCategory": "Infrastructuur",
+    "priceEur": 65
   }
 ]

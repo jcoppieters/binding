@@ -1,11 +1,12 @@
 {
   "meta": {
     "name": "Nieuw project",
-    "created": "2026-07-08T16:31:21.633Z",
-    "modified": "2026-07-09T11:31:55.809Z",
+    "created": "2026-07-10T07:13:29.622Z",
+    "modified": "2026-07-10T07:25:07.674Z",
     "version": "1",
-    "masterIp": "192.168.0.97",
-    "masterPassword": "GMTecno"
+    "masterIp": "192.168.0.5",
+    "masterPassword": "duotecno",
+    "masterPort": 5005
   },
   "railView": {
     "cabinets": [
@@ -15,61 +16,44 @@
         "widthUnits": 36,
         "modules": [
           {
-            "id": "0fwpxzia",
-            "model": "DT0B-01",
-            "nodeAddress": 3,
+            "id": "pupjq6z6",
+            "model": "DT10-AU",
+            "nodeAddress": 4,
             "physicalAddress": 4294901244,
-            "name": "Test node",
+            "name": "Sonos",
             "position": 0
           },
           {
-            "id": "lpwuszg4",
-            "model": "DT05-03",
-            "position": 99
-          },
-          {
-            "id": "avj9nlfj",
-            "model": "DT0B-LITE",
-            "position": 99
-          },
-          {
-            "id": "6ovje9iq",
-            "model": "DT00-24",
-            "position": 99
-          },
-          {
-            "id": "lminpp63",
-            "model": "DT05-06",
-            "position": 99
+            "id": "6b3y3zdh",
+            "model": "DT0B-01",
+            "nodeAddress": 16,
+            "physicalAddress": 4294901244,
+            "name": "Smartbox Living",
+            "position": 1
           }
         ]
       }
     ],
     "woningDevices": [
       {
-        "id": "pa5xriyo",
+        "id": "z4u1vex7",
         "model": "DT0C-10ALw",
         "nodeAddress": 252,
-        "name": " 20260624",
+        "name": " 20220925",
         "position": 99
       },
       {
-        "id": "baf3unn2",
-        "model": "DT1C-4Ag",
-        "nodeAddress": 4,
-        "name": "oled",
+        "id": "spkdvvk1",
+        "model": "UNKNOWN",
+        "nodeAddress": 17,
+        "name": "Switch Living",
         "position": 99
       },
       {
-        "id": "epzv9rke",
-        "model": "DT0C-7Ag",
-        "name": null,
-        "position": 99
-      },
-      {
-        "id": "bekntyxh",
-        "model": "DTBS-B4Ag",
-        "name": null,
+        "id": "8q88pmfa",
+        "model": "UNKNOWN",
+        "nodeAddress": 3,
+        "name": "IP Server",
         "position": 99
       }
     ]

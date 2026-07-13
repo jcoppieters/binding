@@ -61,6 +61,8 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 | TCP FSM writer | `src/communication/BindingWriterFSM.ts` | ✅ |
 | Per-node file-info (count + XOR checksum) | `BindingUploader.requestFileInfo()` | ✅ |
 | Master TCP connection service | `src/services/MasterConnectionService.ts` | ✅ |
+| Two-phase discovery (quick/full modes) | `MasterConnectionService.connect(quickMode)` | ✅ |
+| Per-node unit fetching | `POST /api/master/node/:address/units` | ✅ |
 | Unit live state (frontend) | `public/unit-control.js` | ✅ |
 
 **Gap:** project data model (rooms/devices/rail layout), UI→binding-string generation, UDP discovery, HTTP API clients for moods/scheduling/auth.
@@ -115,23 +117,42 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Confirm dialog → `REMOVE_MODULE` dispatch
 - [x] **P1-8** Reorder modules within cabinet — **DONE** (via detail modal ←/→ buttons)
   - `MOVE_MODULE` action swaps adjacent modules; reflow regenerates rails automatically
-- [x] **P1-5** Resources panel in sidebar: used vs. available counts per type
+- [x] **P1-5** Resources panel in sidebar: used vs. available counts per type — **DONE**
   - Sidebar shows all channel types present in the project (relay, dimmer, motor, dali, input…)
   - Counts computed from all cabinet modules + woning devices via `computeChannelTotals()`
   - Section hidden when no modules are placed
-- [x] **P1-6** DIN rail space bar (M-units used vs. cabinet width)
+- [x] **P1-6** DIN rail space bar (M-units used vs. cabinet width) — **DONE**
   - Thin progress bar below cabinet header: green → orange (≥85%) → red (overfull)
   - "Bezet: Xm/Ym" stat added to cabinet header stats
+- [x] **P1-9** Module detail modal with hardware info — **DONE**
+  - Shows channel groups, discovery status, node type, firmware name
+  - Auto-suggestions for UNKNOWN modules based on discovered capabilities
+  - "Fetch units" button for per-node refresh (incremental discovery)
+  - `public/components/rail-view.js::openModuleDetail()`
+- [x] **P1-10** Materials View (Materiaallijst tab) — **DONE**
+  - `public/components/mat-view.js`
+  - Bill of materials with quantities, DIN space, power consumption, pricing
+  - Pricing data merged from `modules/product-codes.csv` into `_index.json`
+  - Export to CSV/Excel functionality
+  - Totals row with project-wide sums
 
 ### Phase 2 — Home View
 
-- [ ] **P2-1** Render rooms from project data
-- [ ] **P2-2** Add / rename / delete room and floor
+- [x] **P2-1** Render rooms from project data — **DONE**
+  - `public/components/home-view.js`
+  - Room cards on canvas showing name, icon, device count
+  - Sidebar with floors and rooms hierarchy
+- [x] **P2-2** Add / rename / delete room and floor — **DONE**
+  - Add room prompt with name, icon, floor selection
+  - Floor menu with rename/delete options
+  - Room menu with rename/delete options
+  - State actions: ADD_ROOM, UPDATE_ROOM, REMOVE_ROOM, ADD_FLOOR, UPDATE_FLOOR, REMOVE_FLOOR
 - [ ] **P2-3** Click room in sidebar → zoom canvas to show only that room full-width
-- [ ] **P2-4** Add device to room
-  - Show available channels grouped by type (resource-first, not module-first)
-  - Show subtype (trailing edge 230V, etc.) and module origin
-  - Prompt for device name; allow rename
+- [x] **P2-4** Add device to room — **DONE** (UI structure ready)
+  - "Add device" button in room cards
+  - Modal opens for device selection (needs implementation: show available channels)
+  - TODO: List available channels grouped by type, show module origin
+  - TODO: Prompt for device name; allow rename
 - [ ] **P2-5** Floor plan import (image overlay, toggle)
 
 ### Phase 3 — Visual wiring diagram
@@ -173,8 +194,19 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Rename (label), node address (hex) input
   - Reorder: ← Links / Rechts → buttons (triggers `MOVE_MODULE`)
   - Delete button with confirm (triggers `REMOVE_MODULE`)
-- [ ] **P6-2** Woning device detail modal (click switch/LCD in woning panel)
+  - Hardware discovery info section with ✓/✗ status badges
+  - Auto-suggestions for UNKNOWN modules based on discovered unit capabilities
+  - "Fetch units" button for per-node incremental discovery (refresh without full rescan)
+- [x] **P6-2** Woning device detail modal (click switch/LCD in woning panel) — **DONE**
   - Same pattern: image, rename, address, delete (`REMOVE_WONING_DEVICE`)
+  - Hardware discovery info + fetch units button (parity with cabinet modules)
+  - "Move to cabinet" button for UNKNOWN woning devices (misclassified smartboxes)
+  - **Code consolidation**: Unified `openDeviceDetailModal()` handles both cabinet + woning devices
+    * Three shared sub-functions: `buildDiscoverySection()`, `buildCapabilitiesSection()`, `buildChannelGroupsSection()`
+    * Context object distinguishes device type: `{type:'module', cabinetId}` vs `{type:'woning'}`
+    * Same-size displays (150×120px) for all device types
+    * Generic state actions (UPDATE_MODULE / UPDATE_WONING_DEVICE) dispatched based on context
+    * Reduced code: 1687 → 1374 lines (-313 lines, ~18% reduction)
 - [ ] **P6-3** LCD / Touchscreen config modal
   - Multi-pane (one pane per screen page); link to mood/schedule editors for this node
 - [ ] **P6-4** Switch config modal: button labels, room assignment
@@ -219,14 +251,19 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Useful when the installer doesn't know the master IP
 - [x] **P8-1** Connect modal (click connection status in header) — **DONE**
   - IP address + password inputs (pre-filled from project.meta.masterIp / masterPassword)
-  - Calls `POST /api/master/connect` → polls `GET /api/master/status` until 'ready'
+  - Two-phase discovery modes:
+    * **Quick connect** (default): Scans nodes only (3-5 seconds) — gets node list, addresses, types, names
+    * **Full scan** (optional): Scans nodes + units (30+ seconds) — also fetches all unit details per node
+  - Calls `POST /api/master/connect?fullScan=true|false` → polls `GET /api/master/status` until 'ready'
   - Fetches `GET /api/master/nodes`, dispatches SET_CONNECTION with nodes
   - Summary toast: X nodes found, Y matched, Z not in project
   - masterIp + masterPassword saved in project meta via SET_MASTER_CONFIG
+  - **Per-node incremental fetch**: "Fetch units" button in device detail modals for on-demand unit loading
 - [x] **P8-2** Map discovered nodes to project modules — **DONE**
   - `state.discoveredNodes[]` holds runtime DiscoveredNode[] (not persisted)
   - Module card shows ✓ badge (green) if node found, ! badge (red pulse) if nodeAddress set but not found
   - Header connection-status shows IP even when disconnected (last used)
+  - Hardware info section in device detail modals shows discovery status + unit counts
 - [ ] **P8-3** Compare discovery results vs. project: full diff panel
   - Show matched / missing in design / extra on network
 - [ ] **P8-4** Auto-populate Rail View from discovery (unmatched nodes → add as "Unknown" module placeholder)

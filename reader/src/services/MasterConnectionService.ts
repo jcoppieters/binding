@@ -88,6 +88,7 @@ export class MasterConnectionService extends EventEmitter {
   private currentUnitIndex: number = 0;
   private currentNodeAddress: number = 0;
   private currentNodeUnits: number = 0;
+  private quickMode: boolean = false; // If true, skip unit fetching during discovery
   
   // Command queue and response tracking
   private commandQueue: Message[] = [];
@@ -176,11 +177,82 @@ export class MasterConnectionService extends EventEmitter {
     }
     return allUnits;
   }
+
+  /**
+   * Fetch units for a specific node (for incremental discovery)
+   * @param nodeAddress - Node address to fetch units for
+   * @returns Promise<boolean> - true if successful
+   */
+  async fetchNodeUnits(nodeAddress: number): Promise<boolean> {
+    if (!this.isConnected()) {
+      console.error('❌ Cannot fetch node units: not connected to master');
+      return false;
+    }
+
+    const node = this.nodes.get(nodeAddress);
+    if (!node) {
+      console.error(`❌ Cannot fetch units: node 0x${nodeAddress.toString(16).padStart(2, '0')} not found in discovered nodes`);
+      console.log(`   Available nodes: ${Array.from(this.nodes.keys()).map(a => '0x' + a.toString(16).padStart(2, '0')).join(', ') || '(none)'}`);
+      return false;
+    }
+
+    console.log(`📥 Fetching units for node 0x${nodeAddress.toString(16).padStart(2, '0')} (${node.nrUnits} units expected)...`);
+
+    // Clear existing units for this node
+    node.units = [];
+
+    // Fetch units sequentially
+    try {
+      for (let unitIdx = 0; unitIdx < node.nrUnits; unitIdx++) {
+        const unitInfoMsg = DuotecnoProtocol.buildUnitInfo(nodeAddress, unitIdx);
+        
+        // Send and wait for response using the promise-based send method
+        await new Promise<void>((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            reject(new Error(`Timeout fetching unit ${unitIdx} for node 0x${nodeAddress.toString(16)}`));
+          }, 5000);
+
+          // Listen for the next UnitInfo message
+          const handler = (record: CommRecord) => {
+            if (record.method === Rec.UnitInfo && record.message) {
+              const msg = record.message;
+              const respNodeAddr = msg[2];
+              const respUnitAddr = msg[3];
+
+              // Check if this is the unit we're waiting for
+              if (respNodeAddr === nodeAddress && respUnitAddr === unitIdx) {
+                clearTimeout(timeout);
+                this.removeListener('message', handler);
+                resolve();
+              }
+            }
+          };
+
+          this.on('message', handler);
+          this.sendQueued(unitInfoMsg);
+        });
+      }
+
+      console.log(`✅ Fetched ${node.nrUnits} units for node 0x${nodeAddress.toString(16).padStart(2, '0')}`);
+
+      // Request status for all units
+      for (const unit of node.units) {
+        const statusMsg = DuotecnoProtocol.buildUnitStatus(unit.nodeAddress, unit.unitAddress, unit.type);
+        this.sendQueued(statusMsg);
+      }
+
+      return true;
+    } catch (error) {
+      console.error(`Failed to fetch units for node 0x${nodeAddress.toString(16)}:`, error);
+      return false;
+    }
+  }
   
   /**
    * Connect and login to master
    */
-  async connect(host: string, port: number, password: string = ''): Promise<LoginResult> {
+  async connect(host: string, port: number, password: string = '', quickMode: boolean = false): Promise<LoginResult> {
+    this.quickMode = quickMode;
     if (this.socket) {
       await this.disconnect();
     }
@@ -544,12 +616,12 @@ export class MasterConnectionService extends EventEmitter {
     this.currentNodeUnits = nrUnits;
     this.currentUnitIndex = 0;
     
-    // Start sequential unit discovery: request first unit if any
-    if (nrUnits > 0) {
+    // Start sequential unit discovery: request first unit if any (skip in quick mode)
+    if (nrUnits > 0 && !this.quickMode) {
       const unitInfoMsg = DuotecnoProtocol.buildUnitInfo(nodeAddr, this.currentUnitIndex);
       this.sendQueued(unitInfoMsg);
     } else {
-      // No units, move to next node
+      // No units OR quick mode, move to next node
       this.moveToNextNode();
     }
   }
@@ -621,14 +693,16 @@ export class MasterConnectionService extends EventEmitter {
   private discoveryComplete(): void {
     this.status = ConnectionStatus.Ready;
     const totalUnits = this.getAllUnits().length;
-    console.log(`✅ Discovery complete: ${this.nodes.size} nodes, ${totalUnits} units`);
+    console.log(`✅ Discovery complete: ${this.nodes.size} nodes, ${totalUnits} units${this.quickMode ? ' (quick mode - no unit details)' : ''}`);
     
-    // Request status for all discovered units (using queued sending)
-    console.log('📊 Requesting status for all units...');
-    for (const node of this.nodes.values()) {
-      for (const unit of node.units) {
-        const statusMsg = DuotecnoProtocol.buildUnitStatus(unit.nodeAddress, unit.unitAddress, unit.type);
-        this.sendQueued(statusMsg);
+    // Request status for all discovered units (skip in quick mode since we don't have unit details)
+    if (!this.quickMode) {
+      console.log('📊 Requesting status for all units...');
+      for (const node of this.nodes.values()) {
+        for (const unit of node.units) {
+          const statusMsg = DuotecnoProtocol.buildUnitStatus(unit.nodeAddress, unit.unitAddress, unit.type);
+          this.sendQueued(statusMsg);
+        }
       }
     }
     

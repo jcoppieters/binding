@@ -5,6 +5,7 @@
 import { state, dispatch } from './state.js';
 import { initRouter, switchView } from './router.js';
 import { wireButtons as wireRailButtons } from '../components/rail-view.js';
+import { wireButtons as wireHomeButtons } from '../components/home-view.js';
 
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
 
@@ -62,6 +63,9 @@ async function init() {
 
   // Wire Rail View action buttons
   wireRailButtons();
+
+  // Wire Home View action buttons
+  wireHomeButtons();
 }
 
 // ─── Save / Upload ────────────────────────────────────────────────────────────
@@ -135,6 +139,7 @@ async function openConnectModal() {
   const s = state.get();
   const savedIp = s.project.meta.masterIp ?? '';
   const savedPw = s.project.meta.masterPassword ?? '';
+  const savedPort = s.project.meta.masterPort ?? 5001;
 
   const overlay = document.createElement('div');
   overlay.id = 'connect-overlay';
@@ -178,7 +183,16 @@ async function openConnectModal() {
   pwInput.value = savedPw;
   pwInput.style.cssText = 'width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #dde3ef;border-radius:6px;font-size:14px;margin-top:3px';
 
-  body.append(ipLabel, ipInput, pwLabel, pwInput);
+  const portLabel = document.createElement('label');
+  portLabel.style.cssText = 'font-size:11px;font-weight:600;color:#6a7899;display:block';
+  portLabel.textContent = 'Poort';
+  const portInput = document.createElement('input');
+  portInput.type = 'number';
+  portInput.placeholder = '5001';
+  portInput.value = savedPort;
+  portInput.style.cssText = 'width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #dde3ef;border-radius:6px;font-size:14px;margin-top:3px';
+
+  body.append(ipLabel, ipInput, pwLabel, pwInput, portLabel, portInput);
 
   // Status area
   const statusDiv = document.createElement('div');
@@ -214,6 +228,7 @@ async function openConnectModal() {
   async function doConnect(fullScan) {
     const ip = ipInput.value.trim();
     const pw = pwInput.value;
+    const port = parseInt(portInput.value) || 5001;
     if (!ip) { ipInput.style.borderColor = '#ef4444'; return; }
 
     connectBtn.disabled = true;
@@ -222,12 +237,12 @@ async function openConnectModal() {
     statusDiv.textContent = 'TCP verbinding opzetten…';
 
     try {
-      dispatch({ type: 'SET_MASTER_CONFIG', masterIp: ip, masterPassword: pw });
+      dispatch({ type: 'SET_MASTER_CONFIG', masterIp: ip, masterPassword: pw, masterPort: port });
 
       const res = await fetch('/api/master/connect', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ host: ip, port: 5001, password: pw }),
+        body: JSON.stringify({ host: ip, port: port, password: pw, fullScan }),
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
@@ -303,11 +318,16 @@ async function openConnectModal() {
 
 async function saveProject() {
   const s = state.get();
+  // Include discovered nodes in the project file
+  const projectToSave = {
+    ...s.project,
+    discoveredNodes: s.discoveredNodes,
+  };
   try {
     const res = await fetch('/api/project/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(s.project),
+      body: JSON.stringify(projectToSave),
     });
     if (res.ok) {
       dispatch({ type: 'SET_DIRTY', dirty: false });
@@ -346,4 +366,9 @@ export function showToast(msg, type = '') {
 
 // ─── Start ────────────────────────────────────────────────────────────────────
 
-document.addEventListener('DOMContentLoaded', init);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  // DOM is already loaded
+  init();
+}

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Duotecno Binding Software</title>
+<link rel="stylesheet" href="units-view.css">
 <style>
 /* ── Reset & base ─────────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -91,6 +92,7 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
   <div class="view-tab active" id="tab-rail">🗄️ Rail View</div>
   <div class="view-tab" id="tab-home">🏠 Home View</div>
   <div class="view-tab" id="tab-mat">📋 Materiaallijst</div>
+  <div class="view-tab" id="tab-units">📊 Units</div>
 </div>
 
 <!-- ── Main ─────────────────────────────────────────────────────────────── -->
@@ -176,6 +178,9 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
       <table id="mat-table" style="display:none;width:100%;border-collapse:collapse;font-size:13px"></table>
     </div>
   </div>
+
+  <!-- ── Units View ─────────────────────────────────────────────────────── -->
+  <div class="canvas-area" id="units-view" style="display:none;flex-direction:column;overflow:auto;padding:20px"></div>
 
 </div><!-- end .main -->
 

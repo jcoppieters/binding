@@ -1,0 +1,1405 @@
+{
+  "meta": {
+    "name": "Grote Moerstraat",
+    "created": "2026-07-10T07:13:29.622Z",
+    "modified": "2026-07-13T00:01:03.258Z",
+    "version": "1",
+    "masterIp": "gm.coppieters.be",
+    "masterPassword": "duotecno",
+    "masterPort": 5011
+  },
+  "railView": {
+    "cabinets": [
+      {
+        "id": "cabinet-0",
+        "name": "Hoofdkast",
+        "widthUnits": 36,
+        "modules": [
+          {
+            "id": "pupjq6z6",
+            "model": "DT10-AU",
+            "nodeAddress": 4,
+            "physicalAddress": 4294901244,
+            "name": "Sonos",
+            "position": 0
+          },
+          {
+            "id": "6b3y3zdh",
+            "model": "DT0B-01",
+            "nodeAddress": 16,
+            "physicalAddress": 4294901244,
+            "name": "Smartbox Living",
+            "position": 1
+          },
+          {
+            "id": "8q88pmfa",
+            "model": "DT18-HS",
+            "nodeAddress": 3,
+            "physicalAddress": 4294901244,
+            "name": "IP Server",
+            "position": 99
+          },
+          {
+            "id": "udwuqdwy",
+            "model": "DT18-GT",
+            "position": 99
+          },
+          {
+            "id": "z8qmm30z",
+            "model": "DT00-24",
+            "position": 99
+          }
+        ]
+      }
+    ],
+    "woningDevices": [
+      {
+        "id": "z4u1vex7",
+        "model": "DT0C-10ALw",
+        "nodeAddress": 252,
+        "name": "20220925",
+        "position": 99
+      },
+      {
+        "id": "spkdvvk1",
+        "model": "UNKNOWN",
+        "nodeAddress": 17,
+        "name": "Switch Living",
+        "position": 99
+      }
+    ]
+  },
+  "homeView": {
+    "floors": [
+      {
+        "id": "floor-0",
+        "name": "Gelijkvloers"
+      }
+    ],
+    "rooms": [
+      {
+        "id": "0qmolyy6",
+        "name": "beneden",
+        "floorId": "floor-0",
+        "canvasX": 50,
+        "canvasY": 50,
+        "canvasWidth": 200,
+        "canvasHeight": 150,
+        "devices": []
+      }
+    ]
+  },
+  "bindings": [],
+  "discoveredNodes": [
+    {
+      "nodeAddress": 252,
+      "name": " 20260713",
+      "physicalAddress": 811620,
+      "type": 32,
+      "nrUnits": 119,
+      "flags": 89,
+      "units": [
+        {
+          "nodeAddress": 252,
+          "unitAddress": 0,
+          "name": "All off",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 1,
+          "name": "All On",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 2,
+          "name": "Night off",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 3,
+          "name": "Dark outside",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 4,
+          "name": "After 22h",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 5,
+          "name": "Help out",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 6,
+          "name": "Deur Trigger",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 7,
+          "name": "Mood Free",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 8,
+          "name": "Hulp statuss",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 9,
+          "name": "Poort openen",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 10,
+          "name": "Breakfast",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 11,
+          "name": "Cooking",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 12,
+          "name": "Saloon",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 13,
+          "name": "Eating",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 14,
+          "name": "TV",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 15,
+          "name": "Outside On",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 16,
+          "name": "Outside Off",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 17,
+          "name": "Testing",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 18,
+          "name": "Mood 2 long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 19,
+          "name": "Mood 3|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 20,
+          "name": "Mood 3|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 21,
+          "name": "Mood 4|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 22,
+          "name": "Mood 4|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 23,
+          "name": "Mood 5|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 24,
+          "name": "Mood 5|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 25,
+          "name": "Mood 6|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 26,
+          "name": "Mood 6|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 27,
+          "name": "Mood 7 short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 28,
+          "name": "Mood 7|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 29,
+          "name": "Mood 8|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 30,
+          "name": "Mood 8|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 31,
+          "name": "Mood 9|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 32,
+          "name": "Mood 9|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 33,
+          "name": "Mood 10|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 34,
+          "name": "Mood 10|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 35,
+          "name": "Mood 11|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 36,
+          "name": "Mood 11|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 37,
+          "name": "Mood 12|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 38,
+          "name": "Mood 12|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 39,
+          "name": "Mood 13|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 40,
+          "name": "Mood 13|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 41,
+          "name": "Mood 14|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 42,
+          "name": "Mood 14|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 43,
+          "name": "Mood 15|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 44,
+          "name": "Mood 15|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 45,
+          "name": "Mood 16|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 46,
+          "name": "Mood 16|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 47,
+          "name": "Mood 17|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 48,
+          "name": "Mood 17|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 49,
+          "name": "Mood 18|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 50,
+          "name": "Mood 18|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 51,
+          "name": "Mood 19|short",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 52,
+          "name": "Mood 19|long",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 53,
+          "name": "Night on",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 54,
+          "name": "U36|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 55,
+          "name": "U37|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 56,
+          "name": "U38|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 57,
+          "name": "U39|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 58,
+          "name": "U3a|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 59,
+          "name": "U3b|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 60,
+          "name": "U3c|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 61,
+          "name": "U3d|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 62,
+          "name": "U3e|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 63,
+          "name": "U3f|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 64,
+          "name": "U40|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 65,
+          "name": "U41|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 66,
+          "name": "U42|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 67,
+          "name": "U43|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 68,
+          "name": "U44|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 69,
+          "name": "U45|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 70,
+          "name": "U46|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 71,
+          "name": "U47|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 72,
+          "name": "U48|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 73,
+          "name": "U49|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 74,
+          "name": "U4a|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 75,
+          "name": "U4b|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 76,
+          "name": "U4c|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 77,
+          "name": "U4d|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 78,
+          "name": "U4e|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 79,
+          "name": "U4f|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 80,
+          "name": "U50|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 81,
+          "name": "U51|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 82,
+          "name": "U52|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 83,
+          "name": "U53|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 84,
+          "name": "U54|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 85,
+          "name": "U55|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 86,
+          "name": "U56|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 87,
+          "name": "U57|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 88,
+          "name": "U58|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 89,
+          "name": "U59|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 90,
+          "name": "U5a|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 91,
+          "name": "U5b|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 92,
+          "name": "U5c|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 93,
+          "name": "U5d|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 94,
+          "name": "U5e|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 95,
+          "name": "U5f|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 96,
+          "name": "U60|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 97,
+          "name": "U61|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 98,
+          "name": "U62|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 99,
+          "name": "U63|A0C6264",
+          "type": 7
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 100,
+          "name": "Kitchen",
+          "type": 5
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 101,
+          "name": "Tim Bedroom",
+          "type": 5
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 102,
+          "name": "Master Bedroom",
+          "type": 5
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 103,
+          "name": "Living",
+          "type": 5
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 104,
+          "name": "Portable",
+          "type": 5
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 105,
+          "name": "Both",
+          "type": 5
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 106,
+          "name": "Salon Boven",
+          "type": 8
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 107,
+          "name": "Tim Links",
+          "type": 8
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 108,
+          "name": "Tim Rechts",
+          "type": 8
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 109,
+          "name": "Keuken",
+          "type": 8
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 110,
+          "name": "Zwembad",
+          "type": 8
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 111,
+          "name": "Vintage",
+          "type": 1
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 112,
+          "name": "Sticks",
+          "type": 1
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 113,
+          "name": "Trees",
+          "type": 2
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 114,
+          "name": "Driveway",
+          "type": 2
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 115,
+          "name": "Plug 1",
+          "type": 2
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 116,
+          "name": "Plug 2",
+          "type": 2
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 117,
+          "name": "Swimmingpool",
+          "type": 2
+        },
+        {
+          "nodeAddress": 252,
+          "unitAddress": 118,
+          "name": "Poolhouse",
+          "type": 2
+        }
+      ]
+    },
+    {
+      "nodeAddress": 17,
+      "name": "Switch Living",
+      "physicalAddress": 4294901244,
+      "type": 1,
+      "nrUnits": 9,
+      "flags": 1,
+      "units": []
+    },
+    {
+      "nodeAddress": 4,
+      "name": "Sonos",
+      "physicalAddress": 4294901244,
+      "type": 1,
+      "nrUnits": 10,
+      "flags": 1,
+      "units": []
+    },
+    {
+      "nodeAddress": 3,
+      "name": "IP Server",
+      "physicalAddress": 4294901244,
+      "type": 4,
+      "nrUnits": 32,
+      "flags": 209,
+      "units": []
+    },
+    {
+      "nodeAddress": 16,
+      "name": "Smartbox Living",
+      "physicalAddress": 4294901244,
+      "type": 1,
+      "nrUnits": 41,
+      "flags": 1,
+      "units": [
+        {
+          "nodeAddress": 16,
+          "unitAddress": 0,
+          "name": "T0|Sens",
+          "type": 4,
+          "status": 1,
+          "temperature": {
+            "temp": 65136,
+            "preset": 3,
+            "sun": 255,
+            "hsun": 220,
+            "moon": 220,
+            "hmoon": 215
+          },
+          "value": 65136
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 1,
+          "name": "T1|Sens",
+          "type": 4,
+          "status": 1,
+          "temperature": {
+            "temp": 65136,
+            "preset": 1,
+            "sun": 230,
+            "hsun": 220,
+            "moon": 220,
+            "hmoon": 65136
+          },
+          "value": 65136
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 1,
+          "name": "T1|Sens",
+          "type": 4
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 2,
+          "name": "m1",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 2,
+          "name": "m1",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 3,
+          "name": "m2",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 4,
+          "name": "m3",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 3,
+          "name": "m2",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 5,
+          "name": "m4",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 6,
+          "name": "m5",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 4,
+          "name": "m3",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 7,
+          "name": "m6",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 5,
+          "name": "m4",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 8,
+          "name": "m7",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 9,
+          "name": "m8",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 6,
+          "name": "m5",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 10,
+          "name": "m9",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 7,
+          "name": "m6",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 11,
+          "name": "m10",
+          "type": 7,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 12,
+          "name": "0|input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 8,
+          "name": "m7",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 13,
+          "name": "1|Input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 14,
+          "name": "2|Input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 9,
+          "name": "m8",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 15,
+          "name": "3|Input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 10,
+          "name": "m9",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 16,
+          "name": "4|Input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 17,
+          "name": "5|Input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 11,
+          "name": "m10",
+          "type": 7
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 18,
+          "name": "6|Input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 19,
+          "name": "7|Input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 12,
+          "name": "0|input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 20,
+          "name": "Keuken Vol up",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 13,
+          "name": "1|Input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 21,
+          "name": "Keuken Off",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 22,
+          "name": "Keuken Vol down",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 14,
+          "name": "2|Input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 23,
+          "name": "Keuken On",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 15,
+          "name": "3|Input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 24,
+          "name": "C|Input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 25,
+          "name": "D|Input",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 16,
+          "name": "4|Input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 26,
+          "name": "Keuken boven",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 27,
+          "name": "Keuken onder",
+          "type": 3,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 17,
+          "name": "5|Input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 28,
+          "name": "Curtains",
+          "type": 8,
+          "status": 2
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 18,
+          "name": "6|Input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 29,
+          "name": "Saloon",
+          "type": 1,
+          "status": 0,
+          "value": 90
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 30,
+          "name": "Uplighters",
+          "type": 1,
+          "status": 0,
+          "value": 75
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 19,
+          "name": "7|Input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 31,
+          "name": "Table",
+          "type": 1,
+          "status": 0,
+          "value": 70
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 20,
+          "name": "Keuken Vol up",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 32,
+          "name": "Free",
+          "type": 1,
+          "status": 0,
+          "value": 75
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 33,
+          "name": "Wall",
+          "type": 2,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 21,
+          "name": "Keuken Off",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 34,
+          "name": "Work",
+          "type": 2,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 35,
+          "name": "6|switch",
+          "type": 2,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 22,
+          "name": "Keuken Vol down",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 36,
+          "name": "Cook",
+          "type": 2,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 23,
+          "name": "Keuken On",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 37,
+          "name": "Outside",
+          "type": 2,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 38,
+          "name": "LED",
+          "type": 2,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 24,
+          "name": "C|Input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 39,
+          "name": "Music Kitchen",
+          "type": 2,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 40,
+          "name": "Music Outside",
+          "type": 2,
+          "status": 0
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 25,
+          "name": "D|Input",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 26,
+          "name": "Keuken boven",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 27,
+          "name": "Keuken onder",
+          "type": 3
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 28,
+          "name": "Curtains",
+          "type": 8
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 29,
+          "name": "Saloon",
+          "type": 1
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 30,
+          "name": "Uplighters",
+          "type": 1
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 31,
+          "name": "Table",
+          "type": 1
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 32,
+          "name": "Free",
+          "type": 1
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 33,
+          "name": "Wall",
+          "type": 2
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 34,
+          "name": "Work",
+          "type": 2
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 35,
+          "name": "6|switch",
+          "type": 2
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 36,
+          "name": "Cook",
+          "type": 2
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 37,
+          "name": "Outside",
+          "type": 2
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 38,
+          "name": "LED",
+          "type": 2
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 39,
+          "name": "Music Kitchen",
+          "type": 2
+        },
+        {
+          "nodeAddress": 16,
+          "unitAddress": 40,
+          "name": "Music Outside",
+          "type": 2
+        }
+      ]
+    }
+  ]
+}
