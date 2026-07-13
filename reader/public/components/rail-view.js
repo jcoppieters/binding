@@ -1068,35 +1068,36 @@ function buildFieldDevice(wd, modules) {
 
   // Node address with discovery status badge
   const discovered = state.get().discoveredNodes;
+  const addr = el('div', 'fd-addr');
+  
   if (wd.nodeAddress != null) {
-    const addrLine = el('div', 'fd-addr-line');
-    addrLine.style.cssText = 'display:flex;align-items:center;gap:4px;justify-content:center';
-    const addr = el('div', 'fd-addr');
-    addr.textContent = `0x${wd.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}`;
-    addrLine.append(addr);
+    const addrText = document.createTextNode(`0x${wd.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}`);
+    addr.append(addrText);
     
     if (discovered.length > 0) {
       const found = discovered.some(n => n.nodeAddress === wd.nodeAddress);
       const badge = el('span', found ? 'm-badge-found' : 'm-badge-missing');
       badge.textContent = found ? '✓' : '!';
       badge.title = found ? 'Node gevonden in netwerk' : 'Node NIET gevonden in netwerk';
-      badge.style.marginLeft = '0';
-      addrLine.append(badge);
+      badge.style.cssText = 'margin-left:4px';
+      addr.append(' ', badge);
     }
-    fd.append(addrLine);
   } else if (discovered.length > 0) {
     // No address but network scanned → orphan
-    const addrLine = el('div', 'fd-addr-line');
-    addrLine.style.cssText = 'display:flex;align-items:center;gap:4px;justify-content:center';
-    const addr = el('div', 'fd-addr');
-    addr.textContent = '—';
+    const addrText = document.createTextNode('—');
+    addr.append(addrText);
     const badge = el('span', 'm-badge-orphan');
     badge.textContent = '?';
     badge.title = 'Geen node adres toegekend';
-    badge.style.marginLeft = '0';
-    addrLine.append(addr, badge);
-    fd.append(addrLine);
+    badge.style.cssText = 'margin-left:4px';
+    addr.append(' ', badge);
+  } else {
+    addr.textContent = wd.nodeAddress != null 
+      ? `0x${wd.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}` 
+      : '';
   }
+  
+  if (addr.childNodes.length > 0) fd.append(addr);
 
   fd.append(el('div', 'cdr'));
   return fd;

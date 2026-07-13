@@ -51,8 +51,33 @@ async function init() {
     if (name) dispatch({ type: 'SET_PROJECT_NAME', name });
   });
 
-  document.getElementById('btn-open')?.addEventListener('click', () => openProject());
-  document.getElementById('btn-save')?.addEventListener('click', () => saveProject());
+  // Wire header dropdown menu
+  const projectBtn = document.getElementById('btn-project');
+  const projectMenu = document.getElementById('project-menu');
+  
+  projectBtn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    projectMenu.classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', () => {
+    projectMenu?.classList.remove('show');
+  });
+
+  // Handle dropdown menu items
+  projectMenu?.addEventListener('click', (e) => {
+    const item = e.target.closest('.dropdown-item');
+    if (!item) return;
+    
+    const action = item.dataset.action;
+    if (action === 'new') newProject();
+    else if (action === 'open') openProject();
+    else if (action === 'save') saveProject();
+    
+    projectMenu.classList.remove('show');
+  });
+
   document.getElementById('btn-upload')?.addEventListener('click', () => uploadToHardware());
 
   // Subscribe to state changes → update header
@@ -69,6 +94,30 @@ async function init() {
 }
 
 // ─── Save / Upload ────────────────────────────────────────────────────────────
+
+function newProject() {
+  const confirmed = confirm('Nieuw project starten? Niet-opgeslagen wijzigingen gaan verloren.');
+  if (!confirmed) return;
+
+  const emptyProject = {
+    meta: { name: 'Nieuw project', created: new Date().toISOString(), modified: new Date().toISOString(), version: '1' },
+    railView: {
+      cabinets: [{
+        id: 'cabinet-0',
+        name: 'Hoofdkast',
+        widthUnits: 36,
+        modules: [],
+      }],
+      woningDevices: [],
+    },
+    homeView: { floors: [{ id: 'floor-0', name: 'Gelijkvloers' }], rooms: [] },
+    bindings: [],
+    discoveredNodes: [],
+  };
+
+  dispatch({ type: 'SET_PROJECT', project: emptyProject });
+  showToast('Nieuw project gestart', 'success');
+}
 
 async function openProject() {
   try {

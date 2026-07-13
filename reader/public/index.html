@@ -68,6 +68,15 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.toast-success{background:#0d2a1a;color:#4cd04c;border:1px solid #2a5a3a}
 .toast.toast-error{background:#2a0d0d;color:#f05050;border:1px solid #5a2a2a}
+
+/* ── Header dropdown ─────────────────────────────────────────────────────── */
+.header-dropdown{position:relative}
+.dropdown-menu{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #dde3ef;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.15);min-width:180px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .15s,transform .15s,visibility 0s .15s;z-index:1000}
+.dropdown-menu.show{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .15s,transform .15s}
+.dropdown-item{padding:10px 16px;font-size:13px;color:#4a5568;cursor:pointer;transition:background .12s;display:flex;align-items:center;gap:8px}
+.dropdown-item:hover{background:#f5f7fb;color:#1a1f2e}
+.dropdown-item:first-child{border-radius:6px 6px 0 0}
+.dropdown-item:last-child{border-radius:0 0 6px 6px}
 </style>
 </head>
 <body>
@@ -82,9 +91,15 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
   </div>
   <div class="spacer"></div>
   <div id="connection-status" class="connection-status" title="Klik om te verbinden">● Niet verbonden</div>
-  <button class="header-btn" id="btn-open">📂 Openen</button>
-  <button class="header-btn" id="btn-save">💾 Opslaan</button>
-  <button class="header-btn primary" id="btn-upload">📤 Upload naar hardware</button>
+  <div class="header-dropdown">
+    <button class="header-btn" id="btn-project">📁 Project ▾</button>
+    <div class="dropdown-menu" id="project-menu">
+      <div class="dropdown-item" data-action="new">📄 Nieuw Project</div>
+      <div class="dropdown-item" data-action="open">📂 Openen</div>
+      <div class="dropdown-item" data-action="save">💾 Opslaan</div>
+    </div>
+  </div>
+  <button class="header-btn primary" id="btn-upload">📤 Verstuur bindings</button>
 </header>
 
 <!-- ── Tabs ─────────────────────────────────────────────────────────────── -->
