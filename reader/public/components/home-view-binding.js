@@ -124,15 +124,15 @@ function renderBindingPanel() {
   if (!bindingsCanvas || !_currentBindingContext) return;
   
   bindingsEmpty.style.display = 'none';
-  bindingsCanvas.style.display = 'block';
+  bindingsCanvas.style.display = 'flex';
+  bindingsCanvas.style.flexDirection = 'column';
   bindingsCanvas.innerHTML = '';
-  bindingsCanvas.style.cssText = 'padding:20px;display:flex;flex-direction:column;gap:16px;height:100%;overflow:auto';
   
   const { device, room, otherDevices } = _currentBindingContext;
   
   // Header
   const header = document.createElement('div');
-  header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05)';
+  header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05);margin-bottom:16px';
   header.innerHTML = `
     <div style="font-size:14px;font-weight:600;color:#1a1f2e">
       Bindingen voor ${device.icon} ${device.name} 
@@ -141,10 +141,10 @@ function renderBindingPanel() {
     </div>
   `;
   
-  // Devices container
+  // Devices container (flex:1 to fill space)
   const devicesContainer = document.createElement('div');
   devicesContainer.id = 'binding-devices-container';
-  devicesContainer.style.cssText = 'display:flex;flex-wrap:wrap;gap:24px;padding:20px;background:#fff;border-radius:8px;min-height:200px;position:relative';
+  devicesContainer.style.cssText = 'display:flex;flex-wrap:wrap;gap:24px;padding:20px;background:#fff;border-radius:8px;min-height:300px;flex:1;position:relative;align-content:flex-start';
   
   // Make container a drop zone
   setupDropZone(devicesContainer);
