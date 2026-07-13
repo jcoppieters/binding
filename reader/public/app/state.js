@@ -96,7 +96,9 @@ export function dispatch(action) {
         if (node.type === NodeType.kGUINode)  { woningNodes.push(node); continue; }
         // NodeType 8 (kModemNode) = config modem -> always cabinet
         if (node.type === NodeType.kModemNode){ cabinetNodes.push(node); continue; }
-        // For Standard (1) and Gateway (4): cabinet if any output hardware present
+        // NodeType 4 (kGatewayNode) = TCP server / master -> always cabinet
+        if (node.type === NodeType.kGatewayNode){ cabinetNodes.push(node); continue; }
+        // For Standard (1): cabinet if any output hardware present
         const ctrlCount = (node.units ?? []).filter(u => u.type === 3).length; // kInput
         const moodCount = (node.units ?? []).filter(u => u.type === 7).length; // kMood
         if (!hasCabinetUnits(node.units) && (ctrlCount > 0 || moodCount > 0)) {

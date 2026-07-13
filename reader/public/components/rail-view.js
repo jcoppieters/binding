@@ -520,11 +520,21 @@ function buildModuleCard(moduleInstance, def) {
 
   // Discovery status badge (runtime — based on state.discoveredNodes)
   const discovered = state.get().discoveredNodes;
-  if (discovered.length > 0 && moduleInstance.nodeAddress != null) {
-    const found = discovered.some(n => n.nodeAddress === moduleInstance.nodeAddress);
-    const badge = el('span', found ? 'm-badge-found' : 'm-badge-missing');
-    badge.textContent = found ? '✓' : '!';
-    badge.title = found ? 'Node gevonden in netwerk' : 'Node NIET gevonden in netwerk';
+  if (moduleInstance.nodeAddress != null) {
+    if (discovered.length > 0) {
+      const found = discovered.some(n => n.nodeAddress === moduleInstance.nodeAddress);
+      const badge = el('span', found ? 'm-badge-found' : 'm-badge-missing');
+      badge.textContent = found ? '✓' : '!';
+      badge.title = found ? 'Node gevonden in netwerk' : 'Node NIET gevonden in netwerk';
+      footer.append(dinEl, addrEl, badge);
+    } else {
+      footer.append(dinEl, addrEl);
+    }
+  } else if (discovered.length > 0) {
+    // Module has no address but network has been scanned → orphan module
+    const badge = el('span', 'm-badge-orphan');
+    badge.textContent = '?';
+    badge.title = 'Geen node adres toegekend';
     footer.append(dinEl, addrEl, badge);
   } else {
     footer.append(dinEl, addrEl);
@@ -1056,10 +1066,36 @@ function buildFieldDevice(wd, modules) {
   lbl.textContent = wd.name ?? def?.productLine ?? def?.name?.slice(0, 18) ?? wd.model;
   fd.append(lbl);
 
+  // Node address with discovery status badge
+  const discovered = state.get().discoveredNodes;
   if (wd.nodeAddress != null) {
+    const addrLine = el('div', 'fd-addr-line');
+    addrLine.style.cssText = 'display:flex;align-items:center;gap:4px;justify-content:center';
     const addr = el('div', 'fd-addr');
     addr.textContent = `0x${wd.nodeAddress.toString(16).toUpperCase().padStart(2, '0')}`;
-    fd.append(addr);
+    addrLine.append(addr);
+    
+    if (discovered.length > 0) {
+      const found = discovered.some(n => n.nodeAddress === wd.nodeAddress);
+      const badge = el('span', found ? 'm-badge-found' : 'm-badge-missing');
+      badge.textContent = found ? '✓' : '!';
+      badge.title = found ? 'Node gevonden in netwerk' : 'Node NIET gevonden in netwerk';
+      badge.style.marginLeft = '0';
+      addrLine.append(badge);
+    }
+    fd.append(addrLine);
+  } else if (discovered.length > 0) {
+    // No address but network scanned → orphan
+    const addrLine = el('div', 'fd-addr-line');
+    addrLine.style.cssText = 'display:flex;align-items:center;gap:4px;justify-content:center';
+    const addr = el('div', 'fd-addr');
+    addr.textContent = '—';
+    const badge = el('span', 'm-badge-orphan');
+    badge.textContent = '?';
+    badge.title = 'Geen node adres toegekend';
+    badge.style.marginLeft = '0';
+    addrLine.append(addr, badge);
+    fd.append(addrLine);
   }
 
   fd.append(el('div', 'cdr'));
