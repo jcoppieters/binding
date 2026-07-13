@@ -342,10 +342,10 @@ function buildRoomCard(room) {
     background-repeat:no-repeat;
   `;
   
-  // Future: Add background image support
-  // if (room.backgroundImage) {
-  //   card.style.backgroundImage = `url(${room.backgroundImage})`;
-  // }
+  // Add background image if set
+  if (room.backgroundImage) {
+    card.style.backgroundImage = `url(${room.backgroundImage})`;
+  }
   
   card.onmouseenter = () => { card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.12)'; };
   card.onmouseleave = () => { card.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'; };
@@ -523,9 +523,32 @@ function openRoomMenu(room) {
     overlay.remove();
     promptRenameRoom(room);
   };
+  
+  // Floor plan upload/change
+  const floorplanBtn = el('button', 'modal-btn');
+  floorplanBtn.textContent = room.backgroundImage ? '🗺️ Grondplan wijzigen' : '🗺️ Grondplan toevoegen';
+  floorplanBtn.style.cssText = 'width:100%;margin-bottom:8px';
+  floorplanBtn.onclick = () => {
+    overlay.remove();
+    promptAddFloorplan(room);
+  };
+  
+  // Remove floor plan (only if exists)
+  let removeFloorplanBtn = null;
+  if (room.backgroundImage) {
+    removeFloorplanBtn = el('button', 'modal-btn');
+    removeFloorplanBtn.textContent = '🗑 Verwijder grondplan';
+    removeFloorplanBtn.style.cssText = 'width:100%;margin-bottom:8px;color:#f59e0b;border-color:#fde68a';
+    removeFloorplanBtn.onclick = () => {
+      if (confirm('Grondplan verwijderen?')) {
+        dispatch({ type: 'UPDATE_ROOM', roomId: room.id, patch: { backgroundImage: null } });
+        overlay.remove();
+      }
+    };
+  }
 
   const deleteBtn = el('button', 'modal-btn');
-  deleteBtn.textContent = '🗑 Verwijder';
+  deleteBtn.textContent = '🗑 Verwijder kamer';
   deleteBtn.style.cssText = 'width:100%;color:#ef4444;border-color:#fca5a5';
   deleteBtn.onclick = () => {
     if (room.devices.length > 0 && !confirm(`Kamer bevat ${room.devices.length} apparaat/apparaten. Toch verwijderen?`)) {
@@ -537,7 +560,9 @@ function openRoomMenu(room) {
     }
   };
 
-  body.append(renameBtn, deleteBtn);
+  body.append(renameBtn, floorplanBtn);
+  if (removeFloorplanBtn) body.append(removeFloorplanBtn);
+  body.append(deleteBtn);
 
   const footer = el('div', 'modal-footer');
   const closeFooterBtn = el('button', 'modal-btn');
@@ -602,6 +627,62 @@ function promptRenameRoom(room) {
   document.body.append(overlay);
   nameInput.focus();
   nameInput.select();
+}
+
+// ─── Add/Change Floor Plan ────────────────────────────────────────────────────
+
+function promptAddFloorplan(room) {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.style.display = 'none';
+  
+  fileInput.onchange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    if (!file.type.startsWith('image/')) {
+      alert('Alleen afbeeldingen zijn toegestaan');
+      return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const dataUrl = evt.target.result;
+      dispatch({ type: 'UPDATE_ROOM', roomId: room.id, patch: { backgroundImage: dataUrl } });
+      
+      // Show toast notification
+      const toast = el('div', '');
+      toast.style.cssText = `
+        position:fixed;
+        bottom:24px;
+        right:24px;
+        background:#10b981;
+        color:#fff;
+        padding:12px 20px;
+        border-radius:8px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        font-size:14px;
+        z-index:10000;
+        animation:slideIn .3s ease-out;
+      `;
+      toast.textContent = '✓ Grondplan toegevoegd';
+      document.body.append(toast);
+      setTimeout(() => {
+        toast.style.animation = 'slideOut .3s ease-out';
+        setTimeout(() => toast.remove(), 300);
+      }, 2000);
+    };
+    reader.onerror = () => {
+      alert('Fout bij laden van afbeelding');
+    };
+    reader.readAsDataURL(file);
+    
+    fileInput.remove();
+  };
+  
+  document.body.append(fileInput);
+  fileInput.click();
 }
 
 // ─── Add Device to Room ───────────────────────────────────────────────────────
