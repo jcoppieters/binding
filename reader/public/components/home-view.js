@@ -404,8 +404,15 @@ function buildRoomCard(room) {
         deviceCard.style.transform = 'translateY(0)'; 
         deviceCard.style.boxShadow = 'none';
       };
-  // This function is now imported from home-view-binding.js
-  // Kept here as a placeholder for backwards compatibility     }));
+      
+      // Make device draggable for binding panel
+      deviceCard.draggable = true;
+      deviceCard.ondragstart = (e) => {
+        e.dataTransfer.effectAllowed = 'copy';
+        e.dataTransfer.setData('application/json', JSON.stringify({ 
+          device: { ...device, roomName: room.name },
+          sourceType: 'room'
+        }));
         deviceCard.style.opacity = '0.5';
       };
       deviceCard.ondragend = () => {
