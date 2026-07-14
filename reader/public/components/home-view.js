@@ -360,7 +360,7 @@ function buildRoomCard(room) {
   headerButtons.style.cssText = 'display:flex;gap:8px;align-items:center';
   
   const addDeviceBtn = el('button', '');
-  addDeviceBtn.textContent = '+ apparaat';
+  addDeviceBtn.textContent = '+ Apparaat';
   addDeviceBtn.style.cssText = 'background:none;border:none;color:#3b82f6;cursor:pointer;font-size:13px;padding:4px 8px;border-radius:4px;font-weight:500';
   addDeviceBtn.title = 'Apparaat toevoegen';
   addDeviceBtn.onmouseenter = () => { addDeviceBtn.style.background = '#eff6ff'; };

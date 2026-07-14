@@ -148,11 +148,48 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Room menu with rename/delete options
   - State actions: ADD_ROOM, UPDATE_ROOM, REMOVE_ROOM, ADD_FLOOR, UPDATE_FLOOR, REMOVE_FLOOR
 - [ ] **P2-3** Click room in sidebar → zoom canvas to show only that room full-width
-- [x] **P2-4** Add device to room — **DONE** (UI structure ready)
-  - "Add device" button in room cards
-  - Modal opens for device selection (needs implementation: show available channels)
-  - TODO: List available channels grouped by type, show module origin
-  - TODO: Prompt for device name; allow rename
+- [x] **P2-4** Add device to room — **DONE** (basic UI structure)
+  - "+ apparaat" button in room header opens device picker dialog
+  - 7 device type buttons with visual selection (switch, button, sensor, lamp, relay, dimmer, motor)
+  - Name input with validation
+  - Dispatches ADD_DEVICE_TO_ROOM action to add device to room
+  - **STATUS**: Basic demo version complete — adds mock devices with icons/colors
+  - **NEXT**: Link to real units from material list (see P2-4a below)
+- [ ] **P2-4a** Link room devices to real material units (MAJOR TASK)
+  - **Goal**: Room devices must be actual units from the materiaallijst, not mock objects
+  - **Device picker must show**:
+    * Available units grouped by type (relay, lamp, dimmer, motor, switch, sensor, button)
+    * Module origin for each unit (e.g., "DT02 Relay Module - Rail 1, Cabinet A")
+    * Ongebruikt vs. Gebruikt status badge for each unit
+    * Unit name as default (e.g., "Relais 1", "Dimmer kanaal 2") — editable in the picker
+  - **Rules**:
+    * Controllers (switch, sensor, button): can only be used ONCE — cannot appear in multiple rooms
+    * Controllables (lamp, relay, dimmer, motor): CAN be used multiple times (multiple lamps on 1 circuit)
+    * For now: only show UNUSED units in picker (multi-use for lamps = future enhancement)
+  - **Data model**:
+    * Room device gets `channelRef: {cabinetId, moduleId, unitAddress}` or `{woningDeviceId, unitAddress}`
+    * This links the room device to the physical unit in Rail View
+    * Unit itself gets `room: {floorId, roomId}` assignment (bidirectional link)
+  - **Name editing**:
+    * Room device name can be changed in Home View (rename in device context menu)
+    * Name change must update the underlying unit's label
+    * Later: name change must be uploaded to the node (via TCP binding protocol)
+  - **State actions needed**:
+    * ADD_DEVICE_TO_ROOM: link device to unit, mark unit as used, set unit.room
+    * UPDATE_DEVICE_NAME: rename in both room device + linked unit
+    * REMOVE_DEVICE_FROM_ROOM: unlink, mark unit as unused, clear unit.room
+  - **UI changes needed**:
+    * Replace device type picker with unit picker (filterable list with search)
+    * Show unit availability + module origin in picker
+    * Add "Naam" field pre-filled with unit's current label (editable)
+    * Device card in room shows unit icon + custom name
+  - **Backend support**:
+    * May need `GET /api/units/available` endpoint to list unused units
+    * Or compute availability in frontend from project.cabinets + project.woningDevices
+  - **Future enhancements** (not now):
+    * Allow adding already-used lamps to multiple rooms (same circuit)
+    * Show "Gebruikt in: Keuken, Badkamer" badge for multi-use units
+    * Separate "Add existing device" vs "Add new device" flows
 - [ ] **P2-5** Floor plan import (image overlay, toggle)
   - Per-room background image upload via room ... menu (🗺️ Grondplan toevoegen)
   - File input → FileReader → save as data URL to room.backgroundImage
