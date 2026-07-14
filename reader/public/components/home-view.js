@@ -430,7 +430,17 @@ function buildRoomCard(room) {
         e.dataTransfer.setData('application/json', JSON.stringify({ 
           device: { ...device, roomName: room.name },
           sourceType: 'room'
-   ard.append(header, devicesArea
+        }));
+        deviceCard.style.opacity = '0.5';
+      };
+      deviceCard.ondragend = () => {
+        deviceCard.style.opacity = '1';
+      };
+      
+      // Click to open binding panel
+      deviceCard.onclick = (e) => {
+        if (!e.defaultPrevented) {
+          showDeviceBindings(device, room);
         }
       };
       
@@ -438,17 +448,7 @@ function buildRoomCard(room) {
     });
   }
 
-  const addDeviceBtn = el('button', '');
-  addDeviceBtn.textContent = '+ Apparaat toevoegen';
-  addDeviceBtn.style.cssText = 'margin-top:12px;font-size:13px;padding:8px 16px;background:#fff;border:1px solid #dde3ef;border-radius:6px;cursor:pointer;align-self:flex-start;transition:all .15s;color:#4a5568';
-  addDeviceBtn.onmouseenter = () => { addDeviceBtn.style.background = '#f5f7fb'; addDeviceBtn.style.borderColor = '#c0c8d8'; };
-  addDeviceBtn.onmouseleave = () => { addDeviceBtn.style.background = '#fff'; addDeviceBtn.style.borderColor = '#dde3ef'; };
-  addDeviceBtn.onclick = (e) => {
-    e.stopPropagation();
-    promptAddDevice(room);
-  };
-
-  card.append(header, devicesArea, addDeviceBtn);
+  card.append(header, devicesArea);
 
   return card;
 }
