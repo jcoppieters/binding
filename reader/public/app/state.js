@@ -249,6 +249,17 @@ export function dispatch(action) {
       _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
       break;
     }
+    case 'ADD_DEVICE_TO_ROOM': {
+      const homeView = { ..._state.project.homeView };
+      homeView.rooms = homeView.rooms.map(r => {
+        if (r.id === action.roomId) {
+          return { ...r, devices: [...(r.devices || []), action.device] };
+        }
+        return r;
+      });
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
     case 'ADD_FLOOR': {
       const homeView = { ..._state.project.homeView };
       homeView.floors = [...homeView.floors, action.floor];
