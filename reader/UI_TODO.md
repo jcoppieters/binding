@@ -323,11 +323,50 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Confirm deletion → removes binding from project
   - State action: `REMOVE_BINDING`
 - [ ] **P3-4** Insert logic blocks on wires → `C` (Conditional) binding type
-  - **TODO LATER**: Add OR, XOR, AND+NOT logic operators to bindings
-  - Logic blocks appear as visual elements inserted on wire paths
-  - Double-click wire → opens logic block insertion menu
-  - Each logic type has distinct icon and color
-  - Maps to `C` binding type with appropriate parameters
+  - **Goal**: Visual logic gates (NOT, AND, OR, XOR) as draggable blocks in binding canvas
+  - **Logic block types**:
+    * **NOT** (inverter): 1 input → 1 output (inverts signal)
+    * **AND**: 2+ inputs → 1 output (all inputs must be active)
+    * **OR**: 2+ inputs → 1 output (any input triggers output)
+    * **XOR**: 2 inputs → 1 output (exactly one input must be active)
+  - **Block visual design**:
+    * Rectangular card with icon/symbol for logic type (¬, ∧, ∨, ⊕)
+    * Input ports on LEFT side (colored dots, same as device inputs)
+    * Output port on RIGHT side (colored dot)
+    * Label shows logic type name ("NOT", "AND", "OR", "XOR")
+    * Color-coded: NOT=purple, AND=blue, OR=green, XOR=orange
+  - **Placement in binding canvas**:
+    * Drag logic block from toolbar/palette into binding canvas
+    * Position between controller output and controllable input
+    * Wires connect: controller → logic block input(s) → logic block output → controllable
+  - **Wire connections**:
+    * Input wires: multiple controller outputs can connect to logic block inputs
+    * Output wire: logic block output connects to one or more controllable inputs
+    * Wire colors reflect source (controller output color)
+  - **Configuration**:
+    * Click block → opens config panel
+    * AND/OR: configure number of inputs (2-8)
+    * Set inversion per input (NOT modifier per input)
+    * Advanced: debounce time, trigger edge (rising/falling/both)
+  - **State management**:
+    * Logic blocks stored in `project.logicBlocks[]` with `{id, type, inputs[], output, config}`
+    * Bindings reference logic block ID: `{from: {deviceId, portId}, to: {logicBlockId, inputIndex}}`
+    * Output binding: `{from: {logicBlockId, output}, to: {deviceId, portId}}`
+  - **Serialization to `bind*.txt`**:
+    * Maps to `C` (Conditional) binding type
+    * Duotecno protocol supports AND/OR/NOT/XOR in binding strings
+    * Complex logic may require multiple binding entries or intermediate virtual units
+  - **UI workflow**:
+    1. User drags "AND" block from palette to canvas
+    2. Draws wire from Switch 1 kort → AND input 1
+    3. Draws wire from Switch 2 kort → AND input 2
+    4. Draws wire from AND output → Lamp input
+    5. Result: Lamp only turns on when BOTH switches pressed
+  - **Future enhancements**:
+    * Compound blocks: combine multiple gates (e.g., NAND = NOT + AND)
+    * Visual simulation: show block state in real-time (inputs/output active/inactive)
+    * Copy/paste blocks with connected wires
+    * Block templates library
 - [ ] **P3-5** Insert timer blocks on wire (delayed/flashing/repeat) → `Td`/`Tf`/`Tr` binding types
   - **TODO LATER**: Add timer/delay blocks to bindings
   - Timer blocks appear as visual elements on wire paths
@@ -662,18 +701,30 @@ Examples of how existing modules map:
 
 **Branch strategy**: Keep `main` branch demo-ready. Create `feature/material-units` branch for P2-4a.
 
+**Recommended implementation order:**
+
 1. **P2-8** Drag-and-drop device positioning in rooms
    - Essential for floor plan-based layouts
    - Quick win: device cards already exist, just add drag handlers
    - Store x/y coordinates in room device model
    - Optional: snap-to-grid for alignment
+   - **Estimated effort**: 2-4 hours
 
 2. **P2-9** Remove/move device between rooms  
    - Completes device management workflow
    - Context menu on device card: "Verwijder" / "Verplaats naar..."
    - Bindings should persist through moves
+   - **Estimated effort**: 2-3 hours
 
-3. **P2-4a** Link room devices to real material units (MAJOR — separate branch)
+3. **P3-4** Logic blocks (NOT, AND, OR, XOR) in binding view
+   - Visual logic gates as draggable blocks
+   - Input/output ports for wire connections
+   - Foundation for advanced binding logic
+   - Maps to `C` (Conditional) binding type
+   - **Estimated effort**: 6-8 hours
+   - **Why before P2-4a**: Demonstrates binding capabilities without changing data model
+
+4. **P2-4a** Link room devices to real material units (MAJOR — separate branch)
    - ⚠️ **Create branch**: `git checkout -b feature/material-units`
    - Replace mock device picker with real unit picker
    - Show available units from Rail View with module origin
@@ -681,6 +732,7 @@ Examples of how existing modules map:
    - Mark units as used/unused
    - Allow name editing with sync to underlying unit
    - **Test thoroughly before merge** — this changes data model significantly
+   - **Estimated effort**: 12-16 hours
 
 ### Medium-term features (Live control + wiring)
 
