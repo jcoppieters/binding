@@ -154,16 +154,29 @@ function renderBindingPanel() {
   
   const { device, room, otherDevices } = _currentBindingContext;
   
+  // Helper: check if device is a controller (has outputs)
+  const isController = (dev) => {
+    const ports = DEVICE_PORTS[dev.type];
+    return ports && ports.outputs && ports.outputs.length > 0;
+  };
+  
+  // Combine all devices and sort: controllers first, then controllables
+  const allDevices = [device, ...otherDevices];
+  const sortedDevices = allDevices.sort((a, b) => {
+    const aIsController = isController(a);
+    const bIsController = isController(b);
+    if (aIsController && !bIsController) return -1;  // a first
+    if (!aIsController && bIsController) return 1;   // b first
+    return 0;  // keep original order within same type
+  });
+  
   // Header
   const header = document.createElement('div');
   header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05);margin-bottom:16px';
-  header.innerHTML = `
-    <div style="font-size:14px;font-weight:600;color:#1a1f2e">
-      Bindingen voor ${device.icon} ${device.name} 
-      <span style="color:#6a7899;font-weight:400">in ${room.name}</span>
-      <span style="color:#9ca3af;font-size:12px;font-weight:400;margin-left:12px">— Sleep apparaten hierheen</span>
-    </div>
-  `;
+  header.all devices in sorted order (controllers first, then controllables)
+  sortedDevices.forEach(dev => {
+    const isPrimary = dev.id === device.id;
+    const card = buildBindingDeviceCard(dev, isPrimary
   
   // Devices container (flex:1 to fill space)
   const devicesContainer = document.createElement('div');

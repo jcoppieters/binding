@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-13T13:11:15.058Z",
+    "modified": "2026-07-14T06:12:18.353Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -117,7 +117,56 @@
       }
     ]
   },
-  "bindings": [],
+  "bindings": [
+    {
+      "id": "ut64dbgl",
+      "from": {
+        "deviceId": "6vf0ndi8",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "i2zrykxj",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6"
+    },
+    {
+      "id": "fo9293q3",
+      "from": {
+        "deviceId": "6vf0ndi8",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "ig1l0i7q",
+        "portId": "op"
+      },
+      "color": "#3b82f6"
+    },
+    {
+      "id": "vgrxfczt",
+      "from": {
+        "deviceId": "6vf0ndi8",
+        "portId": "lang"
+      },
+      "to": {
+        "deviceId": "i2zrykxj",
+        "portId": "uit"
+      },
+      "color": "#a855f7"
+    },
+    {
+      "id": "u3wuqa9j",
+      "from": {
+        "deviceId": "6vf0ndi8",
+        "portId": "lang"
+      },
+      "to": {
+        "deviceId": "ig1l0i7q",
+        "portId": "stop"
+      },
+      "color": "#a855f7"
+    }
+  ],
   "discoveredNodes": [
     {
       "nodeAddress": 252,
