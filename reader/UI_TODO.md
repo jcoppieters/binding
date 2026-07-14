@@ -147,7 +147,7 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Floor menu with rename/delete options
   - Room menu with rename/delete options
   - State actions: ADD_ROOM, UPDATE_ROOM, REMOVE_ROOM, ADD_FLOOR, UPDATE_FLOOR, REMOVE_FLOOR
-- [ ] **P2-3** Click room in sidebar → zoom canvas to show only that room full-width
+
 - [x] **P2-4** Add device to room — **DONE** (basic UI structure)
   - "+ apparaat" button in room header opens device picker dialog
   - 7 device type buttons with visual selection (switch, button, sensor, lamp, relay, dimmer, motor)
@@ -190,23 +190,18 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
     * Allow adding already-used lamps to multiple rooms (same circuit)
     * Show "Gebruikt in: Keuken, Badkamer" badge for multi-use units
     * Separate "Add existing device" vs "Add new device" flows
-- [ ] **P2-5** Floor plan import (image overlay, toggle)
-  - Per-room background image upload via room ... menu (🗺️ Grondplan toevoegen)
-  - File input → FileReader → save as data URL to room.backgroundImage
-  - CSS background-size:cover + background-position:center applied to room card
-  - "Verwijder grondplan" menu item appears when room.backgroundImage is set
-  - TODO LATER: Add crop/select step after upload — user selects portion of drawing for this room
-  - Global "Grondplan" button removed (per-room backgrounds replace it)
+- [x] **P2-5** Floor plan import (image overlay, toggle) — **PARTIALLY DONE**
+  - ✅ Per-room background image upload via room ... menu (🗺️ Grondplan toevoegen)
+  - ✅ File input → FileReader → save as data URL to room.backgroundImage
+  - ✅ CSS background-size:cover + background-position:center applied to room card
+  - ✅ "Verwijder grondplan" menu item appears when room.backgroundImage is set
+  - ⏳ TODO: Add crop/select step after upload — user selects portion of drawing for this room
 - [x] **P2-6** Bigger room cards with horizontal scroll — **DONE**
   - Room cards occupy ~80% of available canvas width (not small fixed-size cards)
   - Multiple rooms flow horizontally → horizontal scroll to navigate between rooms
   - Rooms take full height above divider with flex:2 layout
   - Device cards remain 100×100px fixed size
   - Allows room interiors to be visible at a useful scale for device placement
-- [ ] **P2-7** Zoom in/out controls for Home View canvas
-  - Toolbar buttons or mouse wheel zoom
-  - Zoom affects room scale and device visibility
-  - Useful for detailed device placement and wiring work
 - [ ] **P2-8** Drag-and-drop device positioning in rooms
   - Device cards should be draggable within room canvas
   - Snap to grid option for alignment
@@ -283,6 +278,35 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Select from devices in same room or all rooms
   - Multiple devices can be added to the binding canvas simultaneously
   - Devices arranged in a flow layout for easy wiring visualization
+- [ ] **P3-1e** Device controls and live state in binding view
+  - **Goal**: When clicking device icon in binding panel, show interactive controls + live state/feedback
+  - **Reference implementation**: `../duotecnopro/src/app/rendering` (ProApp mobile app controls)
+  - **Controls per device type**:
+    * Switch: kort/lang buttons (trigger actions)
+    * Relay: aan/uit/schakel buttons
+    * Dimmer: aan/uit/schakel + slider for dim value + dim+/dim- buttons
+    * Motor: op/neer/stop buttons
+    * Sensor: trigger button (manual test)
+    * Temperature: display current value, set target value
+  - **Live state display**:
+    * Relay: ON/OFF badge with color (green/gray)
+    * Dimmer: ON/OFF + current dim percentage (0-100%)
+    * Motor: UP/DOWN/STOPPED + position percentage
+    * Temperature: current temp, requested/target temp
+    * Switch: last action timestamp (kort/lang pressed X seconds ago)
+  - **Live feedback**:
+    * Subscribe to TCP state updates from master (existing `unit-control.js` infrastructure)
+    * Update UI in real-time when device state changes (from physical switches, other users, moods)
+    * Show activity indicator during state transitions
+  - **Visual feedback on device icons** (future enhancement):
+    * Lamp icon: yellow when ON, gray when OFF
+    * Motor icon: animated up/down arrows during movement
+    * Dimmer: brightness glow effect proportional to dim value
+  - **Implementation notes**:
+    * Reuse existing `unit-control.js` for TCP communication
+    * Modal or expandable panel for controls (don't clutter binding canvas)
+    * Control layout adapts to device type (render functions from ProApp)
+    * State subscription: `state.subscribe()` for local project changes + TCP events for hardware state
 - [ ] **P3-2** Draw wire: drag output port → input port
   - Click and hold on output dot → shows dragging wire following mouse cursor
   - Hover over compatible input dot → highlight as valid drop target
@@ -629,3 +653,87 @@ Examples of how existing modules map:
 - [x] **P0-2c** Manually define `channelGroups` for all DIN modules and Smartbox plugin `channelGroups` — **DONE** (all families have channelGroups now)
 - [x] **P0-2d** Add Smartbox `isSmartboxBase`/`isSmartboxPlugin`/`slotCount` to relevant entries — **DONE**
 - [ ] **P0-2e** Fill in missing metadata for new entries: sourceUrl, pdfUrl, images for DT1C-4, DT43, DT13-ARI, DT13-BO, DMX-PWM, DT0D-*, DT20-LIC, DT00-DAL, DT07-DAL, DT0B-DAL*, DT00-12
+
+---
+
+## Next Steps — Implementation Plan
+
+### Immediate priorities (Demo-ready features)
+
+**Branch strategy**: Keep `main` branch demo-ready. Create `feature/material-units` branch for P2-4a.
+
+1. **P2-8** Drag-and-drop device positioning in rooms
+   - Essential for floor plan-based layouts
+   - Quick win: device cards already exist, just add drag handlers
+   - Store x/y coordinates in room device model
+   - Optional: snap-to-grid for alignment
+
+2. **P2-9** Remove/move device between rooms  
+   - Completes device management workflow
+   - Context menu on device card: "Verwijder" / "Verplaats naar..."
+   - Bindings should persist through moves
+
+3. **P2-4a** Link room devices to real material units (MAJOR — separate branch)
+   - ⚠️ **Create branch**: `git checkout -b feature/material-units`
+   - Replace mock device picker with real unit picker
+   - Show available units from Rail View with module origin
+   - Implement bidirectional link: room device ↔ physical unit
+   - Mark units as used/unused
+   - Allow name editing with sync to underlying unit
+   - **Test thoroughly before merge** — this changes data model significantly
+
+### Medium-term features (Live control + wiring)
+
+4. **P3-1e** Device controls and live state in binding view
+   - Study ProApp rendering code: `../duotecnopro/src/app/rendering`
+   - Extract control layouts per device type
+   - Implement modal/panel for device controls
+   - Connect to existing `unit-control.js` for TCP communication
+   - Add state subscription for real-time updates
+
+5. **P3-1b** Device port visualization in Home View
+   - Show colored dots on device cards (inputs left, outputs right)
+   - Foundation for wire drawing
+
+6. **P3-2** Wire drawing between devices
+   - Drag from output dot to input dot
+   - SVG path rendering with curves
+   - Create binding entries in project
+
+### Lower priority (Deferred)
+
+- **P2-5** (remainder): Floor plan crop/select after upload
+- **P3-4/P3-5**: Logic blocks and timers on wires
+- **P4**: Moods editor
+- **P5**: Scheduling editor
+- **P6-5**: Smartbox plugin configurator
+
+---
+
+## Ideas / Future Enhancements
+
+These are deferred indefinitely — may be useful for v2.0 but not essential for launch:
+
+- **P2-3** Click room in sidebar → zoom canvas to show only that room full-width
+  - Nice-to-have: sidebar navigation to specific room
+  - Can be done with simple scroll-to behavior instead of zoom
+  
+- **P2-7** Zoom in/out controls for Home View canvas
+  - Mouse wheel or toolbar buttons for zoom
+  - Useful for large installations with many rooms
+  - Complex interaction with drag-drop and wiring — defer until those are stable
+
+- **Visual feedback on device icons** (mentioned in P3-1e)
+  - Lamp icons glow when ON
+  - Motor icons show animated arrows during movement
+  - Dimmer brightness proportional to value
+  - Requires real-time state subscription — implement after P3-1e controls are working
+
+- **Multi-room device usage** (mentioned in P2-4a future enhancements)
+  - Allow same lamp to appear in multiple rooms (same circuit)
+  - Show "Gebruikt in: Keuken, Badkamer" badge
+  - Requires careful UX to avoid confusion
+
+- **Undo/redo for all actions**
+  - Command pattern on state.dispatch()
+  - Useful but adds complexity — defer until core features are stable
