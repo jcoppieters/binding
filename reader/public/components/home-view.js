@@ -352,7 +352,23 @@ function buildRoomCard(room) {
 
   const header = el('div', '');
   header.style.cssText = 'font-size:18px;font-weight:600;color:#1a1f2e;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.95);padding:12px 16px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05)';
-  header.innerHTML = `<span>${room.icon || '🚪'} ${room.name}</span>`;
+  
+  const roomTitle = el('span', '');
+  roomTitle.textContent = `${room.icon || '🚪'} ${room.name}`;
+  
+  const headerButtons = el('div', '');
+  headerButtons.style.cssText = 'display:flex;gap:8px;align-items:center';
+  
+  const addDeviceBtn = el('button', '');
+  addDeviceBtn.textContent = '+ apparaat';
+  addDeviceBtn.style.cssText = 'background:none;border:none;color:#3b82f6;cursor:pointer;font-size:13px;padding:4px 8px;border-radius:4px;font-weight:500';
+  addDeviceBtn.title = 'Apparaat toevoegen';
+  addDeviceBtn.onmouseenter = () => { addDeviceBtn.style.background = '#eff6ff'; };
+  addDeviceBtn.onmouseleave = () => { addDeviceBtn.style.background = 'none'; };
+  addDeviceBtn.onclick = (e) => {
+    e.stopPropagation();
+    promptAddDevice(room);
+  };
 
   const menuBtn = el('button', '');
   menuBtn.style.cssText = 'background:none;border:none;color:#6a7899;cursor:pointer;font-size:18px;padding:4px 8px;border-radius:4px';
@@ -364,7 +380,9 @@ function buildRoomCard(room) {
     e.stopPropagation();
     openRoomMenu(room);
   };
-  header.append(menuBtn);
+  
+  headerButtons.append(addDeviceBtn, menuBtn);
+  header.append(roomTitle, headerButtons);
 
   // Devices area (will hold device cards in the future)
   const devicesArea = el('div', '');
@@ -412,17 +430,7 @@ function buildRoomCard(room) {
         e.dataTransfer.setData('application/json', JSON.stringify({ 
           device: { ...device, roomName: room.name },
           sourceType: 'room'
-        }));
-        deviceCard.style.opacity = '0.5';
-      };
-      deviceCard.ondragend = () => {
-        deviceCard.style.opacity = '1';
-      };
-      
-      // Click to open binding panel
-      deviceCard.onclick = (e) => {
-        if (!e.defaultPrevented) {
-          showDeviceBindings(device, room);
+   ard.append(header, devicesArea
         }
       };
       
