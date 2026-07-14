@@ -703,18 +703,114 @@ function promptAddDevice(room) {
   hdr.append(closeBtn);
 
   const body = el('div', 'modal-body');
-  body.textContent = 'TODO: Show available channels grouped by type (dimmer, relay, motor, etc.)';
+  
+  // Device types with icons and colors
+  const deviceTypes = [
+    { type: 'switch', label: 'Schakelaar', icon: '🔘', color: '#a855f7' },
+    { type: 'button', label: 'Drukknop', icon: '🔳', color: '#10b981' },
+    { type: 'sensor', label: 'Sensor', icon: '🌡️', color: '#f59e0b' },
+    { type: 'lamp', label: 'Lamp', icon: '💡', color: '#fbbf24' },
+    { type: 'relay', label: 'Relais', icon: '⚡', color: '#3b82f6' },
+    { type: 'dimmer', label: 'Dimmer', icon: '🎚️', color: '#8b5cf6' },
+    { type: 'motor', label: 'Motor', icon: '🪟', color: '#06b6d4' }
+  ];
+  
+  const typeLabel = el('label', 'modal-label');
+  typeLabel.textContent = 'Type apparaat';
+  
+  const typeGrid = el('div', '');
+  typeGrid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:16px';
+  
+  let selectedType = null;
+  const typeButtons = [];
+  
+  deviceTypes.forEach(dt => {
+    const btn = el('button', '');
+    btn.style.cssText = `
+      padding:12px;
+      border:2px solid #dde3ef;
+      border-radius:8px;
+      background:#fff;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      transition:all .15s;
+    `;
+    btn.innerHTML = `
+      <div style="font-size:28px">${dt.icon}</div>
+      <div style="font-size:12px;color:#1a1f2e;font-weight:500">${dt.label}</div>
+    `;
+    btn.onclick = () => {
+      selectedType = dt;
+      typeButtons.forEach(b => {
+        b.style.borderColor = '#dde3ef';
+        b.style.background = '#fff';
+      });
+      btn.style.borderColor = dt.color;
+      btn.style.background = `${dt.color}15`;
+    };
+    btn.onmouseenter = () => {
+      if (selectedType !== dt) {
+        btn.style.borderColor = '#c0c8d8';
+      }
+    };
+    btn.onmouseleave = () => {
+      if (selectedType !== dt) {
+        btn.style.borderColor = '#dde3ef';
+      }
+    };
+    typeButtons.push(btn);
+    typeGrid.append(btn);
+  });
+  
+  const nameLabel = el('label', 'modal-label');
+  nameLabel.textContent = 'Naam apparaat';
+  nameLabel.style.marginTop = '16px';
+  
+  const nameInput = el('input', 'modal-input');
+  nameInput.type = 'text';
+  nameInput.placeholder = 'Bijv. Lamp woonkamer';
+  
+  body.append(typeLabel, typeGrid, nameLabel, nameInput);
 
   const footer = el('div', 'modal-footer');
   const cancelBtn = el('button', 'modal-btn');
-  cancelBtn.textContent = 'Sluiten';
+  cancelBtn.textContent = 'Annuleren';
   cancelBtn.onclick = () => overlay.remove();
+  
+  const addBtn = el('button', 'modal-btn-primary');
+  addBtn.textContent = 'Toevoegen';
+  addBtn.onclick = () => {
+    if (!selectedType) {
+      alert('Selecteer een type apparaat');
+      return;
+    }
+    const name = nameInput.value.trim();
+    if (!name) {
+      nameInput.style.borderColor = '#ef4444';
+      return;
+    }
+    
+    const device = {
+      id: makeId(),
+      name,
+      type: selectedType.type,
+      icon: selectedType.icon,
+      color: selectedType.color
+    };
+    
+    dispatch({ type: 'ADD_DEVICE_TO_ROOM', roomId: room.id, device });
+    overlay.remove();
+  };
 
-  footer.append(cancelBtn);
+  footer.append(cancelBtn, addBtn);
   dlg.append(hdr, body, footer);
   overlay.append(dlg);
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   document.body.append(overlay);
+  nameInput.focus();
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
