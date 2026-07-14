@@ -445,18 +445,6 @@ function buildRoomCard(room) {
   return card;
 }
 
-function showDeviceBindings(device, room) {
-  console.log('Show bindings for device:', device.name, 'in room:', room.name);
-  // TODO: Implement binding panel visualization
-  const bindingsCanvas = document.getElementById('bindings-canvas');
-  const bindingsEmpty = document.getElementById('bindings-empty');
-  if (bindingsCanvas && bindingsEmpty) {
-    bindingsEmpty.style.display = 'none';
-    bindingsCanvas.style.display = 'block';
-    bindingsCanvas.innerHTML = `<div style="padding:20px;text-align:center;color:#6a7899">Bindingen voor <strong>${device.name}</strong> in <strong>${room.name}</strong> worden hier getoond...</div>`;
-  }
-}
-
 // ─── Resizable Divider ────────────────────────────────────────────────────────
 
 let _dividerInitialized = false;
