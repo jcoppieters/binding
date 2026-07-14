@@ -4,7 +4,31 @@
  */
 
 import { state, dispatch, makeId } from '../app/state.js';
-import { showToast } from '../app/main.js';
+
+// Simple toast notification (avoids circular dependency on main.js)
+function showToast(msg, type = '') {
+  const toast = document.createElement('div');
+  const bgColor = type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6';
+  toast.style.cssText = `
+    position:fixed;
+    bottom:24px;
+    right:24px;
+    background:${bgColor};
+    color:#fff;
+    padding:12px 20px;
+    border-radius:8px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    font-size:14px;
+    z-index:10000;
+    animation:slideIn .3s ease-out;
+  `;
+  toast.textContent = msg;
+  document.body.append(toast);
+  setTimeout(() => {
+    toast.style.animation = 'slideOut .3s ease-out';
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+}
 
 // Device port definitions - controllers have outputs (RIGHT), controllables have inputs (LEFT)
 export const DEVICE_PORTS = {
