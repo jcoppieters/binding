@@ -209,10 +209,13 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Essential for accurate positioning on ground plan backgrounds
   - Allows visual representation of actual device locations in the room
 - [ ] **P2-9** Remove/move device between rooms
-  - Context menu or button to remove device from current room
-  - Device can be added to another room (effectively moving it)
-  - Bindings should remain intact when moving devices
+  - "..." menu button in top-right corner of device card
+  - Menu options:
+    * "Verplaats naar..." → submenu with list of all rooms
+    * "Verwijder" → removes device from room (with confirmation)
+  - Bindings should remain intact when moving devices between rooms
   - Allows reorganization of devices without losing wiring work
+  - Menu styling: dropdown positioned below "..." button, closes on outside click
 
 ### Phase 3 — Visual wiring diagram (Binding View)
 
@@ -243,7 +246,12 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 **Implementation notes:**
 - Binding panel occupies full height under divider (not just a strip)
-- Device cards in binding panel: vertical stack with wrapping, not horizontal scroll
+- **Device layout in binding panel**:
+  * Controllers (switches, sensors, buttons) stacked VERTICALLY on the LEFT side
+  * Controllables (lamps, relays, dimmers, motors) stacked VERTICALLY on the RIGHT side
+  * Multiple controllers → column on left, multiple controllables → column on right
+  * SVG wires connect horizontally between left column (outputs) and right column (inputs)
+  * Example: [Switch 1, Switch 2, Sensor] (left column) → wires → [Lamp 1, Dimmer, Motor] (right column)
 - SVG overlay for wires, positioned absolutely over device container
 - State: `project.bindings[]` with `{id, from: {deviceId, portId}, to: {deviceId, portId}, color}`
 - Drag-drop: room devices have `draggable=true`, binding panel has drop zone handlers
