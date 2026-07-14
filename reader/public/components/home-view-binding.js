@@ -173,10 +173,13 @@ function renderBindingPanel() {
   // Header
   const header = document.createElement('div');
   header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05);margin-bottom:16px';
-  header.all devices in sorted order (controllers first, then controllables)
-  sortedDevices.forEach(dev => {
-    const isPrimary = dev.id === device.id;
-    const card = buildBindingDeviceCard(dev, isPrimary
+  header.innerHTML = `
+    <div style="font-size:14px;font-weight:600;color:#1a1f2e">
+      Bindingen voor ${device.icon} ${device.name} 
+      <span style="color:#6a7899;font-weight:400">in ${room.name}</span>
+      <span style="color:#9ca3af;font-size:12px;font-weight:400;margin-left:12px">— Sleep apparaten hierheen</span>
+    </div>
+  `;
   
   // Devices container (flex:1 to fill space)
   const devicesContainer = document.createElement('div');
@@ -186,13 +189,10 @@ function renderBindingPanel() {
   // Make container a drop zone
   setupDropZone(devicesContainer);
   
-  // Add main device
-  const mainCard = buildBindingDeviceCard(device, true);
-  devicesContainer.appendChild(mainCard);
-  
-  // Add connected devices
-  otherDevices.forEach(dev => {
-    const card = buildBindingDeviceCard(dev, false);
+  // Add all devices in sorted order (controllers first, then controllables)
+  sortedDevices.forEach(dev => {
+    const isPrimary = dev.id === device.id;
+    const card = buildBindingDeviceCard(dev, isPrimary);
     devicesContainer.appendChild(card);
   });
   
