@@ -57,7 +57,7 @@ function buildDeviceCard(device, room, container) {
       return;
     }
     
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = 'copyMove'; // Allow both copy (binding panel) and move (room repositioning)
     e.dataTransfer.setData('application/json', JSON.stringify({ 
       device: { ...device, roomName: room.name },
       sourceType: 'room',
