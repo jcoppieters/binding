@@ -53,7 +53,6 @@ function buildDeviceCard(device, room, container) {
   // Drag to reposition within room
   let dragStartX, dragStartY, deviceStartX, deviceStartY;
   let isDraggingPosition = false;
-  let dragThresholdMet = false;
   
   // In-room repositioning via mousedown (works for all devices)
   deviceCard.onmousedown = (e) => {
@@ -84,7 +83,6 @@ function buildDeviceCard(device, room, container) {
     }
     
     isDraggingPosition = false;
-    dragThresholdMet = false;
     
     const onMouseMove = (e) => {
       const dx = e.clientX - dragStartX;
@@ -92,15 +90,14 @@ function buildDeviceCard(device, room, container) {
       const distance = Math.sqrt(dx*dx + dy*dy);
       
       // Only start dragging if moved more than 5px
-      if (!dragThresholdMet && distance > 5) {
-        dragThresholdMet = true;
+      if (!isDraggingPosition && distance > 5) {
         isDraggingPosition = true;
         deviceCard.style.cursor = 'grabbing';
         // Make sure it's absolutely positioned during drag
         deviceCard.style.position = 'absolute';
       }
       
-      if (dragThresholdMet) {
+      if (isDraggingPosition) {
         // Constrain to container bounds (100x100 device card)
         const maxX = container.offsetWidth - 100;
         const maxY = container.offsetHeight - 100;
@@ -141,7 +138,6 @@ function buildDeviceCard(device, room, container) {
       }
       
       isDraggingPosition = false;
-      dragThresholdMet = false;
     };
     
     const onKeyDown = (e) => {
@@ -169,7 +165,6 @@ function buildDeviceCard(device, room, container) {
         
         deviceCard.style.cursor = 'move';
         isDraggingPosition = false;
-        dragThresholdMet = false;
       }
     };
     
