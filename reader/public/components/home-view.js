@@ -50,145 +50,18 @@ function buildDeviceCard(device, room, container) {
     menuBtn.style.opacity = '0';
   };
   
-  // Drag to reposition within room
-  let dragStartX, dragStartY, deviceStartX, deviceStartY;
-  let isDraggingPosition = false;
-  
-  // In-room repositioning via mousedown (works for all devices)
-  deviceCard.onmousedown = (e) => {
-    if (e.target === menuBtn) return; // Don't start drag if clicking menu
-    
-    // If Shift key is pressed, allow HTML5 drag to binding panel instead
-    if (e.shiftKey) {
-      return; // Let HTML5 drag handle it
-    }
-    
-    // Disable HTML5 drag for in-room repositioning
-    deviceCard.setAttribute('draggable', 'false');
-    
-    dragStartX = e.clientX;
-    dragStartY = e.clientY;
-    
-    // Get current position - for positioned devices use x/y, for static use current visual position
-    if (hasPosition) {
-      deviceStartX = device.x || 0;
-      deviceStartY = device.y || 0;
-    } else {
-      // For static devices, we need to calculate position relative to container
-      // when they become absolutely positioned during drag
-      const rect = deviceCard.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      deviceStartX = rect.left - containerRect.left + container.scrollLeft;
-      deviceStartY = rect.top - containerRect.top + container.scrollTop;
-    }
-    
-    isDraggingPosition = false;
-    
-    const onMouseMove = (e) => {
-      const dx = e.clientX - dragStartX;
-      const dy = e.clientY - dragStartY;
-      const distance = Math.sqrt(dx*dx + dy*dy);
-      
-      // Only start dragging if moved more than 5px
-      if (!isDraggingPosition && distance > 5) {
-        isDraggingPosition = true;
-        deviceCard.style.cursor = 'grabbing';
-        // Make sure it's absolutely positioned during drag
-        deviceCard.style.position = 'absolute';
-      }
-      
-      if (isDraggingPosition) {
-        // Constrain to container bounds (100x100 device card)
-        const maxX = container.offsetWidth - 100;
-        const maxY = container.offsetHeight - 100;
-        const newX = Math.max(0, Math.min(maxX, deviceStartX + dx));
-        const newY = Math.max(0, Math.min(maxY, deviceStartY + dy));
-        
-        deviceCard.style.left = newX + 'px';
-        deviceCard.style.top = newY + 'px';
-      }
-    };
-    
-    const onMouseUp = (e) => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('keydown', onKeyDown);
-      
-      deviceCard.style.cursor = 'move';
-      
-      // Re-enable HTML5 drag for binding panel (with Shift)
-      deviceCard.setAttribute('draggable', 'true');
-      
-      if (isDraggingPosition) {
-        const dx = e.clientX - dragStartX;
-        const dy = e.clientY - dragStartY;
-        // Constrain to container bounds (100x100 device card)
-        const maxX = container.offsetWidth - 100;
-        const maxY = container.offsetHeight - 100;
-        const newX = Math.max(0, Math.min(maxX, deviceStartX + dx));
-        const newY = Math.max(0, Math.min(maxY, deviceStartY + dy));
-        
-        dispatch({
-          type: 'UPDATE_DEVICE_POSITION',
-          roomId: room.id,
-          deviceId: device.id,
-          x: newX,
-          y: newY
-        });
-      }
-      
-      isDraggingPosition = false;
-    };
-    
-    const onKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        // Cancel drag - restore original position
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('keydown', onKeyDown);
-        
-        // Re-enable HTML5 drag for binding panel (with Shift)
-        deviceCard.setAttribute('draggable', 'true');
-        
-        if (isDraggingPosition) {
-          // Restore original position visually
-          if (hasPosition) {
-            deviceCard.style.left = device.x + 'px';
-            deviceCard.style.top = device.y + 'px';
-          } else {
-            // For static devices, remove absolute positioning
-            deviceCard.style.position = '';
-            deviceCard.style.left = '';
-            deviceCard.style.top = '';
-          }
-        }
-        
-        deviceCard.style.cursor = 'move';
-        isDraggingPosition = false;
-      }
-    };
-    
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('keydown', onKeyDown);
-  };
-  
-  // Click to open binding panel (only if not dragging)
-  deviceCard.onclick = (e) => {
-    if (isDraggingPosition) {
+  // HTML5 drag for both repositioning and binding
+  deviceCard.ondragstart = (e) => {
+    if (e.target === menuBtn) {
       e.preventDefault();
       return;
     }
-    showDeviceBindings(device, room);
-  };
-  
-  // HTML5 drag to binding panel (Shift + drag)
-  deviceCard.ondragstart = (e) => {
-    // HTML5 drag to binding panel
-    e.dataTransfer.effectAllowed = 'copy';
+    
+    e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('application/json', JSON.stringify({ 
       device: { ...device, roomName: room.name },
-      sourceType: 'room'
+      sourceType: 'room',
+      roomId: room.id
     }));
     deviceCard.style.opacity = '0.5';
   };
@@ -197,13 +70,19 @@ function buildDeviceCard(device, room, container) {
     deviceCard.style.opacity = '1';
   };
   
-  // Always allow draggable for drag to binding panel
+  // Click to open binding panel
+  deviceCard.onclick = (e) => {
+    if (e.target === menuBtn) return;
+    showDeviceBindings(device, room);
+  };
+  
+  // Always draggable
   deviceCard.setAttribute('draggable', 'true');
   
   // Tooltip
   deviceCard.title = hasPosition 
-    ? 'Sleep binnen kamer om te verplaatsen, Shift+sleep naar binding panel om te koppelen'
-    : 'Shift+sleep naar binding panel of positioneer in kamer';
+    ? 'Sleep om te verplaatsen of naar binding panel te kopiëren'
+    : 'Sleep naar binding panel of positioneer in kamer';
   
   return deviceCard;
 }
@@ -838,6 +717,57 @@ function buildRoomCard(room) {
   // Devices area (positioned relative for absolute device placement)
   const devicesArea = el('div', '');
   devicesArea.style.cssText = 'flex:1;position:relative;padding:16px;border-radius:8px;background:rgba(248,249,253,0.6);overflow:hidden';
+  
+  // Make room a drop zone for repositioning devices
+  devicesArea.ondragover = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    // Visual feedback: highlight room border
+    devicesArea.style.background = 'rgba(239,246,255,0.8)';
+    devicesArea.style.outline = '2px dashed #3b82f6';
+  };
+  
+  devicesArea.ondragleave = (e) => {
+    // Check if we really left the container (not just moving between children)
+    const rect = devicesArea.getBoundingClientRect();
+    if (e.clientX < rect.left || e.clientX >= rect.right || 
+        e.clientY < rect.top || e.clientY >= rect.bottom) {
+      devicesArea.style.background = 'rgba(248,249,253,0.6)';
+      devicesArea.style.outline = '';
+    }
+  };
+  
+  devicesArea.ondrop = (e) => {
+    e.preventDefault();
+    devicesArea.style.background = 'rgba(248,249,253,0.6)';
+    devicesArea.style.outline = '';
+    
+    try {
+      const data = JSON.parse(e.dataTransfer.getData('application/json'));
+      if (data.sourceType === 'room' && data.device && data.roomId === room.id) {
+        // Device dropped in its own room - reposition it
+        const rect = devicesArea.getBoundingClientRect();
+        const x = e.clientX - rect.left - 50; // Center device (100px / 2)
+        const y = e.clientY - rect.top - 50;
+        
+        // Constrain to container bounds
+        const maxX = devicesArea.offsetWidth - 100;
+        const maxY = devicesArea.offsetHeight - 100;
+        const newX = Math.max(0, Math.min(maxX, x));
+        const newY = Math.max(0, Math.min(maxY, y));
+        
+        dispatch({
+          type: 'UPDATE_DEVICE_POSITION',
+          roomId: room.id,
+          deviceId: data.device.id,
+          x: newX,
+          y: newY
+        });
+      }
+    } catch (err) {
+      console.error('Drop error in room:', err);
+    }
+  };
   
   if (room.devices.length === 0) {
     const emptyMsg = el('div', '');
