@@ -76,6 +76,12 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 - [x] **P0-1** Define `.duo` project file schema — **DONE** (`src/models/project.ts`)
 - [x] **P0-2** Module JSON database — **DONE** (reader/modules/, fully populated)
 - [x] **P0-3** New app shell — **DONE** (index.html + state.js + router.js + main.js)
+  - Header with logo, project name, connection status, dropdown menu, upload button
+  - Three view tabs: Rail View, Home View, Materials View
+  - **Fixed header button alignment**: All buttons (connection status, Project dropdown, Verstuur bindings) now same height
+    * Connection status had margin-top:1rem from styles.css → added margin:0 override
+    * Added border:1px solid transparent to match other buttons (box model parity)
+    * Font size, padding, border-radius all matched: 13px, 6px 14px, 6px
 - [x] **P0-4** Remote connection via noports proxy via getMasterURL() — **DONE**
   - Supports tunnel ID format: `.tcp` for TCP connections, `.http` for HTTP API
   - Proxy server hardcoded: `abc123.tcp:5001` → `masters.duotecno.eu:5098/abc123.tcp:5001`
@@ -154,7 +160,7 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
     * Allow adding already-used lamps to multiple rooms (same circuit)
     * Show "Gebruikt in: Keuken, Badkamer" badge for multi-use units
     * Separate "Add existing device" vs "Add new device" flows
-    
+
 - [x] **P2-5** Floor plan import (image overlay, toggle) — **PARTIALLY DONE**
   - ✅ Per-room background image upload via room ... menu (🗺️ Grondplan toevoegen)
   - ✅ File input → FileReader → save as data URL to room.backgroundImage
@@ -172,10 +178,17 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Works for ALL devices (new devices start from visual position, positioned devices from stored x/y)
   - 5px drag threshold prevents accidental moves when clicking
   - Position stored in device.x and device.y coordinates and persists across reloads
-  - Positioned devices: drag to reposition, Shift+drag to copy to binding panel
-  - New devices: drag within room to position, or drag to binding panel without Shift
+  - **Shift key distinguishes drag modes:**
+    * Normal drag (no Shift): reposition device within room (mousedown drag)
+    * Shift+drag: copy device to binding panel (HTML5 drag API)
+    * Prevents conflict between two drag systems
+  - ESC key cancels in-room repositioning and restores original position
   - Tooltips explain interaction modes
   - Essential for accurate positioning on ground plan backgrounds
+  - **Fixed**: Drag within room vs. drag to binding panel now work simultaneously
+    * Problem: HTML5 drag (draggable=true) interfered with mousedown drag for repositioning
+    * Solution: Shift key check in onmousedown - if pressed, skip repositioning logic
+    * When repositioning: temporarily set draggable=false, restore to true on cleanup
 - [x] **P2-9** Remove/move device between rooms — **DONE**
   - "..." menu button in top-right corner of device card
   - Menu options:
