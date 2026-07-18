@@ -237,6 +237,12 @@ function setupDropZone(container) {
     try {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));
       if (data.sourceType === 'room' && data.device) {
+        // Check if binding context exists (device selected)
+        if (!_currentBindingContext) {
+          showToast('Selecteer eerst een apparaat om bindings te bekijken', 'info');
+          return;
+        }
+        
         // Check if device is already in panel
         if (data.device.id === _currentBindingContext.device.id || 
             _currentBindingContext.otherDevices.some(d => d.id === data.device.id)) {

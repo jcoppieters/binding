@@ -744,25 +744,35 @@ function buildRoomCard(room) {
     
     try {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));
-      if (data.sourceType === 'room' && data.device && data.roomId === room.id) {
-        // Device dropped in its own room - reposition it
-        const rect = devicesArea.getBoundingClientRect();
-        const x = e.clientX - rect.left - 50; // Center device (100px / 2)
-        const y = e.clientY - rect.top - 50;
-        
-        // Constrain to container bounds
-        const maxX = devicesArea.offsetWidth - 100;
-        const maxY = devicesArea.offsetHeight - 100;
-        const newX = Math.max(0, Math.min(maxX, x));
-        const newY = Math.max(0, Math.min(maxY, y));
-        
-        dispatch({
-          type: 'UPDATE_DEVICE_POSITION',
-          roomId: room.id,
-          deviceId: data.device.id,
-          x: newX,
-          y: newY
-        });
+      if (data.sourceType === 'room' && data.device) {
+        if (data.roomId === room.id) {
+          // Device dropped in its own room - reposition it
+          const rect = devicesArea.getBoundingClientRect();
+          const x = e.clientX - rect.left - 50; // Center device (100px / 2)
+          const y = e.clientY - rect.top - 50;
+          
+          // Constrain to container bounds
+          const maxX = devicesArea.offsetWidth - 100;
+          const maxY = devicesArea.offsetHeight - 100;
+          const newX = Math.max(0, Math.min(maxX, x));
+          const newY = Math.max(0, Math.min(maxY, y));
+          
+          dispatch({
+            type: 'UPDATE_DEVICE_POSITION',
+            roomId: room.id,
+            deviceId: data.device.id,
+            x: newX,
+            y: newY
+          });
+        } else {
+          // Device dropped from another room - move it
+          dispatch({
+            type: 'MOVE_DEVICE_TO_ROOM',
+            deviceId: data.device.id,
+            fromRoomId: data.roomId,
+            toRoomId: room.id
+          });
+        }
       }
     } catch (err) {
       console.error('Drop error in room:', err);
