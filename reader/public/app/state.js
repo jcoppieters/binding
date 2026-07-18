@@ -281,13 +281,20 @@ export function dispatch(action) {
     case 'MOVE_DEVICE_TO_ROOM': {
       const homeView = { ..._state.project.homeView };
       let deviceToMove = null;
+      let targetRoom = null;
+      
+      // Find target room to get dimensions
+      targetRoom = homeView.rooms.find(r => r.id === action.toRoomId);
       
       // Remove from source room
       homeView.rooms = homeView.rooms.map(r => {
         if (r.id === action.fromRoomId) {
           const device = r.devices.find(d => d.id === action.deviceId);
           if (device) {
-            deviceToMove = { ...device, x: undefined, y: undefined }; // Reset position
+            // Reset position to center of target room
+            const initialX = Math.max(0, (targetRoom?.width || 500) / 2 - 50);
+            const initialY = Math.max(0, (targetRoom?.height || 400) / 2 - 50);
+            deviceToMove = { ...device, x: initialX, y: initialY };
           }
           return { ...r, devices: r.devices.filter(d => d.id !== action.deviceId) };
         }

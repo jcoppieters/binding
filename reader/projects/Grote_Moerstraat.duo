@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-14T08:58:51.479Z",
+    "modified": "2026-07-18T15:35:41.510Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -92,26 +92,8 @@
             "type": "switch",
             "icon": "🔘",
             "color": "#8b5cf6",
-            "x": 50,
-            "y": 50
-          },
-          {
-            "id": "i2zrykxj",
-            "name": "Lamp 2",
-            "type": "lamp",
-            "icon": "💡",
-            "color": "#fbbf24",
-            "x": 170,
-            "y": 50
-          },
-          {
-            "id": "ig1l0i7q",
-            "name": "Motor 3",
-            "type": "motor",
-            "icon": "🪟",
-            "color": "#10b981",
-            "x": 290,
-            "y": 50
+            "x": 211,
+            "y": 178
           },
           {
             "id": "8ffbwoec",
@@ -119,6 +101,42 @@
             "type": "switch",
             "icon": "🔘",
             "color": "#a855f7"
+          }
+        ],
+        "width": "735px",
+        "height": "555px"
+      },
+      {
+        "id": "8ynd4pbd",
+        "name": "boven",
+        "floorId": "floor-0",
+        "canvasX": 50,
+        "canvasY": 50,
+        "canvasWidth": 200,
+        "canvasHeight": 150,
+        "devices": [
+          {
+            "id": "ig1l0i7q",
+            "name": "Motor 3",
+            "type": "motor",
+            "icon": "🪟",
+            "color": "#10b981",
+            "x": 0,
+            "y": 27
+          },
+          {
+            "id": "i2zrykxj",
+            "name": "Lamp 2",
+            "type": "lamp",
+            "icon": "💡",
+            "color": "#fbbf24"
+          },
+          {
+            "id": "insnpyth",
+            "name": "wwww",
+            "type": "sensor",
+            "icon": "🌡️",
+            "color": "#f59e0b"
           }
         ]
       }

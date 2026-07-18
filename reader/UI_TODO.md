@@ -40,7 +40,7 @@ function getMasterURL(address: string, port: number): string {
     const proxyServer = 'masters.duotecno.eu';
     const proxyPort = 5098;
     const tunnelName = address;
-    const masterPort = port - 1; // Proxy always uses port-1 (e.g., 5001 → 5000)
+    const masterPort = port;
     
     return `${proxyServer}:${proxyPort}/${tunnelName}:${masterPort}`;
   } else {
@@ -52,12 +52,12 @@ function getMasterURL(address: string, port: number): string {
 
 **Example:**
 - Local connection: `192.168.0.97:5001` → `192.168.0.97:5001`
-- Remote TCP: `abc123.tcp:5002` → `masters.duotecno.eu:5098/abc123.tcp:5001` (port-1)
-- Remote HTTP: `abc123.http:8081` → `masters.duotecno.eu:5098/abc123.http:8080` (port-1)
+- Remote TCP: `abc123.tcp:5002` → `masters.duotecno.eu:5098/abc123.tcp:5001`
+- Remote HTTP: `abc123.http:8081` → `masters.duotecno.eu:5098/abc123.http:8080`
 
 **Rules:**
-- Always subtract 1 from the port number when connecting via proxy
-- Config stores direct port (5002), proxy uses port-1 (5001)
+- In contrary to the ProApp, there is no need for subtract 1 from the port number when connecting via proxy
+- Config stores the port (example: 5001, but can be different too) and uses it.
 - Proxy server is hardcoded: `masters.duotecno.eu:5098`
 - No old gateway support needed (simplified from ProApp)
 

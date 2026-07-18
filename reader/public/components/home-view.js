@@ -59,6 +59,9 @@ function buildDeviceCard(device, room, container) {
   deviceCard.onmousedown = (e) => {
     if (e.target === menuBtn) return; // Don't start drag if clicking menu
     
+    // If Shift is held, allow HTML5 drag to binding panel (skip position drag)
+    if (e.shiftKey) return;
+    
     // Don't prevent default yet - wait for drag threshold
     dragStartX = e.clientX;
     dragStartY = e.clientY;
@@ -108,6 +111,7 @@ function buildDeviceCard(device, room, container) {
     const onMouseUp = (e) => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('keydown', onKeyDown);
       
       deviceCard.style.cursor = 'move';
       
@@ -133,8 +137,35 @@ function buildDeviceCard(device, room, container) {
       dragThresholdMet = false;
     };
     
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        // Cancel drag - restore original position
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('keydown', onKeyDown);
+        
+        if (isDraggingPosition) {
+          // Restore original position visually
+          if (hasPosition) {
+            deviceCard.style.left = device.x + 'px';
+            deviceCard.style.top = device.y + 'px';
+          } else {
+            // For static devices, remove absolute positioning
+            deviceCard.style.position = '';
+            deviceCard.style.left = '';
+            deviceCard.style.top = '';
+          }
+        }
+        
+        deviceCard.style.cursor = 'move';
+        isDraggingPosition = false;
+        dragThresholdMet = false;
+      }
+    };
+    
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('keydown', onKeyDown);
   };
   
   // Click to open binding panel (only if not dragging)
@@ -1176,12 +1207,19 @@ function promptAddDevice(room) {
       return;
     }
     
+    // Set initial position at center of room (or near center)
+    // Default room width is ~500px, height ~400px, device is 100x100
+    const initialX = Math.max(0, (room.width || 500) / 2 - 50);
+    const initialY = Math.max(0, (room.height || 400) / 2 - 50);
+    
     const device = {
       id: makeId(),
       name,
       type: selectedType.type,
       icon: selectedType.icon,
-      color: selectedType.color
+      color: selectedType.color,
+      x: initialX,
+      y: initialY
     };
     
     dispatch({ type: 'ADD_DEVICE_TO_ROOM', roomId: room.id, device });
