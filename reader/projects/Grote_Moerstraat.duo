@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-18T15:54:13.964Z",
+    "modified": "2026-07-18T16:34:20.871Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -92,8 +92,8 @@
             "type": "switch",
             "icon": "🔘",
             "color": "#8b5cf6",
-            "x": 293,
-            "y": 92
+            "x": 66,
+            "y": 139
           },
           {
             "id": "8ffbwoec",
@@ -101,8 +101,8 @@
             "type": "switch",
             "icon": "🔘",
             "color": "#a855f7",
-            "x": 125,
-            "y": 163
+            "x": 438,
+            "y": 34
           },
           {
             "id": "ur3vqwqt",
@@ -110,8 +110,8 @@
             "type": "button",
             "icon": "🔳",
             "color": "#10b981",
-            "x": 211,
-            "y": 338
+            "x": 367,
+            "y": 203
           },
           {
             "id": "i2zrykxj",
@@ -141,8 +141,8 @@
             "type": "motor",
             "icon": "🪟",
             "color": "#10b981",
-            "x": 78,
-            "y": 21
+            "x": 71,
+            "y": 24
           },
           {
             "id": "insnpyth",
@@ -150,8 +150,8 @@
             "type": "sensor",
             "icon": "🌡️",
             "color": "#f59e0b",
-            "x": 150,
-            "y": 150
+            "x": 164,
+            "y": 121
           }
         ]
       }
@@ -217,6 +217,18 @@
         "portId": "uit"
       },
       "color": "#a855f7"
+    },
+    {
+      "id": "laft3qd9",
+      "from": {
+        "deviceId": "ur3vqwqt",
+        "portId": "druk"
+      },
+      "to": {
+        "deviceId": "i2zrykxj",
+        "portId": "schakel"
+      },
+      "color": "#10b981"
     }
   ],
   "discoveredNodes": [
