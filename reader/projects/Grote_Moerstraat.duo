@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-18T16:34:20.871Z",
+    "modified": "2026-07-18T18:52:53.124Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -87,22 +87,13 @@
         "canvasHeight": 150,
         "devices": [
           {
-            "id": "6vf0ndi8",
-            "name": "Schakelaar 1",
-            "type": "switch",
-            "icon": "🔘",
-            "color": "#8b5cf6",
-            "x": 66,
-            "y": 139
-          },
-          {
             "id": "8ffbwoec",
             "name": "xxx",
             "type": "switch",
             "icon": "🔘",
             "color": "#a855f7",
-            "x": 438,
-            "y": 34
+            "x": 549,
+            "y": 308.703125
           },
           {
             "id": "ur3vqwqt",
@@ -110,8 +101,8 @@
             "type": "button",
             "icon": "🔳",
             "color": "#10b981",
-            "x": 367,
-            "y": 203
+            "x": 135,
+            "y": 28.703125
           },
           {
             "id": "i2zrykxj",
@@ -141,8 +132,8 @@
             "type": "motor",
             "icon": "🪟",
             "color": "#10b981",
-            "x": 71,
-            "y": 24
+            "x": 78,
+            "y": 11.703125
           },
           {
             "id": "insnpyth",
@@ -152,6 +143,15 @@
             "color": "#f59e0b",
             "x": 164,
             "y": 121
+          },
+          {
+            "id": "6vf0ndi8",
+            "name": "Schakelaar 1",
+            "type": "switch",
+            "icon": "🔘",
+            "color": "#8b5cf6",
+            "x": 26,
+            "y": 122.703125
           }
         ]
       }
@@ -227,6 +227,18 @@
       "to": {
         "deviceId": "i2zrykxj",
         "portId": "schakel"
+      },
+      "color": "#10b981"
+    },
+    {
+      "id": "2jg1zuz6",
+      "from": {
+        "deviceId": "ur3vqwqt",
+        "portId": "druk"
+      },
+      "to": {
+        "deviceId": "ig1l0i7q",
+        "portId": "stop"
       },
       "color": "#10b981"
     }

@@ -173,12 +173,13 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Rooms take full height above divider with flex:2 layout
   - Device cards remain 100×100px fixed size
   - Allows room interiors to be visible at a useful scale for device placement
-- [x] **P2-8** Drag-and-drop device positioning in rooms — **DONE**
+- [x] **P2-8** Drag-and-drop device positioning in rooms — **DONE** ✅
   - Single unified HTML5 drag system for all drag operations
   - **Drop zone detection** determines action based on where device is dropped:
-    * Drop in ROOM → repositions device at cursor location (move)
+    * Drop in SAME ROOM → repositions device at cursor location (UPDATE_DEVICE_POSITION)
+    * Drop in DIFFERENT ROOM → moves device to that room at cursor location (MOVE_DEVICE_TO_ROOM with x,y)
     * Drop in BINDING PANEL → adds device to binding visualization (copy)
-    * Drop OUTSIDE both zones → nothing happens (canceled)
+    * Drop OUTSIDE all zones → nothing happens (canceled)
   - Visual feedback during drag:
     * Room border highlights with blue dashed outline when dragging over it
     * Binding panel highlights with blue background when dragging over it
@@ -188,6 +189,7 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Position stored in device.x and device.y coordinates and persists across reloads
   - **No keyboard modifiers needed** - intuitive single drag like Figma/modern design tools
   - Simplified code: removed ~100 lines of mousedown/mousemove logic
+  - **Fixed**: effectAllowed='copyMove' allows both room moves AND binding panel copies
   - Essential for accurate positioning on ground plan backgrounds
 - [x] **P2-9** Remove/move device between rooms — **DONE**
   - "..." menu button in top-right corner of device card
