@@ -76,12 +76,9 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 - [x] **P0-1** Define `.duo` project file schema — **DONE** (`src/models/project.ts`)
 - [x] **P0-2** Module JSON database — **DONE** (reader/modules/, fully populated)
 - [x] **P0-3** New app shell — **DONE** (index.html + state.js + router.js + main.js)
-- [x] **P0-4** Remote connection via noports proxy — **DONE**
-  - Implemented getMasterURL() helper function in `reader/public/app/main.js`
+- [x] **P0-4** Remote connection via noports proxy via getMasterURL() — **DONE**
   - Supports tunnel ID format: `.tcp` for TCP connections, `.http` for HTTP API
-  - Proxy server hardcoded: `masters.duotecno.eu:5098`
-  - No port-1 subtraction needed (simplified from ProApp)
-  - Example: `abc123.tcp:5001` → `masters.duotecno.eu:5098/abc123.tcp:5001`
+  - Proxy server hardcoded: `abc123.tcp:5001` → `masters.duotecno.eu:5098/abc123.tcp:5001`
 
 ### Phase 1 — Rail View
 
@@ -121,6 +118,7 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Dispatches ADD_DEVICE_TO_ROOM action to add device to room
   - **STATUS**: Basic demo version complete — adds mock devices with icons/colors
   - **NEXT**: Link to real units from material list (see P2-4a below)
+
 - [ ] **P2-4a** Link room devices to real material units (MAJOR TASK)
   - **Goal**: Room devices must be actual units from the materiaallijst, not mock objects
   - **Device picker must show**:
@@ -156,6 +154,7 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
     * Allow adding already-used lamps to multiple rooms (same circuit)
     * Show "Gebruikt in: Keuken, Badkamer" badge for multi-use units
     * Separate "Add existing device" vs "Add new device" flows
+    
 - [x] **P2-5** Floor plan import (image overlay, toggle) — **PARTIALLY DONE**
   - ✅ Per-room background image upload via room ... menu (🗺️ Grondplan toevoegen)
   - ✅ File input → FileReader → save as data URL to room.backgroundImage

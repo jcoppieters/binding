@@ -59,7 +59,9 @@ function buildDeviceCard(device, room, container) {
   deviceCard.onmousedown = (e) => {
     if (e.target === menuBtn) return; // Don't start drag if clicking menu
     
-    // Don't prevent default yet - wait for drag threshold
+    // Disable HTML5 drag during mousedown to prevent interference
+    deviceCard.setAttribute('draggable', 'false');
+    
     dragStartX = e.clientX;
     dragStartY = e.clientY;
     
@@ -112,6 +114,9 @@ function buildDeviceCard(device, room, container) {
       
       deviceCard.style.cursor = 'move';
       
+      // Re-enable HTML5 drag for binding panel
+      deviceCard.setAttribute('draggable', 'true');
+      
       if (isDraggingPosition) {
         const dx = e.clientX - dragStartX;
         const dy = e.clientY - dragStartY;
@@ -140,6 +145,9 @@ function buildDeviceCard(device, room, container) {
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
         document.removeEventListener('keydown', onKeyDown);
+        
+        // Re-enable HTML5 drag for binding panel
+        deviceCard.setAttribute('draggable', 'true');
         
         if (isDraggingPosition) {
           // Restore original position visually
