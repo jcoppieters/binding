@@ -59,9 +59,6 @@ function buildDeviceCard(device, room, container) {
   deviceCard.onmousedown = (e) => {
     if (e.target === menuBtn) return; // Don't start drag if clicking menu
     
-    // Disable HTML5 drag during mousedown to prevent interference
-    deviceCard.setAttribute('draggable', 'false');
-    
     dragStartX = e.clientX;
     dragStartY = e.clientY;
     
@@ -114,9 +111,6 @@ function buildDeviceCard(device, room, container) {
       
       deviceCard.style.cursor = 'move';
       
-      // Re-enable HTML5 drag for binding panel
-      deviceCard.setAttribute('draggable', 'true');
-      
       if (isDraggingPosition) {
         const dx = e.clientX - dragStartX;
         const dy = e.clientY - dragStartY;
@@ -145,9 +139,6 @@ function buildDeviceCard(device, room, container) {
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
         document.removeEventListener('keydown', onKeyDown);
-        
-        // Re-enable HTML5 drag for binding panel
-        deviceCard.setAttribute('draggable', 'true');
         
         if (isDraggingPosition) {
           // Restore original position visually
@@ -184,9 +175,12 @@ function buildDeviceCard(device, room, container) {
   
   // HTML5 drag to binding panel (for all devices)
   deviceCard.ondragstart = (e) => {
-    // Allow HTML5 drag to binding panel for all devices
-    // (positioned devices can still be repositioned via mousedown if drag stays in room)
-    deviceCard.setAttribute('draggable', 'true');
+    // If we're repositioning within room (threshold met), cancel HTML5 drag
+    if (dragThresholdMet) {
+      e.preventDefault();
+      return false;
+    }
+    // Otherwise allow HTML5 drag to binding panel
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('application/json', JSON.stringify({ 
       device: { ...device, roomName: room.name },
