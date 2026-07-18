@@ -23,44 +23,6 @@ Analysed sources: `UI.md`, `specs/new-binding-software-ui.md`, `specs/binding-fi
 
 UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MAC, IP, netmask, gateway.
 
-### Remote connection via noports proxy
-
-**For remote access without port forwarding:** Masters can be accessed via the noports.io proxy system using unique tunnel IDs.
-
-**Tunnel ID format:**
-- TCP connections (port 5001): tunnel ID ends in `.tcp`
-- HTTP API (port 8080): tunnel ID ends in `.http`
-
-**Connection logic:**
-```typescript
-function getMasterURL(address: string, port: number): string {
-  // Check if address is a noports tunnel ID
-  if (address.endsWith('.tcp') || address.endsWith('.http')) {
-    // Remote connection via noports proxy
-    const proxyServer = 'masters.duotecno.eu';
-    const proxyPort = 5098;
-    const tunnelName = address;
-    const masterPort = port;
-    
-    return `${proxyServer}:${proxyPort}/${tunnelName}:${masterPort}`;
-  } else {
-    // Direct local connection
-    return `${address}:${port}`;
-  }
-}
-```
-
-**Example:**
-- Local connection: `192.168.0.97:5001` → `192.168.0.97:5001`
-- Remote TCP: `abc123.tcp:5002` → `masters.duotecno.eu:5098/abc123.tcp:5001`
-- Remote HTTP: `abc123.http:8081` → `masters.duotecno.eu:5098/abc123.http:8080`
-
-**Rules:**
-- In contrary to the ProApp, there is no need for subtract 1 from the port number when connecting via proxy
-- Config stores the port (example: 5001, but can be different too) and uses it.
-- Proxy server is hardcoded: `masters.duotecno.eu:5098`
-- No old gateway support needed (simplified from ProApp)
-
 ---
 
 ## Architecture decisions (all settled)
@@ -114,6 +76,12 @@ function getMasterURL(address: string, port: number): string {
 - [x] **P0-1** Define `.duo` project file schema — **DONE** (`src/models/project.ts`)
 - [x] **P0-2** Module JSON database — **DONE** (reader/modules/, fully populated)
 - [x] **P0-3** New app shell — **DONE** (index.html + state.js + router.js + main.js)
+- [x] **P0-4** Remote connection via noports proxy — **DONE**
+  - Implemented getMasterURL() helper function in `reader/public/app/main.js`
+  - Supports tunnel ID format: `.tcp` for TCP connections, `.http` for HTTP API
+  - Proxy server hardcoded: `masters.duotecno.eu:5098`
+  - No port-1 subtraction needed (simplified from ProApp)
+  - Example: `abc123.tcp:5001` → `masters.duotecno.eu:5098/abc123.tcp:5001`
 
 ### Phase 1 — Rail View
 

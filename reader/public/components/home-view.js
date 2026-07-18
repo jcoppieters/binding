@@ -59,9 +59,6 @@ function buildDeviceCard(device, room, container) {
   deviceCard.onmousedown = (e) => {
     if (e.target === menuBtn) return; // Don't start drag if clicking menu
     
-    // If Shift is held, allow HTML5 drag to binding panel (skip position drag)
-    if (e.shiftKey) return;
-    
     // Don't prevent default yet - wait for drag threshold
     dragStartX = e.clientX;
     dragStartY = e.clientY;
@@ -184,23 +181,15 @@ function buildDeviceCard(device, room, container) {
     // Allow drag to binding panel if:
     // 1. Device has no position (new device) OR
     // 2. User holds Shift key (copy to binding panel)
-    if (!hasPosition || e.shiftKey) {
-      shiftDragActive = e.shiftKey;
-      deviceCard.setAttribute('draggable', 'true');
-      e.dataTransfer.effectAllowed = 'copy';
-      e.dataTransfer.setData('application/json', JSON.stringify({ 
-        device: { ...device, roomName: room.name },
-        sourceType: 'room'
-      }));
-      deviceCard.style.opacity = '0.5';
-    } else {
-      // Prevent HTML5 drag for positioned devices (use mousedown instead)
-      e.preventDefault();
-      return false;
-    }
-  };
-  
-  deviceCard.ondragend = () => {
+    if (!hasPHTML5 drag to binding panel for all devices
+    // (positioned devices can still be repositioned via mousedown if drag stays in room)
+    deviceCard.setAttribute('draggable', 'true');
+    e.dataTransfer.effectAllowed = 'copy';
+    e.dataTransfer.setData('application/json', JSON.stringify({ 
+      device: { ...device, roomName: room.name },
+      sourceType: 'room'
+    }));
+    deviceCard.style.opacity = '0.5';iceCard.ondragend = () => {
     deviceCard.style.opacity = '1';
     shiftDragActive = false;
   };
@@ -210,18 +199,15 @@ function buildDeviceCard(device, room, container) {
   
   // Show hint for shift+drag on positioned devices
   if (hasPosition) {
-    deviceCard.title = 'Sleep om te verplaatsen, Shift+sleep om naar binding panel te kopiëren';
-  } else {
-    deviceCard.title = 'Sleep naar binding panel of positioneer in kamer';
-  }
+  };
   
-  return deviceCard;
-}
-
-// Device menu: move to room or delete
-function openDeviceMenu(device, room, anchorElement) {
-  // Close any existing menu
-  const existing = document.getElementById('device-menu');
+  // Always allow draggable for drag to binding panel
+  deviceCard.setAttribute('draggable', 'true');
+  
+  // Tooltip
+  deviceCard.title = hasPosition 
+    ? 'Sleep binnen kamer om te verplaatsen, sleep naar binding panel om te koppelen'
+    : 'Sleep naar binding panel of positioneer in kamer';onst existing = document.getElementById('device-menu');
   if (existing) existing.remove();
   
   const menu = el('div', '');

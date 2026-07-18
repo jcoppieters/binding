@@ -12,22 +12,42 @@ import { wireButtons as wireHomeButtons } from '../components/home-view.js';
 const RECENT_KEY = 'duotecno.conf.recent-projects';
 const MAX_RECENT = 5;
 
+// Normalize filename to match backend format (spaces → underscores)
+function normalizeFilename(name) {
+  if (!name) return '';
+  // If already ends with .duo, strip it first
+  const baseName = name.endsWith('.duo') ? name.slice(0, -4) : name;
+  // Replace spaces and special chars with underscores
+  const normalized = baseName.replace(/[\ ]+/g, '_');
+  return normalized + '.duo';
+}
+
 function getRecentProjects() {
   try {
     const json = localStorage.getItem(RECENT_KEY);
-    return json ? JSON.parse(json) : [];
+    const items = json ? JSON.parse(json) : [];
+    // Filter out any invalid entries and ensure uniqueness
+    return [...new Set(items.filter(f => f && typeof f === 'string'))];
   } catch {
     return [];
   }
 }
 
 function addRecentProject(filename) {
+  if (!filename) return;
+  
+  const normalized = normalizeFilename(filename);
   let recent = getRecentProjects();
-  // Remove if exists, then add to front
-  recent = recent.filter(f => f !== filename);
-  recent.unshift(filename);
+  
+  // Remove if exists (case-insensitive comparison)
+  recent = recent.filter(f => normalizeFilename(f) !== normalized);
+  
+  // Add to front
+  recent.unshift(normalized);
+  
   // Keep only last MAX_RECENT
   recent = recent.slice(0, MAX_RECENT);
+  
   try {
     localStorage.setItem(RECENT_KEY, JSON.stringify(recent));
   } catch (e) {
@@ -36,6 +56,23 @@ function addRecentProject(filename) {
 }
 
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
+
+// Helper: Check if address is a noports tunnel ID and construct appropriate URL
+function getMasterURL(address, port) {
+  // Check if address is a noports tunnel ID
+  if (address.endsWith('.tcp') || address.endsWith('.http')) {
+    // Remote connection via noports proxy
+    const proxyServer = 'masters.duotecno.eu';
+    const proxyPort = 5098;
+    const tunnelName = address;
+    const masterPort = port;
+    
+    return `${proxyServer}:${proxyPort}/${tunnelName}:${masterPort}`;
+  } else {
+    // Direct local connection
+    return `${address}:${port}`;
+  }
+}
 
 async function loadModules() {
   try {
@@ -158,14 +195,78 @@ function updateRecentProjectsMenu() {
   });
 }
 
+// ─── Project Sanitizer (version compatibility) ────────────────────────────────
+
+function sanitizeProject(project) {
+  if (!project) return project;
+  
+  // Ensure homeView exists
+  if (!project.homeView) {
+    project.homeView = { floors: [], rooms: [] };
+  }
+  
+  // Ensure rooms array exists
+  if (!project.homeView.rooms) {
+    project.homeView.rooms = [];
+  }
+  
+  // Fix devices with null/undefined x/y coordinates
+  project.homeView.rooms = project.homeView.rooms.map(room => {
+    if (!room.devices) return room;
+    
+    const roomWidth = room.width || 500;
+    const roomHeight = room.height || 400;
+    
+    const devices = room.devices.map(device => {
+      // If x or y is null/undefined, set to room center
+      if (device.x == null || device.y == null) {
+        return {
+          ...device,
+          x: Math.max(0, roomWidth / 2 - 50),
+          y: Math.max(0, roomHeight / 2 - 50)
+        };
+      }
+      return device;
+    });
+    
+    return { ...room, devices };
+  });
+  
+  // Ensure railView exists
+  if (!project.railView) {
+    project.railView = { cabinets: [], woningDevices: [] };
+  }
+  
+  // Ensure bindings array exists
+  if (!project.bindings) {
+    project.bindings = [];
+  }
+  
+  // Ensure meta exists
+  if (!project.meta) {
+    project.meta = {
+      name: 'Unnamed Project',
+      created: new Date().toISOString(),
+      modified: new Date().toISOString(),
+      version: '1'
+    };
+  }
+  
+  return project;
+}
+
 async function loadProjectFile(filename) {
   try {
     const loadRes = await fetch(`/api/project/load?file=${encodeURIComponent(filename)}`);
     if (!loadRes.ok) throw new Error('Laden mislukt');
     const project = await loadRes.json();
-    dispatch({ type: 'SET_PROJECT', project });
+    
+    // Sanitize project data for version compatibility
+    const sanitized = sanitizeProject(project);
+    
+    dispatch({ type: 'SET_PROJECT', project: sanitized });
     addRecentProject(filename);
-    showToast(`Project "${project.meta.name}" geladen`, 'success');
+    showToast(`Project "${sanitized.meta.name}" geladen`, 'success');
   } catch {
     showToast('Laden mislukt', 'error');
   }
