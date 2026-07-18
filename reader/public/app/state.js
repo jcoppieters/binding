@@ -291,9 +291,9 @@ export function dispatch(action) {
         if (r.id === action.fromRoomId) {
           const device = r.devices.find(d => d.id === action.deviceId);
           if (device) {
-            // Reset position to center of target room
-            const initialX = Math.max(0, (targetRoom?.width || 500) / 2 - 50);
-            const initialY = Math.max(0, (targetRoom?.height || 400) / 2 - 50);
+            // Use provided x,y or default to center of target room
+            const initialX = action.x !== undefined ? action.x : Math.max(0, (targetRoom?.width || 500) / 2 - 50);
+            const initialY = action.y !== undefined ? action.y : Math.max(0, (targetRoom?.height || 400) / 2 - 50);
             deviceToMove = { ...device, x: initialX, y: initialY };
           }
           return { ...r, devices: r.devices.filter(d => d.id !== action.deviceId) };

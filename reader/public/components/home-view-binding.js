@@ -218,6 +218,7 @@ function setupDropZone(container) {
     e.dataTransfer.dropEffect = 'copy';
     container.style.background = '#eff6ff';
     container.style.boxShadow = 'inset 0 0 0 2px #3b82f6';
+    console.log('Binding panel: dragover');
   };
   
   container.ondragleave = (e) => {
@@ -230,32 +231,45 @@ function setupDropZone(container) {
   };
   
   container.ondrop = (e) => {
+    console.log('Binding panel: DROP event triggered!', e);
     e.preventDefault();
     container.style.background = '#fff';
     container.style.boxShadow = '';
     
     try {
-      const data = JSON.parse(e.dataTransfer.getData('application/json'));
+      const rawData = e.dataTransfer.getData('application/json');
+      console.log('Binding panel: raw data =', rawData);
+      const data = JSON.parse(rawData);
+      console.log('Binding panel: parsed data =', data);
+      console.log('Binding panel: _currentBindingContext =', _currentBindingContext);
+      
       if (data.sourceType === 'room' && data.device) {
         // Check if binding context exists (device selected)
         if (!_currentBindingContext) {
+          console.log('Binding panel: no context!');
           showToast('Selecteer eerst een apparaat om bindings te bekijken', 'info');
           return;
         }
         
+        console.log('Binding panel: checking duplicates...');
         // Check if device is already in panel
         if (data.device.id === _currentBindingContext.device.id || 
             _currentBindingContext.otherDevices.some(d => d.id === data.device.id)) {
+          console.log('Binding panel: device already present');
           showToast('Apparaat al aanwezig', 'info');
           return;
         }
+        
+        console.log('Binding panel: adding device to otherDevices');
         // Add to other devices
         _currentBindingContext.otherDevices.push(data.device);
         renderBindingPanel();
         showToast(`${data.device.icon} ${data.device.name} toegevoegd`, 'success');
+      } else {
+        console.log('Binding panel: invalid data format', data);
       }
     } catch (err) {
-      console.error('Drop error:', err);
+      console.error('Binding panel drop error:', err);
     }
   };
 }
