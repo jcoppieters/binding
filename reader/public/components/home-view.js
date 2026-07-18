@@ -174,14 +174,9 @@ function buildDeviceCard(device, room, container) {
     showDeviceBindings(device, room);
   };
   
-  // HTML5 drag to binding panel (Shift+drag for positioned devices, always for new devices)
-  let shiftDragActive = false;
-  
+  // HTML5 drag to binding panel (for all devices)
   deviceCard.ondragstart = (e) => {
-    // Allow drag to binding panel if:
-    // 1. Device has no position (new device) OR
-    // 2. User holds Shift key (copy to binding panel)
-    if (!hasPHTML5 drag to binding panel for all devices
+    // Allow HTML5 drag to binding panel for all devices
     // (positioned devices can still be repositioned via mousedown if drag stays in room)
     deviceCard.setAttribute('draggable', 'true');
     e.dataTransfer.effectAllowed = 'copy';
@@ -189,16 +184,11 @@ function buildDeviceCard(device, room, container) {
       device: { ...device, roomName: room.name },
       sourceType: 'room'
     }));
-    deviceCard.style.opacity = '0.5';iceCard.ondragend = () => {
-    deviceCard.style.opacity = '1';
-    shiftDragActive = false;
+    deviceCard.style.opacity = '0.5';
   };
   
-  // Always allow draggable for Shift+drag to binding panel
-  deviceCard.setAttribute('draggable', 'true');
-  
-  // Show hint for shift+drag on positioned devices
-  if (hasPosition) {
+  deviceCard.ondragend = () => {
+    deviceCard.style.opacity = '1';
   };
   
   // Always allow draggable for drag to binding panel
@@ -207,7 +197,15 @@ function buildDeviceCard(device, room, container) {
   // Tooltip
   deviceCard.title = hasPosition 
     ? 'Sleep binnen kamer om te verplaatsen, sleep naar binding panel om te koppelen'
-    : 'Sleep naar binding panel of positioneer in kamer';onst existing = document.getElementById('device-menu');
+    : 'Sleep naar binding panel of positioneer in kamer';
+  
+  return deviceCard;
+}
+
+// Device menu: move to room or delete
+function openDeviceMenu(device, room, anchorElement) {
+  // Close any existing menu
+  const existing = document.getElementById('device-menu');
   if (existing) existing.remove();
   
   const menu = el('div', '');
