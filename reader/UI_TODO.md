@@ -174,21 +174,21 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Device cards remain 100×100px fixed size
   - Allows room interiors to be visible at a useful scale for device placement
 - [x] **P2-8** Drag-and-drop device positioning in rooms — **DONE**
-  - Device cards draggable within room canvas via mousedown handlers
-  - Works for ALL devices (new devices start from visual position, positioned devices from stored x/y)
-  - 5px drag threshold prevents accidental moves when clicking
+  - Single unified HTML5 drag system for all drag operations
+  - **Drop zone detection** determines action based on where device is dropped:
+    * Drop in ROOM → repositions device at cursor location (move)
+    * Drop in BINDING PANEL → adds device to binding visualization (copy)
+    * Drop OUTSIDE both zones → nothing happens (canceled)
+  - Visual feedback during drag:
+    * Room border highlights with blue dashed outline when dragging over it
+    * Binding panel highlights with blue background when dragging over it
+    * dropEffect cursor shows 'move' for room, 'copy' for binding panel
+  - Drop position calculated from cursor coordinates, centered on device (subtract 50px)
+  - Position constrained to room bounds (0 to container width/height - 100px)
   - Position stored in device.x and device.y coordinates and persists across reloads
-  - **Shift key distinguishes drag modes:**
-    * Normal drag (no Shift): reposition device within room (mousedown drag)
-    * Shift+drag: copy device to binding panel (HTML5 drag API)
-    * Prevents conflict between two drag systems
-  - ESC key cancels in-room repositioning and restores original position
-  - Tooltips explain interaction modes
+  - **No keyboard modifiers needed** - intuitive single drag like Figma/modern design tools
+  - Simplified code: removed ~100 lines of mousedown/mousemove logic
   - Essential for accurate positioning on ground plan backgrounds
-  - **Fixed**: Drag within room vs. drag to binding panel now work simultaneously
-    * Problem: HTML5 drag (draggable=true) interfered with mousedown drag for repositioning
-    * Solution: Shift key check in onmousedown - if pressed, skip repositioning logic
-    * When repositioning: temporarily set draggable=false, restore to true on cleanup
 - [x] **P2-9** Remove/move device between rooms — **DONE**
   - "..." menu button in top-right corner of device card
   - Menu options:
