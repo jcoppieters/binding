@@ -59,6 +59,14 @@ function buildDeviceCard(device, room, container) {
   deviceCard.onmousedown = (e) => {
     if (e.target === menuBtn) return; // Don't start drag if clicking menu
     
+    // If Shift key is pressed, allow HTML5 drag to binding panel instead
+    if (e.shiftKey) {
+      return; // Let HTML5 drag handle it
+    }
+    
+    // Disable HTML5 drag for in-room repositioning
+    deviceCard.setAttribute('draggable', 'false');
+    
     dragStartX = e.clientX;
     dragStartY = e.clientY;
     
@@ -111,6 +119,9 @@ function buildDeviceCard(device, room, container) {
       
       deviceCard.style.cursor = 'move';
       
+      // Re-enable HTML5 drag for binding panel (with Shift)
+      deviceCard.setAttribute('draggable', 'true');
+      
       if (isDraggingPosition) {
         const dx = e.clientX - dragStartX;
         const dy = e.clientY - dragStartY;
@@ -139,6 +150,9 @@ function buildDeviceCard(device, room, container) {
         document.removeEventListener('mousemove', onMouseMove);
         document.removeEventListener('mouseup', onMouseUp);
         document.removeEventListener('keydown', onKeyDown);
+        
+        // Re-enable HTML5 drag for binding panel (with Shift)
+        deviceCard.setAttribute('draggable', 'true');
         
         if (isDraggingPosition) {
           // Restore original position visually
@@ -173,14 +187,9 @@ function buildDeviceCard(device, room, container) {
     showDeviceBindings(device, room);
   };
   
-  // HTML5 drag to binding panel (for all devices)
+  // HTML5 drag to binding panel (Shift + drag)
   deviceCard.ondragstart = (e) => {
-    // If we're repositioning within room (threshold met), cancel HTML5 drag
-    if (dragThresholdMet) {
-      e.preventDefault();
-      return false;
-    }
-    // Otherwise allow HTML5 drag to binding panel
+    // HTML5 drag to binding panel
     e.dataTransfer.effectAllowed = 'copy';
     e.dataTransfer.setData('application/json', JSON.stringify({ 
       device: { ...device, roomName: room.name },
@@ -198,8 +207,8 @@ function buildDeviceCard(device, room, container) {
   
   // Tooltip
   deviceCard.title = hasPosition 
-    ? 'Sleep binnen kamer om te verplaatsen, sleep naar binding panel om te koppelen'
-    : 'Sleep naar binding panel of positioneer in kamer';
+    ? 'Sleep binnen kamer om te verplaatsen, Shift+sleep naar binding panel om te koppelen'
+    : 'Shift+sleep naar binding panel of positioneer in kamer';
   
   return deviceCard;
 }
