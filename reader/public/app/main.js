@@ -7,6 +7,34 @@ import { initRouter, switchView } from './router.js';
 import { wireButtons as wireRailButtons } from '../components/rail-view.js';
 import { wireButtons as wireHomeButtons } from '../components/home-view.js';
 
+// ─── Recent Projects (localStorage) ───────────────────────────────────────────
+
+const RECENT_KEY = 'duotecno.conf.recent-projects';
+const MAX_RECENT = 5;
+
+function getRecentProjects() {
+  try {
+    const json = localStorage.getItem(RECENT_KEY);
+    return json ? JSON.parse(json) : [];
+  } catch {
+    return [];
+  }
+}
+
+function addRecentProject(filename) {
+  let recent = getRecentProjects();
+  // Remove if exists, then add to front
+  recent = recent.filter(f => f !== filename);
+  recent.unshift(filename);
+  // Keep only last MAX_RECENT
+  recent = recent.slice(0, MAX_RECENT);
+  try {
+    localStorage.setItem(RECENT_KEY, JSON.stringify(recent));
+  } catch (e) {
+    console.warn('[recent] localStorage write failed:', e);
+  }
+}
+
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
 
 async function loadModules() {
@@ -54,6 +82,11 @@ async function init() {
   projectBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
     projectMenu.classList.toggle('show');
+    
+    // Populate recent projects when menu opens
+    if (projectMenu.classList.contains('show')) {
+      updateRecentProjectsMenu();
+    }
   });
 
   // Close dropdown when clicking outside
@@ -71,6 +104,11 @@ async function init() {
     else if (action === 'open') openProject();
     else if (action === 'save') saveProject();
     else if (action === 'rename') renameProject();
+    else if (action === 'recent') {
+      // Load recent project
+      const filename = item.dataset.filename;
+      if (filename) loadProjectFile(filename);
+    }
     
     projectMenu.classList.remove('show');
   });
@@ -88,6 +126,49 @@ async function init() {
 
   // Wire Home View action buttons
   wireHomeButtons();
+}
+
+// ─── Recent Projects Menu ──────────────────────────────────────────────────────
+
+function updateRecentProjectsMenu() {
+  const recentContainer = document.getElementById('recent-projects');
+  const divider = document.getElementById('recent-divider');
+  if (!recentContainer || !divider) return;
+  
+  const recent = getRecentProjects();
+  
+  // Clear container
+  recentContainer.innerHTML = '';
+  
+  if (recent.length === 0) {
+    divider.style.display = 'none';
+    return;
+  }
+  
+  // Show divider and populate menu
+  divider.style.display = 'block';
+  
+  recent.forEach(filename => {
+    const item = document.createElement('div');
+    item.className = 'dropdown-item recent';
+    item.dataset.action = 'recent';
+    item.dataset.filename = filename;
+    item.textContent = '📄 ' + filename.replace('.duo', '');
+    recentContainer.append(item);
+  });
+}
+
+async function loadProjectFile(filename) {
+  try {
+    const loadRes = await fetch(`/api/project/load?file=${encodeURIComponent(filename)}`);
+    if (!loadRes.ok) throw new Error('Laden mislukt');
+    const project = await loadRes.json();
+    dispatch({ type: 'SET_PROJECT', project });
+    addRecentProject(filename);
+    showToast(`Project "${project.meta.name}" geladen`, 'success');
+  } catch {
+    showToast('Laden mislukt', 'error');
+  }
 }
 
 // ─── Save / Upload ────────────────────────────────────────────────────────────
@@ -162,16 +243,8 @@ async function openProject() {
         row.onmouseleave = () => row.style.background = '#f8f9fd';
         row.textContent = '📄 ' + filename.replace('.duo', '');
         row.onclick = async () => {
-          try {
-            const loadRes = await fetch(`/api/project/load?file=${encodeURIComponent(filename)}`);
-            if (!loadRes.ok) throw new Error('Laden mislukt');
-            const project = await loadRes.json();
-            dispatch({ type: 'SET_PROJECT', project });
-            overlay.remove();
-            showToast(`Project "${project.meta.name}" geladen`, 'success');
-          } catch {
-            showToast('Laden mislukt', 'error');
-          }
+          overlay.remove();
+          await loadProjectFile(filename);
         };
         body.append(row);
       });
@@ -385,6 +458,8 @@ async function saveProject() {
     });
     if (res.ok) {
       dispatch({ type: 'SET_DIRTY', dirty: false });
+      const filename = s.project.meta.name + '.duo';
+      addRecentProject(filename);
       showToast('Project opgeslagen', 'success');
     } else {
       showToast('Opslaan mislukt', 'error');

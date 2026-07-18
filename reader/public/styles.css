@@ -1476,3 +1476,73 @@ main {
   font-size: 0.875rem;
 }
 
+/* Device Cards (Home View) */
+
+.device-card {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: move;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  user-select: none;
+  border: 2px solid;
+  position: relative;
+}
+
+.device-card.positioned {
+  position: absolute !important;
+}
+
+.device-card.static {
+  position: relative;
+}
+
+/* Device type colors */
+.device-card.switch { background: rgba(168,85,247,0.08); border-color: rgba(168,85,247,0.25); }
+.device-card.button { background: rgba(34,197,94,0.08); border-color: rgba(34,197,94,0.25); }
+.device-card.sensor { background: rgba(249,115,22,0.08); border-color: rgba(249,115,22,0.25); }
+.device-card.lamp { background: rgba(250,204,21,0.08); border-color: rgba(250,204,21,0.25); }
+.device-card.relay { background: rgba(59,130,246,0.08); border-color: rgba(59,130,246,0.25); }
+.device-card.dimmer { background: rgba(236,72,153,0.08); border-color: rgba(236,72,153,0.25); }
+.device-card.motor { background: rgba(20,184,166,0.08); border-color: rgba(20,184,166,0.25); }
+
+.device-card .device-icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+  pointer-events: none;
+}
+
+.device-card .device-name {
+  font-size: 11px;
+  color: #1a1f2e;
+  font-weight: 500;
+  text-align: center;
+  word-break: break-word;
+  pointer-events: none;
+}
+
+.device-card .device-menu-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid;
+  border-radius: 4px;
+  width: 20px;
+  height: 20px;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s, background 0.15s;
+  z-index: 1;
+}
+

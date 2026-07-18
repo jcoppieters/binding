@@ -1,4 +1,4 @@
-## Work estimate: Full binding software system
+## Work estimate: Full Configuration Software system
 
 Based on the current codebase state (Foundation, Rail View, Connection all done).
 

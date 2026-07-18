@@ -126,27 +126,29 @@ function getMasterURL(address: string, port: number): string {
 - [x] **P1-7** Delete module from Rail View — **DONE**
 - [x] **P1-8** Reorder modules within cabinet — **DONE**
 - [x] **P1-9** Module detail modal with hardware info — **DONE**
-  - Shows channel groups, discovery status, node type, firmware name
-  - Auto-suggestions for UNKNOWN modules based on discovered capabilities
-  - "Fetch units" button for per-node refresh (incremental discovery)
-  - `public/components/rail-view.js::openModuleDetail()`
 - [x] **P1-10** Materials View (Materiaallijst tab) — **DONE**
-  - `public/components/mat-view.js`
-  - Bill of materials with quantities, DIN space, power consumption, pricing
-  - Pricing data merged from `modules/product-codes.csv` into `_index.json`
-  - Export to CSV/Excel functionality
-  - Totals row with project-wide sums
 
 ### Phase 2 — Home View
 
 - [x] **P2-1** Render rooms from project data — **DONE**
 - [x] **P2-2** Add / rename / delete room and floor — **DONE**
-  - Add room prompt with name, icon, floor selection
-  - Floor menu with rename/delete options
-  - Room menu with rename/delete options
-  - State actions: ADD_ROOM, UPDATE_ROOM, REMOVE_ROOM, ADD_FLOOR, UPDATE_FLOOR, REMOVE_FLOOR
-
-- [x] **P2-4** Add device to room — **DONE** (basic UI structure)
+- [x] **P2-3** Add device to room — **DONE** (basic demo version)
+- [ ] **P2-4** Link room devices to real material units (MAJOR TASK)
+  - **Goal**: Room devices must be actual units from the materiaallijst, not mock objects
+  - **Device picker must show**: Available units grouped by type, module origin, gebruikt/ongebruikt status
+  - **Rules**: Controllers (switch, sensor, button) can only be used ONCE; Controllables (lamp, relay, dimmer, motor) CAN be used multiple times
+  - **Data model**: Room device gets `channelRef: {cabinetId, moduleId, unitAddress}` linking to physical unit
+  - **State actions**: ADD_DEVICE_TO_ROOM, UPDATE_DEVICE_NAME, REMOVE_DEVICE_FROM_ROOM
+- [x] **P2-5** Floor plan import — **PARTIALLY DONE**
+  - ✅ Per-room background image upload via room ... menu (🗺️ Grondplan toevoegen)
+  - ✅ File input → FileReader → save as data URL to room.backgroundImage
+  - ✅ CSS background-size:cover + background-position:center applied to room card
+  - ✅ "Verwijder grondplan" menu item when room.backgroundImage is set
+  - ⏳ TODO: Add crop/select step after upload — user selects portion of drawing for this room
+- [x] **P2-6** Bigger room cards with horizontal scroll — **DONE**
+- [x] **P2-7** Drag-and-drop device positioning in rooms — **DONE**
+- [x] **P2-8** Remove/move device between rooms — **DONE**
+- [x] **P2-9** Resize room width and height — **DONE**
   - "+ apparaat" button in room header opens device picker dialog
   - 7 device type buttons with visual selection (switch, button, sensor, lamp, relay, dimmer, motor)
   - Name input with validation
@@ -227,35 +229,127 @@ function getMasterURL(address: string, port: number): string {
 
 ### Phase 3 — Visual wiring diagram (Binding View)
 
-**Goal:** Visual node-graph editor where devices show input/output ports and you draw wires between them.
+**Goal:** Replace the old binding wizard with a visual node-graph editor where devices show input/output "dots" (ports) and you draw wires between them.
 
-**Current Status:**
-- [x] Basic room device system with 7 device types (💡 Lamp, 🔘 Schakelaar, ⚡ Relais, 🎚️ Dimmer, 🪟 Motor, 🌡️ Sensor, 🔳 Drukknop)
-- [x] Device cards (100×100px) with icons, colors, positioning
-- [x] Drag-and-drop positioning within rooms
-- [x] Device menu (move/delete)
-- [x] Floor plan upload per room
-- [x] Room resizing
-- [x] Binding panel placeholder (click device triggers showDeviceBindings)
+**Demo requirements:**
+1. **Drag devices from rooms to binding panel**: Any device in a room card can be dragged and dropped into the binding area below the divider
+2. **Controllers (switches, sensors, buttons)**: Show colored dots on the RIGHT side of their card with RIGHT-ALIGNED labels (kort, lang, druk, trigger)
+3. **Controllable devices (lamps, relays, dimmers, motors)**: Show colored dots on the LEFT side of their card with LEFT-ALIGNED labels (aan, uit, schakel, dim+, dim-, op, neer, stop, PIR, stel waarde)
+4. **Wire drawing**: Click/drag from controller output dot → controllable device input dot. Wire color matches the source dot color.
+5. **Auto-save bindings**: Bindings automatically included when saving project to .duo file
+6. **Click device to see bindings**: Clicking a device in a room shows all connected devices in binding panel with wires visible
+7. **Binding area**: Takes full space under the divider (entire lower section)
+8. **Delete wire**: Click wire → delete button or press Delete key → removes binding
+9. **Floor plan upload**: Room ... menu has "🗺️ Grondplan toevoegen" → file upload → becomes room background (crop step TODO later)
+10. **Remove floor plan**: If room has background, ... menu shows "Verwijder grondplan" option
+11. **Room layout**: Always 80% width, full height above divider, horizontal scroll between rooms
+12. **Device types**: 💡 Lamp (controllable), 🔘 Schakelaar (controller), ⚡ Relais (controllable), 🎚️ Dimmer (controllable), 🪟 Motor (controllable), 🌡️ Sensor (controller), 🔳 Drukknop (controller)
 
-**Port System:**
-- **Controllers** (switch, sensor, button): outputs on RIGHT (kort/lang/druk/trigger)
-- **Controllables** (lamp, relay, dimmer, motor): inputs on LEFT (aan/uit/schakel/dim+/dim-/op/neer/stop/PIR/stel waarde)
-- **Binding panel layout**: Controllers left column, controllables right column, SVG wires between
-- **State**: `project.bindings[]` with `{id, from: {deviceId, portId}, to: {deviceId, portId}, color}`
+**Port definitions per device type:**
+- **Schakelaar** (switch): outputs = kort (blue), lang (purple) on RIGHT
+- **Drukknop** (button): outputs = druk (green) on RIGHT  
+- **Sensor** (PIR): outputs = trigger (orange) on RIGHT
+- **Lamp** (relay): inputs = aan (green), uit (red), schakel (blue) on LEFT
+- **Relais**: inputs = aan (green), uit (red), schakel (blue) on LEFT
+- **Dimmer**: inputs = aan (green), uit (red), schakel (blue), dim+ (orange), dim- (orange), PIR (yellow), stel waarde (purple) on LEFT
+- **Motor**: inputs = op (blue), neer (blue), stop (red) on LEFT
 
-**Tasks:**
+**Implementation notes:**
+- Binding panel occupies full height under divider (not just a strip)
+- **Device layout in binding panel**:
+  * Controllers (switches, sensors, buttons) stacked VERTICALLY on the LEFT side
+  * Controllables (lamps, relays, dimmers, motors) stacked VERTICALLY on the RIGHT side
+  * Multiple controllers → column on left, multiple controllables → column on right
+  * SVG wires connect horizontally between left column (outputs) and right column (inputs)
+  * Example: [Switch 1, Switch 2, Sensor] (left column) → wires → [Lamp 1, Dimmer, Motor] (right column)
+- SVG overlay for wires, positioned absolutely over device container
+- State: `project.bindings[]` with `{id, from: {deviceId, portId}, to: {deviceId, portId}, color}`
+- Drag-drop: room devices have `draggable=true`, binding panel has drop zone handlers
+- Auto-load connected devices when opening binding panel for a device
 
-- [ ] **P3-1** Define DEVICE_PORTS constant with ports per device type
-- [ ] **P3-2** Device card port visualization (colored dots on card edges)
-- [ ] **P3-3** Binding panel: show selected device with ports
-- [ ] **P3-4** Add devices to binding canvas for wiring
-- [ ] **P3-5** Wire drawing (drag output → input, SVG path rendering)
-- [ ] **P3-6** Wire state management (ADD_BINDING/REMOVE_BINDING actions)
-- [ ] **P3-7** Delete wire (click + Delete key)
-- [ ] **P3-8** Logic blocks (NOT/AND/OR/XOR) as visual elements on wires
-- [ ] **P3-9** Device controls + live state in binding panel (reuse unit-control.js)
-- [ ] **P3-10** Timer blocks on wires (Td/Tf/Tr binding types)
+**Tasks breakdown:**
+
+- [x] **P3-0** Update UI_TODO with complete binding requirements — **DONE**
+- [ ] **P3-1** Device port system and DEVICE_PORTS constant
+  - Output ports per device type (switch: long, short, double; sensor: trigger; …)
+  - Input ports per device type (dimmer: toggle/on/off/dim-up/dim-down/pir/set-val; relay: on/off; motor: up/down/stop; …)
+  - PIR detectors (DT40/41/43/46): emit `input_digital` trigger → can wire to dimmer/relay/motor inputs; auto-off timer typically added on the receiving unit side
+  - Port list driven by `bindingEditorAPI` actions/events per unit type
+- [x] **P3-1a** Add demo devices to room for binding demonstration — **DONE**
+  - UI to add: input button (switches), relay module, dimmer module, motors, sensors
+  - 7 device types available: 💡 Lamp, 🔘 Schakelaar, ⚡ Relais, 🎚️ Dimmer, 🪟 Motor, 🌡️ Sensor, 🔳 Drukknop
+  - Each device has icon, color, and type stored in room.devices[]
+  - Device cards show at 100×100px with colored backgrounds matching device type
+  - Clicking device triggers binding panel (placeholder implemented)
+- [ ] **P3-1b** Device card port visualization in Home View
+  - Left side: input dots (dim+, dim-, on, off, toggle, PIR, set-value…)
+  - Right side: output dots (short press, long press, double press, trigger…)
+  - Color-coded by function type (e.g., relay=blue, dimmer=orange, input=green)
+  - Port count and position based on device's `channelGroups` + unit type
+- [ ] **P3-1c** Visualize selected device in binding panel
+  - When device is clicked in room, show it in the bottom binding panel
+  - Device card with full port visualization (inputs on left, outputs on right)
+  - Port labels and hover tooltips showing port function
+  - Panel title shows device name and room name
+- [ ] **P3-1d** Add other devices to binding panel for wiring
+  - "Add device" button in binding panel
+  - Select from devices in same room or all rooms
+  - Multiple devices can be added to the binding canvas simultaneously
+  - Devices arranged in a flow layout for easy wiring visualization
+- [ ] **P3-1e** Device controls and live state in binding view
+  - **Goal**: When clicking device icon in binding panel, show interactive controls + live state/feedback
+  - **Reference implementation**: `../duotecnopro/src/app/rendering` (ProApp mobile app controls)
+  - **Controls per device type**:
+    * Switch: kort/lang buttons (trigger actions)
+    * Relay: aan/uit/schakel buttons
+    * Dimmer: aan/uit/schakel + slider for dim value + dim+/dim- buttons
+    * Motor: op/neer/stop buttons
+    * Sensor: trigger button (manual test)
+    * Temperature: display current value, set target value
+  - **Live state display**:
+    * Relay: ON/OFF badge with color (green/gray)
+    * Dimmer: ON/OFF + current dim percentage (0-100%)
+    * Motor: UP/DOWN/STOPPED + position percentage
+    * Temperature: current temp, requested/target temp
+    * Switch: last action timestamp (kort/lang pressed X seconds ago)
+  - **Live feedback**:
+    * Subscribe to TCP state updates from master (existing `unit-control.js` infrastructure)
+    * Update UI in real-time when device state changes (from physical switches, other users, moods)
+    * Show activity indicator during state transitions
+  - **Visual feedback on device icons** (future enhancement):
+    * Lamp icon: yellow when ON, gray when OFF
+    * Motor icon: animated up/down arrows during movement
+    * Dimmer: brightness glow effect proportional to dim value
+  - **Implementation notes**:
+    * Reuse existing `unit-control.js` for TCP communication
+    * Modal or expandable panel for controls (don't clutter binding canvas)
+    * Control layout adapts to device type (render functions from ProApp)
+    * State subscription: `state.subscribe()` for local project changes + TCP events for hardware state
+- [ ] **P3-2** Draw wire: drag output port → input port
+  - Click and hold on output dot → shows dragging wire following mouse cursor
+  - Hover over compatible input dot → highlight as valid drop target
+  - Release on input dot → creates binding, wire snaps to connect the two dots
+  - Wire rendered as SVG path (curved or straight line)
+  - Multiple wires from same output → fan out visually
+- [ ] **P3-2a** Binding wire state management
+  - New state action: `ADD_BINDING` with `{sourceDeviceId, sourcePort, targetDeviceId, targetPort, bindingType}`
+  - Binding stored in `project.bindings[]` array
+  - Each binding maps to one or more `bind*.txt` entries on upload
+  - Wire color reflects binding type (N=normal gray, Td=timer orange, C=conditional purple)
+- [ ] **P3-3** Delete wire
+  - Click wire → highlight + show delete button or press Delete key
+  - Confirm deletion → removes binding from project
+  - State action: `REMOVE_BINDING`
+- [ ] **P3-4** Insert logic blocks on wires → `C` (Conditional) binding type
+  - **Goal**: Visual logic gates (NOT, AND, OR, XOR) as draggable blocks in binding canvas
+  - **Logic block types**:
+    * **NOT** (inverter): 1 input → 1 output (inverts signal)
+    * **AND**: 2+ inputs → 1 output (all inputs must be active)
+    * **OR**: 2+ inputs → 1 output (any input triggers output)
+    * **XOR**: 2 inputs → 1 output (exactly one input must be active)
+  - **Block visual design**:
+    * Rectangular card with icon/symbol for logic type (¬, ∧, ∨, ⊕)
+    * Input ports on LEFT side (colored dots, same as device inputs)
     * Output port on RIGHT side (colored dot)
     * Label shows logic type name ("NOT", "AND", "OR", "XOR")
     * Color-coded: NOT=purple, AND=blue, OR=green, XOR=orange

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Duotecno binding software creates text files named `bind[xx].txt` where `xx` is the hexadecimal node address of a Duotecno node (e.g., `bindfc.txt`, `bind03.txt`).
+The Duotecno Configuration Software creates text files named `bind[xx].txt` where `xx` is the hexadecimal node address of a Duotecno node (e.g., `bindfc.txt`, `bind03.txt`).
 
 ## File Locations
 

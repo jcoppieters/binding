@@ -260,6 +260,64 @@ export function dispatch(action) {
       _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
       break;
     }
+    case 'UPDATE_DEVICE_POSITION': {
+      const homeView = { ..._state.project.homeView };
+      homeView.rooms = homeView.rooms.map(r => {
+        if (r.id === action.roomId) {
+          return {
+            ...r,
+            devices: r.devices.map(d =>
+              d.id === action.deviceId
+                ? { ...d, x: action.x, y: action.y }
+                : d
+            )
+          };
+        }
+        return r;
+      });
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
+    case 'MOVE_DEVICE_TO_ROOM': {
+      const homeView = { ..._state.project.homeView };
+      let deviceToMove = null;
+      
+      // Remove from source room
+      homeView.rooms = homeView.rooms.map(r => {
+        if (r.id === action.fromRoomId) {
+          const device = r.devices.find(d => d.id === action.deviceId);
+          if (device) {
+            deviceToMove = { ...device, x: undefined, y: undefined }; // Reset position
+          }
+          return { ...r, devices: r.devices.filter(d => d.id !== action.deviceId) };
+        }
+        return r;
+      });
+      
+      // Add to target room
+      if (deviceToMove) {
+        homeView.rooms = homeView.rooms.map(r => {
+          if (r.id === action.toRoomId) {
+            return { ...r, devices: [...r.devices, deviceToMove] };
+          }
+          return r;
+        });
+      }
+      
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
+    case 'REMOVE_DEVICE_FROM_ROOM': {
+      const homeView = { ..._state.project.homeView };
+      homeView.rooms = homeView.rooms.map(r => {
+        if (r.id === action.roomId) {
+          return { ...r, devices: r.devices.filter(d => d.id !== action.deviceId) };
+        }
+        return r;
+      });
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
     case 'ADD_FLOOR': {
       const homeView = { ..._state.project.homeView };
       homeView.floors = [...homeView.floors, action.floor];

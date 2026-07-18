@@ -1,4 +1,4 @@
-# Duotecno Binding Software – UI Specification
+# Duotecno Configuration Software – UI Specification
 
 > Status: draft – living document, freely extendable
 
@@ -61,7 +61,7 @@
 
 ## Overview
 
-The new binding software has **three views** that together cover the full project workflow:
+The new Configuration Software has **three views** that together cover the full project workflow:
 
 | View | Purpose |
 |------|---------|

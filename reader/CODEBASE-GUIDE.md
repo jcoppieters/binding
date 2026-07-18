@@ -1,6 +1,6 @@
 # Codebase Guide
 
-How to read and navigate the Duotecno Binding Software frontend.
+How to read and navigate the Duotecno Configuration Software frontend.
 
 ---
 

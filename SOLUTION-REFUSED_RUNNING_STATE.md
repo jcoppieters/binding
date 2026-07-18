@@ -17,7 +17,7 @@ Without the `APPL_UNLOCK` flag (0x02) set in `bDLLAccessControl`, the node remai
 
 ### From C++ Source Analysis (src/DTBindingSoftware)
 
-The C++ binding software calls **two commands** before binding operations:
+The C++ Configuration Software calls **two commands** before binding operations:
 
 ```cpp
 // 1. Set access level (you have this)

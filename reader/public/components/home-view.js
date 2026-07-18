@@ -7,6 +7,366 @@
 import { state, dispatch, makeId } from '../app/state.js';
 import { showDeviceBindings } from './home-view-binding.js';
 
+// Helper to build a device card with drag-and-drop and menu
+function buildDeviceCard(device, room, container) {
+  const deviceCard = el('div', '');
+  
+  // Position: absolute if device has x/y coordinates, otherwise static flow
+  const hasPosition = device.x !== undefined && device.y !== undefined;
+  
+  // Add CSS classes
+  deviceCard.className = `device-card ${hasPosition ? 'positioned' : 'static'} ${device.type || 'lamp'}`;
+  
+  // Only set position in inline styles
+  if (hasPosition) {
+    deviceCard.style.left = device.x + 'px';
+    deviceCard.style.top = device.y + 'px';
+  }
+  
+  // Device content
+  const icon = el('div', 'device-icon');
+  icon.textContent = device.icon || '💡';
+  
+  const name = el('div', 'device-name');
+  name.textContent = device.name;
+  
+  // Menu button (top-right corner)
+  const menuBtn = el('button', 'device-menu-btn');
+  menuBtn.textContent = '⋯';
+  menuBtn.title = 'Apparaat opties';
+  menuBtn.onclick = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    openDeviceMenu(device, room, menuBtn);
+  };
+  
+  deviceCard.append(icon, name, menuBtn);
+  
+  // Show menu button on hover
+  deviceCard.onmouseenter = () => { 
+    menuBtn.style.opacity = '1';
+  };
+  deviceCard.onmouseleave = () => { 
+    menuBtn.style.opacity = '0';
+  };
+  
+  // Drag to reposition within room
+  let dragStartX, dragStartY, deviceStartX, deviceStartY;
+  let isDraggingPosition = false;
+  let dragThresholdMet = false;
+  
+  // In-room repositioning via mousedown (works for all devices)
+  deviceCard.onmousedown = (e) => {
+    if (e.target === menuBtn) return; // Don't start drag if clicking menu
+    
+    // Don't prevent default yet - wait for drag threshold
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    
+    // Get current position - for positioned devices use x/y, for static use current visual position
+    if (hasPosition) {
+      deviceStartX = device.x || 0;
+      deviceStartY = device.y || 0;
+    } else {
+      // For static devices, we need to calculate position relative to container
+      // when they become absolutely positioned during drag
+      const rect = deviceCard.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      deviceStartX = rect.left - containerRect.left + container.scrollLeft;
+      deviceStartY = rect.top - containerRect.top + container.scrollTop;
+    }
+    
+    isDraggingPosition = false;
+    dragThresholdMet = false;
+    
+    const onMouseMove = (e) => {
+      const dx = e.clientX - dragStartX;
+      const dy = e.clientY - dragStartY;
+      const distance = Math.sqrt(dx*dx + dy*dy);
+      
+      // Only start dragging if moved more than 5px
+      if (!dragThresholdMet && distance > 5) {
+        dragThresholdMet = true;
+        isDraggingPosition = true;
+        deviceCard.style.cursor = 'grabbing';
+        // Make sure it's absolutely positioned during drag
+        deviceCard.style.position = 'absolute';
+      }
+      
+      if (dragThresholdMet) {
+        // Constrain to container bounds (100x100 device card)
+        const maxX = container.offsetWidth - 100;
+        const maxY = container.offsetHeight - 100;
+        const newX = Math.max(0, Math.min(maxX, deviceStartX + dx));
+        const newY = Math.max(0, Math.min(maxY, deviceStartY + dy));
+        
+        deviceCard.style.left = newX + 'px';
+        deviceCard.style.top = newY + 'px';
+      }
+    };
+    
+    const onMouseUp = (e) => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      
+      deviceCard.style.cursor = 'move';
+      
+      if (isDraggingPosition) {
+        const dx = e.clientX - dragStartX;
+        const dy = e.clientY - dragStartY;
+        // Constrain to container bounds (100x100 device card)
+        const maxX = container.offsetWidth - 100;
+        const maxY = container.offsetHeight - 100;
+        const newX = Math.max(0, Math.min(maxX, deviceStartX + dx));
+        const newY = Math.max(0, Math.min(maxY, deviceStartY + dy));
+        
+        dispatch({
+          type: 'UPDATE_DEVICE_POSITION',
+          roomId: room.id,
+          deviceId: device.id,
+          x: newX,
+          y: newY
+        });
+      }
+      
+      isDraggingPosition = false;
+      dragThresholdMet = false;
+    };
+    
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  };
+  
+  // Click to open binding panel (only if not dragging)
+  deviceCard.onclick = (e) => {
+    if (isDraggingPosition) {
+      e.preventDefault();
+      return;
+    }
+    showDeviceBindings(device, room);
+  };
+  
+  // HTML5 drag to binding panel (Shift+drag for positioned devices, always for new devices)
+  let shiftDragActive = false;
+  
+  deviceCard.ondragstart = (e) => {
+    // Allow drag to binding panel if:
+    // 1. Device has no position (new device) OR
+    // 2. User holds Shift key (copy to binding panel)
+    if (!hasPosition || e.shiftKey) {
+      shiftDragActive = e.shiftKey;
+      deviceCard.setAttribute('draggable', 'true');
+      e.dataTransfer.effectAllowed = 'copy';
+      e.dataTransfer.setData('application/json', JSON.stringify({ 
+        device: { ...device, roomName: room.name },
+        sourceType: 'room'
+      }));
+      deviceCard.style.opacity = '0.5';
+    } else {
+      // Prevent HTML5 drag for positioned devices (use mousedown instead)
+      e.preventDefault();
+      return false;
+    }
+  };
+  
+  deviceCard.ondragend = () => {
+    deviceCard.style.opacity = '1';
+    shiftDragActive = false;
+  };
+  
+  // Always allow draggable for Shift+drag to binding panel
+  deviceCard.setAttribute('draggable', 'true');
+  
+  // Show hint for shift+drag on positioned devices
+  if (hasPosition) {
+    deviceCard.title = 'Sleep om te verplaatsen, Shift+sleep om naar binding panel te kopiëren';
+  } else {
+    deviceCard.title = 'Sleep naar binding panel of positioneer in kamer';
+  }
+  
+  return deviceCard;
+}
+
+// Device menu: move to room or delete
+function openDeviceMenu(device, room, anchorElement) {
+  // Close any existing menu
+  const existing = document.getElementById('device-menu');
+  if (existing) existing.remove();
+  
+  const menu = el('div', '');
+  menu.id = 'device-menu';
+  menu.style.cssText = `
+    position:fixed;
+    background:white;
+    border:1px solid #dde3ef;
+    border-radius:6px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    padding:4px;
+    z-index:10000;
+    min-width:160px;
+  `;
+  
+  // Position near anchor
+  const rect = anchorElement.getBoundingClientRect();
+  menu.style.left = (rect.left - 140) + 'px';
+  menu.style.top = (rect.bottom + 4) + 'px';
+  
+  // Move to room option
+  const s = state.get();
+  const otherRooms = s.project.homeView.rooms.filter(r => r.id !== room.id);
+  
+  if (otherRooms.length > 0) {
+    const moveBtn = el('button', '');
+    moveBtn.style.cssText = `
+      width:100%;
+      text-align:left;
+      padding:8px 12px;
+      background:none;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      font-size:13px;
+      color:#1a1f2e;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    `;
+    moveBtn.textContent = 'Verplaats naar...';
+    moveBtn.onmouseenter = () => { moveBtn.style.background = '#f0f4fc'; };
+    moveBtn.onmouseleave = () => { moveBtn.style.background = 'none'; };
+    moveBtn.onclick = () => {
+      menu.remove();
+      openRoomSelector(device, room, otherRooms);
+    };
+    menu.append(moveBtn);
+  }
+  
+  // Delete option
+  const deleteBtn = el('button', '');
+  deleteBtn.style.cssText = `
+    width:100%;
+    text-align:left;
+    padding:8px 12px;
+    background:none;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:13px;
+    color:#dc3545;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  `;
+  deleteBtn.textContent = 'Verwijder';
+  deleteBtn.onmouseenter = () => { deleteBtn.style.background = '#fff0f0'; };
+  deleteBtn.onmouseleave = () => { deleteBtn.style.background = 'none'; };
+  deleteBtn.onclick = () => {
+    menu.remove();
+    if (confirm(`Apparaat "${device.name}" verwijderen uit ${room.name}?`)) {
+      dispatch({
+        type: 'REMOVE_DEVICE_FROM_ROOM',
+        roomId: room.id,
+        deviceId: device.id
+      });
+    }
+  };
+  menu.append(deleteBtn);
+  
+  document.body.append(menu);
+  
+  // Close on outside click
+  setTimeout(() => {
+    const closeHandler = (e) => {
+      if (!menu.contains(e.target)) {
+        menu.remove();
+        document.removeEventListener('click', closeHandler);
+      }
+    };
+    document.addEventListener('click', closeHandler);
+  }, 10);
+}
+
+// Room selector for moving device
+function openRoomSelector(device, fromRoom, targetRooms) {
+  const modal = el('div', '');
+  modal.style.cssText = `
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.4);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:10001;
+  `;
+  
+  const panel = el('div', '');
+  panel.style.cssText = `
+    background:white;
+    border-radius:8px;
+    padding:24px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.2);
+    max-width:400px;
+    width:90%;
+  `;
+  
+  const title = el('h3', '');
+  title.style.cssText = 'margin:0 0 16px 0;font-size:16px;color:#1a1f2e';
+  title.textContent = `Verplaats "${device.name}" naar:`;
+  
+  const roomsList = el('div', '');
+  roomsList.style.cssText = 'display:flex;flex-direction:column;gap:8px;margin-bottom:16px';
+  
+  targetRooms.forEach(targetRoom => {
+    const roomBtn = el('button', '');
+    roomBtn.style.cssText = `
+      padding:12px 16px;
+      background:#f8f9fd;
+      border:1px solid #dde3ef;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:14px;
+      text-align:left;
+      display:flex;
+      align-items:center;
+      gap:8px;
+    `;
+    roomBtn.innerHTML = `<span style="font-size:18px">${targetRoom.icon || '🏠'}</span><span>${targetRoom.name}</span>`;
+    roomBtn.onmouseenter = () => { roomBtn.style.background = '#e8f0ff'; };
+    roomBtn.onmouseleave = () => { roomBtn.style.background = '#f8f9fd'; };
+    roomBtn.onclick = () => {
+      dispatch({
+        type: 'MOVE_DEVICE_TO_ROOM',
+        fromRoomId: fromRoom.id,
+        toRoomId: targetRoom.id,
+        deviceId: device.id
+      });
+      modal.remove();
+    };
+    roomsList.append(roomBtn);
+  });
+  
+  const cancelBtn = el('button', '');
+  cancelBtn.style.cssText = `
+    padding:8px 16px;
+    background:none;
+    border:1px solid #dde3ef;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:14px;
+    width:100%;
+  `;
+  cancelBtn.textContent = 'Annuleer';
+  cancelBtn.onclick = () => modal.remove();
+  
+  panel.append(title, roomsList, cancelBtn);
+  modal.append(panel);
+  document.body.append(modal);
+  
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.remove();
+  };
+}
+
 let _unsubscribe = null;
 
 /** Called when the home view tab is activated */
@@ -320,13 +680,18 @@ function renderHomeCanvas(homeView) {
 function buildRoomCard(room) {
   const card = el('div', 'room-card');
   
+  // Use room.width and room.height if set, otherwise default values
+  const roomWidth = room.width || '80%';
+  const roomHeight = room.height || '400px';
+  
   // Calculate width: 80% of parent container minus some margin
   // Min-width ensures rooms don't get too small on narrow screens
   card.style.cssText = `
-    width:80%;
+    width:${roomWidth};
+    height:${roomHeight};
     min-width:600px;
+    min-height:300px;
     max-width:1400px;
-    height:400px;
     background:#fff;
     border:2px solid #dde3ef;
     border-radius:12px;
@@ -347,8 +712,73 @@ function buildRoomCard(room) {
     card.style.backgroundImage = `url(${room.backgroundImage})`;
   }
   
-  card.onmouseenter = () => { card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.12)'; };
-  card.onmouseleave = () => { card.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'; };
+  // Resize handle in bottom-right corner (both width and height)
+  const resizeHandle = el('div', '');
+  resizeHandle.style.cssText = `
+    position:absolute;
+    bottom:8px;
+    right:8px;
+    width:20px;
+    height:20px;
+    cursor:nwse-resize;
+    background:rgba(59,130,246,0.15);
+    border:2px solid #3b82f6;
+    border-radius:4px;
+    opacity:0;
+    transition:opacity .15s;
+    z-index:10;
+  `;
+  resizeHandle.title = 'Sleep om grootte aan te passen';
+  
+  card.onmouseenter = () => { 
+    card.style.boxShadow = '0 4px 20px rgba(0,0,0,0.12)'; 
+    resizeHandle.style.opacity = '0.7';
+  };
+  card.onmouseleave = () => { 
+    card.style.boxShadow = '0 2px 12px rgba(0,0,0,0.08)'; 
+    resizeHandle.style.opacity = '0';
+  };
+  resizeHandle.onmouseenter = () => { resizeHandle.style.opacity = '1'; };
+  
+  // Handle resize drag
+  resizeHandle.onmousedown = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    const startX = e.clientX;
+    const startY = e.clientY;
+    const startWidth = card.offsetWidth;
+    const startHeight = card.offsetHeight;
+    
+    const onMouseMove = (e) => {
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      const newWidth = Math.max(400, startWidth + dx);
+      const newHeight = Math.max(200, startHeight + dy);
+      card.style.width = newWidth + 'px';
+      card.style.height = newHeight + 'px';
+    };
+    
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+      
+      // Save new width and height to room
+      dispatch({
+        type: 'UPDATE_ROOM',
+        roomId: room.id,
+        patch: { 
+          width: card.style.width,
+          height: card.style.height
+        }
+      });
+    };
+    
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  };
+  
+  card.append(resizeHandle);
 
   const header = el('div', '');
   header.style.cssText = 'font-size:18px;font-weight:600;color:#1a1f2e;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.95);padding:12px 16px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05)';
@@ -384,9 +814,9 @@ function buildRoomCard(room) {
   headerButtons.append(addDeviceBtn, menuBtn);
   header.append(roomTitle, headerButtons);
 
-  // Devices area (will hold device cards in the future)
+  // Devices area (positioned relative for absolute device placement)
   const devicesArea = el('div', '');
-  devicesArea.style.cssText = 'flex:1;display:flex;flex-wrap:wrap;gap:12px;align-content:flex-start;padding:16px;border-radius:8px;background:rgba(248,249,253,0.6);overflow:auto';
+  devicesArea.style.cssText = 'flex:1;position:relative;padding:16px;border-radius:8px;background:rgba(248,249,253,0.6);overflow:hidden';
   
   if (room.devices.length === 0) {
     const emptyMsg = el('div', '');
@@ -394,56 +824,9 @@ function buildRoomCard(room) {
     emptyMsg.textContent = 'Geen apparaten in deze kamer';
     devicesArea.append(emptyMsg);
   } else {
-    // Render device cards
+    // Render device cards directly in devicesArea
     room.devices.forEach(device => {
-      const deviceCard = el('div', '');
-      deviceCard.style.cssText = `
-        width:100px;
-        height:100px;
-        background:${device.color || '#fff'}15;
-        border:2px solid ${device.color || '#dde3ef'}40;
-        border-radius:8px;
-        padding:8px;
-        display:flex;
-        flex-direction:column;
-        align-items:center;
-        justify-content:center;
-        cursor:pointer;
-        transition:all .15s;
-      `;
-      deviceCard.innerHTML = `<div style="font-size:28px;margin-bottom:4px">${device.icon || '💡'}</div><div style="font-size:11px;color:#1a1f2e;font-weight:500;text-align:center;word-break:break-word">${device.name}</div>`;
-      deviceCard.onmouseenter = () => { 
-        deviceCard.style.borderColor = device.color || '#c0c8d8';
-        deviceCard.style.transform = 'translateY(-2px)'; 
-        deviceCard.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-      };
-      deviceCard.onmouseleave = () => { 
-        deviceCard.style.borderColor = `${device.color || '#dde3ef'}40`;
-        deviceCard.style.transform = 'translateY(0)'; 
-        deviceCard.style.boxShadow = 'none';
-      };
-      
-      // Make device draggable for binding panel
-      deviceCard.draggable = true;
-      deviceCard.ondragstart = (e) => {
-        e.dataTransfer.effectAllowed = 'copy';
-        e.dataTransfer.setData('application/json', JSON.stringify({ 
-          device: { ...device, roomName: room.name },
-          sourceType: 'room'
-        }));
-        deviceCard.style.opacity = '0.5';
-      };
-      deviceCard.ondragend = () => {
-        deviceCard.style.opacity = '1';
-      };
-      
-      // Click to open binding panel
-      deviceCard.onclick = (e) => {
-        if (!e.defaultPrevented) {
-          showDeviceBindings(device, room);
-        }
-      };
-      
+      const deviceCard = buildDeviceCard(device, room, devicesArea);
       devicesArea.append(deviceCard);
     });
   }

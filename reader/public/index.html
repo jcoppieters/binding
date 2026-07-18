@@ -3,7 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Duotecno Binding Software</title>
+<title>Duotecno Configuration Software</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="units-view.css">
 <style>
 /* ── Reset & base ─────────────────────────────────────────────────────────── */
@@ -12,15 +14,15 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:#eef1f8;color:#1a1f2
 
 /* ── Header ──────────────────────────────────────────────────────────────── */
 header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;background:#1a2540;border-bottom:2px solid #e08c00;flex-shrink:0}
-.logo{font-size:19px;font-weight:700;color:#fff}
+.logo{font-size:19px;font-weight:700;color:#fff;line-height:1}
 .logo em{color:#e08c00;font-style:normal}
-.project-name-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#8090b0;cursor:default}
+.project-name-wrap{display:flex;align-items:center;gap:6px;font-size:12px;color:#8090b0;cursor:default;line-height:1}
 #project-name{color:#c0ccdf;font-weight:600;padding:2px 4px;border-radius:3px}
 #project-name:hover{background:rgba(255,255,255,.08)}
 .spacer{flex:1}
-.connection-status{font-size:11px;padding:4px 10px;border-radius:12px;background:#192035;color:#6a7899;cursor:pointer;transition:all .15s}
+.connection-status{font-size:11px;padding:4px 10px;border-radius:12px;background:#192035;color:#6a7899;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:4px}
 .connection-status.connected{background:#0d2a1a;color:#4cd04c}
-.header-btn{padding:6px 14px;border-radius:6px;border:1px solid #2a3a60;background:#243060;color:#b8c8e0;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;transition:background .15s}
+.header-btn{padding:6px 14px;border-radius:6px;border:1px solid #2a3a60;background:#243060;color:#b8c8e0;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;transition:background .15s;line-height:1}
 .header-btn:hover{background:#2e3a70}
 .header-btn.primary{background:#e08c00;color:#fff;border-color:#e08c00;font-weight:600}
 .header-btn.primary:hover{background:#c87c00}
@@ -70,13 +72,16 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
 .toast.toast-error{background:#2a0d0d;color:#f05050;border:1px solid #5a2a2a}
 
 /* ── Header dropdown ─────────────────────────────────────────────────────── */
-.header-dropdown{position:relative}
+.header-dropdown{position:relative;display:inline-flex;align-items:center}
 .dropdown-menu{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #dde3ef;border-radius:6px;box-shadow:0 4px 12px rgba(0,0,0,.15);min-width:180px;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .15s,transform .15s,visibility 0s .15s;z-index:1000}
 .dropdown-menu.show{opacity:1;visibility:visible;transform:translateY(0);transition:opacity .15s,transform .15s}
 .dropdown-item{padding:10px 16px;font-size:13px;color:#4a5568;cursor:pointer;transition:background .12s;display:flex;align-items:center;gap:8px}
 .dropdown-item:hover{background:#f5f7fb;color:#1a1f2e}
 .dropdown-item:first-child{border-radius:6px 6px 0 0}
 .dropdown-item:last-child{border-radius:0 0 6px 6px}
+.dropdown-divider{height:1px;background:#e2e8f0;margin:4px 0}
+.dropdown-item.recent{font-size:12px;color:#6a7899}
+.dropdown-item.recent:hover{color:#1a1f2e}
 </style>
 </head>
 <body>
@@ -98,6 +103,8 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
       <div class="dropdown-item" data-action="open">📂 Openen</div>
       <div class="dropdown-item" data-action="save">💾 Opslaan</div>
       <div class="dropdown-item" data-action="rename">✏️ Hernoem</div>
+      <div id="recent-divider" class="dropdown-divider" style="display:none"></div>
+      <div id="recent-projects"></div>
     </div>
   </div>
   <button class="header-btn primary" id="btn-upload">📤 Verstuur bindings</button>
@@ -176,7 +183,7 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
     
     <!-- Top panel: Rooms with horizontal scroll -->
     <div id="home-rooms-panel" style="flex:2;min-height:200px;display:flex;flex-direction:column;border-bottom:1px solid #dde3ef">
-      <div id="home-canvas" style="flex:1;overflow-x:auto;overflow-y:hidden;display:flex;align-items:flex-start;gap:24px;padding:20px">
+      <div id="home-canvas" style="flex:1;overflow:auto;display:flex;align-items:flex-start;gap:24px;padding:20px">
         <div class="empty-state" id="home-empty" style="margin:auto">
           <div class="empty-icon">🏠</div>
           <h3>Geen kamers aangemaakt</h3>

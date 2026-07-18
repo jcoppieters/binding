@@ -1,5 +1,5 @@
 # Introduction 
-Duotecno Binding software. 
+Duotecno Configuration Software. 
 
 # Getting Started
 
