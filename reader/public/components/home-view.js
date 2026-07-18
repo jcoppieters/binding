@@ -6,6 +6,7 @@
 
 import { state, dispatch, makeId } from '../app/state.js';
 import { showDeviceBindings } from './home-view-binding.js';
+import { openUnitPicker } from './unit-picker.js';
 
 // Helper to build a device card with drag-and-drop and menu
 function buildDeviceCard(device, room, container) {
@@ -697,7 +698,7 @@ function buildRoomCard(room) {
   addDeviceBtn.onmouseleave = () => { addDeviceBtn.style.background = 'none'; };
   addDeviceBtn.onclick = (e) => {
     e.stopPropagation();
-    promptAddDevice(room);
+    openUnitPicker(room.id);
   };
 
   const menuBtn = el('button', '');
@@ -1044,8 +1045,9 @@ function promptAddFloorplan(room) {
   fileInput.click();
 }
 
-// ─── Add Device to Room ───────────────────────────────────────────────────────
-
+// ─── Add Device to Room (DEPRECATED - replaced by unit-picker.js) ────────────
+// TODO: Remove this once unit picker is fully tested and working
+/*
 function promptAddDevice(room) {
   const overlay = el('div', 'modal-overlay');
   const dlg = el('div', 'modal-dialog');
@@ -1175,6 +1177,7 @@ function promptAddDevice(room) {
   document.body.append(overlay);
   nameInput.focus();
 }
+*/
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
