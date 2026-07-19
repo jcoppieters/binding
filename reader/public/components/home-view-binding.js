@@ -52,6 +52,14 @@ export const DEVICE_PORTS = {
       { id: 'trigger', label: 'Trigger', color: '#f59e0b' }  // orange
     ]
   },
+  input: {
+    // Smartbox/module inputs (input_digital, input_analog) are controllers
+    // Physical input press → generates output event
+    inputs: [],
+    outputs: [
+      { id: 'druk', label: 'Druk', color: '#a855f7' }   // purple
+    ]
+  },
   
   // Controllable devices (have inputs on LEFT side)
   lamp: {
