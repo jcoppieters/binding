@@ -173,15 +173,16 @@ function renderUnitsList(container) {
     return;
   }
   
-  // Group by module
+  // Group by module (using moduleInstanceId for unique grouping)
   const grouped = {};
   for (const unit of _filteredUnits) {
-    const key = unit.moduleModel + (unit.cabinetName || '');
+    const key = unit.moduleInstanceId || unit.woningDeviceId || unit.moduleModel;
     if (!grouped[key]) {
       grouped[key] = {
         moduleName: unit.moduleName,
         moduleModel: unit.moduleModel,
         cabinetName: unit.cabinetName,
+        nodeAddress: unit.nodeAddress,
         units: [],
       };
     }
@@ -193,10 +194,8 @@ function renderUnitsList(container) {
     // Group header
     const groupHeader = document.createElement('div');
     groupHeader.style.cssText = 'margin-bottom:8px;margin-top:24px;font-size:12px;font-weight:600;color:#6a7899;display:flex;align-items:center;gap:8px';
-    groupHeader.innerHTML = `
-      <span>📦 ${group.moduleName}</span>
-      ${group.cabinetName ? `<span style="color:#9ca3af">in ${group.cabinetName}</span>` : ''}
-    `;
+    const nodeHex = group.nodeAddress != null ? ` (Node 0x${group.nodeAddress.toString(16).toUpperCase().padStart(2, '0')})` : '';
+    groupHeader.innerHTML = `<span>📦 ${group.moduleName}${nodeHex}</span>`;
     container.append(groupHeader);
     
     // Units in this module
@@ -230,11 +229,28 @@ function createUnitCard(unit) {
   icon.textContent = unit.icon;
   
   const info = document.createElement('div');
+  
+  // Map channel type to readable plugin type
+  const channelTypeLabels = {
+    dimmer_le: 'LE fase aansnijding',
+    dimmer_te: 'TE fase afsnijding',
+    dimmer_pwm: 'PWM LED',
+    dimmer_dc: '0-10V / 1-10V',
+    relay_no: 'Relais NO',
+    relay_nc: 'Relais NC',
+    relay_ssr: 'Relais SSR',
+    motor_updown: 'Motor op/neer',
+    motor_polar: 'Motor polair',
+    input_digital: 'Digitale ingang',
+    input_analog: 'Analoge ingang',
+  };
+  const channelLabel = channelTypeLabels[unit.channelType] || unit.channelType;
+  const unitHex = `0x${unit.unitAddress.toString(16).toUpperCase().padStart(2, '0')}`;
+  
   info.innerHTML = `
     <div style="font-size:14px;font-weight:500;color:#1a1f2e">${unit.label}</div>
     <div style="font-size:12px;color:#6a7899;margin-top:2px">
-      Unit ${unit.unitAddress} · ${unit.moduleModel}
-      ${unit.nodeAddress ? ` · Node ${unit.nodeAddress.toString(16).toUpperCase()}` : ''}
+      ${channelLabel} · Unit ${unitHex}
     </div>
   `;
   
