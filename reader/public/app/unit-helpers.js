@@ -153,74 +153,94 @@ export function getAllUnitsWithUsage(project, modules) {
     allUnits.push(...units);
   }
   
-  // Add discovered units that aren't generated from module definitions
-  // (e.g., temperature sensors on Smartbox that are only visible via discovery)
+  // Patch generated units with discovery data (override channelType from actual hardware)
+  // This fixes cases where module definitions are generic but hardware reports specific types
+  // (e.g., DT0B Smartbox has generic "input_analog" but hardware reports "temperature" sensors)
   if (project.discoveredNodes) {
     for (const node of project.discoveredNodes) {
       if (!node.units || node.units.length === 0) continue;
       
       for (const discoveredUnit of node.units) {
-        // Skip if this unit already exists (generated from module definition)
-        const alreadyExists = allUnits.some(u => 
+        // Find matching generated unit
+        const existingUnit = allUnits.find(u => 
           u.nodeAddress === discoveredUnit.nodeAddress && 
           u.unitAddress === discoveredUnit.unitAddress
         );
-        if (alreadyExists) continue;
         
-        // Map unitType to channelType
-        const channelType = unitTypeToChannelType(discoveredUnit.type);
-        console.log('[getAllUnitsWithUsage] Discovered unit:', { 
-          unitName: discoveredUnit.name, 
-          unitType: discoveredUnit.type,
-          channelType,
-          nodeAddress: node.nodeAddress,
-          unitAddress: discoveredUnit.unitAddress
-        });
-        if (!channelType) continue; // Skip unknown types
-        
-        // Find module/woning device for this node
-        let moduleContext = null;
-        for (const cabinet of project.railView.cabinets) {
-          const module = cabinet.modules.find(m => m.nodeAddress === node.nodeAddress);
-          if (module) {
-            const moduleDef = modules[module.model];
-            moduleContext = {
-              moduleInstanceId: module.id,
-              cabinetId: cabinet.id,
-              moduleName: moduleDef?.name || module.name || node.name,
-              moduleModel: module.model,
-              cabinetName: cabinet.name,
-            };
-            break;
+        if (existingUnit) {
+          // Patch with discovered type if different
+          const discoveredChannelType = unitTypeToChannelType(discoveredUnit.type);
+          if (discoveredChannelType && discoveredChannelType !== existingUnit.channelType) {
+            console.log('[getAllUnitsWithUsage] Patching unit with discovery data:', {
+              unitName: discoveredUnit.name || existingUnit.label,
+              oldChannelType: existingUnit.channelType,
+              newChannelType: discoveredChannelType,
+              discoveredUnitType: discoveredUnit.type
+            });
+            existingUnit.channelType = discoveredChannelType;
+            existingUnit.unitType = discoveredUnit.type;
+            existingUnit.icon = getIconForChannelType(discoveredChannelType);
+            // Update label from discovery if available
+            if (discoveredUnit.name) {
+              existingUnit.label = discoveredUnit.name;
+            }
           }
-        }
-        
-        if (!moduleContext) {
-          // Check woning devices
-          const device = project.railView.woningDevices.find(d => d.nodeAddress === node.nodeAddress);
-          if (device) {
-            const deviceDef = modules[device.model];
-            moduleContext = {
-              woningDeviceId: device.id,
-              moduleName: deviceDef?.name || device.name || node.name,
-              moduleModel: device.model,
-            };
+        } else {
+          // Unit doesn't exist in module definition - add it from discovery
+          const channelType = unitTypeToChannelType(discoveredUnit.type);
+          console.log('[getAllUnitsWithUsage] Discovered unit (not in module def):', { 
+            unitName: discoveredUnit.name, 
+            unitType: discoveredUnit.type,
+            channelType,
+            nodeAddress: node.nodeAddress,
+            unitAddress: discoveredUnit.unitAddress
+          });
+          if (!channelType) continue; // Skip unknown types
+          
+          // Find module/woning device for this node
+          let moduleContext = null;
+          for (const cabinet of project.railView.cabinets) {
+            const module = cabinet.modules.find(m => m.nodeAddress === node.nodeAddress);
+            if (module) {
+              const moduleDef = modules[module.model];
+              moduleContext = {
+                moduleInstanceId: module.id,
+                cabinetId: cabinet.id,
+                moduleName: moduleDef?.name || module.name || node.name,
+                moduleModel: module.model,
+                cabinetName: cabinet.name,
+              };
+              break;
+            }
           }
+          
+          if (!moduleContext) {
+            // Check woning devices
+            const device = project.railView.woningDevices.find(d => d.nodeAddress === node.nodeAddress);
+            if (device) {
+              const deviceDef = modules[device.model];
+              moduleContext = {
+                woningDeviceId: device.id,
+                moduleName: deviceDef?.name || device.name || node.name,
+                moduleModel: device.model,
+              };
+            }
+          }
+          
+          // Create unit from discovered data
+          const unit = {
+            unitAddress: discoveredUnit.unitAddress,
+            nodeAddress: discoveredUnit.nodeAddress,
+            channelType,
+            unitType: discoveredUnit.type,
+            label: discoveredUnit.name || `Unit ${discoveredUnit.unitAddress}`,
+            icon: getIconForChannelType(channelType),
+            usage: null,
+            ...(moduleContext || {}),
+          };
+          
+          allUnits.push(unit);
         }
-        
-        // Create unit from discovered data
-        const unit = {
-          unitAddress: discoveredUnit.unitAddress,
-          nodeAddress: discoveredUnit.nodeAddress,
-          channelType,
-          unitType: discoveredUnit.type,
-          label: discoveredUnit.name || `Unit ${discoveredUnit.unitAddress}`,
-          icon: getIconForChannelType(channelType),
-          usage: null,
-          ...(moduleContext || {}),
-        };
-        
-        allUnits.push(unit);
       }
     }
   }
