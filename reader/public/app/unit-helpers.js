@@ -169,6 +169,13 @@ export function getAllUnitsWithUsage(project, modules) {
         
         // Map unitType to channelType
         const channelType = unitTypeToChannelType(discoveredUnit.type);
+        console.log('[getAllUnitsWithUsage] Discovered unit:', { 
+          unitName: discoveredUnit.name, 
+          unitType: discoveredUnit.type,
+          channelType,
+          nodeAddress: node.nodeAddress,
+          unitAddress: discoveredUnit.unitAddress
+        });
         if (!channelType) continue; // Skip unknown types
         
         // Find module/woning device for this node
