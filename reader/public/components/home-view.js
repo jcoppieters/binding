@@ -1062,12 +1062,13 @@ function promptAddDevice(room) {
 
   const body = el('div', 'modal-body');
   
-  // Device types with icons and colors - only controllable hardware devices
+  // Device types with icons and colors
   const deviceTypes = [
     { type: 'lamp', label: 'Lamp', icon: '💡', color: '#fbbf24' },
     { type: 'relay', label: 'Relais', icon: '⚡', color: '#3b82f6' },
     { type: 'dimmer', label: 'Dimmer', icon: '🎚️', color: '#8b5cf6' },
-    { type: 'motor', label: 'Motor', icon: '🪟', color: '#06b6d4' }
+    { type: 'motor', label: 'Motor', icon: '🪟', color: '#06b6d4' },
+    { type: 'sensor', label: 'Sensor', icon: '🌡️', color: '#f59e0b' }
   ];
   
   const typeLabel = el('label', 'modal-label');

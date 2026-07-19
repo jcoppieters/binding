@@ -50,6 +50,24 @@ export const DEVICE_PORTS = {
       { id: 'trigger', label: 'Trigger', color: '#10b981' }  // green
     ]
   },
+  sensor: {
+    // Temperature/HVAC sensors (type 4) have BOTH inputs and outputs
+    // Outputs: temperature readings, status changes
+    inputs: [
+      { id: 'preset-off', label: 'Uit', color: '#64748b' },     // grey - turn off
+      { id: 'preset-sun', label: 'Zon', color: '#fbbf24' },     // yellow - sun preset
+      { id: 'preset-hsun', label: 'Halve zon', color: '#f59e0b' },  // orange - half sun
+      { id: 'preset-moon', label: 'Maan', color: '#8b5cf6' },   // purple - moon preset
+      { id: 'preset-hmoon', label: 'Halve maan', color: '#6366f1' }, // indigo - half moon
+      { id: 'temp-up', label: 'Temp +', color: '#ef4444' },     // red - increase temp
+      { id: 'temp-down', label: 'Temp -', color: '#3b82f6' }    // blue - decrease temp
+    ],
+    outputs: [
+      { id: 'temp-change', label: 'Temperatuur', color: '#f59e0b' }, // orange - temp reading
+      { id: 'heating', label: 'Verwarmen', color: '#ef4444' },   // red - heating active
+      { id: 'cooling', label: 'Koelen', color: '#3b82f6' }       // blue - cooling active
+    ]
+  },
   
   // Controllable devices (have inputs on LEFT side)
   lamp: {
