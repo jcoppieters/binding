@@ -339,8 +339,28 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Timer blocks appear as visual elements on wire paths
   - Configurable delay time, flash rate, repeat count
   - Maps to `Td`, `Tf`, `Tr` binding types with time parameters
-- [ ] **P3-6** Serialize wiring diagram → structured bindings in project file
-- [ ] **P3-7** Deserialize structured bindings → wiring diagram (for existing `.duo` files)
+- [ ] **P3-6** Moods as inputs for logic blocks (AND/OR/XOR triggers)
+  - **Context**: Moods (type 7, virtual units on master node 0xFC) currently have outputs only
+  - **Goal**: Allow moods to be activated by logic block outputs (e.g., AND of multiple sensors)
+  - **Use cases**:
+    * "Night mode" mood activated when (Dark outside AND After 22h)
+    * "All off" mood triggered by (Help button OR Alarm sensor)
+    * "Party mode" activated by (Weekend AND Evening AND Motion sensor)
+  - **Implementation**:
+    * Add input ports to mood device type: `{ id: 'activate', label: 'Activeer', color: '#10b981' }`
+    * Moods can receive wires from logic block outputs OR direct controller outputs
+    * When mood input receives trigger → activate mood (same as manual mood selection)
+  - **State management**:
+    * Binding: `{from: {logicBlockId, output}, to: {deviceId: moodId, portId: 'activate'}}`
+    * Or direct: `{from: {deviceId: switchId, portId: 'kort'}, to: {deviceId: moodId, portId: 'activate'}}`
+  - **Serialization**: Maps to binding with mood unit as target (type 7 unit)
+  - **UI TODO**: Research how Duotecno hardware handles mood activation via bindings
+    * Check if moods can be bound as targets in existing binding software
+    * Verify protocol support for mood activation triggers
+    * Document any limitations or special cases
+  - **Priority**: P3 (after basic logic blocks working) — defer to later phase
+- [ ] **P3-7** Serialize wiring diagram → structured bindings in project file
+- [ ] **P3-8** Deserialize structured bindings → wiring diagram (for existing `.duo` files)
 
 ### Phase 4 — Moods editor
 

@@ -33,31 +33,21 @@ function showToast(msg, type = '') {
 // Device port definitions - controllers have outputs (RIGHT), controllables have inputs (LEFT)
 export const DEVICE_PORTS = {
   // Controllers (have outputs on RIGHT side)
-  switch: {
-    inputs: [],
-    outputs: [
-      { id: 'kort', label: 'Kort', color: '#3b82f6' },  // blue
-      { id: 'lang', label: 'Lang', color: '#a855f7' }   // purple
-    ]
-  },
-  button: {
-    inputs: [],
-    outputs: [
-      { id: 'druk', label: 'Druk', color: '#10b981' }   // green
-    ]
-  },
-  sensor: {
-    inputs: [],
-    outputs: [
-      { id: 'trigger', label: 'Trigger', color: '#f59e0b' }  // orange
-    ]
-  },
   input: {
-    // Smartbox/module inputs (input_digital, input_analog) are controllers
-    // Physical input press → generates output event
+    // Smartbox/module inputs (input_digital) are controllers
+    // Physical button press → generates output event (kort/lang detection)
     inputs: [],
     outputs: [
-      { id: 'druk', label: 'Druk', color: '#a855f7' }   // purple
+      { id: 'kort', label: 'Kort', color: '#3b82f6' },  // blue - short press
+      { id: 'lang', label: 'Lang', color: '#a855f7' }   // purple - long press
+    ]
+  },
+  mood: {
+    // Virtual moods (from master node 0xFC) are controllers
+    // Mood activation → generates output event
+    inputs: [],
+    outputs: [
+      { id: 'trigger', label: 'Trigger', color: '#10b981' }  // green
     ]
   },
   

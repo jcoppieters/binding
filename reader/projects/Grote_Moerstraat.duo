@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-18T18:52:53.124Z",
+    "modified": "2026-07-19T09:36:45.584Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -29,7 +29,13 @@
             "nodeAddress": 16,
             "physicalAddress": 4294901244,
             "name": "Smartbox Living",
-            "position": 1
+            "position": 1,
+            "slots": [
+              "DT0B-LE",
+              "DT0B-LE",
+              "DT0B-TE",
+              ""
+            ]
           },
           {
             "id": "8q88pmfa",
@@ -112,6 +118,20 @@
             "color": "#fbbf24",
             "x": null,
             "y": null
+          },
+          {
+            "id": "waiiy9a8",
+            "type": "dimmer",
+            "name": "Dimmer 1 (Slot 1)",
+            "channelRef": {
+              "nodeAddress": 16,
+              "unitAddress": 27,
+              "moduleInstanceId": "6b3y3zdh"
+            },
+            "x": 197,
+            "y": 334.703125,
+            "icon": "💡",
+            "color": "#fbbf24"
           }
         ],
         "width": "735px",
@@ -241,6 +261,30 @@
         "portId": "stop"
       },
       "color": "#10b981"
+    },
+    {
+      "id": "xsne8t8l",
+      "from": {
+        "deviceId": "6vf0ndi8",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "waiiy9a8",
+        "portId": "aan"
+      },
+      "color": "#3b82f6"
+    },
+    {
+      "id": "oh2iga76",
+      "from": {
+        "deviceId": "6vf0ndi8",
+        "portId": "lang"
+      },
+      "to": {
+        "deviceId": "waiiy9a8",
+        "portId": "schakel"
+      },
+      "color": "#a855f7"
     }
   ],
   "discoveredNodes": [

@@ -257,7 +257,7 @@ function buildPickerCard(item, onSelect) {
 function onConfirm(context, model, variant) {
   // Helper: is this model a woning-type (switch/LCD field device)?
   const moduleDB = state.get().modules;
-  const def = moduleDB.find(m => m.model === model || m.functionalModel === model
+  const def = Object.values(moduleDB).find(m => m.model === model || m.functionalModel === model
     || m.variants?.some(v => v.model === model));
   const isWoningModel = def?.category === 'switch' || def?.category === 'lcd';
 
