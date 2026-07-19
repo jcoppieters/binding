@@ -254,7 +254,23 @@ function analyzeUnitUsage(units, project) {
           floorId: room.floorId,
           floorName: floor?.name || 'Onbekend',
           deviceId: device.id,
-   Map UnitType (protocol type) to channelType (binding system type)
+          deviceName: device.name,
+        };
+      }
+    }
+  }
+}
+
+/**
+ * Create a lookup key for a unit's hardware reference
+ */
+function makeRefKey(unit) {
+  if (!unit.nodeAddress) return null;
+  return `${unit.nodeAddress}:${unit.unitAddress}`;
+}
+
+/**
+ * Map UnitType (protocol type) to channelType (binding system type)
  */
 function unitTypeToChannelType(unitType) {
   const map = {
@@ -286,6 +302,14 @@ function getIconForChannelType(channelType) {
     'input_digital': '🔘',
     'input_analog': '🌡️',
     'temperature': '🌡️',  // Temperature sensors
+    'dali': '✨',
+    'dmx': '✨',
+    'audio': '🔊',
+  };
+  
+  return icons[channelType] || '📟';
+}
+
 /**
  * Map channel type to UnitType enum
  */
