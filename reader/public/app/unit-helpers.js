@@ -282,7 +282,9 @@ function unitTypeToChannelType(unitType) {
     [UnitType.kAudio]: 'audio',
     [UnitType.kExtendedAudio]: 'audio',
   };
-  return map[unitType] || null;
+  const result = map[unitType] || null;
+  console.log('[unitTypeToChannelType]', { unitType, result, kTemperature: UnitType.kTemperature });
+  return result;
 }
 
 /**

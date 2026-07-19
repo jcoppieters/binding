@@ -276,6 +276,12 @@ function selectUnit(unit) {
   if (!customName) return; // Cancelled
   
   // Create device with channel reference
+  console.log('[unit-picker] Creating device from unit:', { 
+    unitChannelType: unit.channelType, 
+    unitType: unit.unitType,
+    unitLabel: unit.label,
+    unit 
+  });
   const device = {
     id: makeId(),
     type: mapChannelTypeToDeviceType(unit.channelType),
@@ -288,6 +294,7 @@ function selectUnit(unit) {
     icon: unit.icon,
     color: getColorForChannelType(unit.channelType),
   };
+  console.log('[unit-picker] Created device:', device);
   
   dispatch({
     type: 'ADD_DEVICE_TO_ROOM',
@@ -310,11 +317,16 @@ function makeId() {
 }
 
 function mapChannelTypeToDeviceType(channelType) {
+  console.log('[mapChannelTypeToDeviceType]', { channelType });
   if (channelType.startsWith('dimmer_')) return 'dimmer';
   if (channelType.startsWith('relay_')) return 'relay';
   if (channelType.startsWith('motor_')) return 'motor';
   if (channelType.startsWith('input_')) return 'input';
-  if (channelType === 'temperature') return 'sensor';
+  if (channelType === 'temperature') {
+    console.log('[mapChannelTypeToDeviceType] Matched temperature -> sensor');
+    return 'sensor';
+  }
+  console.log('[mapChannelTypeToDeviceType] No match, returning default relay');
   return 'relay'; // default
 }
 
