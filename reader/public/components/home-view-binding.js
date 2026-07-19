@@ -185,7 +185,7 @@ function renderBindingPanel() {
     <div style="font-size:14px;font-weight:600;color:#1a1f2e">
       Bindingen voor ${device.icon} ${device.name} 
       <span style="color:#6a7899;font-weight:400">in ${room.name}</span>
-      <span style="color:#9ca3af;font-size:12px;font-weight:400;margin-left:12px">— Hou shift-key ingedrukt en sleep apparaten hierheen</span>
+      <span style="color:#9ca3af;font-size:12px;font-weight:400;margin-left:12px">— Sleep extra apparaten hierheen uit de kamers</span>
     </div>
   `;
   

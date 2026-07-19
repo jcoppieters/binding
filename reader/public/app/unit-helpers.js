@@ -12,14 +12,16 @@ import { UnitType } from './unit-types.js';
  * @param {object} moduleInstance - ModuleInstance from project.railView.cabinets[].modules[]
  * @param {object} moduleDef - Module definition from modules database
  * @param {object} cabinet - Cabinet containing this module
+ * @param {object} modules - Full modules database (needed for Smartbox plugins)
  * @returns {Array} Array of unit objects
  */
-export function generateUnitsForModule(moduleInstance, moduleDef, cabinet) {
+export function generateUnitsForModule(moduleInstance, moduleDef, cabinet, modules) {
   if (!moduleDef?.channelGroups) return [];
   
   const units = [];
   let unitAddress = 0; // Unit address increments across all channel groups
   
+  // Base channel groups from module definition
   for (const group of moduleDef.channelGroups) {
     for (let i = 0; i < group.count; i++) {
       const unit = {
@@ -50,6 +52,40 @@ export function generateUnitsForModule(moduleInstance, moduleDef, cabinet) {
       
       units.push(unit);
       unitAddress++;
+    }
+  }
+  
+  // Smartbox+ plugin slots: each slot adds its own channel groups
+  if (moduleDef.isSmartboxBase && moduleInstance.slots && modules) {
+    for (let slotIdx = 0; slotIdx < moduleInstance.slots.length; slotIdx++) {
+      const pluginModel = moduleInstance.slots[slotIdx];
+      if (!pluginModel) continue; // Empty slot
+      
+      const pluginDef = modules[pluginModel];
+      if (!pluginDef?.channelGroups) continue;
+      
+      // Add units from this plugin
+      for (const group of pluginDef.channelGroups) {
+        for (let i = 0; i < group.count; i++) {
+          const unit = {
+            unitAddress,
+            moduleInstanceId: moduleInstance.id,
+            cabinetId: cabinet.id,
+            nodeAddress: moduleInstance.nodeAddress,
+            channelType: group.type,
+            unitType: channelTypeToUnitType(group.type),
+            label: `${generateDefaultLabel(group.type, slotIdx + 1)} (Slot ${slotIdx + 1})`,
+            icon: getIconForChannelType(group.type),
+            moduleName: `${moduleDef.name} + ${pluginDef.name}`,
+            moduleModel: `${moduleDef.model} (${pluginModel})`,
+            cabinetName: cabinet.name,
+            usage: null,
+          };
+          
+          units.push(unit);
+          unitAddress++;
+        }
+      }
     }
   }
   
@@ -103,7 +139,7 @@ export function getAllUnitsWithUsage(project, modules) {
       const moduleDef = modules[module.model];
       if (!moduleDef) continue;
       
-      const units = generateUnitsForModule(module, moduleDef, cabinet);
+      const units = generateUnitsForModule(module, moduleDef, cabinet, modules);
       allUnits.push(...units);
     }
   }

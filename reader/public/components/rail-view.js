@@ -728,6 +728,78 @@ function buildChannelGroupsSection(def) {
 }
 
 /**
+ * Build Smartbox+ slots configuration section
+ */
+function buildSmartboxSlotsSection(device, def, context) {
+  const sect = el('div', '');
+  const title = el('div', '');
+  title.style.cssText = 'font-size:11px;font-weight:700;color:#6a7899;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px';
+  title.textContent = 'Plugin slots';
+  sect.append(title);
+  
+  const slotCount = def.slotCount ?? 4;
+  const currentSlots = device.slots ?? [];
+  
+  // Available plugin models
+  const plugins = [
+    { value: '', label: '— Leeg —' },
+    { value: 'DT0B-LE', label: 'DT0B-LE (Dimmer LE - fase aansnijding)' },
+    { value: 'DT0B-TE', label: 'DT0B-TE (Dimmer TE - fase afsnijding)' },
+    { value: 'DT0B-PW', label: 'DT0B-PW (Dimmer PWM - LED)' },
+    { value: 'DT0B-DC', label: 'DT0B-DC (Dimmer 0-10V / 1-10V)' },
+    { value: 'DT0B-R', label: 'DT0B-R (Relais)' },
+    { value: 'DT0B-SSR', label: 'DT0B-SSR (Solid state relais)' },
+  ];
+  
+  for (let slotIdx = 0; slotIdx < slotCount; slotIdx++) {
+    const row = el('div', '');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:8px';
+    
+    const slotLabel = el('div', '');
+    slotLabel.style.cssText = 'font-size:12px;color:#6a7899;width:50px;flex-shrink:0';
+    slotLabel.textContent = `Slot ${slotIdx + 1}:`;
+    
+    const select = el('select', 'modal-input');
+    select.style.cssText = 'flex:1;font-size:12px;padding:6px 8px';
+    
+    plugins.forEach(plugin => {
+      const option = document.createElement('option');
+      option.value = plugin.value;
+      option.textContent = plugin.label;
+      if (currentSlots[slotIdx] === plugin.value || (!currentSlots[slotIdx] && plugin.value === '')) {
+        option.selected = true;
+      }
+      select.append(option);
+    });
+    
+    select.onchange = () => {
+      const newSlots = [...currentSlots];
+      while (newSlots.length < slotCount) newSlots.push('');
+      newSlots[slotIdx] = select.value;
+      
+      dispatch({
+        type: 'UPDATE_MODULE_SLOTS',
+        cabinetId: context.cabinetId,
+        moduleId: device.id,
+        slots: newSlots
+      });
+      
+      showToast(`Slot ${slotIdx + 1} ${select.value ? `ingesteld op ${select.value}` : 'leeggemaakt'}`, 'success');
+    };
+    
+    row.append(slotLabel, select);
+    sect.append(row);
+  }
+  
+  const hint = el('div', '');
+  hint.style.cssText = 'font-size:10px;color:#9ca3af;margin-top:4px;font-style:italic';
+  hint.textContent = 'Wijzigingen worden direct opgeslagen. Refresh de unit picker om de nieuwe kanalen te zien.';
+  sect.append(hint);
+  
+  return sect;
+}
+
+/**
  * Unified device detail modal (works for both cabinet modules and woning devices)
  */
 function openDeviceDetailModal(device, context) {
@@ -796,6 +868,12 @@ function openDeviceDetailModal(device, context) {
   } else {
     const chSect = buildChannelGroupsSection(def);
     if (chSect) right.append(chSect);
+    
+    // Smartbox slots configuration
+    if (def?.isSmartboxBase && !isWoning) {
+      const slotsSect = buildSmartboxSlotsSection(device, def, context);
+      if (slotsSect) right.append(slotsSect);
+    }
   }
   
   // Discovery section (for all devices with node address)

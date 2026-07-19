@@ -172,6 +172,19 @@ export function dispatch(action) {
       _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
       break;
     }
+    case 'UPDATE_MODULE_SLOTS': {
+      // Update Smartbox+ plugin slots configuration
+      const railView = { ..._state.project.railView };
+      railView.cabinets = railView.cabinets.map(c =>
+        c.id === action.cabinetId ? {
+          ...c, modules: c.modules.map(m =>
+            m.id === action.moduleId ? { ...m, slots: action.slots } : m
+          )
+        } : c
+      );
+      _state = { ..._state, dirty: true, project: { ..._state.project, railView } };
+      break;
+    }
     case 'REMOVE_MODULE': {
       const railView = { ..._state.project.railView };
       railView.cabinets = railView.cabinets.map(c =>
