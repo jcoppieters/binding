@@ -266,14 +266,30 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 - [x] Binding panel placeholder (click device triggers showDeviceBindings)
 
 **Port System:**
-- **Controllers** (switch, sensor, button): outputs on RIGHT (kort/lang/druk/trigger)
-- **Controllables** (lamp, relay, dimmer, motor): inputs on LEFT (aan/uit/schakel/dim+/dim-/op/neer/stop/PIR/stel waarde)
+- **Controllers** (physical inputs that generate events): outputs on RIGHT
+  * Smartbox digital inputs (input_digital): "Druk" (press event)
+  * Smartbox analog inputs (input_analog): "Waarde" (value change)
+  * Switches/buttons in rooms: "Kort", "Lang", "Druk", "Dubbel"
+  * Sensors: "Trigger", "Waarde"
+  * **Important**: Hardware "inputs" are software "outputs" — they OUTPUT events/signals
+- **Controllables** (devices that receive commands): inputs on LEFT
+  * Lamps/relays: "Aan", "Uit", "Schakel"
+  * Dimmers: "Aan", "Uit", "Dim+", "Dim-", "Stel waarde"
+  * Motors: "Op", "Neer", "Stop"
 - **Binding panel layout**: Controllers left column, controllables right column, SVG wires between
 - **State**: `project.bindings[]` with `{id, from: {deviceId, portId}, to: {deviceId, portId}, color}`
 
 **Tasks:**
 
 - [ ] **P3-1** Define DEVICE_PORTS constant with ports per device type
+  - Map channelType to port definitions:
+    * `input_digital` → outputs: ["Druk"]
+    * `input_analog` → outputs: ["Waarde"]
+    * `relay_*` → inputs: ["Aan", "Uit", "Schakel"]
+    * `dimmer_*` → inputs: ["Aan", "Uit", "Dim+", "Dim-", "Stel waarde"]
+    * `motor_*` → inputs: ["Op", "Neer", "Stop"]
+  - Room device types (switch/button/sensor) also get output ports
+  - Port direction determined by whether device is controller or controllable
 - [ ] **P3-2** Device card port visualization (colored dots on card edges)
 - [ ] **P3-3** Binding panel: show selected device with ports
 - [ ] **P3-4** Add devices to binding canvas for wiring
