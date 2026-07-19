@@ -15,7 +15,7 @@ import { state, dispatch, makeId } from '../app/state.js';
  */
 export function openModulePicker(context) {
   const s = state.get();
-  if (!s.modules.length) {
+  if (!s.modules || Object.keys(s.modules).length === 0) {
     alert('Module database niet geladen. Herstart de server.');
     return;
   }
@@ -36,7 +36,7 @@ function buildAndShow(modules, context) {
 
   // Group modules by uiCategory
   const groups = {};
-  for (const m of modules) {
+  for (const m of Object.values(modules)) {
     const cat = m.uiCategory;
     if (!targetCategories.includes(cat)) continue;
     if (!groups[cat]) groups[cat] = [];

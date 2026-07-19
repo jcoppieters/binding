@@ -677,8 +677,7 @@ function buildCapabilitiesSection(device, isWoning) {
       btn.style.cssText = 'display:block;width:100%;text-align:left;margin-bottom:4px;font-size:12px';
       btn.textContent = `${sug.model} — ${sug.name}`;
       btn.onclick = () => {
-        const familyOrStandalone = s.modules.find(m => (m.functionalModel ?? m.model) === sug.model);
-        const specificModel = familyOrStandalone?.variants?.[0]?.model ?? sug.model;
+        const specificModel = sug.model;
         // Dispatch handled by parent
         btn.dataset.selectedModel = specificModel;
       };
@@ -1465,18 +1464,9 @@ function el(tag, className = '') {
 }
 
 function lookupModule(model, modules) {
-  if (!modules?.length) return null;
-  // Check standalone entries
-  const standalone = modules.find(m => m.model === model);
-  if (standalone) return standalone;
-  // Check variant within families
-  for (const m of modules) {
-    if (m.variants) {
-      const v = m.variants.find(v => v.model === model);
-      if (v) return { ...m, ...v }; // merge family properties with variant
-    }
-  }
-  return null;
+  if (!modules || typeof modules !== 'object') return null;
+  // Direct lookup - modules is now an object keyed by model
+  return modules[model] ?? null;
 }
 
 function uiCategoryLabel(uiCategory) {
