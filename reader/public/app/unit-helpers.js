@@ -360,30 +360,6 @@ function generateDefaultLabel(channelType, index) {
 }
 
 /**
- * Get icon for channel type
- */
-function getIconForChannelType(channelType) {
-  const icons = {
-    'dimmer_le': '💡',
-    'dimmer_te': '💡',
-    'dimmer_pwm': '💡',
-    'dimmer_dc': '💡',
-    'relay_no': '⚡',
-    'relay_nc': '⚡',
-    'relay_ssr': '⚡',
-    'motor_updown': '🪟',
-    'motor_polar': '🪟',
-    'input_digital': '🔘',
-    'input_analog': '🌡️',
-    'dali': '✨',
-    'dmx': '✨',
-    'audio': '🔊',
-  };
-  
-  return icons[channelType] || '📟';
-}
-
-/**
  * Get available (unused) units filtered by type
  * @param {Array} allUnits - All units from getAllUnitsWithUsage()
  * @param {string} filterType - 'controller' or 'controllable' or null (all)
