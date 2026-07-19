@@ -116,8 +116,8 @@
             "type": "lamp",
             "icon": "💡",
             "color": "#fbbf24",
-            "x": null,
-            "y": null
+            "x": 50,
+            "y": 50
           },
           {
             "id": "waiiy9a8",

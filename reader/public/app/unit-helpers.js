@@ -220,6 +220,7 @@ function channelTypeToUnitType(channelType) {
     'motor_polar': UnitType.kSwitchingMotor,
     'input_digital': UnitType.kInput,
     'input_analog': UnitType.kInput,
+    'temperature': UnitType.kTemperature,  // Temperature sensors
     'dali': UnitType.kNoType, // Virtual group
     'dmx': UnitType.kNoType,
     'audio': UnitType.kAudio,

@@ -314,6 +314,7 @@ function mapChannelTypeToDeviceType(channelType) {
   if (channelType.startsWith('relay_')) return 'relay';
   if (channelType.startsWith('motor_')) return 'motor';
   if (channelType.startsWith('input_')) return 'input';
+  if (channelType === 'temperature') return 'sensor';
   return 'relay'; // default
 }
 
@@ -330,6 +331,7 @@ function getColorForChannelType(channelType) {
     'motor_polar': '#34d399',
     'input_digital': '#a78bfa',
     'input_analog': '#f472b6',
+    'temperature': '#f59e0b',  // orange for temperature sensors
   };
   return colors[channelType] || '#9ca3af';
 }

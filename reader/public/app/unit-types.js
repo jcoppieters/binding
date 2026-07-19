@@ -43,7 +43,7 @@ export const UNIT_TYPE_INFO = Object.freeze({
   [UnitType.kDimmer]:         { label: 'Dimmer',           icon: '💡', cabinetHardware: true,  channelTypes: ['dimmer_le','dimmer_te','dimmer_pwm','dimmer_dc'] },
   [UnitType.kSwitch]:         { label: 'Relais',           icon: '⚡', cabinetHardware: true,  channelTypes: ['relay_no','relay_nc','relay_ssr'] },
   [UnitType.kInput]:          { label: 'Input',            icon: '🔲', cabinetHardware: false, channelTypes: ['input_digital','input_analog'] },
-  [UnitType.kTemperature]:    { label: 'Sensor',           icon: '🌡', cabinetHardware: false, channelTypes: [] },
+  [UnitType.kTemperature]:    { label: 'Sensor',           icon: '🌡', cabinetHardware: false, channelTypes: ['temperature'] },
   [UnitType.kExtendedAudio]:  { label: 'Audio ext.',       icon: '🔊', cabinetHardware: true,  channelTypes: ['audio'] },
   [UnitType.kMood]:           { label: 'Virtueel (moods)', icon: '🌙', cabinetHardware: false, channelTypes: [] },
   [UnitType.kSwitchingMotor]: { label: 'Motor',            icon: '🔄', cabinetHardware: true,  channelTypes: ['motor_updown','motor_polar'] },
