@@ -383,13 +383,18 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 - [ ] **P6-3** LCD / Touchscreen config modal
   - Multi-pane (one pane per screen page); link to mood/schedule editors for this node
 - [ ] **P6-4** Switch config modal: button labels, room assignment
-- [ ] **P6-5** Smartbox plugin slot configurator (in module detail modal)
-  - Show `slotCount` slots for all `isSmartboxBase` modules
-  - Each slot: dropdown to select plugin model (DT0B-LE/DC/PW/TE/R/SSR/DAL12/DAL64) or empty
-  - Selecting a plugin updates `ModuleInstance.slots[]` and recalculates total channelGroups for resource panel
-  - DT0B-01/ULTRA support dimmer plugins; DT0B-LITE supports relay-only plugins
-  - Derived total channels = fixed `channelGroups` + channels contributed by each slot's plugin
-  - Note: DT0B-ULTRA slot count unknown — verify with hardware docs before implementing
+- [x] **P6-5** Smartbox plugin slot configurator (in module detail modal) — **DONE** ✅
+  - **Status**: Fully implemented and tested
+  - **UI**: Plugin slots section appears in module detail modal for all `isSmartboxBase` modules (DT0B-01, DT0B-LITE, DT0B-MINI)
+  - **Slot configuration**:
+    * Shows `slotCount` dropdown selects (4 for DT0B-01)
+    * Plugin options per slot: DT0B-LE/TE/PW/DC/R/SSR or "— Leeg —"
+    * Changes saved instantly via UPDATE_MODULE_SLOTS action
+    * Fixed bug: Each slot change now fetches fresh state (prevents overwriting previous changes)
+  - **Unit generation**: `generateUnitsForModule()` processes base channelGroups + plugin channelGroups
+  - **Result**: Configured plugins now appear as units in unit picker (e.g., 2× DT0B-TE → 2 dimmers in Uitgang filter)
+  - **Testing**: ✅ Multi-slot configuration works (Slot 1-3 all retained correctly)
+  - **Note**: DT0B-ULTRA slot count unknown — verify with hardware docs before implementing
 - [ ] **P6-6** Module database editor (internal maintenance tool)
   - CRUD UI for `reader/modules/_index.json` entries
   - Fields: model, name, category, uiCategory, channelGroups, powerW, dinUnits, imageFile, variants
