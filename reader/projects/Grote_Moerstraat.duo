@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-19T09:36:45.584Z",
+    "modified": "2026-07-19T21:24:41.923Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -132,6 +132,20 @@
             "y": 334.703125,
             "icon": "💡",
             "color": "#fbbf24"
+          },
+          {
+            "id": "4bjaebev",
+            "type": "input",
+            "name": "Sensor 1",
+            "channelRef": {
+              "nodeAddress": 16,
+              "unitAddress": 16,
+              "moduleInstanceId": "6b3y3zdh"
+            },
+            "x": null,
+            "y": null,
+            "icon": "🌡️",
+            "color": "#f472b6"
           }
         ],
         "width": "735px",

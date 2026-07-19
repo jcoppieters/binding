@@ -153,6 +153,71 @@ export function getAllUnitsWithUsage(project, modules) {
     allUnits.push(...units);
   }
   
+  // Add discovered units that aren't generated from module definitions
+  // (e.g., temperature sensors on Smartbox that are only visible via discovery)
+  if (project.discoveredNodes) {
+    for (const node of project.discoveredNodes) {
+      if (!node.units || node.units.length === 0) continue;
+      
+      for (const discoveredUnit of node.units) {
+        // Skip if this unit already exists (generated from module definition)
+        const alreadyExists = allUnits.some(u => 
+          u.nodeAddress === discoveredUnit.nodeAddress && 
+          u.unitAddress === discoveredUnit.unitAddress
+        );
+        if (alreadyExists) continue;
+        
+        // Map unitType to channelType
+        const channelType = unitTypeToChannelType(discoveredUnit.type);
+        if (!channelType) continue; // Skip unknown types
+        
+        // Find module/woning device for this node
+        let moduleContext = null;
+        for (const cabinet of project.railView.cabinets) {
+          const module = cabinet.modules.find(m => m.nodeAddress === node.nodeAddress);
+          if (module) {
+            const moduleDef = modules[module.model];
+            moduleContext = {
+              moduleInstanceId: module.id,
+              cabinetId: cabinet.id,
+              moduleName: moduleDef?.name || module.name || node.name,
+              moduleModel: module.model,
+              cabinetName: cabinet.name,
+            };
+            break;
+          }
+        }
+        
+        if (!moduleContext) {
+          // Check woning devices
+          const device = project.railView.woningDevices.find(d => d.nodeAddress === node.nodeAddress);
+          if (device) {
+            const deviceDef = modules[device.model];
+            moduleContext = {
+              woningDeviceId: device.id,
+              moduleName: deviceDef?.name || device.name || node.name,
+              moduleModel: device.model,
+            };
+          }
+        }
+        
+        // Create unit from discovered data
+        const unit = {
+          unitAddress: discoveredUnit.unitAddress,
+          nodeAddress: discoveredUnit.nodeAddress,
+          channelType,
+          unitType: discoveredUnit.type,
+          label: discoveredUnit.name || `Unit ${discoveredUnit.unitAddress}`,
+          icon: getIconForChannelType(channelType),
+          usage: null,
+          ...(moduleContext || {}),
+        };
+        
+        allUnits.push(unit);
+      }
+    }
+  }
+  
   // Analyze usage from homeView rooms
   analyzeUnitUsage(allUnits, project);
   
@@ -189,21 +254,38 @@ function analyzeUnitUsage(units, project) {
           floorId: room.floorId,
           floorName: floor?.name || 'Onbekend',
           deviceId: device.id,
-          deviceName: device.name,
-        };
-      }
-    }
-  }
+   Map UnitType (protocol type) to channelType (binding system type)
+ */
+function unitTypeToChannelType(unitType) {
+  const map = {
+    [UnitType.kDimmer]: 'dimmer_le',  // Default to LE, will be refined by module def
+    [UnitType.kSwitch]: 'relay_no',   // Default to NO
+    [UnitType.kInput]: 'input_digital',
+    [UnitType.kTemperature]: 'temperature',
+    [UnitType.kSwitchingMotor]: 'motor_updown',
+    [UnitType.kAudio]: 'audio',
+    [UnitType.kExtendedAudio]: 'audio',
+  };
+  return map[unitType] || null;
 }
 
 /**
- * Create a lookup key for a unit's hardware reference
+ * Get icon for channel type
  */
-function makeRefKey(unit) {
-  if (!unit.nodeAddress) return null;
-  return `${unit.nodeAddress}:${unit.unitAddress}`;
-}
-
+function getIconForChannelType(channelType) {
+  const icons = {
+    'dimmer_le': '💡',
+    'dimmer_te': '💡',
+    'dimmer_pwm': '💡',
+    'dimmer_dc': '💡',
+    'relay_no': '⚡',
+    'relay_nc': '⚡',
+    'relay_ssr': '⚡',
+    'motor_updown': '🪟',
+    'motor_polar': '🪟',
+    'input_digital': '🔘',
+    'input_analog': '🌡️',
+    'temperature': '🌡️',  // Temperature sensors
 /**
  * Map channel type to UnitType enum
  */
