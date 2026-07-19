@@ -207,6 +207,51 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Defaults: 80% width, 400px height; minimums: 600px width, 300px height
   - Allows different room sizes for better floor plan visualization and device layout
 
+- [ ] **P2-11** Enhance module detail modal with Units tab
+  - **Current state**: Modal shows general info (channelGroups, node type, firmware)
+  - **Enhancement**: Add tab navigation — "Info" (current) + "Units" (new)
+  - **Units tab content**:
+    * List all units (channels) for this module instance
+    * Per unit: name/label, type (relay/dimmer/input), unit #, status (gebruikt/beschikbaar)
+    * For outputs: current value (ON/OFF, dimmer %, motor position) — live if connected
+    * Group by channel type (e.g., all relays, then all dimmers)
+    * Click unit → highlight in Home View (if assigned to room)
+  - **Benefits**:
+    * Verify unit names/labels match expectations before assigning to rooms
+    * See which units are already used and where
+    * Troubleshoot: "Why can't I see Unit 3?" → check if it exists in module
+    * Bridge gap between Rail View hardware and Home View devices
+  - **Implementation notes**:
+    * Reuse `generateUnitsForModule()` from `unit-helpers.js`
+    * Add `analyzeUnitUsage()` to mark used units with room info
+    * Tab UI: two buttons at top, swap content div on click
+    * Live status: fetch from `/api/master/node/:address/units` (if connected)
+
+- [ ] **P2-12** Improve unit picker UX flow
+  - **Current state**: Filter tabs (All/Uitgang/Ingang) + search box → flat list
+  - **Desired flow** (after filter selection):
+    1. **Filter by I/O direction**: All / Uitgang (outputs) / Ingang (inputs)
+    2. **Then show device TYPE groups**: Lamp 💡 | Relais ⚡ | Dimmer 🎚️ | Motor 🪟 | etc.
+    3. **Within each type**: List units with **specifications + status**:
+       - For dimmers: type (fase aansnijding / fase afsnijding / PWM / DC)
+       - For relays: type (NO / NC / SSR)
+       - For motors: type (up/down / polar)
+       - For all: **Beschikbaar** / **Gebruikt in: Keuken**
+    4. User clicks a unit → name prompt → device added to room
+  - **Benefits**:
+    * Easier to find "I need a dimmer" without knowing exact module names
+    * Specifications visible before selection (avoid wrong dimmer type)
+    * Clear visual grouping by function (all lamps together)
+  - **Implementation**:
+    * After filter, compute type counts: `{lamp: 12, relay: 8, dimmer: 4, ...}`
+    * Show type buttons with counts: "💡 Lamp (12)" "⚡ Relais (8)"
+    * Click type → filter _filteredUnits by that device type
+    * Add specs to unit card (read from channelType + moduleDef)
+  - **Alternative**: Keep current flat list, but add type badges + specs inline
+    * Pros: simpler, less clicks
+    * Cons: longer scroll, harder to scan
+  - **Decision**: User feedback needed — test current UI first
+
 ### Phase 3 — Visual wiring diagram (Binding View)
 
 **Goal:** Visual node-graph editor where devices show input/output ports and you draw wires between them.
@@ -475,6 +520,78 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 - **Q-2** Auth API uses HTTPS with device self-signed certs. Node.js `https` client will likely need `rejectUnauthorized: false`. Verify during P4-1.
 - **Q-3** Moods live on LCD/Touchscreen nodes (virtual units). If no LCD is configured yet, can moods live on the master node? Clarify during P4 implementation.
 - **Q-4** Scheduling API: spec uses `/schedulescfg/tag` (extra 's') in one place and `/schedulecfg/tag` elsewhere. Confirm correct URL against lab during P5.
+
+---
+
+## Architecture discussions *(open items for team review)*
+
+### A-1: Client vs Server logic split
+
+**Current state**: `unit-helpers.js` (client-side JavaScript) generates units from module channelGroups and tracks usage.
+
+**Concern**: Where should business logic live?
+- **Client (*.js, *.html)**: UI rendering, user interactions, visual state
+- **Server (TypeScript)**: Data transformations, project validation, business rules
+
+**Specific questions**:
+1. Should unit generation (`getAllUnitsWithUsage`) be a server API endpoint?
+   - **Pros**: Centralized logic, testable, reusable for future tools
+   - **Cons**: Extra HTTP round-trip, server must cache project state
+   - **Decision**: Keep in client for now (performance), revisit if logic becomes complex
+
+2. Does the server currently have all needed state?
+   - Server has: project file structure, module database, binding strings
+   - Server may NOT have: unit usage tracking, live discovery results, UI selections
+   - **TODO**: Audit server state completeness — add section below if gaps found
+
+3. What belongs on server vs client?
+   - **Clear server**: Project CRUD, file parsing, TCP/UDP communication, binding serialization
+   - **Clear client**: DOM manipulation, drag-and-drop, modal dialogs, animations
+   - **Gray area**: Unit generation, usage tracking, binding validation, name sync
+   - **Guideline**: Move to server when:
+     * Logic needed by multiple clients (mobile app, CLI tool)
+     * Data transformation is complex/testable
+     * Business rules enforce consistency
+
+**Action items**:
+- [ ] Create `A-2` section: "Server state completeness audit" — list what server has/needs
+- [ ] Add server endpoints for unit management if needed (e.g., `GET /api/units`, `POST /api/units/:id/assign`)
+- [ ] Consider TypeScript types for unit-helpers functions (gradual migration)
+
+### A-2: Server state completeness audit
+
+**Question**: Does the server maintain all needed project state for UI logic to work?
+
+**Known server state** (from `src/models/project.ts`):
+- ✅ Project metadata (name, master IP, password)
+- ✅ Rail View: cabinets, modules, woning devices with positions
+- ✅ Home View: floors, rooms, devices with channelRefs
+- ✅ Bindings: structured JSON format
+- ✅ Module database: channelGroups, specs, pricing
+
+**Potentially missing**:
+- ❓ Unit usage tracking (which units assigned to which rooms)
+  - Currently computed client-side in `analyzeUnitUsage()`
+  - Should this be cached server-side for performance?
+- ❓ Live discovery results (discovered nodes, unit capabilities)
+  - `MasterConnectionService` has this, but is it persisted?
+  - Should discovery results be stored in `.duo` file?
+- ❓ Module → unit label mappings
+  - Default labels ("Dimmer 1", "Relais 2") generated client-side
+  - Custom labels (renamed by user) — where do these live?
+  - Should unit labels be part of ModuleInstance in project file?
+- ❓ Device → unit bidirectional link
+  - Room devices have `channelRef: {nodeAddress, unitAddress, moduleInstanceId}`
+  - Do units also have `room: {floorId, roomId}` back-reference?
+  - If not, usage must be computed every time → performance concern
+
+**Recommendation**:
+- Add `units[]` array to `ModuleInstance` in project file schema
+- Each unit has: `{unitAddress, label, channelType, room?: {floorId, roomId}}`
+- Server `GET /api/project/units` endpoint returns all units with usage
+- Client calls this for unit picker, avoids recomputing usage
+
+**Follow-up**: Discuss with team, decide on server state design before P2-4a merge
 
 ---
 
