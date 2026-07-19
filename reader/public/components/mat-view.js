@@ -84,25 +84,10 @@ function collectMaterialsData(project, modules) {
   const rows = [];
   
   for (const [model, { count }] of modelCounts.entries()) {
-    let def = modules.find(m => m.model === model);
-    if (!def) {
-      for (const fam of modules) {
-        if (fam.variants) {
-          const variant = fam.variants.find(v => v.model === model);
-          if (variant) {
-            def = {
-              ...fam,
-              ...variant,
-              model: variant.model,
-              finish: variant.finish,
-              priceEur: variant.priceEur ?? fam.priceEur
-            };
-            break;
-          }
-        }
-      }
-    }
-
+    // modules is now an object { 'DT0B-01': {...}, 'DT10-AU': {...} }
+    const def = modules[model];
+    
+    // If not found, create minimal entry with just model name
     const name = def?.productLine ?? def?.name ?? model;
     const finish = def?.finish ? ` (${def.finish})` : '';
     const category = def?.uiCategory ?? def?.category ?? '—';

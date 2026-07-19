@@ -81,17 +81,25 @@ async function loadModules() {
     const modulesArray = await res.json();
     
     // Transform array to object with model as key
-    // Each variant gets the parent's channelGroups, category, etc.
+    // Entries with variants: each variant becomes a separate model
+    // Entries without variants (standalone): use the entry itself
     const modules = {};
-    for (const family of modulesArray) {
-      const { variants, ...parentProps } = family;
-      if (!variants) continue;
-      
-      for (const variant of variants) {
-        modules[variant.model] = {
-          ...parentProps,
-          ...variant,
-        };
+    for (const entry of modulesArray) {
+      if (entry.variants && entry.variants.length > 0) {
+        // Has variants: flatten each variant with parent props
+        const { variants, ...parentProps } = entry;
+        for (const variant of variants) {
+          modules[variant.model] = {
+            ...parentProps,
+            ...variant,
+          };
+        }
+      } else {
+        // No variants: standalone module (e.g., DT0B-01, DT10-AU)
+        // Use 'model' field as key
+        if (entry.model) {
+          modules[entry.model] = entry;
+        }
       }
     }
     
