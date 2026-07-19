@@ -15,6 +15,13 @@ let _filterType = 'all'; // 'all' | 'controller' | 'controllable'
 let _searchQuery = '';
 
 /**
+ * Update filter button style based on active state
+ */
+function updateFilterButtonStyle(btn, isActive) {
+  btn.style.cssText = `padding:8px 16px;border-radius:6px;border:1px solid ${isActive ? '#3b82f6' : '#d1d5db'};background:${isActive ? '#eff6ff' : '#fff'};color:${isActive ? '#1e40af' : '#4b5563'};font-size:13px;cursor:pointer;font-weight:${isActive ? '600' : '400'}`;
+}
+
+/**
  * Open unit picker for adding device to room
  * @param {string} roomId - Room to add device to
  */
@@ -65,14 +72,22 @@ function renderPicker() {
     { id: 'controller', label: 'Ingang (schakelaar, sensor)', icon: '🔘' },
   ];
   
+  const filterButtons = {};
+  
   tabs.forEach(tab => {
     const btn = document.createElement('button');
     btn.textContent = `${tab.icon} ${tab.label}`;
-    btn.style.cssText = `padding:8px 16px;border-radius:6px;border:1px solid ${_filterType === tab.id ? '#3b82f6' : '#d1d5db'};background:${_filterType === tab.id ? '#eff6ff' : '#fff'};color:${_filterType === tab.id ? '#1e40af' : '#4b5563'};font-size:13px;cursor:pointer;font-weight:${_filterType === tab.id ? '600' : '400'}`;
+    btn.dataset.filterId = tab.id;
+    updateFilterButtonStyle(btn, _filterType === tab.id);
     btn.onclick = () => {
       _filterType = tab.id;
+      // Update all button styles
+      Object.entries(filterButtons).forEach(([id, button]) => {
+        updateFilterButtonStyle(button, id === _filterType);
+      });
       applyFilters();
     };
+    filterButtons[tab.id] = btn;
     filters.append(btn);
   });
   

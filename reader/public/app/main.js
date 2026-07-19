@@ -78,9 +78,25 @@ async function loadModules() {
   try {
     const res = await fetch('/api/modules');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const modules = await res.json();
+    const modulesArray = await res.json();
+    
+    // Transform array to object with model as key
+    // Each variant gets the parent's channelGroups, category, etc.
+    const modules = {};
+    for (const family of modulesArray) {
+      const { variants, ...parentProps } = family;
+      if (!variants) continue;
+      
+      for (const variant of variants) {
+        modules[variant.model] = {
+          ...parentProps,
+          ...variant,
+        };
+      }
+    }
+    
     dispatch({ type: 'SET_MODULES', modules });
-    console.log(`[app] Module DB loaded: ${modules.length} entries`);
+    console.log(`[app] Module DB loaded: ${Object.keys(modules).length} models`);
   } catch (e) {
     console.warn('[app] Could not load module DB:', e.message);
   }
