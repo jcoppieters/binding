@@ -772,7 +772,13 @@ function buildSmartboxSlotsSection(device, def, context) {
     });
     
     select.onchange = () => {
-      const newSlots = [...currentSlots];
+      // Get current slots from state (not closure variable) to avoid overwriting previous changes
+      const s = state.get();
+      const cabinet = s.project.railView.cabinets.find(c => c.id === context.cabinetId);
+      const module = cabinet?.modules.find(m => m.id === device.id);
+      const existingSlots = module?.slots ?? [];
+      
+      const newSlots = [...existingSlots];
       while (newSlots.length < slotCount) newSlots.push('');
       newSlots[slotIdx] = select.value;
       
