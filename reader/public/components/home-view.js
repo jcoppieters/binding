@@ -8,6 +8,79 @@ import { state, dispatch, makeId } from '../app/state.js';
 import { showDeviceBindings } from './home-view-binding.js';
 import { openUnitPicker } from './unit-picker.js';
 
+/**
+ * Create a reusable dropdown menu positioned near an anchor element
+ * @param {Array} items - Array of menu items: { label, icon?, onClick, color?, hoverBg? }
+ * @param {HTMLElement} anchorElement - Element to position menu near
+ * @param {string} menuId - Unique ID for the menu
+ * @returns {HTMLElement} The created menu element
+ */
+function createDropdownMenu(items, anchorElement, menuId) {
+  // Close any existing menu with same ID
+  const existing = document.getElementById(menuId);
+  if (existing) existing.remove();
+  
+  const menu = el('div', '');
+  menu.id = menuId;
+  menu.style.cssText = `
+    position:fixed;
+    background:white;
+    border:1px solid #dde3ef;
+    border-radius:6px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    padding:4px;
+    z-index:10000;
+    min-width:160px;
+  `;
+  
+  // Position near anchor
+  const rect = anchorElement.getBoundingClientRect();
+  menu.style.left = (rect.left - 140) + 'px';
+  menu.style.top = (rect.bottom + 4) + 'px';
+  
+  // Add items
+  for (const item of items) {
+    const btn = el('button', '');
+    btn.style.cssText = `
+      width:100%;
+      text-align:left;
+      padding:8px 12px;
+      background:none;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      font-size:13px;
+      color:${item.color || '#1a1f2e'};
+      display:flex;
+      align-items:center;
+      gap:8px;
+    `;
+    btn.textContent = `${item.icon ? item.icon + ' ' : ''}${item.label}`;
+    btn.onmouseenter = () => { btn.style.background = item.hoverBg || '#f0f4fc'; };
+    btn.onmouseleave = () => { btn.style.background = 'none'; };
+    btn.onclick = () => {
+      menu.remove();
+      item.onClick();
+    };
+    menu.append(btn);
+  }
+  
+  document.body.append(menu);
+  
+  // Close on outside click
+  setTimeout(() => {
+    const closeHandler = (e) => {
+      if (!menu.contains(e.target)) {
+        menu.remove();
+        document.removeEventListener('click', closeHandler);
+      }
+    };
+    document.addEventListener('click', closeHandler);
+  }, 0);
+  
+  return menu;
+}
+
 // Helper to build a device card with drag-and-drop and menu
 function buildDeviceCard(device, room, container) {
   const deviceCard = el('div', '');
@@ -88,103 +161,57 @@ function buildDeviceCard(device, room, container) {
   return deviceCard;
 }
 
-// Device menu: move to room or delete
+// Device menu: rename, move to room, or delete
 function openDeviceMenu(device, room, anchorElement) {
-  // Close any existing menu
-  const existing = document.getElementById('device-menu');
-  if (existing) existing.remove();
-  
-  const menu = el('div', '');
-  menu.id = 'device-menu';
-  menu.style.cssText = `
-    position:fixed;
-    background:white;
-    border:1px solid #dde3ef;
-    border-radius:6px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.15);
-    padding:4px;
-    z-index:10000;
-    min-width:160px;
-  `;
-  
-  // Position near anchor
-  const rect = anchorElement.getBoundingClientRect();
-  menu.style.left = (rect.left - 140) + 'px';
-  menu.style.top = (rect.bottom + 4) + 'px';
-  
-  // Move to room option
   const s = state.get();
   const otherRooms = s.project.homeView.rooms.filter(r => r.id !== room.id);
   
+  const menuItems = [
+    {
+      label: 'Hernoem',
+      icon: '✏️',
+      onClick: () => promptRenameDevice(device, room)
+    }
+  ];
+  
   if (otherRooms.length > 0) {
-    const moveBtn = el('button', '');
-    moveBtn.style.cssText = `
-      width:100%;
-      text-align:left;
-      padding:8px 12px;
-      background:none;
-      border:none;
-      border-radius:4px;
-      cursor:pointer;
-      font-size:13px;
-      color:#1a1f2e;
-      display:flex;
-      align-items:center;
-      gap:8px;
-    `;
-    moveBtn.textContent = 'Verplaats naar...';
-    moveBtn.onmouseenter = () => { moveBtn.style.background = '#f0f4fc'; };
-    moveBtn.onmouseleave = () => { moveBtn.style.background = 'none'; };
-    moveBtn.onclick = () => {
-      menu.remove();
-      openRoomSelector(device, room, otherRooms);
-    };
-    menu.append(moveBtn);
+    menuItems.push({
+      label: 'Verplaats naar...',
+      onClick: () => openRoomSelector(device, room, otherRooms)
+    });
   }
   
-  // Delete option
-  const deleteBtn = el('button', '');
-  deleteBtn.style.cssText = `
-    width:100%;
-    text-align:left;
-    padding:8px 12px;
-    background:none;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-    font-size:13px;
-    color:#dc3545;
-    display:flex;
-    align-items:center;
-    gap:8px;
-  `;
-  deleteBtn.textContent = 'Verwijder';
-  deleteBtn.onmouseenter = () => { deleteBtn.style.background = '#fff0f0'; };
-  deleteBtn.onmouseleave = () => { deleteBtn.style.background = 'none'; };
-  deleteBtn.onclick = () => {
-    menu.remove();
-    if (confirm(`Apparaat "${device.name}" verwijderen uit ${room.name}?`)) {
-      dispatch({
-        type: 'REMOVE_DEVICE_FROM_ROOM',
-        roomId: room.id,
-        deviceId: device.id
-      });
-    }
-  };
-  menu.append(deleteBtn);
-  
-  document.body.append(menu);
-  
-  // Close on outside click
-  setTimeout(() => {
-    const closeHandler = (e) => {
-      if (!menu.contains(e.target)) {
-        menu.remove();
-        document.removeEventListener('click', closeHandler);
+  menuItems.push({
+    label: 'Verwijder',
+    color: '#dc3545',
+    hoverBg: '#fff0f0',
+    onClick: () => {
+      if (confirm(`Apparaat "${device.name}" verwijderen uit ${room.name}?`)) {
+        dispatch({
+          type: 'REMOVE_DEVICE_FROM_ROOM',
+          roomId: room.id,
+          deviceId: device.id
+        });
       }
-    };
-    document.addEventListener('click', closeHandler);
-  }, 10);
+    }
+  });
+  
+  createDropdownMenu(menuItems, anchorElement, 'device-menu');
+}
+
+/**
+ * Prompt user to rename a device
+ */
+function promptRenameDevice(device, room) {
+  const newName = prompt('Nieuwe naam voor apparaat:', device.name);
+  if (newName && newName.trim() && newName !== device.name) {
+    dispatch({
+      type: 'UPDATE_DEVICE',
+      roomId: room.id,
+      deviceId: device.id,
+      patch: { name: newName.trim() }
+    });
+  }
 }
 
 // Room selector for moving device
@@ -709,7 +736,7 @@ function buildRoomCard(room) {
   menuBtn.onmouseleave = () => { menuBtn.style.background = 'none'; };
   menuBtn.onclick = (e) => {
     e.stopPropagation();
-    openRoomMenu(room);
+    openRoomMenu(room, menuBtn);
   };
   
   headerButtons.append(addDeviceBtn, menuBtn);
@@ -862,78 +889,50 @@ function initResizableDivider() {
   _dividerInitialized = true;
 }
 
-function openRoomMenu(room) {
-  const overlay = el('div', 'modal-overlay');
-  const dlg = el('div', 'modal-dialog');
-  dlg.style.cssText = 'width:300px;max-width:95vw';
-
-  const hdr = el('div', 'modal-header');
-  hdr.innerHTML = `<strong>${room.name}</strong>`;
-  const closeBtn = el('button', 'modal-close');
-  closeBtn.textContent = '✕';
-  closeBtn.onclick = () => overlay.remove();
-  hdr.append(closeBtn);
-
-  const body = el('div', 'modal-body');
-
-  const renameBtn = el('button', 'modal-btn');
-  renameBtn.textContent = '✏️ Hernoem';
-  renameBtn.style.cssText = 'width:100%;margin-bottom:8px';
-  renameBtn.onclick = () => {
-    overlay.remove();
-    promptRenameRoom(room);
-  };
+function openRoomMenu(room, anchorElement) {
+  const menuItems = [
+    {
+      label: 'Hernoem',
+      icon: '✏️',
+      onClick: () => promptRenameRoom(room)
+    },
+    {
+      label: room.backgroundImage ? 'Grondplan wijzigen' : 'Grondplan toevoegen',
+      icon: '🗺️',
+      onClick: () => promptAddFloorplan(room)
+    }
+  ];
   
-  // Floor plan upload/change
-  const floorplanBtn = el('button', 'modal-btn');
-  floorplanBtn.textContent = room.backgroundImage ? '🗺️ Grondplan wijzigen' : '🗺️ Grondplan toevoegen';
-  floorplanBtn.style.cssText = 'width:100%;margin-bottom:8px';
-  floorplanBtn.onclick = () => {
-    overlay.remove();
-    promptAddFloorplan(room);
-  };
-  
-  // Remove floor plan (only if exists)
-  let removeFloorplanBtn = null;
   if (room.backgroundImage) {
-    removeFloorplanBtn = el('button', 'modal-btn');
-    removeFloorplanBtn.textContent = '🗑 Verwijder grondplan';
-    removeFloorplanBtn.style.cssText = 'width:100%;margin-bottom:8px;color:#f59e0b;border-color:#fde68a';
-    removeFloorplanBtn.onclick = () => {
-      if (confirm('Grondplan verwijderen?')) {
-        dispatch({ type: 'UPDATE_ROOM', roomId: room.id, patch: { backgroundImage: null } });
-        overlay.remove();
+    menuItems.push({
+      label: 'Verwijder grondplan',
+      icon: '🗑',
+      color: '#f59e0b',
+      hoverBg: '#fef3c7',
+      onClick: () => {
+        if (confirm('Grondplan verwijderen?')) {
+          dispatch({ type: 'UPDATE_ROOM', roomId: room.id, patch: { backgroundImage: null } });
+        }
       }
-    };
+    });
   }
-
-  const deleteBtn = el('button', 'modal-btn');
-  deleteBtn.textContent = '🗑 Verwijder kamer';
-  deleteBtn.style.cssText = 'width:100%;color:#ef4444;border-color:#fca5a5';
-  deleteBtn.onclick = () => {
-    if (room.devices.length > 0 && !confirm(`Kamer bevat ${room.devices.length} apparaat/apparaten. Toch verwijderen?`)) {
-      return;
+  
+  menuItems.push({
+    label: 'Verwijder kamer',
+    icon: '🗑',
+    color: '#ef4444',
+    hoverBg: '#fee2e2',
+    onClick: () => {
+      if (room.devices.length > 0 && !confirm(`Kamer bevat ${room.devices.length} apparaat/apparaten. Toch verwijderen?`)) {
+        return;
+      }
+      if (confirm(`Verwijder kamer "${room.name}"?`)) {
+        dispatch({ type: 'REMOVE_ROOM', roomId: room.id });
+      }
     }
-    if (confirm(`Verwijder kamer "${room.name}"?`)) {
-      dispatch({ type: 'REMOVE_ROOM', roomId: room.id });
-      overlay.remove();
-    }
-  };
-
-  body.append(renameBtn, floorplanBtn);
-  if (removeFloorplanBtn) body.append(removeFloorplanBtn);
-  body.append(deleteBtn);
-
-  const footer = el('div', 'modal-footer');
-  const closeFooterBtn = el('button', 'modal-btn');
-  closeFooterBtn.textContent = 'Sluiten';
-  closeFooterBtn.onclick = () => overlay.remove();
-  footer.append(closeFooterBtn);
-
-  dlg.append(hdr, body, footer);
-  overlay.append(dlg);
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  document.body.append(overlay);
+  });
+  
+  createDropdownMenu(menuItems, anchorElement, 'room-menu');
 }
 
 function promptRenameRoom(room) {
