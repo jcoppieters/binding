@@ -152,6 +152,13 @@ export function showDeviceBindings(device, room) {
     });
   });
   
+  // Also check global moods (not room-based)
+  (s.project.homeView.moods || []).forEach(mood => {
+    if (connectedDeviceIds.has(mood.id)) {
+      connectedDevices.push({ ...mood, roomName: 'Moods' });
+    }
+  });
+  
   // Set context
   _currentBindingContext = {
     device,
@@ -234,15 +241,32 @@ function renderBindingPanel() {
     });
   });
   
+  // Also check global moods (not room-based)
+  (s.project.homeView.moods || []).forEach(mood => {
+    if (connectedDeviceIds.has(mood.id)) {
+      connectedDevices.push({ ...mood, roomName: 'Moods' });
+    }
+  });
+  
   // Add manually added devices (even if they don't have bindings yet)
   _manuallyAddedDevices.forEach(deviceId => {
     if (!connectedDevices.some(d => d.id === deviceId)) {
+      // Check in rooms
+      let found = false;
       s.project.homeView.rooms.forEach(r => {
         const device = r.devices.find(d => d.id === deviceId);
         if (device) {
           connectedDevices.push({ ...device, roomName: r.name });
+          found = true;
         }
       });
+      // Check in moods if not found in rooms
+      if (!found) {
+        const mood = (s.project.homeView.moods || []).find(m => m.id === deviceId);
+        if (mood) {
+          connectedDevices.push({ ...mood, roomName: 'Moods' });
+        }
+      }
     }
   });
   
