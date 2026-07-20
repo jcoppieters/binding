@@ -75,9 +75,10 @@ router.post('/bindings', async (req, res) => {
 
       } catch (err) {
         console.error(`[import] Failed to parse ${file.fileName}:`, err);
+        const error = err instanceof Error ? err : new Error(String(err));
         errors.push({ 
           fileName: file.fileName, 
-          error: err.message || 'Parsing failed' 
+          error: error.message || 'Parsing failed' 
         });
       }
     }
@@ -96,6 +97,11 @@ router.post('/bindings', async (req, res) => {
       if (type === BindingType.IMMEDIATE || type === BindingType.NORMAL) {
         simple.push(binding);
       } else {
+        // Complex bindings: C, Td, Tf, Tr, Ti, To, G, P
+        complex.push(binding);
+      }
+    }
+
     console.log(`[import] Categorized: ${simple.length} simple, ${complex.length} complex`);
 
     res.json({
@@ -107,17 +113,13 @@ router.post('/bindings', async (req, res) => {
         complex
       },
       errors,
-      filesParsed: files.lengthxBindings: complex.length,
-      bindings: {
-        simple,
-        complex
-      },
-      errors
+      filesParsed: files.length
     });
 
   } catch (err) {
     console.error('[import] Error:', err);
-    res.status(500).json({ error: err.message || 'Import failed' });
+    const error = err instanceof Error ? err : new Error(String(err));
+    res.status(500).json({ error: error.message || 'Import failed' });
   }
 });
 
@@ -254,7 +256,8 @@ router.post('/match', async (req, res) => {
 
   } catch (err) {
     console.error('[match] Error:', err);
-    res.status(500).json({ error: err.message || 'Matching failed' });
+    const error = err instanceof Error ? err : new Error(String(err));
+    res.status(500).json({ error: error.message || 'Matching failed' });
   }
 });
 
