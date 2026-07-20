@@ -13,6 +13,7 @@ import { MasterConnectionService } from './services/MasterConnectionService.js';
 
 // Import API modules
 import bindingEditorAPI from './api/bindingEditorAPI.js';
+import bindingImportAPI from './api/bindingImportAPI.js';
 import { createInstallationAPI } from './api/installationAPI.js';
 import { createBindingsAPI } from './api/bindingsAPI.js';
 import { createUploadAPI } from './api/uploadAPI.js';
@@ -125,6 +126,9 @@ app.use('/api', createStatsAPI({
 }));
 
 app.use('/api/editor', bindingEditorAPI);
+
+// Binding import (from disk)
+app.use('/api/bindings', bindingImportAPI);
 
 // Module database (product catalogue)
 app.use('/api', createModulesAPI());

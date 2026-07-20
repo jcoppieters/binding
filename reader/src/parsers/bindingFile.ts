@@ -14,13 +14,19 @@ import {
 
 export class BindingFileParser {
   /**
-   * Parse a binding file
+   * Parse a binding file from disk
    */
   static parse(filePath: string): BindingFile {
     const content = readFileSync(filePath, 'utf-8');
-    const lines = content.split('\n').filter(line => line.trim());
-    
     const fileName = filePath.split('/').pop() || '';
+    return this.parseFromContent(content, fileName);
+  }
+
+  /**
+   * Parse binding content from string (for in-memory parsing)
+   */
+  static parseFromContent(content: string, fileName: string): BindingFile {
+    const lines = content.split('\n').filter(line => line.trim());
     const nodeAddress = this.extractNodeAddressFromFileName(fileName);
     
     const entries: BindingEntry[] = [];

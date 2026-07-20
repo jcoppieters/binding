@@ -6,6 +6,7 @@ import { state, dispatch } from './state.js';
 import { initRouter, switchView } from './router.js';
 import { wireButtons as wireRailButtons } from '../components/rail-view.js';
 import { wireButtons as wireHomeButtons } from '../components/home-view.js';
+import { openImportBindingsModal } from '../components/import-bindings-modal.js';
 
 // ─── Recent Projects (localStorage) ───────────────────────────────────────────
 
@@ -165,6 +166,7 @@ async function init() {
     else if (action === 'open') openProject();
     else if (action === 'save') saveProject();
     else if (action === 'rename') renameProject();
+    else if (action === 'import-bindings') openImportBindingsModal();
     else if (action === 'recent') {
       // Load recent project
       const filename = item.dataset.filename;
