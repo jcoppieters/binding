@@ -278,35 +278,38 @@ function setupDropZone(container) {
 
 /**
  * Build button selector for multi-button switches
- * @param {object} device - Device with buttonCount and activeButton
+ * @param {object} device - Device with isMultiButtonSwitch, buttons, and sensors
  * @returns {HTMLElement}
  */
 function buildButtonSelector(device) {
   const container = document.createElement('div');
-  container.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:center';
+  container.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:center;width:100%';
   
   const label = document.createElement('div');
   label.style.cssText = 'font-size:11px;color:#6a7899;font-weight:500';
-  label.textContent = 'Fysieke knop:';
+  label.textContent = 'Selecteer button of sensor:';
   
-  // Determine grid layout (2 columns for 2-8 buttons)
+  // Determine grid layout (2 columns for buttons)
   const cols = 2;
-  const rows = Math.ceil(device.buttonCount / cols);
+  const totalButtons = device.buttons ? device.buttons.length : (device.buttonCount || 0);
   
   const grid = document.createElement('div');
   grid.style.cssText = `
     display:grid;
     grid-template-columns:repeat(${cols}, 1fr);
     gap:4px;
+    width:100%;
   `;
   
-  for (let i = 0; i < device.buttonCount; i++) {
+  // Add button selectors
+  for (let i = 0; i < totalButtons; i++) {
     const btn = document.createElement('button');
-    const isActive = i === device.activeButton;
+    const isActive = !device.activeSensor && i === device.activeButton;
     
     btn.textContent = (i + 1).toString();
+    btn.title = `Button ${i + 1}`;
     btn.style.cssText = `
-      width:32px;
+      width:100%;
       height:32px;
       border-radius:4px;
       border:2px solid ${isActive ? device.color : '#d1d5db'};
@@ -319,15 +322,20 @@ function buildButtonSelector(device) {
     `;
     
     btn.onclick = () => {
-      // Update device's active button
+      // Update device to use this button
+      const buttonUnit = device.buttons[i];
       dispatch({
         type: 'UPDATE_DEVICE',
         deviceId: device.id,
-        patch: { activeButton: i }
+        patch: { 
+          activeButton: i,
+          activeSensor: false,
+          channelRef: buttonUnit.ref
+        }
       });
       
       // Show toast
-      showToast(`Knop ${i + 1} geselecteerd`, 'success');
+      showToast(`Button ${i + 1} geselecteerd`, 'success');
     };
     
     btn.onmouseenter = () => {
@@ -345,6 +353,60 @@ function buildButtonSelector(device) {
     };
     
     grid.appendChild(btn);
+  }
+  
+  // Add temperature sensor button if present
+  if (device.hasTempSensor && device.sensors && device.sensors.length > 0) {
+    const sensorBtn = document.createElement('button');
+    const isActive = device.activeSensor;
+    
+    sensorBtn.innerHTML = '🌡️';
+    sensorBtn.title = 'Temperatuur sensor';
+    sensorBtn.style.cssText = `
+      width:100%;
+      height:32px;
+      border-radius:4px;
+      border:2px solid ${isActive ? '#f59e0b' : '#d1d5db'};
+      background:${isActive ? '#f59e0b' : '#fff'};
+      color:${isActive ? '#fff' : '#4b5563'};
+      font-size:18px;
+      font-weight:${isActive ? '700' : '500'};
+      cursor:pointer;
+      transition:all .15s;
+      grid-column:1 / -1;
+    `;
+    
+    sensorBtn.onclick = () => {
+      // Update device to use temperature sensor
+      const sensorUnit = device.sensors[0];
+      dispatch({
+        type: 'UPDATE_DEVICE',
+        deviceId: device.id,
+        patch: { 
+          activeSensor: true,
+          channelRef: sensorUnit.ref
+        }
+      });
+      
+      // Show toast
+      showToast(`Temperatuur sensor geselecteerd`, 'success');
+    };
+    
+    sensorBtn.onmouseenter = () => {
+      if (!isActive) {
+        sensorBtn.style.borderColor = '#9ca3af';
+        sensorBtn.style.background = '#f9fafb';
+      }
+    };
+    
+    sensorBtn.onmouseleave = () => {
+      if (!isActive) {
+        sensorBtn.style.borderColor = '#d1d5db';
+        sensorBtn.style.background = '#fff';
+      }
+    };
+    
+    grid.appendChild(sensorBtn);
   }
   
   container.appendChild(label);
@@ -383,13 +445,20 @@ function buildBindingDeviceCard(device, isPrimary) {
   
   card.appendChild(deviceHeader);
   
-  // Button selector for multi-button switches
-  if (device.buttonCount && device.buttonCount > 1) {
+  // Button/sensor selector for multi-button switches
+  if (device.isMultiButtonSwitch) {
     const buttonSelector = buildButtonSelector(device);
     card.appendChild(buttonSelector);
   }
   
-  const ports = DEVICE_PORTS[device.type] || { inputs: [], outputs: [] };
+  // Determine which ports to show
+  let deviceType = device.type;
+  if (device.isMultiButtonSwitch && device.activeSensor) {
+    // Show sensor ports when temp sensor is selected
+    deviceType = 'sensor';
+  }
+  
+  const ports = DEVICE_PORTS[deviceType] || { inputs: [], outputs: [] };
   
   const portsContainer = document.createElement('div');
   portsContainer.style.cssText = 'display:flex;gap:32px;align-items:flex-start';
@@ -420,7 +489,6 @@ function buildBindingDeviceCard(device, isPrimary) {
     portsContainer.appendChild(outputsCol);
   }
   
-  card.appendChild(deviceHeader);
   card.appendChild(portsContainer);
   
   return card;

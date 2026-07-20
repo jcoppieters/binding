@@ -306,18 +306,6 @@ export function dispatch(action) {
           devices: r.devices.map(d => {
             if (d.id === action.deviceId) {
               const updated = { ...d, ...action.patch };
-              
-              // Special handling for multi-button switches
-              // When activeButton changes, update channelRef.unitAddress
-              if (action.patch.activeButton !== undefined && d.buttonCount && d.channelRef) {
-                // Calculate base unit address (first button)
-                const baseUnitAddress = d.channelRef.unitAddress - (d.activeButton || 0);
-                updated.channelRef = {
-                  ...d.channelRef,
-                  unitAddress: baseUnitAddress + action.patch.activeButton
-                };
-              }
-              
               return updated;
             }
             return d;
