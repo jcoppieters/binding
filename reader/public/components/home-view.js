@@ -100,7 +100,7 @@ function buildDeviceCard(device, room, container) {
   
   // Device content
   const icon = el('div', 'device-icon');
-  icon.textContent = device.icon || '💡';
+  icon.textContent = device.icon || '?';
   
   const name = el('div', 'device-name');
   name.textContent = device.name;

@@ -339,18 +339,33 @@ function createDeviceFromRail(railDevice: any, role: 'input' | 'output'): any {
   
   // Determine device type based on channel type and role
   let deviceType = 'lamp';
+  let icon = '💡';
+  let color = '#fbbf24';
+  
   if (railDevice.channelType === 'input_digital') {
     deviceType = 'input';
+    icon = '🔘';
+    color = '#a78bfa';
   } else if (railDevice.channelType === 'input_analog' || railDevice.channelType === 'temperature') {
     deviceType = 'sensor';
+    icon = '🌡️';
+    color = '#f59e0b';
   } else if (railDevice.channelType?.startsWith('dimmer_')) {
     deviceType = 'dimmer';
+    icon = '💡';
+    color = '#fbbf24';
   } else if (railDevice.channelType?.startsWith('relay_')) {
     deviceType = 'relay';
+    icon = '⚡';
+    color = '#60a5fa';
   } else if (railDevice.channelType === 'motor_updown' || railDevice.channelType === 'motor_polar') {
     deviceType = 'motor';
+    icon = '🪟';
+    color = '#34d399';
   } else if (railDevice.channelType === 'mood') {
     deviceType = 'mood';
+    icon = '🎭';
+    color = '#ec4899';
   }
 
   // For discoveredNodes, use the unit name; otherwise use model + unit
@@ -360,6 +375,8 @@ function createDeviceFromRail(railDevice: any, role: 'input' | 'output'): any {
     id: deviceId,
     type: deviceType,
     name: deviceName,
+    icon,
+    color,
     x: 0, // Will be positioned by frontend
     y: 0,
     channelRef: {
