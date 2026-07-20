@@ -344,11 +344,37 @@ function buildHomeDeviceMap(project: any): Map<string, any> {
     }
   }
   
-  // Also check moods from homeView.moods array
+  // Also check moods from homeView.moods array (imported moods)
   for (const mood of (project.homeView?.moods || [])) {
     if (mood.channelRef) {
       const key = `${mood.channelRef.nodeAddress}-${mood.channelRef.unitAddress}`;
       map.set(key, mood);
+    }
+  }
+  
+  // Also check ALL moods from discoveredNodes (Type 7 units) - for creating new bindings
+  for (const node of (project.discoveredNodes || [])) {
+    if (node.units) {
+      for (const unit of node.units) {
+        if (unit.type === 7) { // Type 7 = mood
+          const key = `${node.nodeAddress}-${unit.unitAddress}`;
+          // Only add if not already in map (imported moods take precedence)
+          if (!map.has(key)) {
+            map.set(key, {
+              id: `mood-${node.nodeAddress}-${unit.unitAddress}`,
+              name: unit.name || `Mood ${unit.unitAddress}`,
+              icon: '🎭',
+              color: '#ec4899',
+              type: 'mood',
+              channelRef: {
+                nodeAddress: node.nodeAddress,
+                unitAddress: unit.unitAddress,
+                moduleInstanceId: `mood-${node.nodeAddress}-${unit.unitAddress}`
+              }
+            });
+          }
+        }
+      }
     }
   }
 

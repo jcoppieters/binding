@@ -404,35 +404,76 @@ function renderMoodsList(project) {
 
   list.innerHTML = '';
 
-  // Get moods from homeView.moods or empty array
-  const moods = project.homeView?.moods || [];
+  // Get ALL moods from discoveredNodes (Type 7 units), not just imported ones
+  const allMoods = [];
+  const usedMoodKeys = new Set(); // Track which moods have bindings
   
-  if (moods.length === 0) {
+  // Check which moods are used in bindings
+  (project.bindings || []).forEach(b => {
+    if (b.from.channelRef) {
+      const key = `${b.from.channelRef.nodeAddress}-${b.from.channelRef.unitAddress}`;
+      usedMoodKeys.add(key);
+    }
+    if (b.to.channelRef) {
+      const key = `${b.to.channelRef.nodeAddress}-${b.to.channelRef.unitAddress}`;
+      usedMoodKeys.add(key);
+    }
+  });
+  
+  // Extract moods from discoveredNodes
+  for (const node of (project.discoveredNodes || [])) {
+    if (node.units) {
+      for (const unit of node.units) {
+        if (unit.type === 7) { // Type 7 = mood
+          const key = `${node.nodeAddress}-${unit.unitAddress}`;
+          const isUsed = usedMoodKeys.has(key);
+          
+          allMoods.push({
+            id: `mood-${node.nodeAddress}-${unit.unitAddress}`,
+            name: unit.name || `Mood ${unit.unitAddress}`,
+            icon: '🎭',
+            color: '#ec4899',
+            type: 'mood',
+            channelRef: {
+              nodeAddress: node.nodeAddress,
+              unitAddress: unit.unitAddress,
+              moduleInstanceId: `mood-${node.nodeAddress}-${unit.unitAddress}`
+            },
+            nodeName: node.name || `Node 0x${node.nodeAddress.toString(16).toUpperCase()}`,
+            isUsed
+          });
+        }
+      }
+    }
+  }
+  
+  if (allMoods.length === 0) {
     const emptyMsg = el('div', '');
     emptyMsg.style.cssText = 'padding:8px;font-size:11px;color:#a0aaba;font-style:italic';
-    emptyMsg.textContent = 'Geen moods geïmporteerd';
+    emptyMsg.textContent = 'Geen moods gevonden';
     list.append(emptyMsg);
     return;
   }
 
   // Group moods by node address
   const moodsByNode = new Map();
-  for (const mood of moods) {
-    const nodeAddr = mood.channelRef?.nodeAddress;
-    if (nodeAddr == null) continue;
-    
+  for (const mood of allMoods) {
+    const nodeAddr = mood.channelRef.nodeAddress;
     if (!moodsByNode.has(nodeAddr)) {
-      moodsByNode.set(nodeAddr, []);
+      moodsByNode.set(nodeAddr, {
+        nodeName: mood.nodeName,
+        moods: []
+      });
     }
-    moodsByNode.get(nodeAddr).push(mood);
+    moodsByNode.get(nodeAddr).moods.push(mood);
   }
 
   // Render each node group
-  for (const [nodeAddr, nodeMoods] of [...moodsByNode.entries()].sort((a, b) => a[0] - b[0])) {
+  for (const [nodeAddr, nodeData] of [...moodsByNode.entries()].sort((a, b) => a[0] - b[0])) {
     // Node header (collapsed/expanded)
     const nodeHeader = el('div', '');
     nodeHeader.style.cssText = 'font-size:11px;font-weight:600;color:#6a7899;margin-top:8px;padding:4px 8px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:6px';
-    nodeHeader.innerHTML = `<span style="font-family:monospace;color:#e08c00">0x${nodeAddr.toString(16).toUpperCase().padStart(2, '0')}</span> <span style="color:#9ca3af">(${nodeMoods.length})</span>`;
+    nodeHeader.innerHTML = `<span style="color:#4a5568">${nodeData.nodeName}</span> <span style="font-family:monospace;color:#e08c00">(0x${nodeAddr.toString(16).toUpperCase().padStart(2, '0')})</span> <span style="color:#9ca3af;font-size:10px">${nodeData.moods.length}</span>`;
     
     // Toggle collapse
     let collapsed = false;
@@ -451,10 +492,18 @@ function renderMoodsList(project) {
     };
     
     // Mood items
-    for (const mood of nodeMoods) {
+    for (const mood of nodeData.moods) {
       const item = el('div', 'mood-item');
-      item.style.cssText = 'padding:6px 12px;margin:2px 0;border-radius:4px;cursor:grab;font-size:12px;color:#4a5568;display:flex;align-items:center;gap:8px;transition:all .15s';
-      item.innerHTML = `<span style="font-size:14px">${mood.icon || '🎭'}</span> ${mood.name}`;
+      
+      // Style differently if used in bindings
+      const baseStyle = 'padding:6px 12px;margin:2px 0;border-radius:4px;cursor:grab;font-size:12px;display:flex;align-items:center;gap:8px;transition:all .15s';
+      if (mood.isUsed) {
+        item.style.cssText = baseStyle + ';color:#4a5568;font-weight:500';
+      } else {
+        item.style.cssText = baseStyle + ';color:#9ca3af;font-weight:normal';
+      }
+      
+      item.innerHTML = `<span style="font-size:14px">${mood.icon}</span> ${mood.name}`;
       
       // Hover effect
       item.onmouseenter = () => {
@@ -471,11 +520,20 @@ function renderMoodsList(project) {
       // Make draggable for binding panel
       item.draggable = true;
       item.ondragstart = (e) => {
-        e.dataTransfer.setData('device', JSON.stringify(mood));
+        e.dataTransfer.setData('application/json', JSON.stringify({
+          device: mood,
+          sourceType: 'moods'
+        }));
         item.style.opacity = '0.5';
       };
       item.ondragend = () => {
         item.style.opacity = '1';
+      };
+      
+      // Click to open binding panel for this mood
+      item.onclick = (e) => {
+        if (e.defaultPrevented) return;
+        showDeviceBindings(mood, { id: 'moods', name: 'Moods', icon: '🎭' });
       };
       
       moodsContainer.append(item);

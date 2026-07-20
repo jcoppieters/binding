@@ -369,7 +369,7 @@ function setupDropZone(container) {
     try {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));
       
-      if (data.sourceType === 'room' && data.device) {
+      if ((data.sourceType === 'room' || data.sourceType === 'moods') && data.device) {
         // Check if binding context exists (device selected)
         if (!_currentBindingContext) {
           showToast('Selecteer eerst een apparaat om bindings te bekijken', 'info');
@@ -384,7 +384,11 @@ function setupDropZone(container) {
         }
         
         // Add to other devices
-        _currentBindingContext.otherDevices.push(data.device);
+        const deviceToAdd = { ...data.device };
+        if (data.sourceType === 'moods') {
+          deviceToAdd.roomName = 'Moods'; // Mark as mood device
+        }
+        _currentBindingContext.otherDevices.push(deviceToAdd);
         _manuallyAddedDevices.add(data.device.id); // Track manually added device
         renderBindingPanel();
         showToast(`${data.device.icon} ${data.device.name} toegevoegd`, 'success');
