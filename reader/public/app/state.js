@@ -279,9 +279,10 @@ export function dispatch(action) {
     }
     case 'ADD_MOOD': {
       const homeView = { ..._state.project.homeView };
+      const moods = homeView.moods || [];
       // Avoid duplicates
-      if (!homeView.moods.some(m => m.id === action.mood.id)) {
-        homeView.moods = [...(homeView.moods || []), action.mood];
+      if (!moods.some(m => m.id === action.mood.id)) {
+        homeView.moods = [...moods, action.mood];
         _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
       }
       break;
