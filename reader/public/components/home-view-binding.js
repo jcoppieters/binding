@@ -195,6 +195,7 @@ function renderBindingPanel() {
     b.from.deviceId === freshDevice.id || b.to.deviceId === freshDevice.id
   );
   _bindingWires = deviceBindings.map(b => ({ ...b }));
+  console.log('[Binding Debug] Loaded bindings:', _bindingWires.length, 'wires for device', freshDevice.name);
   
   const { device, room, otherDevices } = _currentBindingContext;
   
@@ -660,16 +661,24 @@ function completeWire(from, to) {
  */
 function renderBindingWires() {
   const svg = document.getElementById('binding-wires-svg');
-  if (!svg) return;
+  if (!svg) {
+    console.warn('[Binding Debug] SVG element not found');
+    return;
+  }
   
+  console.log('[Binding Debug] Rendering', _bindingWires.length, 'wires');
   svg.innerHTML = '';
   
   _bindingWires.forEach(wire => {
+    console.log('[Binding Debug] Wire:', wire.from.deviceId, wire.from.portId, '->', wire.to.deviceId, wire.to.portId);
     // Find port elements
     const fromPort = document.querySelector(`[data-device-id="${wire.from.deviceId}"][data-port-id="${wire.from.portId}"]`);
     const toPort = document.querySelector(`[data-device-id="${wire.to.deviceId}"][data-port-id="${wire.to.portId}"]`);
     
-    if (!fromPort || !toPort) return;
+    if (!fromPort || !toPort) {
+      console.warn('[Binding Debug] Port not found:', fromPort ? 'toPort missing' : 'fromPort missing', wire);
+      return;
+    }
     
     const container = document.getElementById('binding-devices-container');
     const containerRect = container.getBoundingClientRect();

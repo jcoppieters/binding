@@ -13,6 +13,7 @@ let _allDeviceGroups = [];
 let _filteredDeviceGroups = [];
 let _filterType = 'all'; // 'all' | 'controller' | 'controllable'
 let _searchQuery = '';
+let _deviceGroupsCache = null; // Cache to avoid expensive recalculation (1800ms+ violation)
 
 /**
  * Update filter button style based on active state

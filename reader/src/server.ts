@@ -28,8 +28,9 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = 3000;
 
-// Enable JSON body parsing
-app.use(express.json());
+// Enable JSON body parsing with 50MB limit (for large images)
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Serve static files from public directory
 app.use(express.static(join(__dirname, '../public')));
