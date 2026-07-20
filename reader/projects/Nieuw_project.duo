@@ -1,12 +1,9 @@
 {
   "meta": {
     "name": "Nieuw project",
-    "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-10T07:25:07.674Z",
-    "version": "1",
-    "masterIp": "192.168.0.5",
-    "masterPassword": "duotecno",
-    "masterPort": 5005
+    "created": "2026-07-20T07:40:37.757Z",
+    "modified": "2026-07-20T07:45:16.384Z",
+    "version": "1"
   },
   "railView": {
     "cabinets": [
@@ -16,44 +13,25 @@
         "widthUnits": 36,
         "modules": [
           {
-            "id": "pupjq6z6",
-            "model": "DT10-AU",
-            "nodeAddress": 4,
-            "physicalAddress": 4294901244,
-            "name": "Sonos",
-            "position": 0
-          },
-          {
-            "id": "6b3y3zdh",
-            "model": "DT0B-01",
-            "nodeAddress": 16,
-            "physicalAddress": 4294901244,
-            "name": "Smartbox Living",
-            "position": 1
+            "id": "4j2ee5ug",
+            "model": "DT0B-ULTRA",
+            "position": 99,
+            "slots": [
+              "DT0B-DC",
+              "DT0B-LE",
+              "DT0B-LE",
+              ""
+            ],
+            "name": null
           }
         ]
       }
     ],
     "woningDevices": [
       {
-        "id": "z4u1vex7",
-        "model": "DT0C-10ALw",
-        "nodeAddress": 252,
-        "name": " 20220925",
-        "position": 99
-      },
-      {
-        "id": "spkdvvk1",
-        "model": "UNKNOWN",
-        "nodeAddress": 17,
-        "name": "Switch Living",
-        "position": 99
-      },
-      {
-        "id": "8q88pmfa",
-        "model": "UNKNOWN",
-        "nodeAddress": 3,
-        "name": "IP Server",
+        "id": "6vya9lu4",
+        "model": "DT0C-10Ag",
+        "name": null,
         "position": 99
       }
     ]
@@ -62,10 +40,101 @@
     "floors": [
       {
         "id": "floor-0",
-        "name": "Gelijkvloers"
+        "name": "Beneden"
+      },
+      {
+        "id": "z4t6n535",
+        "name": "Boven"
       }
     ],
-    "rooms": []
+    "rooms": [
+      {
+        "id": "5keqloxg",
+        "name": "333",
+        "floorId": "z4t6n535",
+        "canvasX": 50,
+        "canvasY": 50,
+        "canvasWidth": 200,
+        "canvasHeight": 150,
+        "devices": [
+          {
+            "id": "m1zyhast",
+            "type": "dimmer",
+            "name": "Dimmer 2 (Slot 2)",
+            "channelRef": {
+              "unitAddress": 98,
+              "moduleInstanceId": "4j2ee5ug"
+            },
+            "x": 97,
+            "y": 38.203125,
+            "icon": "💡",
+            "color": "#fbbf24"
+          },
+          {
+            "id": "kaly3nsr",
+            "type": "input",
+            "name": "Input 1",
+            "channelRef": {
+              "unitAddress": 0,
+              "moduleInstanceId": "4j2ee5ug"
+            },
+            "x": 737,
+            "y": 20.203125,
+            "icon": "🔘",
+            "color": "#a78bfa"
+          },
+          {
+            "id": "80eadr78",
+            "type": "input",
+            "name": "Input 1",
+            "channelRef": {
+              "unitAddress": 0,
+              "moduleInstanceId": "4j2ee5ug"
+            },
+            "x": 737,
+            "y": 169.203125,
+            "icon": "🔘",
+            "color": "#a78bfa"
+          }
+        ]
+      },
+      {
+        "id": "2ocpz9to",
+        "name": "yyy",
+        "floorId": "floor-0",
+        "canvasX": 50,
+        "canvasY": 50,
+        "canvasWidth": 200,
+        "canvasHeight": 150,
+        "devices": []
+      }
+    ]
   },
-  "bindings": []
+  "bindings": [
+    {
+      "id": "en8pjvu6",
+      "from": {
+        "deviceId": "80eadr78",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "m1zyhast",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6"
+    },
+    {
+      "id": "b8xv6lyl",
+      "from": {
+        "deviceId": "80eadr78",
+        "portId": "lang"
+      },
+      "to": {
+        "deviceId": "m1zyhast",
+        "portId": "setval"
+      },
+      "color": "#a855f7"
+    }
+  ],
+  "discoveredNodes": []
 }

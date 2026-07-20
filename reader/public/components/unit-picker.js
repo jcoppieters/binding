@@ -314,28 +314,31 @@ function makeId() {
 
 /**
  * Find an available position in the room, avoiding device collisions.
- * Starts at center and increments by 50px in both directions until finding empty spot.
+ * Starts at (50, 50) and increments by 50px until finding empty spot.
  */
 function findAvailablePosition(room) {
   const roomWidth = room.width || 500;
   const roomHeight = room.height || 400;
-  let x = Math.max(0, roomWidth / 2 - 50);
-  let y = Math.max(0, roomHeight / 2 - 50);
-  
   const devices = room.devices || [];
   
-  // Check for collision at current position
+  let x = 50;
+  let y = 50;
+  
+  // Check for device at exact position
   while (hasDeviceAt(devices, x, y)) {
     x += 50;
     y += 50;
     
-    // Wrap around if we exceed room bounds
+    // Wrap x if exceeds bounds
     if (x > roomWidth - 100) {
-      x = 0;
+      x = 50;
       y += 50;
     }
+    
+    // Wrap y if exceeds bounds
     if (y > roomHeight - 100) {
-      y = 0;
+      x = 50;
+      y = 100;
     }
   }
   
@@ -343,21 +346,10 @@ function findAvailablePosition(room) {
 }
 
 /**
- * Check if a device exists at the given position.
- * Devices are 100x100, so we check for overlap.
+ * Check if a device exists at exact position.
  */
 function hasDeviceAt(devices, x, y) {
-  const deviceSize = 100;
-  return devices.some(device => {
-    if (device.x === undefined || device.y === undefined) return false;
-    // Check if rectangles overlap
-    return !(
-      x + deviceSize <= device.x ||
-      device.x + deviceSize <= x ||
-      y + deviceSize <= device.y ||
-      device.y + deviceSize <= y
-    );
-  });
+  return devices.some(device => device.x === x && device.y === y);
 }
 
 function mapChannelTypeToDeviceType(channelType) {
