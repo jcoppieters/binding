@@ -442,16 +442,19 @@ export function groupUnitsIntoDevices(units, modules) {
       continue;
     }
     
-    // Count input_digital channels in this module
-    const inputGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_digital') || [];
-    const totalButtons = inputGroups.reduce((sum, g) => sum + g.count, 0);
+    // Only group specific multi-button switch models (Essence & Serenity)
+    // Models: DTBS-ES1/2/4 (Essence), DTBS-B1/2/4/8 (Serenity)
+    const isMultiButtonSwitch = /^DTBS-(ES|B)[1248]/.test(unit.moduleModel);
     
-    // Check for temperature sensor
-    const tempGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_analog' || g.type === 'temperature') || [];
-    const hasTempSensor = tempGroups.length > 0;
-    
-    // If 2+ buttons, treat as multi-button switch device
-    if (totalButtons >= 2) {
+    if (isMultiButtonSwitch) {
+      // Count input_digital channels in this module
+      const inputGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_digital') || [];
+      const totalButtons = inputGroups.reduce((sum, g) => sum + g.count, 0);
+      
+      // Check for temperature sensor
+      const tempGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_analog' || g.type === 'temperature') || [];
+      const hasTempSensor = tempGroups.length > 0;
+      
       // Find all units from this module instance
       const moduleUnits = units.filter(u => 
         u.moduleInstanceId === unit.moduleInstanceId &&

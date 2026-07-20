@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-19T21:24:41.923Z",
+    "modified": "2026-07-20T09:49:38.725Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -68,7 +68,7 @@
       },
       {
         "id": "spkdvvk1",
-        "model": "UNKNOWN",
+        "model": "DTBS-ES4w",
         "nodeAddress": 17,
         "name": "Switch Living",
         "position": 99
@@ -93,24 +93,6 @@
         "canvasHeight": 150,
         "devices": [
           {
-            "id": "8ffbwoec",
-            "name": "xxx",
-            "type": "switch",
-            "icon": "🔘",
-            "color": "#a855f7",
-            "x": 549,
-            "y": 308.703125
-          },
-          {
-            "id": "ur3vqwqt",
-            "name": "knoppie",
-            "type": "button",
-            "icon": "🔳",
-            "color": "#10b981",
-            "x": 135,
-            "y": 28.703125
-          },
-          {
             "id": "i2zrykxj",
             "name": "Lamp 2",
             "type": "lamp",
@@ -128,24 +110,10 @@
               "unitAddress": 27,
               "moduleInstanceId": "6b3y3zdh"
             },
-            "x": 197,
-            "y": 334.703125,
+            "x": 200,
+            "y": 58.203125,
             "icon": "💡",
             "color": "#fbbf24"
-          },
-          {
-            "id": "4bjaebev",
-            "type": "input",
-            "name": "Sensor 1",
-            "channelRef": {
-              "nodeAddress": 16,
-              "unitAddress": 16,
-              "moduleInstanceId": "6b3y3zdh"
-            },
-            "x": null,
-            "y": null,
-            "icon": "🌡️",
-            "color": "#f472b6"
           }
         ],
         "width": "735px",
@@ -314,169 +282,197 @@
           "nodeAddress": 252,
           "unitAddress": 0,
           "name": "All off",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 1,
           "name": "All On",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 2,
           "name": "Night off",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 3,
           "name": "Dark outside",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 4,
           "name": "After 22h",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 5,
           "name": "Help out",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 6,
           "name": "Deur Trigger",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 7,
           "name": "Mood Free",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 8,
           "name": "Hulp statuss",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 9,
           "name": "Poort openen",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 10,
           "name": "Breakfast",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 11,
           "name": "Cooking",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 12,
           "name": "Saloon",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 13,
           "name": "Eating",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 14,
           "name": "TV",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 15,
           "name": "Outside On",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 16,
           "name": "Outside Off",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 17,
           "name": "Testing",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 18,
           "name": "Mood 2 long",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 19,
           "name": "Mood 3|short",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 20,
           "name": "Mood 3|long",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 21,
           "name": "Mood 4|short",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 22,
           "name": "Mood 4|long",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 23,
           "name": "Mood 5|short",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 24,
           "name": "Mood 5|long",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 25,
           "name": "Mood 6|short",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 26,
           "name": "Mood 6|long",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
           "unitAddress": 27,
           "name": "Mood 7 short",
-          "type": 7
+          "type": 7,
+          "status": 0
         },
         {
           "nodeAddress": 252,
@@ -1033,7 +1029,62 @@
       "type": 1,
       "nrUnits": 9,
       "flags": 1,
-      "units": []
+      "units": [
+        {
+          "nodeAddress": 17,
+          "unitAddress": 0,
+          "name": "onder links",
+          "type": 3
+        },
+        {
+          "nodeAddress": 17,
+          "unitAddress": 1,
+          "name": "onder 2",
+          "type": 3
+        },
+        {
+          "nodeAddress": 17,
+          "unitAddress": 2,
+          "name": "onder 3",
+          "type": 3
+        },
+        {
+          "nodeAddress": 17,
+          "unitAddress": 3,
+          "name": "onder rechts",
+          "type": 3
+        },
+        {
+          "nodeAddress": 17,
+          "unitAddress": 4,
+          "name": "boven links",
+          "type": 3
+        },
+        {
+          "nodeAddress": 17,
+          "unitAddress": 5,
+          "name": "boven 2",
+          "type": 3
+        },
+        {
+          "nodeAddress": 17,
+          "unitAddress": 6,
+          "name": "boven 3",
+          "type": 3
+        },
+        {
+          "nodeAddress": 17,
+          "unitAddress": 7,
+          "name": "boven rechts",
+          "type": 3
+        },
+        {
+          "nodeAddress": 17,
+          "unitAddress": 8,
+          "name": "Saloon",
+          "type": 4
+        }
+      ]
     },
     {
       "nodeAddress": 4,
@@ -1042,7 +1093,68 @@
       "type": 1,
       "nrUnits": 10,
       "flags": 1,
-      "units": []
+      "units": [
+        {
+          "nodeAddress": 4,
+          "unitAddress": 0,
+          "name": "U00|A100567",
+          "type": 11
+        },
+        {
+          "nodeAddress": 4,
+          "unitAddress": 1,
+          "name": "U01|A100567",
+          "type": 12
+        },
+        {
+          "nodeAddress": 4,
+          "unitAddress": 2,
+          "name": "U02|A100567",
+          "type": 12
+        },
+        {
+          "nodeAddress": 4,
+          "unitAddress": 3,
+          "name": "U03|A100567",
+          "type": 12
+        },
+        {
+          "nodeAddress": 4,
+          "unitAddress": 4,
+          "name": "U04|A100567",
+          "type": 12
+        },
+        {
+          "nodeAddress": 4,
+          "unitAddress": 5,
+          "name": "U05|A100567",
+          "type": 12
+        },
+        {
+          "nodeAddress": 4,
+          "unitAddress": 6,
+          "name": "U06|A100567",
+          "type": 12
+        },
+        {
+          "nodeAddress": 4,
+          "unitAddress": 7,
+          "name": "U07|A100567",
+          "type": 12
+        },
+        {
+          "nodeAddress": 4,
+          "unitAddress": 8,
+          "name": "U08|A100567",
+          "type": 12
+        },
+        {
+          "nodeAddress": 4,
+          "unitAddress": 9,
+          "name": "Sonos Matrix",
+          "type": 11
+        }
+      ]
     },
     {
       "nodeAddress": 3,
@@ -1051,7 +1163,200 @@
       "type": 4,
       "nrUnits": 32,
       "flags": 209,
-      "units": []
+      "units": [
+        {
+          "nodeAddress": 3,
+          "unitAddress": 0,
+          "name": "Test Mood",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 1,
+          "name": "U01|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 2,
+          "name": "U02|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 3,
+          "name": "U03|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 4,
+          "name": "U04|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 5,
+          "name": "U05|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 6,
+          "name": "U06|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 7,
+          "name": "U07|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 8,
+          "name": "U08|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 9,
+          "name": "U09|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 10,
+          "name": "U0a|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 11,
+          "name": "U0b|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 12,
+          "name": "U0c|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 13,
+          "name": "U0d|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 14,
+          "name": "U0e|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 15,
+          "name": "U0f|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 16,
+          "name": "U10|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 17,
+          "name": "U11|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 18,
+          "name": "U12|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 19,
+          "name": "U13|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 20,
+          "name": "U14|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 21,
+          "name": "U15|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 22,
+          "name": "U16|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 23,
+          "name": "U17|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 24,
+          "name": "U18|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 25,
+          "name": "U19|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 26,
+          "name": "U1a|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 27,
+          "name": "U1b|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 28,
+          "name": "U1c|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 29,
+          "name": "U1d|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 30,
+          "name": "U1e|A182179",
+          "type": 7
+        },
+        {
+          "nodeAddress": 3,
+          "unitAddress": 31,
+          "name": "U1f|A182179",
+          "type": 7
+        }
+      ]
     },
     {
       "nodeAddress": 16,
@@ -1065,33 +1370,7 @@
           "nodeAddress": 16,
           "unitAddress": 0,
           "name": "T0|Sens",
-          "type": 4,
-          "status": 1,
-          "temperature": {
-            "temp": 65136,
-            "preset": 3,
-            "sun": 255,
-            "hsun": 220,
-            "moon": 220,
-            "hmoon": 215
-          },
-          "value": 65136
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 1,
-          "name": "T1|Sens",
-          "type": 4,
-          "status": 1,
-          "temperature": {
-            "temp": 65136,
-            "preset": 1,
-            "sun": 230,
-            "hsun": 220,
-            "moon": 220,
-            "hmoon": 65136
-          },
-          "value": 65136
+          "type": 4
         },
         {
           "nodeAddress": 16,
@@ -1103,48 +1382,13 @@
           "nodeAddress": 16,
           "unitAddress": 2,
           "name": "m1",
-          "type": 7,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 2,
-          "name": "m1",
           "type": 7
         },
         {
           "nodeAddress": 16,
           "unitAddress": 3,
           "name": "m2",
-          "type": 7,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 4,
-          "name": "m3",
-          "type": 7,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 3,
-          "name": "m2",
           "type": 7
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 5,
-          "name": "m4",
-          "type": 7,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 6,
-          "name": "m5",
-          "type": 7,
-          "status": 0
         },
         {
           "nodeAddress": 16,
@@ -1154,30 +1398,9 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 7,
-          "name": "m6",
-          "type": 7,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 5,
           "name": "m4",
           "type": 7
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 8,
-          "name": "m7",
-          "type": 7,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 9,
-          "name": "m8",
-          "type": 7,
-          "status": 0
         },
         {
           "nodeAddress": 16,
@@ -1187,30 +1410,9 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 10,
-          "name": "m9",
-          "type": 7,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 7,
           "name": "m6",
           "type": 7
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 11,
-          "name": "m10",
-          "type": 7,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 12,
-          "name": "0|input",
-          "type": 3,
-          "status": 0
         },
         {
           "nodeAddress": 16,
@@ -1220,30 +1422,9 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 13,
-          "name": "1|Input",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 14,
-          "name": "2|Input",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 9,
           "name": "m8",
           "type": 7
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 15,
-          "name": "3|Input",
-          "type": 3,
-          "status": 0
         },
         {
           "nodeAddress": 16,
@@ -1253,37 +1434,9 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 16,
-          "name": "4|Input",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 17,
-          "name": "5|Input",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 11,
           "name": "m10",
           "type": 7
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 18,
-          "name": "6|Input",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 19,
-          "name": "7|Input",
-          "type": 3,
-          "status": 0
         },
         {
           "nodeAddress": 16,
@@ -1293,30 +1446,9 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 20,
-          "name": "Keuken Vol up",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 13,
           "name": "1|Input",
           "type": 3
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 21,
-          "name": "Keuken Off",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 22,
-          "name": "Keuken Vol down",
-          "type": 3,
-          "status": 0
         },
         {
           "nodeAddress": 16,
@@ -1326,30 +1458,9 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 23,
-          "name": "Keuken On",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 15,
           "name": "3|Input",
           "type": 3
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 24,
-          "name": "C|Input",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 25,
-          "name": "D|Input",
-          "type": 3,
-          "status": 0
         },
         {
           "nodeAddress": 16,
@@ -1359,30 +1470,9 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 26,
-          "name": "Keuken boven",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 27,
-          "name": "Keuken onder",
-          "type": 3,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 17,
           "name": "5|Input",
           "type": 3
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 28,
-          "name": "Curtains",
-          "type": 8,
-          "status": 2
         },
         {
           "nodeAddress": 16,
@@ -1392,33 +1482,9 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 29,
-          "name": "Saloon",
-          "type": 1,
-          "status": 0,
-          "value": 90
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 30,
-          "name": "Uplighters",
-          "type": 1,
-          "status": 0,
-          "value": 75
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 19,
           "name": "7|Input",
           "type": 3
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 31,
-          "name": "Table",
-          "type": 1,
-          "status": 0,
-          "value": 70
         },
         {
           "nodeAddress": 16,
@@ -1428,38 +1494,9 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 32,
-          "name": "Free",
-          "type": 1,
-          "status": 0,
-          "value": 75
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 33,
-          "name": "Wall",
-          "type": 2,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 21,
           "name": "Keuken Off",
           "type": 3
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 34,
-          "name": "Work",
-          "type": 2,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 35,
-          "name": "6|switch",
-          "type": 2,
-          "status": 0
         },
         {
           "nodeAddress": 16,
@@ -1469,50 +1506,15 @@
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 36,
-          "name": "Cook",
-          "type": 2,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 23,
           "name": "Keuken On",
           "type": 3
         },
         {
           "nodeAddress": 16,
-          "unitAddress": 37,
-          "name": "Outside",
-          "type": 2,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 38,
-          "name": "LED",
-          "type": 2,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
           "unitAddress": 24,
           "name": "C|Input",
           "type": 3
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 39,
-          "name": "Music Kitchen",
-          "type": 2,
-          "status": 0
-        },
-        {
-          "nodeAddress": 16,
-          "unitAddress": 40,
-          "name": "Music Outside",
-          "type": 2,
-          "status": 0
         },
         {
           "nodeAddress": 16,

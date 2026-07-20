@@ -297,10 +297,6 @@ function selectDeviceGroup(deviceGroup) {
   const s = state.get();
   const room = s.project.homeView.rooms.find(r => r.id === _currentRoomId);
   if (!room) return;
-function selectDeviceGroup(deviceGroup) {
-  const s = state.get();
-  const room = s.project.homeView.rooms.find(r => r.id === _currentRoomId);
-  if (!room) return;
   
   // Prompt for custom name
   const defaultName = deviceGroup.type === 'multi-button-switch' 
@@ -370,8 +366,6 @@ function selectDeviceGroup(deviceGroup) {
   if (s2.showToast) {
     s2.showToast(`${device.icon} ${device.name} toegevoegd`, 'success');
   }
-}
-
 }
 
 function makeId() {

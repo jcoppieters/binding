@@ -724,7 +724,7 @@ function buildRoomCard(room) {
     display:flex;
     flex-direction:column;
     position:relative;
-    background-size:cover;
+    background-size:contain;
     background-position:center;
     background-repeat:no-repeat;
   `;
