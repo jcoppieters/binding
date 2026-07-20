@@ -2,6 +2,18 @@
 
 > **This is the single source of truth. Keep it up to date with every session.**
 
+**Last updated:** 2026-07-20
+
+**Recent completions (July 2026):**
+- ✅ Multi-button switch system (DTBS-ES/B families) with per-button binding support
+- ✅ Visual binding editor with wire drawing, device ports, and SVG rendering
+- ✅ Temperature sensor type detection fix (hardware discovery patching)
+- ✅ Image storage in .img companion files (clean JSON separation)
+- ✅ Floor plan crop modal with 8 resize handles
+- ✅ Device visibility improvements (white backgrounds, faded floor plans)
+- ✅ Binding panel device persistence (manually added devices stay until binding created)
+- ✅ Per-button wire filtering (show only active button's wires)
+
 Analysed sources: `UI.md`, `specs/new-binding-software-ui.md`, `specs/binding-files-format.md`, `specs/api - Authorization API - v1.05.pdf`, `specs/api - moodscfg - v1.15.pdf`, `specs/api - schedulingcfg - v1.12.pdf`, `specs/udp - config protocol v3.01.pdf`, `public/demo1–5.html`, `src/api/`, `src/services/`, `src/communication/`, `src/models/`, `duotecnopro/` mobile app.
 
 ---
@@ -161,12 +173,14 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
     * Show "Gebruikt in: Keuken, Badkamer" badge for multi-use units
     * Separate "Add existing device" vs "Add new device" flows
 
-- [x] **P2-5** Floor plan import (image overlay, toggle) — **PARTIALLY DONE**
+- [x] **P2-5** Floor plan import (image overlay, toggle) — **DONE** ✅
   - ✅ Per-room background image upload via room ... menu (🗺️ Grondplan toevoegen)
   - ✅ File input → FileReader → save as data URL to room.backgroundImage
-  - ✅ CSS background-size:cover + background-position:center applied to room card
+  - ✅ Crop modal with drag and 8 resize handles (extracted to crop-modal.js)
+  - ✅ Separate background image layer with independent opacity control (25% faded)
+  - ✅ Background color layer at 85% opacity for visibility
   - ✅ "Verwijder grondplan" menu item appears when room.backgroundImage is set
-  - ⏳ TODO: Add crop/select step after upload — user selects portion of drawing for this room
+  - ✅ Images stored in .img companion files (separate from .duo for clean JSON)
 - [x] **P2-6** Bigger room cards with horizontal scroll — **DONE**
   - Room cards occupy ~80% of available canvas width (not small fixed-size cards)
   - Multiple rooms flow horizontally → horizontal scroll to navigate between rooms
@@ -258,12 +272,16 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 **Current Status:**
 - [x] Basic room device system with 7 device types (💡 Lamp, 🔘 Schakelaar, ⚡ Relais, 🎚️ Dimmer, 🪟 Motor, 🌡️ Sensor, 🔳 Drukknop)
-- [x] Device cards (100×100px) with icons, colors, positioning
+- [x] Device cards (100×100px) with icons, colors, positioning (white backgrounds with colored borders)
 - [x] Drag-and-drop positioning within rooms
 - [x] Device menu (move/delete)
-- [x] Floor plan upload per room
+- [x] Floor plan upload per room with crop modal
 - [x] Room resizing
-- [x] Binding panel placeholder (click device triggers showDeviceBindings)
+- [x] Binding panel with device display and port visualization
+- [x] Multi-button switch support with per-button binding filtering
+- [x] Wire drawing and rendering between device ports
+- [x] Wire deletion
+- [x] Binding state management (ADD_BINDING/REMOVE_BINDING actions)
 
 **Port System:**
 - **Controllers** (physical inputs that generate events): outputs on RIGHT
@@ -281,21 +299,33 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 **Tasks:**
 
-- [ ] **P3-1** Define DEVICE_PORTS constant with ports per device type
+- [x] **P3-1** Define DEVICE_PORTS constant with ports per device type — **DONE** ✅
   - Map channelType to port definitions:
-    * `input_digital` → outputs: ["Druk"]
+    * `input_digital` → outputs: ["Kort", "Lang"]
     * `input_analog` → outputs: ["Waarde"]
     * `relay_*` → inputs: ["Aan", "Uit", "Schakel"]
-    * `dimmer_*` → inputs: ["Aan", "Uit", "Dim+", "Dim-", "Stel waarde"]
+    * `dimmer_*` → inputs: ["Aan", "Uit", "Schakel", "Dim+", "Dim-", "PIR", "Stel waarde"]
     * `motor_*` → inputs: ["Op", "Neer", "Stop"]
+    * `temperature` → outputs: ["Temp +", "Temp -", "Koelen", "Verwarmen"]
   - Room device types (switch/button/sensor) also get output ports
-  - Port direction determined by whether device is controller or controllable
-- [ ] **P3-2** Device card port visualization (colored dots on card edges)
-- [ ] **P3-3** Binding panel: show selected device with ports
-- [ ] **P3-4** Add devices to binding canvas for wiring
-- [ ] **P3-5** Wire drawing (drag output → input, SVG path rendering)
-- [ ] **P3-6** Wire state management (ADD_BINDING/REMOVE_BINDING actions)
-- [ ] **P3-7** Delete wire (click + Delete key)
+  - Multi-button switches: per-button channel filtering with button selector UI
+- [x] **P3-2** Device card port visualization (colored dots on card edges) — **DONE** ✅
+- [x] **P3-3** Binding panel: show selected device with ports — **DONE** ✅
+  - Controllers on left, controllables on right
+  - Button selector for multi-button switches (2-column grid)
+  - Per-button/sensor binding filtering with channelRef tracking
+- [x] **P3-4** Add devices to binding canvas for wiring — **DONE** ✅
+  - Drag from room → binding panel to add devices
+  - Manually added devices persist until binding created
+  - Auto-load connected devices based on existing bindings
+- [x] **P3-5** Wire drawing (drag output → input, SVG path rendering) — **DONE** ✅
+  - Bezier curves from output ports (right) to input ports (left)
+  - Color-coded by port type
+  - Live wire preview during drawing
+- [x] **P3-6** Wire state management (ADD_BINDING/REMOVE_BINDING actions) — **DONE** ✅
+  - Bindings stored with channelRef for multi-button switches
+  - State subscription for real-time updates
+- [x] **P3-7** Delete wire (click + confirm) — **DONE** ✅
 - [ ] **P3-8** Logic blocks (NOT/AND/OR/XOR) as visual elements on wires
 - [ ] **P3-9** Device controls + live state in binding panel (reuse unit-control.js)
 - [ ] **P3-10** Timer blocks on wires (Td/Tf/Tr binding types)
@@ -423,16 +453,15 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 ### Phase 7 — Save & Upload
 
-- [x] **P7-1** "Save" button → serialize project to `.duo` JSON → `POST /api/project/save`
+- [x] **P7-1** "Save" button → serialize project to `.duo` JSON → `POST /api/project/save` — **DONE** ✅
   - `src/api/projectAPI.ts` handles save + list + load
   - Frontend in `main.js → saveProject()`
-- [x] **P7-2** "Open project" → load `.duo` file
+  - Images stored in separate .img companion files (clean JSON + image data separation)
+  - 50MB body parser limit for large images
+- [x] **P7-2** "Open project" → load `.duo` file — **DONE** ✅
   - Lists `.duo` files from `reader/projects/` directory
   - Frontend in `main.js → openProject()`
-- [ ] **P7-3** Import existing installation (no `.duo`, only `bind*.txt` + node DB)
-  - Parse binding strings → reconstruct what's possible into wiring diagram
-  - Unknown/complex bindings kept as "legacy bindings" visible but not visually editable until re-wired
-  - All devices land in "House" room
+  - Auto-merges .img files back into project on load
 - [ ] **P7-4** Upload bindings to hardware
   - Serialize structured bindings → `bind*.txt` format strings
   - Default: `/upload/changed` (XOR checksum diff, skip unchanged)
@@ -440,6 +469,85 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Show per-node result: uploaded / skipped / failed
 - [ ] **P7-5** Upload moods (per dirty LCD node)
 - [ ] **P7-6** Upload schedules (per dirty node)
+
+### Phase 7b — Import existing installation from hardware
+
+**Goal:** Read binding files from hardware and convert to visual wiring diagram
+
+**Backend parsers available:**
+- ✅ `BindingFileParser` (src/parsers/bindingFile.ts) - parses bind*.txt files
+- ✅ `generateBindingString()` / `parseBindingString()` (src/api/bindingEditorAPI.ts) - high-level binding conversion
+- ✅ `BindingManager` (src/services/BindingManager.ts) - in-memory CRUD for binding strings
+- ✅ TCP download protocol (src/communication/) - fetch bind*.txt from hardware
+
+**Tasks:**
+
+- [ ] **P7b-1** Download all binding files from connected hardware
+  - Use existing TCP protocol to fetch bind*.txt for each node
+  - Store raw binding strings per node
+  - Show progress: "Downloading bindings from node 0x03... (1/15)"
+  - Handle errors: missing files, connection issues, timeout
+  
+- [ ] **P7b-2** Parse binding strings into structured format
+  - Use `BindingFileParser` to parse each bind*.txt file
+  - Extract binding entries: type, flags, input/output addresses, events, actions
+  - Handle all binding types: I (Immediate), N (Normal), C (Conditional), Td/Tf/Tr/Ti/To (Timers), G (Group)
+  - Collect parse errors for user review
+  
+- [ ] **P7b-3** Match bindings to project devices
+  - Map node addresses to modules in Rail View (use discovery data)
+  - Map unit addresses to specific channels (relay 1, dimmer 2, etc.)
+  - Create device entries in Home View for bound units
+  - All unassigned devices land in default "House" room
+  
+- [ ] **P7b-4** Reconstruct visual bindings for simple cases
+  - **Simple bindings** (Type I/N): direct controller → controllable wire
+    * Input: switch button → Output: lamp relay
+    * Convert to visual wire in binding panel
+  - **Conditional bindings** (Type C): logic blocks (NOT/AND/OR/XOR)
+    * Parse operator and operands
+    * Create logic block visual element
+    * Connect inputs and output wires
+  - **Timer bindings** (Td/Tf/Tr/Ti/To): timer blocks
+    * Parse timer parameters (delay, flash rate, repeat count)
+    * Create timer block visual element on wire
+  
+- [ ] **P7b-5** Handle complex bindings as "legacy"
+  - **Complex bindings** that can't be visualized:
+    * Multiple-hop bindings (relay chains)
+    * Property overrides (Type P)
+    * Custom protocols not in standard types
+  - Store as "legacy binding" objects: `{type: 'legacy', rawString: '...', description: '...'}`
+  - Show in separate "Legacy Bindings" section in binding panel
+  - Display raw binding string with explanation
+  - Mark as "not visually editable" - can view/delete but not edit graphically
+  - User can delete legacy binding and re-create visually
+  
+- [ ] **P7b-6** Import UI flow
+  - "Import from hardware" button in header dropdown
+  - Modal: "This will download existing bindings and create devices. Continue?"
+  - Progress indicator during download and parsing
+  - Summary dialog:
+    * X bindings imported
+    * Y devices created in Home View
+    * Z legacy bindings (view details)
+  - Option to review legacy bindings before accepting
+  - Option to cancel if unexpected results
+  
+- [ ] **P7b-7** Conflict resolution
+  - If project already has devices/bindings:
+    * Ask user: "Replace all" / "Merge" / "Cancel"
+    * Replace: clear existing, import fresh
+    * Merge: keep existing, add new (may create duplicates)
+  - Handle node address conflicts (same address, different module type)
+  - Handle binding conflicts (same input/output, different parameters)
+  
+- [ ] **P7b-8** Validation and warnings
+  - Verify all node addresses found in Rail View
+  - Warn about bindings to unknown nodes: "Binding references node 0x05, but no module with this address exists"
+  - Warn about bindings to unknown unit types: "Cannot determine unit type for node 0x0A unit 3"
+  - Offer to create "Unknown" module placeholders for missing nodes
+  - Allow user to assign correct module types before finalizing import
 
 ### Phase 8 — UDP Discovery & connection status
 
@@ -494,18 +602,21 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 ## Binding → wiring diagram type mapping
 
-| Binding type | Wiring diagram element |
-|-------------|----------------------|
-| `N` Normal | Simple wire |
-| `C` Conditional | Wire + NOT/AND/OR logic block |
-| `Td` Timer Delayed | Wire + timer block |
-| `Tf` Timer Flashing | Wire + timer block |
-| `Tr` Timer Repeat | Wire + timer block |
-| `Ti` Timer Interval | Wire + timer block |
-| `To` Timer Oneshot | Wire + timer block |
-| `G` Group | Mood (separate Mood API, not wiring diagram) |
-| `P` Property | Property override — dedicated UI element (deferred) |
-| `I` Immediate | Simple wire variant |
+*(See Phase 7b for import implementation details)*
+
+| Binding type | Wiring diagram element | Import status |
+|-------------|----------------------|---------------|
+| `I` Immediate | Simple wire | ✅ Ready (P7b-4) |
+| `N` Normal | Simple wire | ✅ Ready (P7b-4) |
+| `C` Conditional | Wire + NOT/AND/OR/XOR logic block | ⏳ TODO (P3-8, P7b-4) |
+| `Td` Timer Delayed | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
+| `Tf` Timer Flashing | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
+| `Tr` Timer Repeat | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
+| `Ti` Timer Interval | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
+| `To` Timer Oneshot | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
+| `G` Group | Mood (separate Mood API, not wiring diagram) | ⏳ TODO (P4) |
+| `P` Property | Property override — dedicated UI element (deferred) | ⏭️ Later |
+| *Complex* | Legacy binding (view/delete only) | ✅ Ready (P7b-5) |
 
 ---
 
@@ -538,26 +649,26 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 ## Stubs in demo5 → phase that replaces them
 
-| Stub | Phase |
-|------|-------|
-| `+ Kast toevoegen` | P1-3 |
-| `+ Rail toevoegen` | P1-3 |
-| `+ Schakelaar` / `+ LCD` | P1-4 |
-| `+ Kamer toevoegen` | P2-2 |
-| `selectRoom()` | P2-3 |
-| `addDeviceToRoom()` | P2-4 |
-| `openModuleDetail()` | P6-1 |
-| Binding wizard (`openBW` / `saveBW`) | P3 |
-| Save button | P7-1 |
-| Upload button | P7-4 |
-| Export Excel / PDF | P9-2, P9-3 |
-| Connection status indicator | P8-2 |
+| Stub | Phase | Status |
+|------|-------|--------|
+| `+ Kast toevoegen` | P1-3 | ✅ DONE |
+| `+ Rail toevoegen` | P1-3 | ✅ DONE |
+| `+ Schakelaar` / `+ LCD` | P1-4 | ✅ DONE |
+| `+ Kamer toevoegen` | P2-2 | ✅ DONE |
+| `selectRoom()` | P2-3 | ⏭️ Skipped (no zoom needed) |
+| `addDeviceToRoom()` | P2-4 | ✅ DONE (basic) |
+| `openModuleDetail()` | P6-1 | ✅ DONE |
+| Binding wizard (`openBW` / `saveBW`) | P3 | ✅ DONE (replaced with visual wiring) |
+| Save button | P7-1 | ✅ DONE |
+| Upload button | P7-4 | ⏳ TODO |
+| Export Excel / PDF | P9-2, P9-3 | ⏳ TODO |
+| Connection status indicator | P8-2 | ✅ DONE |
 
 ---
 
 ## Open questions *(add new ones here; none blocking Phase 0)*
 
-- **Q-1** Reconstruct wiring graph from `bind*.txt`: research during P7-3. Some bindings may only be "legacy" strings initially — show them in the UI but not visually editable until manually re-wired.
+- **Q-1** ~~Reconstruct wiring graph from `bind*.txt`~~ → **RESOLVED**: See Phase 7b for detailed import plan. Simple bindings (Type I/N) convert to visual wires, conditional (Type C) to logic blocks, timers (Td/Tf/Tr/Ti/To) to timer blocks. Complex bindings stored as "legacy bindings" (view/delete but not visually editable).
 - **Q-2** Auth API uses HTTPS with device self-signed certs. Node.js `https` client will likely need `rejectUnauthorized: false`. Verify during P4-1.
 - **Q-3** Moods live on LCD/Touchscreen nodes (virtual units). If no LCD is configured yet, can moods live on the master node? Clarify during P4 implementation.
 - **Q-4** Scheduling API: spec uses `/schedulescfg/tag` (extra 's') in one place and `/schedulecfg/tag` elsewhere. Confirm correct URL against lab during P5.
