@@ -171,12 +171,6 @@ export function getAllUnitsWithUsage(project, modules) {
           // Patch with discovered type if different
           const discoveredChannelType = unitTypeToChannelType(discoveredUnit.type);
           if (discoveredChannelType && discoveredChannelType !== existingUnit.channelType) {
-            console.log('[getAllUnitsWithUsage] Patching unit with discovery data:', {
-              unitName: discoveredUnit.name || existingUnit.label,
-              oldChannelType: existingUnit.channelType,
-              newChannelType: discoveredChannelType,
-              discoveredUnitType: discoveredUnit.type
-            });
             existingUnit.channelType = discoveredChannelType;
             existingUnit.unitType = discoveredUnit.type;
             existingUnit.icon = getIconForChannelType(discoveredChannelType);
@@ -188,13 +182,6 @@ export function getAllUnitsWithUsage(project, modules) {
         } else {
           // Unit doesn't exist in module definition - add it from discovery
           const channelType = unitTypeToChannelType(discoveredUnit.type);
-          console.log('[getAllUnitsWithUsage] Discovered unit (not in module def):', { 
-            unitName: discoveredUnit.name, 
-            unitType: discoveredUnit.type,
-            channelType,
-            nodeAddress: node.nodeAddress,
-            unitAddress: discoveredUnit.unitAddress
-          });
           if (!channelType) continue; // Skip unknown types
           
           // Find module/woning device for this node
@@ -309,9 +296,7 @@ function unitTypeToChannelType(unitType) {
     [UnitType.kAudio]: 'audio',
     [UnitType.kExtendedAudio]: 'audio',
   };
-  const result = map[unitType] || null;
-  console.log('[unitTypeToChannelType]', { unitType, result, kTemperature: UnitType.kTemperature });
-  return result;
+  return map[unitType] || null;
 }
 
 /**
