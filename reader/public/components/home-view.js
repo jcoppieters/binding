@@ -369,10 +369,13 @@ function renderRoomsList(homeView) {
 
     // Rooms in this floor
     if (floorData.rooms.length === 0) {
-      const empty = el('div', '');
-      empty.style.cssText = 'padding:8px 10px;font-size:11px;color:#a0aaba;font-style:italic';
-      empty.textContent = 'Geen kamers';
-      list.append(empty);
+      const addRoomBtn = el('button', '');
+      addRoomBtn.style.cssText = 'margin:4px 8px;padding:5px 8px;border-radius:5px;border:1px dashed #dde3ef;color:#a0aaba;font-size:11px;cursor:pointer;text-align:left;transition:all .15s;background:none;width:calc(100% - 16px)';
+      addRoomBtn.textContent = '+ Kamer';
+      addRoomBtn.onmouseenter = () => { addRoomBtn.style.borderColor = '#e08c00'; addRoomBtn.style.color = '#e08c00'; addRoomBtn.style.background = '#fef9f0'; };
+      addRoomBtn.onmouseleave = () => { addRoomBtn.style.borderColor = '#dde3ef'; addRoomBtn.style.color = '#a0aaba'; addRoomBtn.style.background = 'none'; };
+      addRoomBtn.onclick = () => promptAddRoomToFloor(floor);
+      list.append(addRoomBtn);
     } else {
       for (const room of floorData.rooms) {
         const item = el('div', 'sidebar-item');

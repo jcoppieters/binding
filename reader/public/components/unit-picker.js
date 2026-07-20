@@ -317,29 +317,25 @@ function makeId() {
  * Starts at (50, 50) and increments by 50px until finding empty spot.
  */
 function findAvailablePosition(room) {
-  const roomWidth = room.width || 500;
-  const roomHeight = room.height || 400;
+  const roomWidth = parseInt(room.width) || 500;
+  const roomHeight = parseInt(room.height) || 400;
   const devices = room.devices || [];
   
-  let x = 50;
-  let y = 50;
-  
+  let topX = 50; let x = 50;
+  let topY = 50; let y = 50;
+
   // Check for device at exact position
   while (hasDeviceAt(devices, x, y)) {
     x += 50;
     y += 50;
     
-    // Wrap x if exceeds bounds
-    if (x > roomWidth - 100) {
-      x = 50;
-      y += 50;
+    // Wrap x or y if exceeds bounds
+    if ((x > roomWidth - 100) || (y > roomHeight - 100)) {
+      topX += 75;
+      x = topX;
+      y = topY;
     }
-    
-    // Wrap y if exceeds bounds
-    if (y > roomHeight - 100) {
-      x = 50;
-      y = 100;
-    }
+
   }
   
   return { x, y };
