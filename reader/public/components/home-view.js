@@ -323,7 +323,7 @@ export function mount(container) {
 
 /** Wire buttons (called from main.js after DOM ready) */
 export function wireButtons() {
-  document.getElementById('btn-add-room')?.addEventListener('click', () => promptAddRoom());
+  document.getElementById('btn-add-room')?.addEventListener('click', () => promptAddFloor());
   document.getElementById('btn-add-room-empty')?.addEventListener('click', () => promptAddRoom());
 }
 
@@ -361,7 +361,7 @@ function renderRoomsList(homeView) {
     floorMenu.title = 'Floor opties';
     floorMenu.onclick = (e) => {
       e.stopPropagation();
-      openFloorMenu(floor);
+      openFloorMenu(floor, floorMenu);
     };
     floorHeader.append(floorMenu);
     
@@ -479,13 +479,43 @@ function promptAddRoom() {
 
 // ─── Floor Menu ───────────────────────────────────────────────────────────────
 
-function openFloorMenu(floor) {
+function openFloorMenu(floor, anchorElement) {
+  const menuItems = [
+    {
+      label: '+ Kamer',
+      onClick: () => promptAddRoomToFloor(floor)
+    },
+    {
+      label: 'Hernoem',
+      onClick: () => promptRenameFloor(floor)
+    },
+    {
+      label: 'Verwijder',
+      onClick: () => {
+        const s = state.get();
+        const roomsOnFloor = s.project.homeView.rooms.filter(r => r.floorId === floor.id);
+        if (roomsOnFloor.length > 0) {
+          alert(`Kan verdieping niet verwijderen: bevat nog ${roomsOnFloor.length} kamer(s)`);
+          return;
+        }
+        if (confirm(`Verwijder verdieping "${floor.name}"?`)) {
+          dispatch({ type: 'REMOVE_FLOOR', floorId: floor.id });
+        }
+      },
+      style: 'color:#ef4444'
+    }
+  ];
+
+  createDropdownMenu(menuItems, anchorElement, 'floor-menu');
+}
+
+function promptAddRoomToFloor(floor) {
   const overlay = el('div', 'modal-overlay');
   const dlg = el('div', 'modal-dialog');
-  dlg.style.cssText = 'width:300px;max-width:95vw';
+  dlg.style.cssText = 'width:400px;max-width:95vw';
 
   const hdr = el('div', 'modal-header');
-  hdr.innerHTML = `<strong>${floor.name}</strong>`;
+  hdr.innerHTML = `<strong>Nieuwe kamer — ${floor.name}</strong>`;
   const closeBtn = el('button', 'modal-close');
   closeBtn.textContent = '✕';
   closeBtn.onclick = () => overlay.remove();
@@ -493,42 +523,109 @@ function openFloorMenu(floor) {
 
   const body = el('div', 'modal-body');
 
-  const renameBtn = el('button', 'modal-btn');
-  renameBtn.textContent = '✏️ Hernoem';
-  renameBtn.style.cssText = 'width:100%;margin-bottom:8px';
-  renameBtn.onclick = () => {
-    overlay.remove();
-    promptRenameFloor(floor);
-  };
+  const nameLabel = el('label', 'modal-label');
+  nameLabel.textContent = 'Naam';
+  const nameInput = el('input', 'modal-input');
+  nameInput.placeholder = 'Woonkamer, Keuken, Slaapkamer...';
+  nameInput.type = 'text';
 
-  const deleteBtn = el('button', 'modal-btn');
-  deleteBtn.textContent = '🗑 Verwijder';
-  deleteBtn.style.cssText = 'width:100%;color:#ef4444;border-color:#fca5a5';
-  deleteBtn.onclick = () => {
-    const s = state.get();
-    const roomsOnFloor = s.project.homeView.rooms.filter(r => r.floorId === floor.id);
-    if (roomsOnFloor.length > 0) {
-      alert(`Kan verdieping niet verwijderen: bevat nog ${roomsOnFloor.length} kamer(s)`);
-      return;
-    }
-    if (confirm(`Verwijder verdieping "${floor.name}"?`)) {
-      dispatch({ type: 'REMOVE_FLOOR', floorId: floor.id });
-      overlay.remove();
-    }
-  };
+  const iconLabel = el('label', 'modal-label');
+  iconLabel.textContent = 'Icoon (optioneel)';
+  const iconInput = el('input', 'modal-input');
+  iconInput.placeholder = '🛋️ 🍴 🛏️ 🚿 ...';
+  iconInput.maxLength = 4;
+  iconInput.style.width = '80px';
 
-  body.append(renameBtn, deleteBtn);
+  body.append(nameLabel, nameInput, iconLabel, iconInput);
 
   const footer = el('div', 'modal-footer');
-  const closeFooterBtn = el('button', 'modal-btn');
-  closeFooterBtn.textContent = 'Sluiten';
-  closeFooterBtn.onclick = () => overlay.remove();
-  footer.append(closeFooterBtn);
+  const cancelBtn = el('button', 'modal-btn');
+  cancelBtn.textContent = 'Annuleren';
+  cancelBtn.onclick = () => overlay.remove();
+  const addBtn = el('button', 'modal-btn-primary');
+  addBtn.textContent = 'Toevoegen';
+  addBtn.onclick = () => {
+    const name = nameInput.value.trim();
+    if (!name) {
+      nameInput.style.borderColor = '#ef4444';
+      return;
+    }
+    
+    dispatch({
+      type: 'ADD_ROOM',
+      room: {
+        id: makeId(),
+        name,
+        icon: iconInput.value.trim() || undefined,
+        floorId: floor.id,
+        canvasX: 50,
+        canvasY: 50,
+        canvasWidth: 200,
+        canvasHeight: 150,
+        devices: []
+      }
+    });
+    overlay.remove();
+  };
 
+  footer.append(cancelBtn, addBtn);
   dlg.append(hdr, body, footer);
   overlay.append(dlg);
   overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
   document.body.append(overlay);
+  nameInput.focus();
+}
+
+function promptAddFloor() {
+  const overlay = el('div', 'modal-overlay');
+  const dlg = el('div', 'modal-dialog');
+  dlg.style.cssText = 'width:350px;max-width:95vw';
+
+  const hdr = el('div', 'modal-header');
+  hdr.innerHTML = '<strong>Nieuwe verdieping</strong>';
+  const closeBtn = el('button', 'modal-close');
+  closeBtn.textContent = '✕';
+  closeBtn.onclick = () => overlay.remove();
+  hdr.append(closeBtn);
+
+  const body = el('div', 'modal-body');
+  const nameLabel = el('label', 'modal-label');
+  nameLabel.textContent = 'Naam';
+  const nameInput = el('input', 'modal-input');
+  nameInput.placeholder = 'Gelijkvloers, 1e verdieping, Zolder...';
+  nameInput.type = 'text';
+
+  body.append(nameLabel, nameInput);
+
+  const footer = el('div', 'modal-footer');
+  const cancelBtn = el('button', 'modal-btn');
+  cancelBtn.textContent = 'Annuleren';
+  cancelBtn.onclick = () => overlay.remove();
+  const addBtn = el('button', 'modal-btn-primary');
+  addBtn.textContent = 'Toevoegen';
+  addBtn.onclick = () => {
+    const name = nameInput.value.trim();
+    if (!name) {
+      nameInput.style.borderColor = '#ef4444';
+      return;
+    }
+    
+    dispatch({
+      type: 'ADD_FLOOR',
+      floor: {
+        id: makeId(),
+        name
+      }
+    });
+    overlay.remove();
+  };
+
+  footer.append(cancelBtn, addBtn);
+  dlg.append(hdr, body, footer);
+  overlay.append(dlg);
+  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+  document.body.append(overlay);
+  nameInput.focus();
 }
 
 function promptRenameFloor(floor) {

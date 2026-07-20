@@ -275,14 +275,17 @@ function selectUnit(unit) {
   const customName = prompt(`Geef dit apparaat een naam:`, defaultName);
   if (!customName) return; // Cancelled
   
+  // Find available position (avoiding collisions)
+  const { x, y } = findAvailablePosition(room);
+  
   // Create device with channel reference
   const device = {
     id: makeId(),
     type: mapChannelTypeToDeviceType(unit.channelType),
     name: customName,
     channelRef: createChannelRef(unit),
-    x: Math.max(0, (room.width || 500) / 2 - 50),
-    y: Math.max(0, (room.height || 400) / 2 - 50),
+    x,
+    y,
     
     // Store display properties from unit
     icon: unit.icon,
@@ -307,6 +310,54 @@ function selectUnit(unit) {
 
 function makeId() {
   return Math.random().toString(36).slice(2, 10);
+}
+
+/**
+ * Find an available position in the room, avoiding device collisions.
+ * Starts at center and increments by 50px in both directions until finding empty spot.
+ */
+function findAvailablePosition(room) {
+  const roomWidth = room.width || 500;
+  const roomHeight = room.height || 400;
+  let x = Math.max(0, roomWidth / 2 - 50);
+  let y = Math.max(0, roomHeight / 2 - 50);
+  
+  const devices = room.devices || [];
+  
+  // Check for collision at current position
+  while (hasDeviceAt(devices, x, y)) {
+    x += 50;
+    y += 50;
+    
+    // Wrap around if we exceed room bounds
+    if (x > roomWidth - 100) {
+      x = 0;
+      y += 50;
+    }
+    if (y > roomHeight - 100) {
+      y = 0;
+    }
+  }
+  
+  return { x, y };
+}
+
+/**
+ * Check if a device exists at the given position.
+ * Devices are 100x100, so we check for overlap.
+ */
+function hasDeviceAt(devices, x, y) {
+  const deviceSize = 100;
+  return devices.some(device => {
+    if (device.x === undefined || device.y === undefined) return false;
+    // Check if rectangles overlap
+    return !(
+      x + deviceSize <= device.x ||
+      device.x + deviceSize <= x ||
+      y + deviceSize <= device.y ||
+      device.y + deviceSize <= y
+    );
+  });
 }
 
 function mapChannelTypeToDeviceType(channelType) {
