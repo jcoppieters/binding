@@ -110,6 +110,7 @@ export const DEVICE_PORTS = {
 let _currentBindingContext = null;
 let _bindingWires = [];
 let _drawingWire = null;
+let _manuallyAddedDevices = new Set(); // Track devices manually added without bindings yet
 
 /**
  * Show device bindings - opens the binding panel for a device
@@ -157,6 +158,9 @@ export function showDeviceBindings(device, room) {
     room,
     otherDevices: connectedDevices
   };
+  
+  // Clear manually added devices when opening new binding context
+  _manuallyAddedDevices.clear();
   
   // Copy bindings to local cache
   _bindingWires = deviceBindings.map(b => ({ ...b }));
@@ -228,6 +232,18 @@ function renderBindingPanel() {
         connectedDevices.push({ ...d, roomName: r.name });
       }
     });
+  });
+  
+  // Add manually added devices (even if they don't have bindings yet)
+  _manuallyAddedDevices.forEach(deviceId => {
+    if (!connectedDevices.some(d => d.id === deviceId)) {
+      s.project.homeView.rooms.forEach(r => {
+        const device = r.devices.find(d => d.id === deviceId);
+        if (device) {
+          connectedDevices.push({ ...device, roomName: r.name });
+        }
+      });
+    }
   });
   
   _currentBindingContext.otherDevices = connectedDevices;
@@ -345,6 +361,7 @@ function setupDropZone(container) {
         
         // Add to other devices
         _currentBindingContext.otherDevices.push(data.device);
+        _manuallyAddedDevices.add(data.device.id); // Track manually added device
         renderBindingPanel();
         showToast(`${data.device.icon} ${data.device.name} toegevoegd`, 'success');
       }
@@ -706,6 +723,10 @@ function completeWire(from, to) {
   
   // Dispatch to state
   dispatch({ type: 'ADD_BINDING', binding });
+  
+  // Remove devices from manually added set now that they have bindings
+  _manuallyAddedDevices.delete(from.deviceId);
+  _manuallyAddedDevices.delete(to.deviceId);
   
   renderBindingWires();
   showToast('Binding toegevoegd', 'success');

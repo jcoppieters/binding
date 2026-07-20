@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-20T13:58:01.171Z",
+    "modified": "2026-07-20T14:12:37.215Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -98,8 +98,8 @@
             "type": "lamp",
             "icon": "💡",
             "color": "#fbbf24",
-            "x": 40,
-            "y": 68.203125
+            "x": 124,
+            "y": 622.203125
           },
           {
             "id": "waiiy9a8",
@@ -110,8 +110,8 @@
               "unitAddress": 27,
               "moduleInstanceId": "6b3y3zdh"
             },
-            "x": 48,
-            "y": 232.203125,
+            "x": 95,
+            "y": 509.203125,
             "icon": "💡",
             "color": "#fbbf24"
           },
@@ -119,8 +119,8 @@
             "id": "hlm8cyux",
             "type": "input",
             "name": "DTBS-ES4w",
-            "x": 557,
-            "y": 60.203125,
+            "x": 184,
+            "y": 407.203125,
             "isMultiButtonSwitch": true,
             "buttonCount": 8,
             "hasTempSensor": true,
@@ -281,19 +281,19 @@
                 }
               }
             ],
-            "activeButton": 1,
+            "activeButton": 0,
             "activeSensor": false,
             "channelRef": {
               "nodeAddress": 17,
-              "unitAddress": 1,
+              "unitAddress": 0,
               "moduleInstanceId": "spkdvvk1"
             },
             "icon": "🔳 🌡️",
             "color": "#a78bfa"
           }
         ],
-        "width": "735px",
-        "height": "555px",
+        "width": "767px",
+        "height": "996px",
         "backgroundImageRef": "room-0qmolyy6"
       },
       {
@@ -311,8 +311,8 @@
             "type": "motor",
             "icon": "🪟",
             "color": "#10b981",
-            "x": 312,
-            "y": 42.203125
+            "x": 196,
+            "y": 779
           },
           {
             "id": "insnpyth",
@@ -320,8 +320,8 @@
             "type": "sensor",
             "icon": "🌡️",
             "color": "#f59e0b",
-            "x": 164,
-            "y": 121
+            "x": 323,
+            "y": 647.203125
           },
           {
             "id": "6vf0ndi8",
@@ -329,10 +329,13 @@
             "type": "input",
             "icon": "🔘",
             "color": "#8b5cf6",
-            "x": 26,
-            "y": 122.703125
+            "x": 166,
+            "y": 553.203125
           }
-        ]
+        ],
+        "width": "714px",
+        "height": "996px",
+        "backgroundImageRef": "room-8ynd4pbd"
       }
     ]
   },
