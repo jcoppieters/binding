@@ -278,6 +278,9 @@ function selectUnit(unit) {
   // Find available position (avoiding collisions)
   const { x, y } = findAvailablePosition(room);
   
+  // Detect multi-button switches (Essence, Serenity, etc.)
+  const buttonInfo = detectMultiButtonSwitch(unit, s);
+  
   // Create device with channel reference
   const device = {
     id: makeId(),
@@ -290,6 +293,9 @@ function selectUnit(unit) {
     // Store display properties from unit
     icon: unit.icon,
     color: getColorForChannelType(unit.channelType),
+    
+    // Multi-button switch info
+    ...buttonInfo,
   };
   
   dispatch({
@@ -306,6 +312,33 @@ function selectUnit(unit) {
   if (s2.showToast) {
     s2.showToast(`${device.icon} ${device.name} toegevoegd`, 'success');
   }
+}
+
+/**
+ * Detect if unit belongs to a multi-button switch and return button info
+ * @param {object} unit - The selected unit
+ * @param {object} s - Current state
+ * @returns {object} Button info or empty object
+ */
+function detectMultiButtonSwitch(unit, s) {
+  // Only for input_digital channels
+  if (unit.channelType !== 'input_digital') return {};
+  
+  // Check if module is a multi-button switch (2+ buttons)
+  const moduleDef = s.modules?.[unit.moduleModel];
+  if (!moduleDef) return {};
+  
+  // Find input_digital channel groups
+  const inputGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_digital') || [];
+  const totalButtons = inputGroups.reduce((sum, g) => sum + g.count, 0);
+  
+  // Only consider as multi-button if 2 or more buttons
+  if (totalButtons < 2) return {};
+  
+  return {
+    buttonCount: totalButtons,
+    activeButton: unit.unitAddress, // Current button (0-indexed)
+  };
 }
 
 function makeId() {

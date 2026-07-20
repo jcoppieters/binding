@@ -277,6 +277,83 @@ function setupDropZone(container) {
 }
 
 /**
+ * Build button selector for multi-button switches
+ * @param {object} device - Device with buttonCount and activeButton
+ * @returns {HTMLElement}
+ */
+function buildButtonSelector(device) {
+  const container = document.createElement('div');
+  container.style.cssText = 'display:flex;flex-direction:column;gap:6px;align-items:center';
+  
+  const label = document.createElement('div');
+  label.style.cssText = 'font-size:11px;color:#6a7899;font-weight:500';
+  label.textContent = 'Fysieke knop:';
+  
+  // Determine grid layout (2 columns for 2-8 buttons)
+  const cols = 2;
+  const rows = Math.ceil(device.buttonCount / cols);
+  
+  const grid = document.createElement('div');
+  grid.style.cssText = `
+    display:grid;
+    grid-template-columns:repeat(${cols}, 1fr);
+    gap:4px;
+  `;
+  
+  for (let i = 0; i < device.buttonCount; i++) {
+    const btn = document.createElement('button');
+    const isActive = i === device.activeButton;
+    
+    btn.textContent = (i + 1).toString();
+    btn.style.cssText = `
+      width:32px;
+      height:32px;
+      border-radius:4px;
+      border:2px solid ${isActive ? device.color : '#d1d5db'};
+      background:${isActive ? device.color : '#fff'};
+      color:${isActive ? '#fff' : '#4b5563'};
+      font-size:13px;
+      font-weight:${isActive ? '700' : '500'};
+      cursor:pointer;
+      transition:all .15s;
+    `;
+    
+    btn.onclick = () => {
+      // Update device's active button
+      dispatch({
+        type: 'UPDATE_DEVICE',
+        deviceId: device.id,
+        patch: { activeButton: i }
+      });
+      
+      // Show toast
+      showToast(`Knop ${i + 1} geselecteerd`, 'success');
+    };
+    
+    btn.onmouseenter = () => {
+      if (!isActive) {
+        btn.style.borderColor = '#9ca3af';
+        btn.style.background = '#f9fafb';
+      }
+    };
+    
+    btn.onmouseleave = () => {
+      if (!isActive) {
+        btn.style.borderColor = '#d1d5db';
+        btn.style.background = '#fff';
+      }
+    };
+    
+    grid.appendChild(btn);
+  }
+  
+  container.appendChild(label);
+  container.appendChild(grid);
+  
+  return container;
+}
+
+/**
  * Build a device card for the binding panel
  */
 function buildBindingDeviceCard(device, isPrimary) {
@@ -303,6 +380,14 @@ function buildBindingDeviceCard(device, isPrimary) {
     <div style="font-size:13px;font-weight:600;color:#1a1f2e">${device.name}</div>
     <div style="font-size:11px;color:#6a7899">${device.type}</div>
   `;
+  
+  card.appendChild(deviceHeader);
+  
+  // Button selector for multi-button switches
+  if (device.buttonCount && device.buttonCount > 1) {
+    const buttonSelector = buildButtonSelector(device);
+    card.appendChild(buttonSelector);
+  }
   
   const ports = DEVICE_PORTS[device.type] || { inputs: [], outputs: [] };
   

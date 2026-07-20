@@ -294,17 +294,35 @@ export function dispatch(action) {
     case 'UPDATE_DEVICE': {
       const homeView = { ..._state.project.homeView };
       homeView.rooms = homeView.rooms.map(r => {
-        if (r.id === action.roomId) {
-          return {
-            ...r,
-            devices: r.devices.map(d =>
-              d.id === action.deviceId
-                ? { ...d, ...action.patch }
-                : d
-            )
-          };
-        }
-        return r;
+        // If roomId specified, only update in that room
+        if (action.roomId && r.id !== action.roomId) return r;
+        
+        // Update device if found in this room
+        const hasDevice = r.devices.some(d => d.id === action.deviceId);
+        if (!hasDevice && action.roomId) return r; // Not in this room
+        
+        return {
+          ...r,
+          devices: r.devices.map(d => {
+            if (d.id === action.deviceId) {
+              const updated = { ...d, ...action.patch };
+              
+              // Special handling for multi-button switches
+              // When activeButton changes, update channelRef.unitAddress
+              if (action.patch.activeButton !== undefined && d.buttonCount && d.channelRef) {
+                // Calculate base unit address (first button)
+                const baseUnitAddress = d.channelRef.unitAddress - (d.activeButton || 0);
+                updated.channelRef = {
+                  ...d.channelRef,
+                  unitAddress: baseUnitAddress + action.patch.activeButton
+                };
+              }
+              
+              return updated;
+            }
+            return d;
+          })
+        };
       });
       _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
       break;
