@@ -1492,6 +1492,7 @@ main {
   user-select: none;
   border: 2px solid;
   position: relative;
+  z-index: 1; /* Above background image layer */
 }
 
 .device-card.positioned {

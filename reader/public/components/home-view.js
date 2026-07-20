@@ -830,11 +830,14 @@ function buildRoomCard(room) {
 
   // Devices area (positioned relative for absolute device placement)
   const devicesArea = el('div', '');
-  devicesArea.style.cssText = `flex:1;position:relative;padding:16px;border-radius:8px;background:rgba(248,249,253,0.85);overflow:hidden;${
-    room.backgroundImage 
-      ? 'background-image:url(' + room.backgroundImage + ');background-size:contain;background-position:center;background-repeat:no-repeat;' 
-      : ''
-  }`;
+  devicesArea.style.cssText = 'flex:1;position:relative;padding:16px;border-radius:8px;background:rgba(248,249,253,0.85);overflow:hidden';
+  
+  // Background image layer (separate from background color for independent opacity control)
+  if (room.backgroundImage) {
+    const bgLayer = el('div', '');
+    bgLayer.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;background-image:url(' + room.backgroundImage + ');background-size:contain;background-position:center;background-repeat:no-repeat;opacity:0.25;pointer-events:none;z-index:0';
+    devicesArea.appendChild(bgLayer);
+  }
   
   // Create DnD overlay (hidden by default)
   const dndOverlay = el('div', '');
