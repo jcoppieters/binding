@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-20T13:10:29.486Z",
+    "modified": "2026-07-20T13:53:32.355Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -98,8 +98,8 @@
             "type": "lamp",
             "icon": "💡",
             "color": "#fbbf24",
-            "x": 152,
-            "y": 81.203125
+            "x": 40,
+            "y": 68.203125
           },
           {
             "id": "waiiy9a8",
@@ -114,6 +114,182 @@
             "y": 232.203125,
             "icon": "💡",
             "color": "#fbbf24"
+          },
+          {
+            "id": "hlm8cyux",
+            "type": "input",
+            "name": "DTBS-ES4w",
+            "x": 557,
+            "y": 60.203125,
+            "isMultiButtonSwitch": true,
+            "buttonCount": 8,
+            "hasTempSensor": true,
+            "buttons": [
+              {
+                "unitAddress": 0,
+                "woningDeviceId": "spkdvvk1",
+                "nodeAddress": 17,
+                "channelType": "input_digital",
+                "unitType": 3,
+                "label": "Input 1",
+                "icon": "🔘",
+                "moduleName": "DTBS-ES4w",
+                "moduleModel": "DTBS-ES4w",
+                "usage": null,
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 0,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              },
+              {
+                "unitAddress": 1,
+                "woningDeviceId": "spkdvvk1",
+                "nodeAddress": 17,
+                "channelType": "input_digital",
+                "unitType": 3,
+                "label": "Input 2",
+                "icon": "🔘",
+                "moduleName": "DTBS-ES4w",
+                "moduleModel": "DTBS-ES4w",
+                "usage": null,
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 1,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              },
+              {
+                "unitAddress": 2,
+                "woningDeviceId": "spkdvvk1",
+                "nodeAddress": 17,
+                "channelType": "input_digital",
+                "unitType": 3,
+                "label": "Input 3",
+                "icon": "🔘",
+                "moduleName": "DTBS-ES4w",
+                "moduleModel": "DTBS-ES4w",
+                "usage": null,
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 2,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              },
+              {
+                "unitAddress": 3,
+                "woningDeviceId": "spkdvvk1",
+                "nodeAddress": 17,
+                "channelType": "input_digital",
+                "unitType": 3,
+                "label": "Input 4",
+                "icon": "🔘",
+                "moduleName": "DTBS-ES4w",
+                "moduleModel": "DTBS-ES4w",
+                "usage": null,
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 3,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              },
+              {
+                "unitAddress": 4,
+                "woningDeviceId": "spkdvvk1",
+                "nodeAddress": 17,
+                "channelType": "input_digital",
+                "unitType": 3,
+                "label": "boven links",
+                "icon": "🔘",
+                "moduleName": "DTBS-ES4w",
+                "moduleModel": "DTBS-ES4w",
+                "usage": null,
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 4,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              },
+              {
+                "unitAddress": 5,
+                "nodeAddress": 17,
+                "channelType": "input_digital",
+                "unitType": 3,
+                "label": "boven 2",
+                "icon": "🔘",
+                "usage": null,
+                "woningDeviceId": "spkdvvk1",
+                "moduleName": "Switch Living",
+                "moduleModel": "DTBS-ES4w",
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 5,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              },
+              {
+                "unitAddress": 6,
+                "nodeAddress": 17,
+                "channelType": "input_digital",
+                "unitType": 3,
+                "label": "boven 3",
+                "icon": "🔘",
+                "usage": null,
+                "woningDeviceId": "spkdvvk1",
+                "moduleName": "Switch Living",
+                "moduleModel": "DTBS-ES4w",
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 6,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              },
+              {
+                "unitAddress": 7,
+                "nodeAddress": 17,
+                "channelType": "input_digital",
+                "unitType": 3,
+                "label": "boven rechts",
+                "icon": "🔘",
+                "usage": null,
+                "woningDeviceId": "spkdvvk1",
+                "moduleName": "Switch Living",
+                "moduleModel": "DTBS-ES4w",
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 7,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              }
+            ],
+            "sensors": [
+              {
+                "unitAddress": 8,
+                "nodeAddress": 17,
+                "channelType": "temperature",
+                "unitType": 4,
+                "label": "Saloon",
+                "icon": "🌡️",
+                "usage": null,
+                "woningDeviceId": "spkdvvk1",
+                "moduleName": "Switch Living",
+                "moduleModel": "DTBS-ES4w",
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 8,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              }
+            ],
+            "activeButton": 1,
+            "activeSensor": false,
+            "channelRef": {
+              "nodeAddress": 17,
+              "unitAddress": 1,
+              "moduleInstanceId": "spkdvvk1"
+            },
+            "icon": "🔳 🌡️",
+            "color": "#a78bfa"
           }
         ],
         "width": "735px",
@@ -268,6 +444,30 @@
         "portId": "schakel"
       },
       "color": "#a855f7"
+    },
+    {
+      "id": "ihun7jr1",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "waiiy9a8",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6"
+    },
+    {
+      "id": "2ezkb3zk",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "i2zrykxj",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6"
     }
   ],
   "discoveredNodes": [

@@ -118,9 +118,21 @@ export function showDeviceBindings(device, room) {
   const s = state.get();
   
   // Load existing bindings for this device
-  const deviceBindings = (s.project.bindings || []).filter(b => 
-    b.from.deviceId === device.id || b.to.deviceId === device.id
-  );
+  // For multi-button switches, filter by active button/sensor channelRef
+  const deviceBindings = (s.project.bindings || []).filter(b => {
+    const matchesDevice = b.from.deviceId === device.id || b.to.deviceId === device.id;
+    if (!matchesDevice) return false;
+    
+    // For multi-button switches, check channelRef
+    if (device.isMultiButtonSwitch) {
+      const currentChannelRef = JSON.stringify(device.channelRef);
+      const fromMatches = b.from.deviceId === device.id && JSON.stringify(b.from.channelRef) === currentChannelRef;
+      const toMatches = b.to.deviceId === device.id && JSON.stringify(b.to.channelRef) === currentChannelRef;
+      return fromMatches || toMatches;
+    }
+    
+    return true;
+  });
   
   // Find all connected devices
   const connectedDeviceIds = new Set();
@@ -191,9 +203,21 @@ function renderBindingPanel() {
   }).filter(d => d); // Remove any deleted devices
   
   // Reload bindings from state to ensure they're in sync
-  const deviceBindings = (s.project.bindings || []).filter(b => 
-    b.from.deviceId === freshDevice.id || b.to.deviceId === freshDevice.id
-  );
+  // For multi-button switches, filter by active button/sensor channelRef
+  const deviceBindings = (s.project.bindings || []).filter(b => {
+    const matchesDevice = b.from.deviceId === freshDevice.id || b.to.deviceId === freshDevice.id;
+    if (!matchesDevice) return false;
+    
+    // For multi-button switches, check channelRef
+    if (freshDevice.isMultiButtonSwitch) {
+      const currentChannelRef = JSON.stringify(freshDevice.channelRef);
+      const fromMatches = b.from.deviceId === freshDevice.id && JSON.stringify(b.from.channelRef) === currentChannelRef;
+      const toMatches = b.to.deviceId === freshDevice.id && JSON.stringify(b.to.channelRef) === currentChannelRef;
+      return fromMatches || toMatches;
+    }
+    
+    return true;
+  });
   _bindingWires = deviceBindings.map(b => ({ ...b }));
   
   const { device, room, otherDevices } = _currentBindingContext;
@@ -217,9 +241,21 @@ function renderBindingPanel() {
   // Header
   const header = document.createElement('div');
   header.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:12px 16px;background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,0.05);margin-bottom:16px';
+  
+  // Build header text with button/sensor info for multi-button switches
+  let headerText = `${device.icon} ${device.name}`;
+  if (device.isMultiButtonSwitch) {
+    if (device.activeSensor) {
+      headerText += ' <span style="color:#f59e0b;font-weight:600">🌡️ Sensor</span>';
+    } else {
+      const buttonNum = (device.activeButton || 0) + 1;
+      headerText += ` <span style="color:${device.color};font-weight:600">Button ${buttonNum}</span>`;
+    }
+  }
+  
   header.innerHTML = `
     <div style="font-size:14px;font-weight:600;color:#1a1f2e">
-      Bindingen voor ${device.icon} ${device.name} 
+      Bindingen voor ${headerText}
       <span style="color:#6a7899;font-weight:400">in ${room.name}</span>
       <span style="color:#9ca3af;font-size:12px;font-weight:400;margin-left:12px">— Sleep extra apparaten hierheen uit de kamers</span>
     </div>
@@ -572,7 +608,11 @@ function buildPortElement(device, port, direction) {
     dot.onmousedown = (e) => startWireDrawing(e, device, port);
   } else {
     dot.addEventListener('wireConnect', (e) => {
-      completeWire(e.detail.from, { deviceId: device.id, portId: port.id });
+      completeWire(e.detail.from, { 
+        deviceId: device.id, 
+        portId: port.id,
+        channelRef: device.channelRef  // Store channelRef for multi-button switches
+      });
     });
   }
   
@@ -595,7 +635,11 @@ function startWireDrawing(e, device, port) {
   const containerRect = container.getBoundingClientRect();
   
   _drawingWire = {
-    from: { deviceId: device.id, portId: port.id },
+    from: { 
+      deviceId: device.id, 
+      portId: port.id,
+      channelRef: device.channelRef  // Store channelRef for multi-button switches
+    },
     color: port.color,
     startX: rect.left + rect.width / 2 - containerRect.left,
     startY: rect.top + rect.height / 2 - containerRect.top
