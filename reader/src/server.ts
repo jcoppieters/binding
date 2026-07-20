@@ -130,10 +130,10 @@ app.use('/api/editor', bindingEditorAPI);
 
 // Binding import (from disk) - mount before regular bindings API to avoid conflicts
 app.use('/api/import', bindingImportAPI);
-Binding converter (legacy → visual format)
+
+// Binding converter (legacy → visual format)
 app.use('/api/convert', bindingConverterAPI);
 
-// 
 // Module database (product catalogue)
 app.use('/api', createModulesAPI());
 
