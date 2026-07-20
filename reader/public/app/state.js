@@ -291,6 +291,24 @@ export function dispatch(action) {
       _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
       break;
     }
+    case 'UPDATE_DEVICE': {
+      const homeView = { ..._state.project.homeView };
+      homeView.rooms = homeView.rooms.map(r => {
+        if (r.id === action.roomId) {
+          return {
+            ...r,
+            devices: r.devices.map(d =>
+              d.id === action.deviceId
+                ? { ...d, ...action.patch }
+                : d
+            )
+          };
+        }
+        return r;
+      });
+      _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
     case 'MOVE_DEVICE_TO_ROOM': {
       const homeView = { ..._state.project.homeView };
       let deviceToMove = null;
