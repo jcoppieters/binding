@@ -42,6 +42,16 @@ export const DEVICE_PORTS = {
       { id: 'lang', label: 'Lang', color: '#a855f7' }   // purple - long press
     ]
   },
+  switch: {
+    // Legacy devices with type 'switch' (backwards compatibility)
+    // Same as 'input' - controllers with kort/lang outputs
+    inputs: [],
+    outputs: [
+      { id: 'kort', label: 'Kort', color: '#3b82f6' },  // blue - short press
+      { id: 'lang', label: 'Lang', color: '#a855f7' },  // purple - long press
+      { id: 'druk', label: 'Druk', color: '#10b981' }   // green - single press (for sensors)
+    ]
+  },
   mood: {
     // Virtual moods (from master node 0xFC) are controllers
     // Mood activation → generates output event
@@ -237,6 +247,7 @@ function renderBindingPanel() {
   // Add all devices in sorted order (controllers first, then controllables)
   sortedDevices.forEach(dev => {
     const isPrimary = dev.id === device.id;
+    console.log('[Binding Debug] Rendering device:', dev.name, '| id:', dev.id, '| type:', dev.type, '| isMultiButton:', dev.isMultiButtonSwitch, '| activeButton:', dev.activeButton, '| activeSensor:', dev.activeSensor);
     const card = buildBindingDeviceCard(dev, isPrimary);
     devicesContainer.appendChild(card);
   });
@@ -492,6 +503,7 @@ function buildBindingDeviceCard(device, isPrimary) {
   }
   
   const ports = DEVICE_PORTS[deviceType] || { inputs: [], outputs: [] };
+  console.log('[Binding Debug]   -> deviceType:', deviceType, '| inputs:', ports.inputs.length, '| outputs:', ports.outputs.length);
   
   const portsContainer = document.createElement('div');
   portsContainer.style.cssText = 'display:flex;gap:32px;align-items:flex-start';
@@ -558,6 +570,7 @@ function buildPortElement(device, port, direction) {
   dot.dataset.portId = port.id;
   dot.dataset.direction = direction;
   dot.title = `${device.name} - ${port.label}`;
+  console.log('[Binding Debug]       -> Port created:', direction, port.id, 'for device', device.id, device.name);
   
   dot.onmouseenter = () => {
     dot.style.transform = 'scale(1.3)';
