@@ -109,12 +109,17 @@ export function showCropModal(imageDataUrl, onCrop) {
     cropH = img.height * 0.8;
     
     const updateCropOverlay = () => {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = rect.width / canvas.width;
-      const scaleY = rect.height / canvas.height;
+      const containerRect = canvasContainer.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+      const scaleX = canvasRect.width / canvas.width;
+      const scaleY = canvasRect.height / canvas.height;
       
-      cropOverlay.style.left = (cropX * scaleX) + 'px';
-      cropOverlay.style.top = (cropY * scaleY) + 'px';
+      // Account for canvas offset within centered container
+      const offsetX = canvasRect.left - containerRect.left;
+      const offsetY = canvasRect.top - containerRect.top;
+      
+      cropOverlay.style.left = (offsetX + cropX * scaleX) + 'px';
+      cropOverlay.style.top = (offsetY + cropY * scaleY) + 'px';
       cropOverlay.style.width = (cropW * scaleX) + 'px';
       cropOverlay.style.height = (cropH * scaleY) + 'px';
       
@@ -168,9 +173,9 @@ export function showCropModal(imageDataUrl, onCrop) {
     document.onmousemove = (e) => {
       if (!activeAction) return;
       
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
+      const canvasRect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / canvasRect.width;
+      const scaleY = canvas.height / canvasRect.height;
       
       const deltaX = (e.clientX - dragStartX) * scaleX;
       const deltaY = (e.clientY - dragStartY) * scaleY;
