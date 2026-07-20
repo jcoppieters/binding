@@ -534,12 +534,9 @@ function promptAddRoomToFloor(floor) {
 
   const iconLabel = el('label', 'modal-label');
   iconLabel.textContent = 'Icoon (optioneel)';
-  const iconInput = el('input', 'modal-input');
-  iconInput.placeholder = '🛋️ 🍴 🛏️ 🚿 ...';
-  iconInput.maxLength = 4;
-  iconInput.style.width = '80px';
+  const iconPicker = createIconPicker(iconLabel, '');
 
-  body.append(nameLabel, nameInput, iconLabel, iconInput);
+  body.append(nameLabel, nameInput, iconLabel, iconPicker.container);
 
   const footer = el('div', 'modal-footer');
   const cancelBtn = el('button', 'modal-btn');
@@ -1055,12 +1052,9 @@ function promptRenameRoom(room) {
 
   const iconLabel = el('label', 'modal-label');
   iconLabel.textContent = 'Icoon';
-  const iconInput = el('input', 'modal-input');
-  iconInput.value = room.icon || '';
-  iconInput.maxLength = 4;
-  iconInput.style.width = '80px';
+  const iconPicker = createIconPicker(iconLabel, room.icon || '');
 
-  body.append(nameLabel, nameInput, iconLabel, iconInput);
+  body.append(nameLabel, nameInput, iconLabel, iconPicker.container);
 
   const footer = el('div', 'modal-footer');
   const cancelBtn = el('button', 'modal-btn');
@@ -1074,7 +1068,7 @@ function promptRenameRoom(room) {
       nameInput.style.borderColor = '#ef4444';
       return;
     }
-    dispatch({ type: 'UPDATE_ROOM', roomId: room.id, patch: { name, icon: iconInput.value.trim() || undefined } });
+    dispatch({ type: 'UPDATE_ROOM', roomId: room.id, patch: { name, icon: iconPicker.getValue() || undefined } });
     overlay.remove();
   };
 
