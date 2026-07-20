@@ -425,10 +425,7 @@ function promptAddRoom() {
 
   const iconLabel = el('label', 'modal-label');
   iconLabel.textContent = 'Icoon (optioneel)';
-  const iconInput = el('input', 'modal-input');
-  iconInput.placeholder = '🛋️ 🍴 🛏️ 🚿 ...';
-  iconInput.maxLength = 4;
-  iconInput.style.width = '80px';
+  const iconPicker = createIconPicker(iconLabel, '');
 
   const floorLabel = el('label', 'modal-label');
   floorLabel.textContent = 'Verdieping';
@@ -440,7 +437,7 @@ function promptAddRoom() {
     floorSelect.append(option);
   }
 
-  body.append(nameLabel, nameInput, iconLabel, iconInput, floorLabel, floorSelect);
+  body.append(nameLabel, nameInput, iconLabel, iconPicker.container, floorLabel, floorSelect);
 
   const footer = el('div', 'modal-footer');
   const cancelBtn = el('button', 'modal-btn');
@@ -460,7 +457,7 @@ function promptAddRoom() {
       room: {
         id: makeId(),
         name,
-        icon: iconInput.value.trim() || undefined,
+        icon: iconPicker.getValue() || undefined,
         floorId: floorSelect.value,
         canvasX: 50,
         canvasY: 50,
@@ -556,7 +553,7 @@ function promptAddRoomToFloor(floor) {
       room: {
         id: makeId(),
         name,
-        icon: iconInput.value.trim() || undefined,
+        icon: iconPicker.getValue() || undefined,
         floorId: floor.id,
         canvasX: 50,
         canvasY: 50,
