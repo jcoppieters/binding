@@ -166,6 +166,30 @@ function renderBindingPanel() {
   bindingsCanvas.style.flexDirection = 'column';
   bindingsCanvas.innerHTML = '';
   
+  // Get fresh device data from state (in case it was updated)
+  const s = state.get();
+  const freshRoom = s.project.homeView.rooms.find(r => r.id === _currentBindingContext.room.id);
+  const freshDevice = freshRoom?.devices.find(d => d.id === _currentBindingContext.device.id);
+  
+  if (!freshDevice) {
+    // Device was deleted, close panel
+    _currentBindingContext = null;
+    bindingsEmpty.style.display = 'flex';
+    bindingsCanvas.style.display = 'none';
+    return;
+  }
+  
+  // Update context with fresh data
+  _currentBindingContext.device = freshDevice;
+  _currentBindingContext.room = freshRoom;
+  
+  // Refresh other devices as well
+  _currentBindingContext.otherDevices = _currentBindingContext.otherDevices.map(otherDev => {
+    const otherRoom = s.project.homeView.rooms.find(r => r.devices.some(d => d.id === otherDev.id));
+    const fresh = otherRoom?.devices.find(d => d.id === otherDev.id);
+    return fresh ? { ...fresh, roomName: otherRoom.name } : otherDev;
+  }).filter(d => d); // Remove any deleted devices
+  
   const { device, room, otherDevices } = _currentBindingContext;
   
   // Helper: check if device is a controller (has outputs)
@@ -321,7 +345,8 @@ function buildButtonSelector(device) {
       transition:all .15s;
     `;
     
-    btn.onclick = () => {
+    btn.onclick = (e) => {
+      e.stopPropagation();
       // Update device to use this button
       const buttonUnit = device.buttons[i];
       dispatch({
@@ -376,7 +401,8 @@ function buildButtonSelector(device) {
       grid-column:1 / -1;
     `;
     
-    sensorBtn.onclick = () => {
+    sensorBtn.onclick = (e) => {
+      e.stopPropagation();
       // Update device to use temperature sensor
       const sensorUnit = device.sensors[0];
       dispatch({
@@ -697,3 +723,11 @@ function deleteWire(wireId) {
   renderBindingWires();
   showToast('Binding verwijderd', 'info');
 }
+
+// Subscribe to state changes to update binding panel when devices change
+state.subscribe((newState) => {
+  // Only re-render if binding panel is open and devices have changed
+  if (_currentBindingContext) {
+    renderBindingPanel();
+  }
+});
