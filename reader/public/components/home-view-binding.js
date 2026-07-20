@@ -195,13 +195,6 @@ function renderBindingPanel() {
   _currentBindingContext.device = freshDevice;
   _currentBindingContext.room = freshRoom;
   
-  // Refresh other devices as well
-  _currentBindingContext.otherDevices = _currentBindingContext.otherDevices.map(otherDev => {
-    const otherRoom = s.project.homeView.rooms.find(r => r.devices.some(d => d.id === otherDev.id));
-    const fresh = otherRoom?.devices.find(d => d.id === otherDev.id);
-    return fresh ? { ...fresh, roomName: otherRoom.name } : otherDev;
-  }).filter(d => d); // Remove any deleted devices
-  
   // Reload bindings from state to ensure they're in sync
   // For multi-button switches, filter by active button/sensor channelRef
   const deviceBindings = (s.project.bindings || []).filter(b => {
@@ -219,6 +212,25 @@ function renderBindingPanel() {
     return true;
   });
   _bindingWires = deviceBindings.map(b => ({ ...b }));
+  
+  // Rebuild otherDevices list based on current bindings (important for multi-button switches)
+  const connectedDeviceIds = new Set();
+  deviceBindings.forEach(b => {
+    if (b.from.deviceId !== freshDevice.id) connectedDeviceIds.add(b.from.deviceId);
+    if (b.to.deviceId !== freshDevice.id) connectedDeviceIds.add(b.to.deviceId);
+  });
+  
+  // Get connected device objects from all rooms
+  const connectedDevices = [];
+  s.project.homeView.rooms.forEach(r => {
+    r.devices.forEach(d => {
+      if (connectedDeviceIds.has(d.id)) {
+        connectedDevices.push({ ...d, roomName: r.name });
+      }
+    });
+  });
+  
+  _currentBindingContext.otherDevices = connectedDevices;
   
   const { device, room, otherDevices } = _currentBindingContext;
   

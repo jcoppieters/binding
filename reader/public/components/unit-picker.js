@@ -333,7 +333,7 @@ function selectDeviceGroup(deviceGroup) {
       channelRef: createChannelRef(deviceGroup.buttons[0]),
       
       // Display properties
-      icon: deviceGroup.hasTempSensor ? '🔳🌡️' : '🔳',
+      icon: deviceGroup.hasTempSensor ? '🔳 🌡️' : '🔳',
       color: getColorForChannelType('input_digital'),
     };
   } else {

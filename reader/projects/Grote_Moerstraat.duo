@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-20T13:53:32.355Z",
+    "modified": "2026-07-20T13:58:01.171Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -466,6 +466,45 @@
       "to": {
         "deviceId": "i2zrykxj",
         "portId": "schakel"
+      },
+      "color": "#3b82f6"
+    },
+    {
+      "id": "m9s3svmf",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 0,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "i2zrykxj",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6"
+    },
+    {
+      "id": "hlc1nr8z",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 1,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "waiiy9a8",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 16,
+          "unitAddress": 27,
+          "moduleInstanceId": "6b3y3zdh"
+        }
       },
       "color": "#3b82f6"
     }
