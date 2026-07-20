@@ -1177,6 +1177,38 @@ function showCropModal(imageDataUrl, onCrop) {
     box-shadow:0 0 0 9999px rgba(0,0,0,0.5);
   `;
   
+  // Create resize handles
+  const handles = [];
+  const handlePositions = [
+    { pos: 'nw', cursor: 'nw-resize', x: 0, y: 0 },
+    { pos: 'n', cursor: 'n-resize', x: 0.5, y: 0 },
+    { pos: 'ne', cursor: 'ne-resize', x: 1, y: 0 },
+    { pos: 'e', cursor: 'e-resize', x: 1, y: 0.5 },
+    { pos: 'se', cursor: 'se-resize', x: 1, y: 1 },
+    { pos: 's', cursor: 's-resize', x: 0.5, y: 1 },
+    { pos: 'sw', cursor: 'sw-resize', x: 0, y: 1 },
+    { pos: 'w', cursor: 'w-resize', x: 0, y: 0.5 }
+  ];
+  
+  handlePositions.forEach(h => {
+    const handle = el('div', '');
+    handle.style.cssText = `
+      position:absolute;
+      width:10px;
+      height:10px;
+      background:#fff;
+      border:2px solid #e08c00;
+      border-radius:50%;
+      cursor:${h.cursor};
+      transform:translate(-50%, -50%);
+    `;
+    handle.dataset.pos = h.pos;
+    handle.dataset.x = h.x;
+    handle.dataset.y = h.y;
+    cropOverlay.append(handle);
+    handles.push(handle);
+  });
+  
   // Load image
   const img = new Image();
   img.onload = () => {
@@ -1203,20 +1235,47 @@ function showCropModal(imageDataUrl, onCrop) {
       cropOverlay.style.top = (cropY * scaleY) + 'px';
       cropOverlay.style.width = (cropW * scaleX) + 'px';
       cropOverlay.style.height = (cropH * scaleY) + 'px';
+      
+      // Update handle positions
+      handles.forEach(handle => {
+        const hx = parseFloat(handle.dataset.x);
+        const hy = parseFloat(handle.dataset.y);
+        handle.style.left = (hx * 100) + '%';
+        handle.style.top = (hy * 100) + '%';
+      });
     };
     
     updateCropOverlay();
     window.addEventListener('resize', updateCropOverlay);
     
-    // Drag functionality
-    let isDragging = false;
+    // Drag/resize functionality
+    let activeAction = null; // 'move' or 'resize'
+    let resizeHandle = null;
     let dragStartX = 0;
     let dragStartY = 0;
     let cropStartX = 0;
     let cropStartY = 0;
+    let cropStartW = 0;
+    let cropStartH = 0;
+    
+    handles.forEach(handle => {
+      handle.onmousedown = (e) => {
+        activeAction = 'resize';
+        resizeHandle = handle.dataset.pos;
+        dragStartX = e.clientX;
+        dragStartY = e.clientY;
+        cropStartX = cropX;
+        cropStartY = cropY;
+        cropStartW = cropW;
+        cropStartH = cropH;
+        e.stopPropagation();
+        e.preventDefault();
+      };
+    });
     
     cropOverlay.onmousedown = (e) => {
-      isDragging = true;
+      if (activeAction === 'resize') return;
+      activeAction = 'move';
       dragStartX = e.clientX;
       dragStartY = e.clientY;
       cropStartX = cropX;
@@ -1225,7 +1284,7 @@ function showCropModal(imageDataUrl, onCrop) {
     };
     
     document.onmousemove = (e) => {
-      if (!isDragging) return;
+      if (!activeAction) return;
       
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
@@ -1234,14 +1293,36 @@ function showCropModal(imageDataUrl, onCrop) {
       const deltaX = (e.clientX - dragStartX) * scaleX;
       const deltaY = (e.clientY - dragStartY) * scaleY;
       
-      cropX = Math.max(0, Math.min(canvas.width - cropW, cropStartX + deltaX));
-      cropY = Math.max(0, Math.min(canvas.height - cropH, cropStartY + deltaY));
+      if (activeAction === 'move') {
+        cropX = Math.max(0, Math.min(canvas.width - cropW, cropStartX + deltaX));
+        cropY = Math.max(0, Math.min(canvas.height - cropH, cropStartY + deltaY));
+      } else if (activeAction === 'resize') {
+        const minSize = 50;
+        
+        if (resizeHandle.includes('w')) {
+          const newX = Math.max(0, Math.min(cropStartX + cropStartW - minSize, cropStartX + deltaX));
+          cropW = cropStartW + (cropStartX - newX);
+          cropX = newX;
+        }
+        if (resizeHandle.includes('e')) {
+          cropW = Math.max(minSize, Math.min(canvas.width - cropStartX, cropStartW + deltaX));
+        }
+        if (resizeHandle.includes('n')) {
+          const newY = Math.max(0, Math.min(cropStartY + cropStartH - minSize, cropStartY + deltaY));
+          cropH = cropStartH + (cropStartY - newY);
+          cropY = newY;
+        }
+        if (resizeHandle.includes('s')) {
+          cropH = Math.max(minSize, Math.min(canvas.height - cropStartY, cropStartH + deltaY));
+        }
+      }
       
       updateCropOverlay();
     };
     
     document.onmouseup = () => {
-      isDragging = false;
+      activeAction = null;
+      resizeHandle = null;
     };
   };
   img.src = imageDataUrl;
