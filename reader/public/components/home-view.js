@@ -1273,3 +1273,79 @@ function el(tag, className) {
   if (className) element.className = className;
   return element;
 }
+
+/**
+ * Create an icon picker with clickable emoji grid.
+ * @param {HTMLElement} labelElement - The label element to update with selected icon
+ * @param {string} initialValue - Initial icon value
+ * @returns {Object} - { container: HTMLElement, getValue: () => string }
+ */
+function createIconPicker(labelElement, initialValue = '') {
+  const roomIcons = ['🛋️', '🍴', '🛏️', '🚿', '🖥️', '🚪', '🏠', '📺', '🎮', '📚', '🧺', '🌿', '🎨', '🎵', '🔧'];
+  
+  let selectedIcon = initialValue;
+  
+  // Update label text
+  const updateLabel = (icon) => {
+    const baseText = labelElement.textContent.split(':')[0].trim();
+    labelElement.textContent = icon ? `${baseText}: ${icon}` : baseText;
+  };
+  
+  // Initial label update
+  if (initialValue) updateLabel(initialValue);
+  
+  // Create picker grid
+  const container = el('div', '');
+  container.style.cssText = 'display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px';
+  
+  roomIcons.forEach(icon => {
+    const btn = el('button', '');
+    btn.type = 'button';
+    btn.textContent = icon;
+    btn.style.cssText = `
+      padding:8px;
+      border:2px solid ${selectedIcon === icon ? '#e08c00' : '#e5e7eb'};
+      border-radius:6px;
+      background:${selectedIcon === icon ? '#fef9f0' : '#fff'};
+      font-size:20px;
+      cursor:pointer;
+      transition:all .15s;
+    `;
+    
+    btn.onmouseenter = () => {
+      if (selectedIcon !== icon) {
+        btn.style.borderColor = '#d1d5db';
+        btn.style.background = '#f9fafb';
+      }
+    };
+    
+    btn.onmouseleave = () => {
+      if (selectedIcon !== icon) {
+        btn.style.borderColor = '#e5e7eb';
+        btn.style.background = '#fff';
+      }
+    };
+    
+    btn.onclick = () => {
+      // Deselect all
+      container.querySelectorAll('button').forEach(b => {
+        b.style.borderColor = '#e5e7eb';
+        b.style.background = '#fff';
+      });
+      
+      // Select this one
+      selectedIcon = icon;
+      btn.style.borderColor = '#e08c00';
+      btn.style.background = '#fef9f0';
+      updateLabel(icon);
+    };
+    
+    container.append(btn);
+  });
+  
+  return {
+    container,
+    getValue: () => selectedIcon
+  };
+}
+
