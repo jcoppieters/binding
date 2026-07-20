@@ -830,7 +830,7 @@ function buildRoomCard(room) {
 
   // Devices area (positioned relative for absolute device placement)
   const devicesArea = el('div', '');
-  devicesArea.style.cssText = `flex:1;position:relative;padding:16px;border-radius:8px;background:rgba(248,249,253,0.6);overflow:hidden;${
+  devicesArea.style.cssText = `flex:1;position:relative;padding:16px;border-radius:8px;background:rgba(248,249,253,0.85);overflow:hidden;${
     room.backgroundImage 
       ? 'background-image:url(' + room.backgroundImage + ');background-size:contain;background-position:center;background-repeat:no-repeat;' 
       : ''

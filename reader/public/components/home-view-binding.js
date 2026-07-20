@@ -741,7 +741,27 @@ function renderBindingWires() {
   
   svg.innerHTML = '';
   
+  // Get all devices currently displayed in binding panel (to check their active buttons)
+  const allDevicesInPanel = [_currentBindingContext.device, ..._currentBindingContext.otherDevices];
+  
   _bindingWires.forEach(wire => {
+    // Filter wires based on active button/sensor of multi-button switches
+    // Check if 'from' device is multi-button switch with different active button
+    const fromDevice = allDevicesInPanel.find(d => d.id === wire.from.deviceId);
+    if (fromDevice?.isMultiButtonSwitch) {
+      const wireChannelRef = JSON.stringify(wire.from.channelRef);
+      const activeChannelRef = JSON.stringify(fromDevice.channelRef);
+      if (wireChannelRef !== activeChannelRef) return; // Skip this wire
+    }
+    
+    // Check if 'to' device is multi-button switch with different active button
+    const toDevice = allDevicesInPanel.find(d => d.id === wire.to.deviceId);
+    if (toDevice?.isMultiButtonSwitch) {
+      const wireChannelRef = JSON.stringify(wire.to.channelRef);
+      const activeChannelRef = JSON.stringify(toDevice.channelRef);
+      if (wireChannelRef !== activeChannelRef) return; // Skip this wire
+    }
+    
     // Find port elements
     const fromPort = document.querySelector(`[data-device-id="${wire.from.deviceId}"][data-port-id="${wire.from.portId}"]`);
     const toPort = document.querySelector(`[data-device-id="${wire.to.deviceId}"][data-port-id="${wire.to.portId}"]`);
