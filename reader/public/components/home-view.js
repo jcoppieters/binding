@@ -1098,29 +1098,31 @@ function promptAddFloorplan(room) {
     const reader = new FileReader();
     reader.onload = (evt) => {
       const dataUrl = evt.target.result;
-      dispatch({ type: 'UPDATE_ROOM', roomId: room.id, patch: { backgroundImage: dataUrl } });
-      
-      // Show toast notification
-      const toast = el('div', '');
-      toast.style.cssText = `
-        position:fixed;
-        bottom:24px;
-        right:24px;
-        background:#10b981;
-        color:#fff;
-        padding:12px 20px;
-        border-radius:8px;
-        box-shadow:0 4px 12px rgba(0,0,0,0.15);
-        font-size:14px;
-        z-index:10000;
-        animation:slideIn .3s ease-out;
-      `;
-      toast.textContent = '✓ Grondplan toegevoegd';
-      document.body.append(toast);
-      setTimeout(() => {
-        toast.style.animation = 'slideOut .3s ease-out';
-        setTimeout(() => toast.remove(), 300);
-      }, 2000);
+      showCropModal(dataUrl, (croppedDataUrl) => {
+        dispatch({ type: 'UPDATE_ROOM', roomId: room.id, patch: { backgroundImage: croppedDataUrl } });
+        
+        // Show toast notification
+        const toast = el('div', '');
+        toast.style.cssText = `
+          position:fixed;
+          bottom:24px;
+          right:24px;
+          background:#10b981;
+          color:#fff;
+          padding:12px 20px;
+          border-radius:8px;
+          box-shadow:0 4px 12px rgba(0,0,0,0.15);
+          font-size:14px;
+          z-index:10000;
+          animation:slideIn .3s ease-out;
+        `;
+        toast.textContent = '✓ Grondplan toegevoegd';
+        document.body.append(toast);
+        setTimeout(() => {
+          toast.style.animation = 'slideOut .3s ease-out';
+          setTimeout(() => toast.remove(), 300);
+        }, 2000);
+      });
     };
     reader.onerror = () => {
       alert('Fout bij laden van afbeelding');
@@ -1132,6 +1134,149 @@ function promptAddFloorplan(room) {
   
   document.body.append(fileInput);
   fileInput.click();
+}
+
+function showCropModal(imageDataUrl, onCrop) {
+  const overlay = el('div', 'modal-overlay');
+  const dlg = el('div', 'modal-dialog');
+  dlg.style.cssText = 'width:800px;max-width:95vw';
+
+  const hdr = el('div', 'modal-header');
+  hdr.innerHTML = '<strong>Grondplan bijsnijden</strong>';
+  const closeBtn = el('button', 'modal-close');
+  closeBtn.textContent = '✕';
+  closeBtn.onclick = () => overlay.remove();
+  hdr.append(closeBtn);
+
+  const body = el('div', 'modal-body');
+  body.style.padding = '16px';
+  
+  // Create canvas container
+  const canvasContainer = el('div', '');
+  canvasContainer.style.cssText = `
+    position:relative;
+    width:100%;
+    max-height:60vh;
+    overflow:auto;
+    background:#f3f4f6;
+    border-radius:8px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  `;
+  
+  const canvas = document.createElement('canvas');
+  canvas.style.cssText = 'display:block;max-width:100%;height:auto;cursor:crosshair';
+  
+  const cropOverlay = el('div', '');
+  cropOverlay.style.cssText = `
+    position:absolute;
+    border:2px solid #e08c00;
+    background:rgba(224,140,0,0.1);
+    cursor:move;
+    box-shadow:0 0 0 9999px rgba(0,0,0,0.5);
+  `;
+  
+  // Load image
+  const img = new Image();
+  img.onload = () => {
+    // Set canvas size to image size
+    canvas.width = img.width;
+    canvas.height = img.height;
+    
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    
+    // Initial crop area (80% of image, centered)
+    const cropMargin = 0.1;
+    let cropX = img.width * cropMargin;
+    let cropY = img.height * cropMargin;
+    let cropW = img.width * 0.8;
+    let cropH = img.height * 0.8;
+    
+    const updateCropOverlay = () => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = rect.width / canvas.width;
+      const scaleY = rect.height / canvas.height;
+      
+      cropOverlay.style.left = (cropX * scaleX) + 'px';
+      cropOverlay.style.top = (cropY * scaleY) + 'px';
+      cropOverlay.style.width = (cropW * scaleX) + 'px';
+      cropOverlay.style.height = (cropH * scaleY) + 'px';
+    };
+    
+    updateCropOverlay();
+    window.addEventListener('resize', updateCropOverlay);
+    
+    // Drag functionality
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let cropStartX = 0;
+    let cropStartY = 0;
+    
+    cropOverlay.onmousedown = (e) => {
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+      cropStartX = cropX;
+      cropStartY = cropY;
+      e.preventDefault();
+    };
+    
+    document.onmousemove = (e) => {
+      if (!isDragging) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      
+      const deltaX = (e.clientX - dragStartX) * scaleX;
+      const deltaY = (e.clientY - dragStartY) * scaleY;
+      
+      cropX = Math.max(0, Math.min(canvas.width - cropW, cropStartX + deltaX));
+      cropY = Math.max(0, Math.min(canvas.height - cropH, cropStartY + deltaY));
+      
+      updateCropOverlay();
+    };
+    
+    document.onmouseup = () => {
+      isDragging = false;
+    };
+  };
+  img.src = imageDataUrl;
+  
+  canvasContainer.append(canvas, cropOverlay);
+  body.append(canvasContainer);
+
+  const footer = el('div', 'modal-footer');
+  footer.style.marginTop = '16px';
+  
+  const cancelBtn = el('button', 'modal-btn');
+  cancelBtn.textContent = 'Annuleren';
+  cancelBtn.onclick = () => overlay.remove();
+  
+  const cropBtn = el('button', 'modal-btn-primary');
+  cropBtn.textContent = 'Bijsnijden';
+  cropBtn.onclick = () => {
+    // Create new canvas with cropped image
+    const croppedCanvas = document.createElement('canvas');
+    croppedCanvas.width = cropW;
+    croppedCanvas.height = cropH;
+    
+    const ctx = croppedCanvas.getContext('2d');
+    ctx.drawImage(canvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+    
+    const croppedDataUrl = croppedCanvas.toDataURL('image/png');
+    overlay.remove();
+    onCrop(croppedDataUrl);
+  };
+
+  footer.append(cancelBtn, cropBtn);
+  dlg.append(hdr, body, footer);
+  overlay.append(dlg);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+  document.body.append(overlay);
 }
 
 // ─── Add Device to Room (DEPRECATED - replaced by unit-picker.js) ────────────
