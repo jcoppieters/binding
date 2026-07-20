@@ -482,11 +482,31 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 **Tasks:**
 
-- [ ] **P7b-1** Download all binding files from connected hardware
-  - Use existing TCP protocol to fetch bind*.txt for each node
-  - Store raw binding strings per node
+- [ ] **P7b-1** Download all binding files from connected hardware **⚠️ NEEDS RESEARCH**
+  - **Current status**: TCP protocol supports **uploading** bindings (✅ `BindingWriterFSM`, `BindingUploader`)
+  - **Missing**: No download/read protocol implementation found in codebase
+  - **requestFileInfo exists**: Can fetch binding count + XOR checksum from node (for change detection)
+  - **Question for engineers**: Does the Duotecno TCP protocol support downloading bind*.txt from hardware?
+    * If YES: implement download FSM (reverse of BindingWriterFSM)
+    * If NO: **Skip P7b-1** → use P7b-1a alternative below
   - Show progress: "Downloading bindings from node 0x03... (1/15)"
   - Handle errors: missing files, connection issues, timeout
+  
+- [ ] **P7b-1a** Import binding files from local Config folder (ALTERNATIVE to P7b-1) **✅ READY NOW**
+  - **Simpler approach**: Load bind*.txt files from disk instead of hardware
+  - User workflow:
+    1. User clicks "Import bindings" in header dropdown
+    2. File picker: select Config folder (contains bind*.txt files)
+    3. Read all bind*.txt files from selected folder
+  - **Advantages**:
+    * No TCP download protocol needed
+    * Works offline (no hardware connection required)
+    * Uses existing `BindingFileParser` (already implemented ✅)
+    * Most projects already have bind*.txt files saved
+  - **Implementation**: 
+    * Native file picker via `<input type="file" webkitdirectory>` or Electron/Tauri file API
+    * Read files via FileReader API (browser) or fs module (Electron/Tauri)
+    * Pass to existing `BindingFileParser` backend
   
 - [ ] **P7b-2** Parse binding strings into structured format
   - Use `BindingFileParser` to parse each bind*.txt file
@@ -549,6 +569,94 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - Offer to create "Unknown" module placeholders for missing nodes
   - Allow user to assign correct module types before finalizing import
 
+### Phase 7c — Simple binding import (MVP - No logic blocks, no timers) **🚀 READY TO START**
+
+**Goal:** Import simple bindings from bind*.txt files on disk (Type I/N only)
+
+**Why start here:**
+- ✅ No TCP download protocol needed (works offline)
+- ✅ `BindingFileParser` already exists and works
+- ✅ Most projects have bind*.txt files saved locally
+- ✅ Can deliver value immediately without waiting for P3-8/P3-10 (logic blocks/timers)
+- ✅ Foundation for full import once visual elements are ready
+
+**Scope limitations (MVP):**
+- ✅ Type I (Immediate) and Type N (Normal) bindings only
+- ❌ No Type C (Conditional/logic blocks) - requires P3-8 first
+- ❌ No Type Td/Tf/Tr/Ti/To (Timers) - requires P3-10 first
+- ❌ No Type G (Group/Moods) - requires P4 first
+- ❌ No Type P (Property) - deferred
+- ⏳ Complex bindings → marked as "legacy" (stored but not visualized)
+
+**Implementation plan:**
+
+- [ ] **P7c-1** File picker UI for Config folder
+  - "Import bindings" button in Project dropdown menu
+  - File picker: `<input type="file" webkitdirectory multiple>` to select Config folder
+  - Display selected folder path in modal
+  - List found bind*.txt files with node addresses
+  - Continue button to proceed with import
+
+- [ ] **P7c-2** Backend API for parsing binding files
+  - `POST /api/bindings/import` endpoint
+  - Accept array of `{fileName, content}` objects
+  - Use existing `BindingFileParser` to parse each file
+  - Return structured data: `{bindings: [...], errors: [...]}`
+  - Group bindings by type: `{simple: [...], conditional: [...], timer: [...], legacy: [...]}`
+
+- [ ] **P7c-3** Match bindings to existing Rail View devices
+  - For each binding entry, extract node addresses and unit addresses
+  - Look up node address in `project.cabinets[].modules[]` and `project.woningDevices[]`
+  - Match unit addresses to channel indexes (relay 1 = unit 1, dimmer 2 = unit 2, etc.)
+  - Create mapping: `{nodeAddress, unitAddress} → {cabinetId?, moduleInstanceId?, channelIndex}`
+  - Warn about unmatched node addresses
+
+- [ ] **P7c-4** Create Home View devices for bound units (Type I/N only)
+  - For each simple binding (Type I/N):
+    * Extract input unit (controller) and output unit (controllable)
+    * Check if units already exist as Home View devices
+    * If not, create new devices in default "Imported" room
+    * Set device.channelRef to link back to Rail View unit
+  - Name devices based on unit type: "Lamp 1", "Schakelaar 2", "Dimmer 3"
+  - Store original binding entry in device metadata for later visualization
+
+- [ ] **P7c-5** Convert simple bindings to visual wires
+  - For each Type I/N binding:
+    * Map input event to port (E01 "Kort" → portId: "kort")
+    * Map output action to port (F10 "Toggle" → portId: "schakel")
+    * Create binding object: `{id, from: {deviceId, portId}, to: {deviceId, portId}, color}`
+    * Add to `project.bindings[]`
+  - Result: Visual wires appear in binding panel for imported bindings
+
+- [ ] **P7c-6** Store complex bindings as "legacy" (no visualization)
+  - Types C/Td/Tf/Tr/Ti/To/G/P → stored as legacy
+  - Create legacy binding objects: `{type: 'legacy', subtype: 'C'|'Td'|..., rawString: '...', description: 'Conditional binding: ...'}`
+  - Add to `project.legacyBindings[]` array
+  - Display count in import summary: "14 simple bindings imported, 3 legacy bindings stored"
+
+- [ ] **P7c-7** Import summary dialog
+  - Show results after import:
+    * "✅ 14 simple bindings imported and visualized"
+    * "⏳ 3 conditional bindings stored as legacy (requires logic blocks)"
+    * "⏳ 2 timer bindings stored as legacy (requires timer blocks)"
+    * "⚠️ 1 binding to unknown node 0x05 (not in Rail View)"
+  - Option to review legacy bindings
+  - Option to create missing devices as "Unknown" placeholders
+  - Accept/Cancel buttons
+
+- [ ] **P7c-8** Legacy bindings view (in binding panel)
+  - When viewing a device with legacy bindings, show separate section:
+    * "Legacy Bindings (3)" collapsible section
+    * Per legacy binding: raw string, parsed description, "Delete" button
+    * Tooltip: "This binding uses features not yet supported in visual editor"
+  - User can delete legacy binding and recreate visually
+
+**Value proposition:**
+- Installer can import 80% of bindings immediately (most are simple Type I/N)
+- Visualizes existing work in new UI without manual recreation
+- Provides clear path forward: "3 bindings need logic blocks - coming soon"
+- Foundation for full import once P3-8/P3-10 are complete
+
 ### Phase 8 — UDP Discovery & connection status
 
 - [ ] **P8-0** Subnet scan: TCP-probe port 5001 on all 254 addresses of the local subnet
@@ -602,21 +710,21 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
 
 ## Binding → wiring diagram type mapping
 
-*(See Phase 7b for import implementation details)*
+*(See Phase 7b for full import plan, Phase 7c for MVP simple import)*
 
-| Binding type | Wiring diagram element | Import status |
-|-------------|----------------------|---------------|
-| `I` Immediate | Simple wire | ✅ Ready (P7b-4) |
-| `N` Normal | Simple wire | ✅ Ready (P7b-4) |
-| `C` Conditional | Wire + NOT/AND/OR/XOR logic block | ⏳ TODO (P3-8, P7b-4) |
-| `Td` Timer Delayed | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
-| `Tf` Timer Flashing | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
-| `Tr` Timer Repeat | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
-| `Ti` Timer Interval | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
-| `To` Timer Oneshot | Wire + timer block | ⏳ TODO (P3-10, P7b-4) |
-| `G` Group | Mood (separate Mood API, not wiring diagram) | ⏳ TODO (P4) |
-| `P` Property | Property override — dedicated UI element (deferred) | ⏭️ Later |
-| *Complex* | Legacy binding (view/delete only) | ✅ Ready (P7b-5) |
+| Binding type | Wiring diagram element | Import status | Phase |
+|-------------|----------------------|---------------|-------|
+| `I` Immediate | Simple wire | ✅ **Ready NOW** | **P7c (MVP)** |
+| `N` Normal | Simple wire | ✅ **Ready NOW** | **P7c (MVP)** |
+| `C` Conditional | Wire + NOT/AND/OR/XOR logic block | ⏳ TODO (needs P3-8) | P7b-4 |
+| `Td` Timer Delayed | Wire + timer block | ⏳ TODO (needs P3-10) | P7b-4 |
+| `Tf` Timer Flashing | Wire + timer block | ⏳ TODO (needs P3-10) | P7b-4 |
+| `Tr` Timer Repeat | Wire + timer block | ⏳ TODO (needs P3-10) | P7b-4 |
+| `Ti` Timer Interval | Wire + timer block | ⏳ TODO (needs P3-10) | P7b-4 |
+| `To` Timer Oneshot | Wire + timer block | ⏳ TODO (needs P3-10) | P7b-4 |
+| `G` Group | Mood (separate Mood API, not wiring diagram) | ⏳ TODO (needs P4) | P7b-4 |
+| `P` Property | Property override — dedicated UI element (deferred) | ⏭️ Later | — |
+| *Complex* | Legacy binding (view/delete only) | ✅ Ready NOW | **P7c-6** |
 
 ---
 
