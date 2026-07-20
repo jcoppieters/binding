@@ -11,4 +11,6 @@
   -  in public and src
   - 
 
-
+- datastructures in the xxx.duo file
+  - there is a node address in every unit ??
+  - I see multiple definitions of the same units and/or nodes, can they all refer to an array such as the "discovered nodes", all others (rooms, rail, bindings) could refer to there by node and unit address.

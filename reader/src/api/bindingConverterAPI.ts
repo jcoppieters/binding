@@ -133,17 +133,40 @@ router.post('/convert', async (req, res) => {
         const functionCode = extractFunctionCode(output, binding.content);
         const outputPortId = FUNCTION_TO_PORT[functionCode] || 'schakel';
 
+        // Build from/to with channelRef for multi-button switches
+        const fromBinding: any = {
+          deviceId: inputDevice.id,
+          portId: inputPortId
+        };
+        
+        // If input device is a multi-button switch, add channelRef to specify which button
+        if (inputDevice.matchedButton || inputDevice.matchedSensor) {
+          fromBinding.channelRef = {
+            nodeAddress: input.nodeAddress,
+            unitAddress: input.unitAddress,
+            moduleInstanceId: inputDevice.channelRef?.moduleInstanceId || inputDevice.id
+          };
+        }
+        
+        const toBinding: any = {
+          deviceId: outputDevice.id,
+          portId: outputPortId
+        };
+        
+        // If output device is multi-channel, add channelRef
+        if (outputDevice.matchedButton || outputDevice.matchedSensor) {
+          toBinding.channelRef = {
+            nodeAddress: output.nodeAddress,
+            unitAddress: output.unitAddress,
+            moduleInstanceId: outputDevice.channelRef?.moduleInstanceId || outputDevice.id
+          };
+        }
+
         // Create visual binding
         const visualBinding = {
           id: `imported-${binding.nodeAddress}-${binding.bindingNumber}`,
-          from: {
-            deviceId: inputDevice.id,
-            portId: inputPortId
-          },
-          to: {
-            deviceId: outputDevice.id,
-            portId: outputPortId
-          },
+          from: fromBinding,
+          to: toBinding,
           color: '#3b82f6', // Default blue
           imported: true,
           sourceFile: binding.fileName,
@@ -267,9 +290,40 @@ function buildHomeDeviceMap(project: any): Map<string, any> {
 
   for (const room of (project.homeView?.rooms || [])) {
     for (const device of (room.devices || [])) {
+      // Check primary channelRef
       if (device.channelRef) {
         const key = `${device.channelRef.nodeAddress}-${device.channelRef.unitAddress}`;
         map.set(key, device);
+      }
+      
+      // Check multi-button switches (buttons array)
+      if (device.buttons && Array.isArray(device.buttons)) {
+        for (const button of device.buttons) {
+          if (button.ref || button.channelRef) {
+            const ref = button.ref || button.channelRef;
+            const key = `${ref.nodeAddress}-${ref.unitAddress}`;
+            // Store the device, but also store which button was matched
+            map.set(key, {
+              ...device,
+              matchedButton: button,
+              matchedButtonIndex: device.buttons.indexOf(button)
+            });
+          }
+        }
+      }
+      
+      // Check sensors array (for multi-button switches with temp sensors)
+      if (device.sensors && Array.isArray(device.sensors)) {
+        for (const sensor of device.sensors) {
+          if (sensor.ref || sensor.channelRef) {
+            const ref = sensor.ref || sensor.channelRef;
+            const key = `${ref.nodeAddress}-${ref.unitAddress}`;
+            map.set(key, {
+              ...device,
+              matchedSensor: sensor
+            });
+          }
+        }
       }
     }
   }
@@ -295,12 +349,17 @@ function createDeviceFromRail(railDevice: any, role: 'input' | 'output'): any {
     deviceType = 'relay';
   } else if (railDevice.channelType === 'motor_updown' || railDevice.channelType === 'motor_polar') {
     deviceType = 'motor';
+  } else if (railDevice.channelType === 'mood') {
+    deviceType = 'mood';
   }
+
+  // For discoveredNodes, use the unit name; otherwise use model + unit
+  const deviceName = railDevice.name || `${railDevice.model || 'Device'} U${railDevice.unitAddress}`;
 
   return {
     id: deviceId,
     type: deviceType,
-    name: `${railDevice.model || 'Device'} U${railDevice.unitAddress}`,
+    name: deviceName,
     x: 0, // Will be positioned by frontend
     y: 0,
     channelRef: {

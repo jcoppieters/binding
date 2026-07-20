@@ -269,21 +269,26 @@ export function openImportBindingsModal() {
         }
 
         // Add devices to imported room
-        for (const device of converted.devicesToCreate) {
-          // Simple grid positioning
-          const index = importedRoom.devices.length;
+        const startIndex = importedRoom.devices.length;
+        converted.devicesToCreate.forEach((device, i) => {
+          // Simple grid positioning - 5 columns, 120px spacing
+          const index = startIndex + i;
           device.x = 50 + (index % 5) * 120;
           device.y = 50 + Math.floor(index / 5) * 100;
+          
+          console.log(`[import] Adding device ${device.name} at (${device.x}, ${device.y})`);
           
           dispatch({
             type: 'ADD_DEVICE_TO_ROOM',
             roomId: importedRoom.id,
             device
           });
-        }
+        });
 
         // Add bindings to project
         for (const binding of converted.visualBindings) {
+          console.log(`[import] Adding binding: ${binding.from.deviceId} (${binding.from.portId}) → ${binding.to.deviceId} (${binding.to.portId})`);
+          
           dispatch({
             type: 'ADD_BINDING',
             binding
