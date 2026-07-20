@@ -1,0 +1,298 @@
+/**
+ * Binding Converter API
+ * 
+ * Converts parsed legacy bind*.txt bindings to visual binding format
+ */
+
+import { Router } from 'express';
+import { BindingType } from '../models/binding.js';
+
+const router = Router();
+
+/**
+ * Event code to port mapping (for input devices - controllers)
+ */
+const EVENT_TO_PORT: Record<number, string> = {
+  0x01: 'kort',   // Short press
+  0x02: 'lang',   // Long press
+  0x03: 'puls',   // Pulse/toggle (used for simple toggle bindings)
+  0x04: 'status'  // Status request
+};
+
+/**
+ * Function code to port mapping (for output devices - controllables)
+ * Based on bindingEditorAPI.ts and hardware specs
+ */
+const FUNCTION_TO_PORT: Record<number, string> = {
+  0xFA6: 'schakel',  // Toggle
+  0xFA2: 'aan',      // Turn on
+  0xFA4: 'uit',      // Turn off
+  0xFB6: 'op',       // Motor up / dim up
+  0xFB4: 'neer',     // Motor down / dim down
+  0xF9F: 'trigger',  // Scene/Mood trigger
+};
+
+/**
+ * POST /convert
+ * 
+ * Convert parsed bindings to visual binding format
+ * 
+ * Body: {
+ *   bindings: Array<ParsedBinding>,
+ *   project: Project (with railView for device lookup)
+ * }
+ * 
+ * Response: {
+ *   visualBindings: Array<VisualBinding>,
+ *   devicesToCreate: Array<DeviceDefinition>,
+ *   warnings: Array<string>
+ * }
+ */
+router.post('/convert', async (req, res) => {
+  try {
+    const { bindings, project } = req.body;
+
+    if (!bindings || !Array.isArray(bindings)) {
+      return res.status(400).json({ error: 'Invalid request: bindings array required' });
+    }
+
+    if (!project) {
+      return res.status(400).json({ error: 'Invalid request: project required' });
+    }
+
+    const visualBindings = [];
+    const devicesToCreate = [];
+    const warnings = [];
+
+    // Build lookup maps
+    const railDeviceMap = buildRailDeviceMap(project);
+    const homeDeviceMap = buildHomeDeviceMap(project);
+
+    console.log(`[converter] Converting ${bindings.length} bindings...`);
+    console.log(`[converter] Rail devices: ${railDeviceMap.size}, Home devices: ${homeDeviceMap.size}`);
+
+    // Convert each simple binding
+    for (const binding of bindings) {
+      try {
+        // Only process Type I (Immediate) and Type N (Normal)
+        if (binding.bindingType !== BindingType.IMMEDIATE && binding.bindingType !== BindingType.NORMAL) {
+          continue; // Skip complex bindings
+        }
+
+        if (!binding.inputUnits || binding.inputUnits.length === 0) {
+          warnings.push(`Binding ${binding.bindingNumber}: No input unit defined`);
+          continue;
+        }
+
+        if (!binding.outputUnits || binding.outputUnits.length === 0) {
+          warnings.push(`Binding ${binding.bindingNumber}: No output unit defined`);
+          continue;
+        }
+
+        const input = binding.inputUnits[0];
+        const output = binding.outputUnits[0];
+
+        // Find or create input device (controller)
+        const inputKey = `${input.nodeAddress}-${input.unitAddress}`;
+        let inputDevice = homeDeviceMap.get(inputKey);
+        
+        if (!inputDevice) {
+          const railDevice = railDeviceMap.get(inputKey);
+          if (!railDevice) {
+            warnings.push(`Binding ${binding.bindingNumber}: Input device not found (node 0x${input.nodeAddress.toString(16)}, unit ${input.unitAddress})`);
+            continue;
+          }
+          
+          // Create Home View device for this input
+          inputDevice = createDeviceFromRail(railDevice, 'input');
+          devicesToCreate.push(inputDevice);
+          homeDeviceMap.set(inputKey, inputDevice);
+        }
+
+        // Find or create output device (controllable)
+        const outputKey = `${output.nodeAddress}-${output.unitAddress}`;
+        let outputDevice = homeDeviceMap.get(outputKey);
+        
+        if (!outputDevice) {
+          const railDevice = railDeviceMap.get(outputKey);
+          if (!railDevice) {
+            warnings.push(`Binding ${binding.bindingNumber}: Output device not found (node 0x${output.nodeAddress.toString(16)}, unit ${output.unitAddress})`);
+            continue;
+          }
+          
+          // Create Home View device for this output
+          outputDevice = createDeviceFromRail(railDevice, 'output');
+          devicesToCreate.push(outputDevice);
+          homeDeviceMap.set(outputKey, outputDevice);
+        }
+
+        // Map event code to port
+        const inputPortId = EVENT_TO_PORT[input.event || 0x03] || 'puls';
+        
+        // Map function code to port (extract from output content)
+        const functionCode = extractFunctionCode(output, binding.content);
+        const outputPortId = FUNCTION_TO_PORT[functionCode] || 'schakel';
+
+        // Create visual binding
+        const visualBinding = {
+          id: `imported-${binding.nodeAddress}-${binding.bindingNumber}`,
+          from: {
+            deviceId: inputDevice.id,
+            portId: inputPortId
+          },
+          to: {
+            deviceId: outputDevice.id,
+            portId: outputPortId
+          },
+          color: '#3b82f6', // Default blue
+          imported: true,
+          sourceFile: binding.fileName,
+          bindingNumber: binding.bindingNumber
+        };
+
+        visualBindings.push(visualBinding);
+
+      } catch (err) {
+        const error = err instanceof Error ? err : new Error(String(err));
+        warnings.push(`Binding ${binding.bindingNumber}: ${error.message}`);
+      }
+    }
+
+    console.log(`[converter] Converted ${visualBindings.length} bindings, ${devicesToCreate.length} devices to create, ${warnings.length} warnings`);
+
+    res.json({
+      visualBindings,
+      devicesToCreate,
+      warnings
+    });
+
+  } catch (err) {
+    console.error('[converter] Error:', err);
+    const error = err instanceof Error ? err : new Error(String(err));
+    res.status(500).json({ error: error.message || 'Conversion failed' });
+  }
+});
+
+/**
+ * Build a map of Rail View devices by node-unit key
+ */
+function buildRailDeviceMap(project: any): Map<string, any> {
+  const map = new Map();
+
+  // Add cabinet modules
+  for (const cabinet of (project.railView?.cabinets || [])) {
+    for (const module of (cabinet.modules || [])) {
+      if (module.nodeAddress != null && module.channelGroups) {
+        // For each channel group, create entries for individual units
+        for (const group of module.channelGroups) {
+          const count = group.count || 1;
+          for (let i = 0; i < count; i++) {
+            const unitAddress = (group.startUnit || 0) + i;
+            const key = `${module.nodeAddress}-${unitAddress}`;
+            map.set(key, {
+              ...module,
+              cabinetId: cabinet.id,
+              channelType: group.type,
+              channelIndex: i,
+              unitAddress,
+              location: 'cabinet'
+            });
+          }
+        }
+      }
+    }
+  }
+
+  // Add woning devices
+  for (const device of (project.railView?.woningDevices || [])) {
+    if (device.nodeAddress != null && device.channelGroups) {
+      for (const group of device.channelGroups) {
+        const count = group.count || 1;
+        for (let i = 0; i < count; i++) {
+          const unitAddress = (group.startUnit || 0) + i;
+          const key = `${device.nodeAddress}-${unitAddress}`;
+          map.set(key, {
+            ...device,
+            channelType: group.type,
+            channelIndex: i,
+            unitAddress,
+            location: 'woning'
+          });
+        }
+      }
+    }
+  }
+
+  return map;
+}
+
+/**
+ * Build a map of Home View devices by node-unit key
+ */
+function buildHomeDeviceMap(project: any): Map<string, any> {
+  const map = new Map();
+
+  for (const room of (project.homeView?.rooms || [])) {
+    for (const device of (room.devices || [])) {
+      if (device.channelRef) {
+        const key = `${device.channelRef.nodeAddress}-${device.channelRef.unitAddress}`;
+        map.set(key, device);
+      }
+    }
+  }
+
+  return map;
+}
+
+/**
+ * Create a Home View device definition from a Rail View device
+ */
+function createDeviceFromRail(railDevice: any, role: 'input' | 'output'): any {
+  const deviceId = `imported-${railDevice.nodeAddress}-${railDevice.unitAddress}-${Date.now()}`;
+  
+  // Determine device type based on channel type and role
+  let deviceType = 'lamp';
+  if (railDevice.channelType === 'input_digital') {
+    deviceType = 'input';
+  } else if (railDevice.channelType === 'input_analog' || railDevice.channelType === 'temperature') {
+    deviceType = 'sensor';
+  } else if (railDevice.channelType?.startsWith('dimmer_')) {
+    deviceType = 'dimmer';
+  } else if (railDevice.channelType?.startsWith('relay_')) {
+    deviceType = 'relay';
+  } else if (railDevice.channelType === 'motor_updown' || railDevice.channelType === 'motor_polar') {
+    deviceType = 'motor';
+  }
+
+  return {
+    id: deviceId,
+    type: deviceType,
+    name: `${railDevice.model || 'Device'} U${railDevice.unitAddress}`,
+    x: 0, // Will be positioned by frontend
+    y: 0,
+    channelRef: {
+      nodeAddress: railDevice.nodeAddress,
+      unitAddress: railDevice.unitAddress,
+      moduleInstanceId: railDevice.id,
+      channelIndex: railDevice.channelIndex
+    },
+    imported: true
+  };
+}
+
+/**
+ * Extract function code from output unit
+ * Format: A0000XXUxxFxxxDxxxxS where Fxxx is the function code
+ */
+function extractFunctionCode(output: any, content: string): number {
+  // Try to parse from content string
+  const match = content.match(/F([0-9A-F]{2,3})/i);
+  if (match) {
+    return parseInt(match[1], 16);
+  }
+  
+  // Default to toggle
+  return 0xFA6;
+}
+
+export default router;

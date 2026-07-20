@@ -14,6 +14,7 @@ import { MasterConnectionService } from './services/MasterConnectionService.js';
 // Import API modules
 import bindingEditorAPI from './api/bindingEditorAPI.js';
 import bindingImportAPI from './api/bindingImportAPI.js';
+import bindingConverterAPI from './api/bindingConverterAPI.js';
 import { createInstallationAPI } from './api/installationAPI.js';
 import { createBindingsAPI } from './api/bindingsAPI.js';
 import { createUploadAPI } from './api/uploadAPI.js';
@@ -129,7 +130,10 @@ app.use('/api/editor', bindingEditorAPI);
 
 // Binding import (from disk) - mount before regular bindings API to avoid conflicts
 app.use('/api/import', bindingImportAPI);
+Binding converter (legacy → visual format)
+app.use('/api/convert', bindingConverterAPI);
 
+// 
 // Module database (product catalogue)
 app.use('/api', createModulesAPI());
 

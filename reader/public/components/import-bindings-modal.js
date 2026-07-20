@@ -233,16 +233,78 @@ export function openImportBindingsModal() {
 
       console.log('[import] Result:', result);
 
+      // Convert simple bindings to visual format
+      console.log('[import] Converting bindings to visual format...');
+      
+      const currentProject = state.get().project;
+      
+      const convertRes = await fetch('/api/convert/convert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          bindings: result.bindings.simple,
+          project: currentProject
+        })
+      });
+
+      if (!convertRes.ok) {
+        throw new Error(`Conversion failed: ${convertRes.statusText}`);
+      }
+
+      const converted = await convertRes.json();
+      console.log('[import] Converted:', converted);
+
+      // Add converted bindings and devices to project
+      if (converted.devicesToCreate.length > 0 || converted.visualBindings.length > 0) {
+        // Create "Imported" room if it doesn't exist
+        let importedRoom = currentProject.homeView.rooms.find(r => r.name === 'Geïmporteerd');
+        if (!importedRoom) {
+          importedRoom = {
+            id: `room-imported-${Date.now()}`,
+            name: 'Geïmporteerd',
+            floorId: currentProject.homeView.floors[0]?.id || 'floor-0',
+            devices: []
+          };
+          dispatch({ type: 'ADD_ROOM', room: importedRoom });
+        }
+
+        // Add devices to imported room
+        for (const device of converted.devicesToCreate) {
+          // Simple grid positioning
+          const index = importedRoom.devices.length;
+          device.x = 50 + (index % 5) * 120;
+          device.y = 50 + Math.floor(index / 5) * 100;
+          
+          dispatch({
+            type: 'ADD_DEVICE_TO_ROOM',
+            roomId: importedRoom.id,
+            device
+          });
+        }
+
+        // Add bindings to project
+        for (const binding of converted.visualBindings) {
+          dispatch({
+            type: 'ADD_BINDING',
+            binding
+          });
+        }
+      }
+
       if (statusDiv) {
         const msg = [
-          `✅ Parsing complete:`,
+          `✅ Import voltooid!`,
           `📁 ${result.filesParsed} files parsed`,
           `📊 ${result.totalBindings} total bindings`,
           `✅ ${result.simpleBindings} simple (Type I/N)`,
-          `⏳ ${result.complexBindings} complex (C/T types)`,
+          `⏳ ${result.complexBindings} complex (opgeslagen als legacy)`,
+          ``,
+          `🔄 Conversie:`,
+          `➕ ${converted.devicesToCreate.length} apparaten aangemaakt`,
+          `🔗 ${converted.visualBindings.length} bindings toegevoegd`,
         ];
-        if (result.errors && result.errors.length > 0) {
-          msg.push(`⚠️ ${result.errors.length} errors`);
+        if (converted.warnings && converted.warnings.length > 0) {
+          msg.push(`⚠️ ${converted.warnings.length} waarschuwingen`);
         }
         statusDiv.innerHTML = msg.join('<br>');
         statusDiv.style.background = '#e8f5e9';
@@ -254,7 +316,7 @@ export function openImportBindingsModal() {
       const bindingsDetail = document.createElement('div');
       bindingsDetail.style.cssText = 'margin-top:16px;padding:12px;border:1px solid #eef1f8;border-radius:6px;background:#f9fafb;max-height:300px;overflow-y:auto';
       
-      let detailHTML = '<div style="font-size:12px;font-weight:600;color:#4a5568;margin-bottom:8px">Parsed Bindings by File</div>';
+      let detailHTML = '<div style="font-size:12px;font-weight:600;color:#4a5568;margin-bottom:8px">Geïmporteerde Bindings per Bestand</div>';
       
       // Group bindings by file
       const bindingsByFile = {};
@@ -282,17 +344,25 @@ export function openImportBindingsModal() {
         `;
       }
       
+      // Add warnings if any
+      if (converted.warnings && converted.warnings.length > 0) {
+        detailHTML += '<div style="margin-top:12px;font-size:12px;font-weight:600;color:#ff9800;margin-bottom:4px">⚠️ Waarschuwingen</div>';
+        for (const warning of converted.warnings.slice(0, 10)) { // Show first 10 warnings
+          detailHTML += `<div style="padding:4px 8px;font-size:11px;color:#6a7899;border-left:2px solid #ff9800;margin-bottom:2px">${warning}</div>`;
+        }
+        if (converted.warnings.length > 10) {
+          detailHTML += `<div style="padding:4px 8px;font-size:11px;color:#a0aaba;font-style:italic">... en ${converted.warnings.length - 10} meer</div>`;
+        }
+      }
+      
       bindingsDetail.innerHTML = detailHTML;
       
       if (statusDiv && statusDiv.parentNode) {
         statusDiv.parentNode.insertBefore(bindingsDetail, statusDiv.nextSibling);
       }
 
-      // Update project with imported bindings
-      // TODO: This is where we'll add the bindings to the project
-      // For now, just show success message
-
-      showToast(`Import geslaagd: ${result.simpleBindings} eenvoudige bindings geïmporteerd`, 'success');
+      // Show success message
+      showToast(`Import geslaagd: ${converted.visualBindings.length} bindings en ${converted.devicesToCreate.length} apparaten toegevoegd`, 'success');
       
       // Don't auto-close, let user review the results
       submitBtn.textContent = 'Sluiten';
