@@ -324,7 +324,6 @@ export function mount(container) {
 /** Wire buttons (called from main.js after DOM ready) */
 export function wireButtons() {
   document.getElementById('btn-add-room')?.addEventListener('click', () => promptAddRoom());
-  document.getElementById('btn-add-room-toolbar')?.addEventListener('click', () => promptAddRoom());
   document.getElementById('btn-add-room-empty')?.addEventListener('click', () => promptAddRoom());
 }
 

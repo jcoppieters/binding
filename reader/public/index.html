@@ -39,7 +39,7 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
 
 /* ── Sidebar ─────────────────────────────────────────────────────────────── */
 .sidebar{width:210px;background:#fff;border-right:1px solid #dde3ef;display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
-.sidebar-section{padding:12px 8px 6px}
+.sidebar-section{padding:8px}
 .sidebar-label{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:#a0aaba;font-weight:600;margin-bottom:8px}
 .sidebar-item{padding:7px 6px;border-radius:6px;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;color:#4a5568;transition:background .12s,color .12s}
 .sidebar-item:hover{background:#f0f4fc;color:#1a1f2e}
@@ -176,11 +176,6 @@ header{display:flex;align-items:center;gap:14px;padding:0 20px;height:52px;backg
 
   <!-- ── Home View ──────────────────────────────────────────────────────── -->
   <div class="canvas-area" id="home-view" style="display:none;flex-direction:column">
-    <div class="toolbar">
-      <button class="tool-btn" id="btn-add-room-toolbar">＋ Kamer</button>
-      <button class="tool-btn" id="btn-import-floorplan">🗺️ Grondplan</button>
-    </div>
-    
     <!-- Top panel: Rooms with horizontal scroll -->
     <div id="home-rooms-panel" style="flex:2;min-height:200px;display:flex;flex-direction:column;border-bottom:1px solid #dde3ef">
       <div id="home-canvas" style="flex:1;overflow:auto;display:flex;align-items:flex-start;gap:24px;padding:20px">
