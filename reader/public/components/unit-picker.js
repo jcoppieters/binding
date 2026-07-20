@@ -6,11 +6,11 @@
  */
 
 import { state, dispatch } from '../app/state.js';
-import { getAllUnitsWithUsage, getAvailableUnits, createChannelRef } from '../app/unit-helpers.js';
+import { getAllUnitsWithUsage, getAvailableUnits, createChannelRef, groupUnitsIntoDevices } from '../app/unit-helpers.js';
 
 let _currentRoomId = null;
-let _allUnits = [];
-let _filteredUnits = [];
+let _allDeviceGroups = [];
+let _filteredDeviceGroups = [];
 let _filterType = 'all'; // 'all' | 'controller' | 'controllable'
 let _searchQuery = '';
 
@@ -32,8 +32,14 @@ export function openUnitPicker(roomId) {
   const modules = s.modules;
   
   // Generate all units with usage tracking
-  _allUnits = getAllUnitsWithUsage(s.project, modules);
-  _filteredUnits = _allUnits;
+  const allUnits = getAllUnitsWithUsage(s.project, modules);
+  
+  // Get only available (unused) units
+  const availableUnits = allUnits.filter(u => !u.usage);
+  
+  // Group units into device groups (multi-button switches grouped together)
+  _allDeviceGroups = groupUnitsIntoDevices(availableUnits, modules);
+  _filteredDeviceGroups = _allDeviceGroups;
   _filterType = 'all';
   _searchQuery = '';
   
@@ -139,19 +145,44 @@ function renderPicker() {
 function applyFilters() {
   // Filter by type
   if (_filterType === 'all') {
-    _filteredUnits = _allUnits.filter(u => !u.usage); // Only unused
-  } else {
-    _filteredUnits = getAvailableUnits(_allUnits, _filterType);
+    _filteredDeviceGroups = _allDeviceGroups;
+  } else if (_filterType === 'controller') {
+    // Controllers: input_digital (switches)
+    _filteredDeviceGroups = _allDeviceGroups.filter(g => {
+      if (g.type === 'multi-button-switch') return true; // Switches are controllers
+      if (g.type === 'single') {
+        return g.unit.channelType === 'input_digital' || g.unit.channelType === 'input_analog';
+      }
+      return false;
+    });
+  } else if (_filterType === 'controllable') {
+    // Controllables: outputs (dimmers, relays, motors)
+    _filteredDeviceGroups = _allDeviceGroups.filter(g => {
+      if (g.type === 'multi-button-switch') return false; // Switches are not controllable
+      if (g.type === 'single') {
+        const ct = g.unit.channelType;
+        return ct.startsWith('dimmer_') || ct.startsWith('relay_') || ct.startsWith('motor_');
+      }
+      return false;
+    });
   }
   
   // Filter by search query
   if (_searchQuery) {
-    _filteredUnits = _filteredUnits.filter(u => 
-      u.label.toLowerCase().includes(_searchQuery) ||
-      u.moduleName.toLowerCase().includes(_searchQuery) ||
-      u.moduleModel.toLowerCase().includes(_searchQuery) ||
-      u.cabinetName?.toLowerCase().includes(_searchQuery)
-    );
+    _filteredDeviceGroups = _filteredDeviceGroups.filter(g => {
+      if (g.type === 'multi-button-switch') {
+        return g.label.toLowerCase().includes(_searchQuery) ||
+               g.moduleName.toLowerCase().includes(_searchQuery) ||
+               g.moduleModel.toLowerCase().includes(_searchQuery) ||
+               g.cabinetName?.toLowerCase().includes(_searchQuery);
+      } else {
+        const u = g.unit;
+        return u.label.toLowerCase().includes(_searchQuery) ||
+               u.moduleName.toLowerCase().includes(_searchQuery) ||
+               u.moduleModel.toLowerCase().includes(_searchQuery) ||
+               u.cabinetName?.toLowerCase().includes(_searchQuery);
+      }
+    });
   }
   
   // Re-render list
@@ -162,31 +193,37 @@ function applyFilters() {
 function renderUnitsList(container) {
   container.innerHTML = '';
   
-  if (_filteredUnits.length === 0) {
+  if (_filteredDeviceGroups.length === 0) {
     container.innerHTML = `
       <div style="text-align:center;padding:40px;color:#9ca3af">
         <div style="font-size:48px;margin-bottom:16px">🔍</div>
-        <div style="font-size:14px;font-weight:500;color:#6b7280">Geen beschikbare kanalen</div>
+        <div style="font-size:14px;font-weight:500;color:#6b7280">Geen beschikbare apparaten</div>
         <div style="font-size:12px;margin-top:6px">Voeg modules toe in Rail View of pas je zoekopdracht aan</div>
       </div>
     `;
     return;
   }
   
-  // Group by module (using moduleInstanceId for unique grouping)
+  // Group by cabinet/module
   const grouped = {};
-  for (const unit of _filteredUnits) {
-    const key = unit.moduleInstanceId || unit.woningDeviceId || unit.moduleModel;
+  for (const deviceGroup of _filteredDeviceGroups) {
+    const key = deviceGroup.type === 'multi-button-switch' 
+      ? (deviceGroup.moduleInstanceId || deviceGroup.woningDeviceId || deviceGroup.moduleModel)
+      : (deviceGroup.unit.moduleInstanceId || deviceGroup.unit.woningDeviceId || deviceGroup.unit.moduleModel);
+      
+    const moduleName = deviceGroup.type === 'multi-button-switch' ? deviceGroup.moduleName : deviceGroup.unit.moduleName;
+    const cabinetName = deviceGroup.type === 'multi-button-switch' ? deviceGroup.cabinetName : deviceGroup.unit.cabinetName;
+    const nodeAddress = deviceGroup.type === 'multi-button-switch' ? deviceGroup.nodeAddress : deviceGroup.unit.nodeAddress;
+    
     if (!grouped[key]) {
       grouped[key] = {
-        moduleName: unit.moduleName,
-        moduleModel: unit.moduleModel,
-        cabinetName: unit.cabinetName,
-        nodeAddress: unit.nodeAddress,
-        units: [],
+        moduleName,
+        cabinetName,
+        nodeAddress,
+        deviceGroups: [],
       };
     }
-    grouped[key].units.push(unit);
+    grouped[key].deviceGroups.push(deviceGroup);
   }
   
   // Render groups
@@ -198,15 +235,15 @@ function renderUnitsList(container) {
     groupHeader.innerHTML = `<span>📦 ${group.moduleName}${nodeHex}</span>`;
     container.append(groupHeader);
     
-    // Units in this module
-    for (const unit of group.units) {
-      const card = createUnitCard(unit);
+    // Device groups in this module
+    for (const deviceGroup of group.deviceGroups) {
+      const card = createDeviceGroupCard(deviceGroup);
       container.append(card);
     }
   }
 }
 
-function createUnitCard(unit) {
+function createDeviceGroupCard(deviceGroup) {
   const card = document.createElement('div');
   card.style.cssText = 'padding:12px 16px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:8px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:space-between';
   
@@ -219,41 +256,32 @@ function createUnitCard(unit) {
     card.style.borderColor = '#e5e7eb';
   };
   
-  card.onclick = () => selectUnit(unit);
+  card.onclick = () => selectDeviceGroup(deviceGroup);
   
   const left = document.createElement('div');
   left.style.cssText = 'display:flex;align-items:center;gap:12px;flex:1';
   
   const icon = document.createElement('div');
   icon.style.cssText = 'font-size:24px;flex-shrink:0';
-  icon.textContent = unit.icon;
+  icon.textContent = deviceGroup.type === 'multi-button-switch' ? deviceGroup.icon : deviceGroup.unit.icon;
   
   const info = document.createElement('div');
+  info.style.cssText = 'flex:1;min-width:0';
   
-  // Map channel type to readable plugin type
-  const channelTypeLabels = {
-    dimmer_le: 'LE fase aansnijding',
-    dimmer_te: 'TE fase afsnijding',
-    dimmer_pwm: 'PWM LED',
-    dimmer_dc: '0-10V / 1-10V',
-    relay_no: 'Relais NO',
-    relay_nc: 'Relais NC',
-    relay_ssr: 'Relais SSR',
-    motor_updown: 'Motor op/neer',
-    motor_polar: 'Motor polair',
-    input_digital: 'Digitale ingang',
-    input_analog: 'Analoge ingang',
-  };
-  const channelLabel = channelTypeLabels[unit.channelType] || unit.channelType;
-  const unitHex = `0x${unit.unitAddress.toString(16).toUpperCase().padStart(2, '0')}`;
+  const name = document.createElement('div');
+  name.style.cssText = 'font-size:13px;font-weight:500;color:#1a1f2e;margin-bottom:2px';
+  name.textContent = deviceGroup.type === 'multi-button-switch' ? deviceGroup.label : deviceGroup.unit.label;
   
-  info.innerHTML = `
-    <div style="font-size:14px;font-weight:500;color:#1a1f2e">${unit.label}</div>
-    <div style="font-size:12px;color:#6a7899;margin-top:2px">
-      ${channelLabel} · Unit ${unitHex}
-    </div>
-  `;
+  const details = document.createElement('div');
+  details.style.cssText = 'font-size:11px;color:#6a7899';
+  if (deviceGroup.type === 'multi-button-switch') {
+    details.textContent = deviceGroup.cabinetName || '';
+  } else {
+    const unit = deviceGroup.unit;
+    details.textContent = `${unit.cabinetName || ''} • Unit ${unit.unitAddress}`;
+  }
   
+  info.append(name, details);
   left.append(icon, info);
   
   const badge = document.createElement('div');
@@ -265,38 +293,68 @@ function createUnitCard(unit) {
   return card;
 }
 
-function selectUnit(unit) {
+function selectDeviceGroup(deviceGroup) {
+  const s = state.get();
+  const room = s.project.homeView.rooms.find(r => r.id === _currentRoomId);
+  if (!room) return;
+function selectDeviceGroup(deviceGroup) {
   const s = state.get();
   const room = s.project.homeView.rooms.find(r => r.id === _currentRoomId);
   if (!room) return;
   
   // Prompt for custom name
-  const defaultName = unit.label;
+  const defaultName = deviceGroup.type === 'multi-button-switch' 
+    ? deviceGroup.moduleName 
+    : deviceGroup.unit.label;
   const customName = prompt(`Geef dit apparaat een naam:`, defaultName);
   if (!customName) return; // Cancelled
   
   // Find available position (avoiding collisions)
   const { x, y } = findAvailablePosition(room);
   
-  // Detect multi-button switches (Essence, Serenity, etc.)
-  const buttonInfo = detectMultiButtonSwitch(unit, s);
+  let device;
   
-  // Create device with channel reference
-  const device = {
-    id: makeId(),
-    type: mapChannelTypeToDeviceType(unit.channelType),
-    name: customName,
-    channelRef: createChannelRef(unit),
-    x,
-    y,
-    
-    // Store display properties from unit
-    icon: unit.icon,
-    color: getColorForChannelType(unit.channelType),
-    
-    // Multi-button switch info
-    ...buttonInfo,
-  };
+  if (deviceGroup.type === 'multi-button-switch') {
+    // Multi-button switch: store all units and default to first button
+    device = {
+      id: makeId(),
+      type: 'input',
+      name: customName,
+      x,
+      y,
+      
+      // Multi-button switch specific data
+      isMultiButtonSwitch: true,
+      buttonCount: deviceGroup.buttonCount,
+      hasTempSensor: deviceGroup.hasTempSensor,
+      buttons: deviceGroup.buttons.map(u => ({...u, ref: createChannelRef(u)})),
+      sensors: deviceGroup.sensors.map(u => ({...u, ref: createChannelRef(u)})),
+      activeButton: 0, // Default to first button
+      activeSensor: false, // false = button mode, true = sensor mode
+      
+      // Current channel ref (first button by default)
+      channelRef: createChannelRef(deviceGroup.buttons[0]),
+      
+      // Display properties
+      icon: deviceGroup.hasTempSensor ? '🔳🌡️' : '🔳',
+      color: getColorForChannelType('input_digital'),
+    };
+  } else {
+    // Single unit
+    const unit = deviceGroup.unit;
+    device = {
+      id: makeId(),
+      type: mapChannelTypeToDeviceType(unit.channelType),
+      name: customName,
+      channelRef: createChannelRef(unit),
+      x,
+      y,
+      
+      // Store display properties from unit
+      icon: unit.icon,
+      color: getColorForChannelType(unit.channelType),
+    };
+  }
   
   dispatch({
     type: 'ADD_DEVICE_TO_ROOM',
@@ -314,31 +372,6 @@ function selectUnit(unit) {
   }
 }
 
-/**
- * Detect if unit belongs to a multi-button switch and return button info
- * @param {object} unit - The selected unit
- * @param {object} s - Current state
- * @returns {object} Button info or empty object
- */
-function detectMultiButtonSwitch(unit, s) {
-  // Only for input_digital channels
-  if (unit.channelType !== 'input_digital') return {};
-  
-  // Check if module is a multi-button switch (2+ buttons)
-  const moduleDef = s.modules?.[unit.moduleModel];
-  if (!moduleDef) return {};
-  
-  // Find input_digital channel groups
-  const inputGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_digital') || [];
-  const totalButtons = inputGroups.reduce((sum, g) => sum + g.count, 0);
-  
-  // Only consider as multi-button if 2 or more buttons
-  if (totalButtons < 2) return {};
-  
-  return {
-    buttonCount: totalButtons,
-    activeButton: unit.unitAddress, // Current button (0-indexed)
-  };
 }
 
 function makeId() {

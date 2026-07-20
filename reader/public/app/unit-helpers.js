@@ -414,3 +414,94 @@ export function createChannelRef(unit) {
     moduleInstanceId: unit.moduleInstanceId || unit.woningDeviceId,
   };
 }
+
+/**
+ * Group units into device groups for multi-button switches
+ * Returns array of device groups where each group represents a physical device (switch)
+ * @param {Array} units - Array of units
+ * @param {object} modules - Module database
+ * @returns {Array} Device groups
+ */
+export function groupUnitsIntoDevices(units, modules) {
+  const deviceGroups = [];
+  const processedUnits = new Set();
+  
+  for (const unit of units) {
+    if (processedUnits.has(unit)) continue;
+    
+    // Check if this is a multi-button switch (2+ input_digital from same module/device)
+    const moduleDef = modules?.[unit.moduleModel];
+    if (!moduleDef) {
+      // Not a known module, add as single unit
+      deviceGroups.push({
+        type: 'single',
+        unit,
+        units: [unit],
+      });
+      processedUnits.add(unit);
+      continue;
+    }
+    
+    // Count input_digital channels in this module
+    const inputGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_digital') || [];
+    const totalButtons = inputGroups.reduce((sum, g) => sum + g.count, 0);
+    
+    // Check for temperature sensor
+    const tempGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_analog' || g.type === 'temperature') || [];
+    const hasTempSensor = tempGroups.length > 0;
+    
+    // If 2+ buttons, treat as multi-button switch device
+    if (totalButtons >= 2) {
+      // Find all units from this module instance
+      const moduleUnits = units.filter(u => 
+        u.moduleInstanceId === unit.moduleInstanceId &&
+        u.woningDeviceId === unit.woningDeviceId &&
+        u.nodeAddress === unit.nodeAddress &&
+        !processedUnits.has(u)
+      );
+      
+      // Separate buttons and sensors
+      const buttons = moduleUnits.filter(u => u.channelType === 'input_digital');
+      const sensors = moduleUnits.filter(u => u.channelType === 'temperature' || u.channelType === 'input_analog');
+      
+      // Check if any units from this group are already used
+      const anyUsed = moduleUnits.some(u => u.usage);
+      
+      if (anyUsed) {
+        // Skip if any unit is used
+        moduleUnits.forEach(u => processedUnits.add(u));
+        continue;
+      }
+      
+      deviceGroups.push({
+        type: 'multi-button-switch',
+        moduleModel: unit.moduleModel,
+        moduleName: unit.moduleName,
+        moduleInstanceId: unit.moduleInstanceId,
+        woningDeviceId: unit.woningDeviceId,
+        nodeAddress: unit.nodeAddress,
+        cabinetName: unit.cabinetName,
+        buttonCount: buttons.length,
+        hasTempSensor,
+        buttons,
+        sensors,
+        units: moduleUnits,
+        // Display properties
+        label: `${unit.moduleName} (${buttons.length} knoppen${hasTempSensor ? ' + sensor' : ''})`,
+        icon: '🔳',
+      });
+      
+      moduleUnits.forEach(u => processedUnits.add(u));
+    } else {
+      // Single button or other type - add as individual unit
+      deviceGroups.push({
+        type: 'single',
+        unit,
+        units: [unit],
+      });
+      processedUnits.add(unit);
+    }
+  }
+  
+  return deviceGroups;
+}
