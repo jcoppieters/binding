@@ -150,7 +150,7 @@
           {
             "id": "6vf0ndi8",
             "name": "Schakelaar 1",
-            "type": "switch",
+            "type": "input",
             "icon": "🔘",
             "color": "#8b5cf6",
             "x": 26,
