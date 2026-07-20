@@ -223,6 +223,39 @@ function buildRailDeviceMap(project: any): Map<string, any> {
     }
   }
 
+  // Fallback: Use discoveredNodes if channelGroups not yet configured
+  // This happens when modules exist in Rail View but channels aren't defined yet
+  for (const node of (project.discoveredNodes || [])) {
+    if (node.units) {
+      for (const unit of node.units) {
+        const key = `${node.nodeAddress}-${unit.unitAddress}`;
+        // Only add if not already in map (channelGroups take precedence)
+        if (!map.has(key)) {
+          // Map unit type to channel type
+          // Type 3 = input_digital, Type 1/2 = relay/dimmer, Type 7 = mood, Type 8 = motor, Type 4 = temperature
+          let channelType = 'unknown';
+          if (unit.type === 3) channelType = 'input_digital';
+          else if (unit.type === 1) channelType = 'dimmer_1ch';
+          else if (unit.type === 2) channelType = 'relay_16a';
+          else if (unit.type === 7) channelType = 'mood';
+          else if (unit.type === 8) channelType = 'motor_updown';
+          else if (unit.type === 4) channelType = 'temperature';
+          
+          map.set(key, {
+            id: `discovered-${node.nodeAddress}-${unit.unitAddress}`,
+            model: node.name || 'UNKNOWN',
+            nodeAddress: node.nodeAddress,
+            unitAddress: unit.unitAddress,
+            name: unit.name || `Unit ${unit.unitAddress}`,
+            channelType,
+            unitType: unit.type,
+            location: 'discovered'
+          });
+        }
+      }
+    }
+  }
+
   return map;
 }
 
