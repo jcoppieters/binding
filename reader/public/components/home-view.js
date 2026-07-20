@@ -836,13 +836,17 @@ function buildRoomCard(room) {
       : ''
   }`;
   
+  // Create DnD overlay (hidden by default)
+  const dndOverlay = el('div', '');
+  dndOverlay.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(59,130,246,0.1);border:2px dashed #3b82f6;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:100';
+  devicesArea.appendChild(dndOverlay);
+  
   // Make room a drop zone for repositioning devices
   devicesArea.ondragover = (e) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-    // Visual feedback: highlight room border
-    devicesArea.style.background = 'rgba(239,246,255,0.8)';
-    devicesArea.style.outline = '2px dashed #3b82f6';
+    // Visual feedback: show overlay
+    dndOverlay.style.opacity = '1';
   };
   
   devicesArea.ondragleave = (e) => {
@@ -850,15 +854,13 @@ function buildRoomCard(room) {
     const rect = devicesArea.getBoundingClientRect();
     if (e.clientX < rect.left || e.clientX >= rect.right || 
         e.clientY < rect.top || e.clientY >= rect.bottom) {
-      devicesArea.style.background = 'rgba(248,249,253,0.6)';
-      devicesArea.style.outline = '';
+      dndOverlay.style.opacity = '0';
     }
   };
   
   devicesArea.ondrop = (e) => {
     e.preventDefault();
-    devicesArea.style.background = 'rgba(248,249,253,0.6)';
-    devicesArea.style.outline = '';
+    dndOverlay.style.opacity = '0';
     
     try {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));

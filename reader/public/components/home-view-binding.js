@@ -190,6 +190,12 @@ function renderBindingPanel() {
     return fresh ? { ...fresh, roomName: otherRoom.name } : otherDev;
   }).filter(d => d); // Remove any deleted devices
   
+  // Reload bindings from state to ensure they're in sync
+  const deviceBindings = (s.project.bindings || []).filter(b => 
+    b.from.deviceId === freshDevice.id || b.to.deviceId === freshDevice.id
+  );
+  _bindingWires = deviceBindings.map(b => ({ ...b }));
+  
   const { device, room, otherDevices } = _currentBindingContext;
   
   // Helper: check if device is a controller (has outputs)
