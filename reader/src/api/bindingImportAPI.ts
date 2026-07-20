@@ -12,7 +12,7 @@ import { BindingType } from '../models/binding.js';
 const router = Router();
 
 /**
- * POST /api/bindings/import
+ * POST /bindings
  * 
  * Parse bind*.txt files and categorize bindings by type
  * 
@@ -31,11 +31,17 @@ const router = Router();
  *   errors: Array<{ fileName: string, error: string }>
  * }
  */
-router.post('/import', async (req, res) => {
+router.post('/bindings', async (req, res) => {
   try {
+    console.log('[import] Request received');
+    console.log('[import] Body type:', typeof req.body);
+    console.log('[import] Body keys:', req.body ? Object.keys(req.body) : 'null');
+    console.log('[import] Files:', req.body?.files ? `${req.body.files.length} files` : 'undefined');
+    
     const { files } = req.body;
 
     if (!files || !Array.isArray(files)) {
+      console.error('[import] Invalid request - files is not an array:', files);
       return res.status(400).json({ error: 'Invalid request: files array required' });
     }
 
@@ -44,8 +50,10 @@ router.post('/import', async (req, res) => {
 
     // Parse each file
     for (const file of files) {
+      console.log(`[import] Parsing ${file.fileName}...`);
       try {
         const parsed = BindingFileParser.parseFromContent(file.content, file.fileName);
+        console.log(`[import] ${file.fileName}: ${parsed.entries.length} bindings, ${parsed.errors.length} errors`);
         
         // Add fileName and nodeAddress to each binding
         const nodeAddress = parsed.nodeAddress;
@@ -74,6 +82,9 @@ router.post('/import', async (req, res) => {
       }
     }
 
+    console.log(`[import] Total bindings parsed: ${allBindings.length}`);
+    console.log(`[import] Total errors: ${errors.length}`);
+
     // Categorize bindings
     const simple = [];
     const complex = [];
@@ -85,15 +96,18 @@ router.post('/import', async (req, res) => {
       if (type === BindingType.IMMEDIATE || type === BindingType.NORMAL) {
         simple.push(binding);
       } else {
-        // Complex bindings: C, Td, Tf, Tr, Ti, To, G, P
-        complex.push(binding);
-      }
-    }
+    console.log(`[import] Categorized: ${simple.length} simple, ${complex.length} complex`);
 
     res.json({
       totalBindings: allBindings.length,
       simpleBindings: simple.length,
       complexBindings: complex.length,
+      bindings: {
+        simple,
+        complex
+      },
+      errors,
+      filesParsed: files.lengthxBindings: complex.length,
       bindings: {
         simple,
         complex
@@ -108,7 +122,7 @@ router.post('/import', async (req, res) => {
 });
 
 /**
- * POST /api/bindings/match
+ * POST /match
  * 
  * Match parsed bindings to existing Rail View devices
  * 

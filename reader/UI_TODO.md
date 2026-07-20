@@ -391,6 +391,8 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - **Priority**: P3 (after basic logic blocks working) — defer to later phase
 - [ ] **P3-7** Serialize wiring diagram → structured bindings in project file
 - [ ] **P3-8** Deserialize structured bindings → wiring diagram (for existing `.duo` files)
+- [ ] **P3-9** Show current state (when connected) of all output-devices (dimmers, relais, motor, ...)
+- [ ] **P3-10** Allow controlling the possibility of the inputs (generate short, long press, ...)
 
 ### Phase 4 — Moods editor
 

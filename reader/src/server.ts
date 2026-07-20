@@ -127,8 +127,8 @@ app.use('/api', createStatsAPI({
 
 app.use('/api/editor', bindingEditorAPI);
 
-// Binding import (from disk)
-app.use('/api/bindings', bindingImportAPI);
+// Binding import (from disk) - mount before regular bindings API to avoid conflicts
+app.use('/api/import', bindingImportAPI);
 
 // Module database (product catalogue)
 app.use('/api', createModulesAPI());

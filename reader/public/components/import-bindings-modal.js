@@ -191,15 +191,26 @@ export function openImportBindingsModal() {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Importeren...';
 
+      console.log('[import] Reading', selectedFiles.length, 'files...');
+
       // Read all files
       const fileContents = await Promise.all(
-        selectedFiles.map(file => readFileAsText(file))
+        selectedFiles.map(async (file, i) => {
+          const content = await readFileAsText(file);
+          console.log(`[import] Read ${file.name}: ${content.length} chars, ${content.split('\n').length} lines`);
+          return content;
+        })
       );
+
+      console.log('[import] All files read successfully');
 
       const filesToImport = selectedFiles.map((file, i) => ({
         fileName: file.name,
         content: fileContents[i]
       }));
+
+      console.log('[import] Sending request with', filesToImport.length, 'files');
+      console.log('[import] First file:', filesToImport[0]?.fileName, 'content length:', filesToImport[0]?.content?.length);
 
       // Send to backend for parsing
       const statusDiv = document.getElementById('import-status');
@@ -208,7 +219,7 @@ export function openImportBindingsModal() {
         statusDiv.textContent = 'Parsing binding files...';
       }
 
-      const res = await fetch('/api/bindings/import', {
+      const res = await fetch('/api/import/bindings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ files: filesToImport })
@@ -220,8 +231,61 @@ export function openImportBindingsModal() {
 
       const result = await res.json();
 
+      console.log('[import] Result:', result);
+
       if (statusDiv) {
-        statusDiv.textContent = `Parsing complete: ${result.totalBindings} bindings parsed, ${result.simpleBindings} simple (I/N), ${result.complexBindings} complex`;
+        const msg = [
+          `✅ Parsing complete:`,
+          `📁 ${result.filesParsed} files parsed`,
+          `📊 ${result.totalBindings} total bindings`,
+          `✅ ${result.simpleBindings} simple (Type I/N)`,
+          `⏳ ${result.complexBindings} complex (C/T types)`,
+        ];
+        if (result.errors && result.errors.length > 0) {
+          msg.push(`⚠️ ${result.errors.length} errors`);
+        }
+        statusDiv.innerHTML = msg.join('<br>');
+        statusDiv.style.background = '#e8f5e9';
+        statusDiv.style.borderLeft = '4px solid #4caf50';
+        statusDiv.style.color = '#2e7d32';
+      }
+
+      // Show detailed binding breakdown
+      const bindingsDetail = document.createElement('div');
+      bindingsDetail.style.cssText = 'margin-top:16px;padding:12px;border:1px solid #eef1f8;border-radius:6px;background:#f9fafb;max-height:300px;overflow-y:auto';
+      
+      let detailHTML = '<div style="font-size:12px;font-weight:600;color:#4a5568;margin-bottom:8px">Parsed Bindings by File</div>';
+      
+      // Group bindings by file
+      const bindingsByFile = {};
+      for (const binding of [...result.bindings.simple, ...result.bindings.complex]) {
+        const file = binding.fileName;
+        if (!bindingsByFile[file]) {
+          bindingsByFile[file] = { simple: 0, complex: 0 };
+        }
+        if (binding.bindingType === 'I' || binding.bindingType === 'N') {
+          bindingsByFile[file].simple++;
+        } else {
+          bindingsByFile[file].complex++;
+        }
+      }
+      
+      for (const [file, counts] of Object.entries(bindingsByFile)) {
+        const nodeAddr = file.match(/bind([0-9a-fA-F]{2})\.txt/i)?.[1]?.toUpperCase() || '??';
+        detailHTML += `
+          <div style="padding:6px 8px;font-size:12px;color:#4a5568;display:flex;align-items:center;gap:8px;border-bottom:1px solid #eef1f8">
+            <span style="font-family:monospace;color:#6a7899;font-weight:600">0x${nodeAddr}</span>
+            <span style="flex:1">${file}</span>
+            <span style="color:#4caf50">✅ ${counts.simple}</span>
+            <span style="color:#ff9800">⏳ ${counts.complex}</span>
+          </div>
+        `;
+      }
+      
+      bindingsDetail.innerHTML = detailHTML;
+      
+      if (statusDiv && statusDiv.parentNode) {
+        statusDiv.parentNode.insertBefore(bindingsDetail, statusDiv.nextSibling);
       }
 
       // Update project with imported bindings
@@ -230,8 +294,10 @@ export function openImportBindingsModal() {
 
       showToast(`Import geslaagd: ${result.simpleBindings} eenvoudige bindings geïmporteerd`, 'success');
       
-      // Close modal after short delay
-      setTimeout(() => overlay.remove(), 2000);
+      // Don't auto-close, let user review the results
+      submitBtn.textContent = 'Sluiten';
+      submitBtn.disabled = false;
+      submitBtn.onclick = () => overlay.remove();
 
     } catch (err) {
       console.error('[import] Error:', err);
