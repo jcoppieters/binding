@@ -302,6 +302,7 @@ let _unsubscribe = null;
 export function activate() {
   const s = state.get();
   renderRoomsList(s.project.homeView);
+  renderMoodsList(s.project);
   renderHomeCanvas(s.project.homeView);
   initResizableDivider();
 
@@ -311,6 +312,7 @@ export function activate() {
       // Only re-render if home view is active
       if (s.activeView === 'home') {
         renderRoomsList(s.project.homeView);
+        renderMoodsList(s.project);
         renderHomeCanvas(s.project.homeView);
       }
     });
@@ -392,6 +394,95 @@ function selectRoom(roomId) {
   // TODO: implement canvas zoom/focus
   console.log('Select room:', roomId);
   dispatch({ type: 'SELECT_ROOM', roomId });
+}
+
+// ─── Sidebar: Moods List ──────────────────────────────────────────────────────
+
+function renderMoodsList(project) {
+  const list = document.getElementById('moods-list');
+  if (!list) return;
+
+  list.innerHTML = '';
+
+  // Get moods from homeView.moods or empty array
+  const moods = project.homeView?.moods || [];
+  
+  if (moods.length === 0) {
+    const emptyMsg = el('div', '');
+    emptyMsg.style.cssText = 'padding:8px;font-size:11px;color:#a0aaba;font-style:italic';
+    emptyMsg.textContent = 'Geen moods geïmporteerd';
+    list.append(emptyMsg);
+    return;
+  }
+
+  // Group moods by node address
+  const moodsByNode = new Map();
+  for (const mood of moods) {
+    const nodeAddr = mood.channelRef?.nodeAddress;
+    if (nodeAddr == null) continue;
+    
+    if (!moodsByNode.has(nodeAddr)) {
+      moodsByNode.set(nodeAddr, []);
+    }
+    moodsByNode.get(nodeAddr).push(mood);
+  }
+
+  // Render each node group
+  for (const [nodeAddr, nodeMoods] of [...moodsByNode.entries()].sort((a, b) => a[0] - b[0])) {
+    // Node header (collapsed/expanded)
+    const nodeHeader = el('div', '');
+    nodeHeader.style.cssText = 'font-size:11px;font-weight:600;color:#6a7899;margin-top:8px;padding:4px 8px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:6px';
+    nodeHeader.innerHTML = `<span style="font-family:monospace;color:#e08c00">0x${nodeAddr.toString(16).toUpperCase().padStart(2, '0')}</span> <span style="color:#9ca3af">(${nodeMoods.length})</span>`;
+    
+    // Toggle collapse
+    let collapsed = false;
+    const toggleIcon = el('span', '');
+    toggleIcon.textContent = '▼';
+    toggleIcon.style.cssText = 'font-size:8px;color:#9ca3af;transition:transform .2s';
+    nodeHeader.prepend(toggleIcon);
+    
+    const moodsContainer = el('div', '');
+    moodsContainer.style.cssText = 'display:block';
+    
+    nodeHeader.onclick = () => {
+      collapsed = !collapsed;
+      moodsContainer.style.display = collapsed ? 'none' : 'block';
+      toggleIcon.style.transform = collapsed ? 'rotate(-90deg)' : 'rotate(0)';
+    };
+    
+    // Mood items
+    for (const mood of nodeMoods) {
+      const item = el('div', 'mood-item');
+      item.style.cssText = 'padding:6px 12px;margin:2px 0;border-radius:4px;cursor:grab;font-size:12px;color:#4a5568;display:flex;align-items:center;gap:8px;transition:all .15s';
+      item.innerHTML = `<span style="font-size:14px">${mood.icon || '🎭'}</span> ${mood.name}`;
+      
+      // Hover effect
+      item.onmouseenter = () => {
+        item.style.background = '#fef9f0';
+        item.style.borderLeft = '3px solid #ec4899';
+        item.style.paddingLeft = '9px';
+      };
+      item.onmouseleave = () => {
+        item.style.background = 'none';
+        item.style.borderLeft = 'none';
+        item.style.paddingLeft = '12px';
+      };
+      
+      // Make draggable for binding panel
+      item.draggable = true;
+      item.ondragstart = (e) => {
+        e.dataTransfer.setData('device', JSON.stringify(mood));
+        item.style.opacity = '0.5';
+      };
+      item.ondragend = () => {
+        item.style.opacity = '1';
+      };
+      
+      moodsContainer.append(item);
+    }
+    
+    list.append(nodeHeader, moodsContainer);
+  }
 }
 
 // ─── Prompt: Add Room ─────────────────────────────────────────────────────────

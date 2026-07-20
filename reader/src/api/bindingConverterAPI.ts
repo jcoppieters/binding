@@ -62,6 +62,7 @@ router.post('/convert', async (req, res) => {
 
     const visualBindings = [];
     const devicesToCreate = [];
+    const moodsToCreate = [];
     const warnings = [];
 
     // Build lookup maps
@@ -105,7 +106,14 @@ router.post('/convert', async (req, res) => {
           
           // Create Home View device for this input
           inputDevice = createDeviceFromRail(railDevice, 'input');
-          devicesToCreate.push(inputDevice);
+          
+          // Separate moods from regular devices
+          if (inputDevice.type === 'mood') {
+            moodsToCreate.push(inputDevice);
+          } else {
+            devicesToCreate.push(inputDevice);
+          }
+          
           homeDeviceMap.set(inputKey, inputDevice);
         }
 
@@ -122,7 +130,14 @@ router.post('/convert', async (req, res) => {
           
           // Create Home View device for this output
           outputDevice = createDeviceFromRail(railDevice, 'output');
-          devicesToCreate.push(outputDevice);
+          
+          // Separate moods from regular devices
+          if (outputDevice.type === 'mood') {
+            moodsToCreate.push(outputDevice);
+          } else {
+            devicesToCreate.push(outputDevice);
+          }
+          
           homeDeviceMap.set(outputKey, outputDevice);
         }
 
@@ -181,11 +196,12 @@ router.post('/convert', async (req, res) => {
       }
     }
 
-    console.log(`[converter] Converted ${visualBindings.length} bindings, ${devicesToCreate.length} devices to create, ${warnings.length} warnings`);
+    console.log(`[converter] Converted ${visualBindings.length} bindings, ${devicesToCreate.length} devices to create, ${moodsToCreate.length} moods to create, ${warnings.length} warnings`);
 
     res.json({
       visualBindings,
       devicesToCreate,
+      moodsToCreate,
       warnings
     });
 
@@ -325,6 +341,14 @@ function buildHomeDeviceMap(project: any): Map<string, any> {
           }
         }
       }
+    }
+  }
+  
+  // Also check moods from homeView.moods array
+  for (const mood of (project.homeView?.moods || [])) {
+    if (mood.channelRef) {
+      const key = `${mood.channelRef.nodeAddress}-${mood.channelRef.unitAddress}`;
+      map.set(key, mood);
     }
   }
 

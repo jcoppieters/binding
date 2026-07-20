@@ -20,7 +20,11 @@ const EMPTY_PROJECT = {
     }],
     woningDevices: [],
   },
-  homeView: { floors: [{ id: 'floor-0', name: 'Gelijkvloers' }], rooms: [] },
+  homeView: { 
+    floors: [{ id: 'floor-0', name: 'Gelijkvloers' }], 
+    rooms: [],
+    moods: [] // Global moods not tied to a specific room
+  },
   bindings: [],
   discoveredNodes: [], // Saved from last connection: nodes with units and their states
 };
@@ -271,6 +275,15 @@ export function dispatch(action) {
         return r;
       });
       _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      break;
+    }
+    case 'ADD_MOOD': {
+      const homeView = { ..._state.project.homeView };
+      // Avoid duplicates
+      if (!homeView.moods.some(m => m.id === action.mood.id)) {
+        homeView.moods = [...(homeView.moods || []), action.mood];
+        _state = { ..._state, dirty: true, project: { ..._state.project, homeView } };
+      }
       break;
     }
     case 'UPDATE_DEVICE_POSITION': {

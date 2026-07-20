@@ -255,35 +255,47 @@ export function openImportBindingsModal() {
       console.log('[import] Converted:', converted);
 
       // Add converted bindings and devices to project
-      if (converted.devicesToCreate.length > 0 || converted.visualBindings.length > 0) {
-        // Create "Imported" room if it doesn't exist
-        let importedRoom = currentProject.homeView.rooms.find(r => r.name === 'Geïmporteerd');
-        if (!importedRoom) {
-          importedRoom = {
-            id: `room-imported-${Date.now()}`,
-            name: 'Geïmporteerd',
-            floorId: currentProject.homeView.floors[0]?.id || 'floor-0',
-            devices: []
-          };
-          dispatch({ type: 'ADD_ROOM', room: importedRoom });
-        }
-
-        // Add devices to imported room
-        const startIndex = importedRoom.devices.length;
-        converted.devicesToCreate.forEach((device, i) => {
-          // Simple grid positioning - 5 columns, 120px spacing
-          const index = startIndex + i;
-          device.x = 50 + (index % 5) * 120;
-          device.y = 50 + Math.floor(index / 5) * 100;
-          
-          console.log(`[import] Adding device ${device.name} at (${device.x}, ${device.y})`);
+      if (converted.devicesToCreate.length > 0 || converted.moodsToCreate.length > 0 || converted.visualBindings.length > 0) {
+        // Add moods to global moods array
+        for (const mood of (converted.moodsToCreate || [])) {
+          console.log(`[import] Adding mood: ${mood.name} (node 0x${mood.channelRef.nodeAddress.toString(16)})`);
           
           dispatch({
-            type: 'ADD_DEVICE_TO_ROOM',
-            roomId: importedRoom.id,
-            device
+            type: 'ADD_MOOD',
+            mood
           });
-        });
+        }
+        
+        // Create "Imported" room if it doesn't exist (for non-mood devices)
+        if (converted.devicesToCreate.length > 0) {
+          let importedRoom = currentProject.homeView.rooms.find(r => r.name === 'Geïmporteerd');
+          if (!importedRoom) {
+            importedRoom = {
+              id: `room-imported-${Date.now()}`,
+              name: 'Geïmporteerd',
+              floorId: currentProject.homeView.floors[0]?.id || 'floor-0',
+              devices: []
+            };
+            dispatch({ type: 'ADD_ROOM', room: importedRoom });
+          }
+
+          // Add devices to imported room
+          const startIndex = importedRoom.devices.length;
+          converted.devicesToCreate.forEach((device, i) => {
+            // Simple grid positioning - 5 columns, 120px spacing
+            const index = startIndex + i;
+            device.x = 50 + (index % 5) * 120;
+            device.y = 50 + Math.floor(index / 5) * 100;
+            
+            console.log(`[import] Adding device ${device.name} at (${device.x}, ${device.y})`);
+            
+            dispatch({
+              type: 'ADD_DEVICE_TO_ROOM',
+              roomId: importedRoom.id,
+              device
+            });
+          });
+        }
 
         // Add bindings to project
         for (const binding of converted.visualBindings) {
@@ -306,6 +318,7 @@ export function openImportBindingsModal() {
           ``,
           `🔄 Conversie:`,
           `➕ ${converted.devicesToCreate.length} apparaten aangemaakt`,
+          `🎭 ${(converted.moodsToCreate || []).length} moods aangemaakt`,
           `🔗 ${converted.visualBindings.length} bindings toegevoegd`,
         ];
         if (converted.warnings && converted.warnings.length > 0) {
