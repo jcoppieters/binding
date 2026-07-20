@@ -93,6 +93,17 @@ router.post('/convert', async (req, res) => {
         const input = binding.inputUnits[0];
         const output = binding.outputUnits[0];
 
+        // Special handling for mood trigger bindings (function 0xF9F)
+        // The output references LCD unit, but targetMoodUnit contains the actual mood
+        let actualOutput = output;
+        if ((output as any).targetMoodUnit !== undefined) {
+          actualOutput = {
+            nodeAddress: output.nodeAddress,
+            unitAddress: (output as any).targetMoodUnit,
+            event: 0x03, // Use 'puls' event for mood triggers
+          };
+        }
+
         // Find or create input device (controller)
         const inputKey = `${input.nodeAddress}-${input.unitAddress}`;
         let inputDevice = homeDeviceMap.get(inputKey);
@@ -118,13 +129,13 @@ router.post('/convert', async (req, res) => {
         }
 
         // Find or create output device (controllable)
-        const outputKey = `${output.nodeAddress}-${output.unitAddress}`;
+        const outputKey = `${actualOutput.nodeAddress}-${actualOutput.unitAddress}`;
         let outputDevice = homeDeviceMap.get(outputKey);
         
         if (!outputDevice) {
           const railDevice = railDeviceMap.get(outputKey);
           if (!railDevice) {
-            warnings.push(`Binding ${binding.bindingNumber}: Output device not found (node 0x${output.nodeAddress.toString(16)}, unit ${output.unitAddress})`);
+            warnings.push(`Binding ${binding.bindingNumber}: Output device not found (node 0x${actualOutput.nodeAddress.toString(16)}, unit ${actualOutput.unitAddress})`);
             continue;
           }
           
@@ -145,7 +156,7 @@ router.post('/convert', async (req, res) => {
         const inputPortId = EVENT_TO_PORT[input.event || 0x03] || 'puls';
         
         // Map function code to port (extract from output content)
-        const functionCode = extractFunctionCode(output, binding.content);
+        const functionCode = extractFunctionCode(actualOutput, binding.content);
         const outputPortId = FUNCTION_TO_PORT[functionCode] || 'schakel';
 
         // Build from/to with channelRef for multi-button switches
@@ -168,11 +179,11 @@ router.post('/convert', async (req, res) => {
           portId: outputPortId
         };
         
-        // If output device is multi-channel, add channelRef
-        if (outputDevice.matchedButton || outputDevice.matchedSensor) {
+        // If output device is multi-channel or mood, add channelRef
+        if (outputDevice.matchedButton || outputDevice.matchedSensor || outputDevice.type === 'mood') {
           toBinding.channelRef = {
-            nodeAddress: output.nodeAddress,
-            unitAddress: output.unitAddress,
+            nodeAddress: actualOutput.nodeAddress,
+            unitAddress: actualOutput.unitAddress,
             moduleInstanceId: outputDevice.channelRef?.moduleInstanceId || outputDevice.id
           };
         }

@@ -380,6 +380,21 @@ export class BindingFileParser {
       const dIndex = text.indexOf('D', fIndex);
       if (dIndex !== -1) {
         ref.event = parseInt(text.substring(fIndex + 1, dIndex), 16);
+        
+        // Special handling for mood trigger function (0xF9F)
+        // Data format: D02XXYY where XX is the target mood unit
+        if (ref.event === 0xF9F) {
+          const dataStr = text.substring(dIndex + 1);
+          // Extract mood unit from data: D02XXYY -> XX
+          if (dataStr.length >= 6) {
+            const moodUnit = parseInt(dataStr.substring(2, 4), 16);
+            // Store the target mood unit in a special property
+            (ref as any).targetMoodUnit = moodUnit;
+          }
+        }
+      } else {
+        // Function without data
+        ref.event = parseInt(text.substring(fIndex + 1), 16);
       }
     }
     
