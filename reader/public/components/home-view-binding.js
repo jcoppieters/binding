@@ -338,6 +338,10 @@ function renderBindingPanel() {
     connectedChannelRefs.delete(selfKey);
   }
   
+  // Debug: Log what we're looking for
+  console.log('[renderBindingPanel] connectedDeviceIds:', Array.from(connectedDeviceIds));
+  console.log('[renderBindingPanel] connectedChannelRefs:', Array.from(connectedChannelRefs));
+  
   // Get connected device objects from all rooms
   const connectedDevices = [];
   s.project.homeView.rooms.forEach(r => {
@@ -384,20 +388,36 @@ function renderBindingPanel() {
     });
   });
   
-  // Also check global moods (not room-based)
-  (s.project.homeView.moods || []).forEach(mood => {
-    if (connectedDeviceIds.has(mood.id)) {
-      console.log('[renderBindingPanel] Adding mood by deviceId:', mood.name, mood.id);
-      connectedDevices.push({ ...mood, roomName: 'Moods' });
-    } else if (mood.channelRef) {
-      // Also match by channelRef
-      const key = `${mood.channelRef.nodeAddress}-${mood.channelRef.unitAddress}`;
-      if (connectedChannelRefs.has(key)) {
-        console.log('[renderBindingPanel] Adding mood by channelRef:', mood.name, key);
-        connectedDevices.push({ ...mood, roomName: 'Moods' });
+  // Also check global moods - extract from discoveredNodes (same as sidebar)
+  for (const node of (s.project.discoveredNodes || [])) {
+    if (node.units) {
+      for (const unit of node.units) {
+        if (unit.type === 7) { // Type 7 = mood
+          const moodId = `mood-${node.nodeAddress}-${unit.unitAddress}`;
+          const moodKey = `${node.nodeAddress}-${unit.unitAddress}`;
+          
+          if (connectedDeviceIds.has(moodId) || connectedChannelRefs.has(moodKey)) {
+            const mood = {
+              id: moodId,
+              name: unit.name || `Mood ${unit.unitAddress}`,
+              icon: '🎭',
+              color: '#ec4899',
+              type: 'mood',
+              channelRef: {
+                nodeAddress: node.nodeAddress,
+                unitAddress: unit.unitAddress,
+                moduleInstanceId: `mood-${node.nodeAddress}-${unit.unitAddress}`
+              },
+              roomName: 'Moods'
+            };
+            
+            console.log('[renderBindingPanel] Adding mood from discoveredNodes:', mood.name, moodKey);
+            connectedDevices.push(mood);
+          }
+        }
       }
     }
-  });
+  }
   
   // Add manually added devices (even if they don't have bindings yet)
   _manuallyAddedDevices.forEach(deviceId => {
