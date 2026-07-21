@@ -317,7 +317,7 @@
             "x": 546,
             "y": 59.203125,
             "isMultiButtonSwitch": true,
-            "buttonCount": 7,
+            "buttonCount": 8,
             "hasTempSensor": true,
             "buttons": [
               {
@@ -368,6 +368,23 @@
                 "ref": {
                   "nodeAddress": 17,
                   "unitAddress": 2,
+                  "moduleInstanceId": "spkdvvk1"
+                }
+              },
+              {
+                "unitAddress": 3,
+                "woningDeviceId": "spkdvvk1",
+                "nodeAddress": 17,
+                "channelType": "input_digital",
+                "unitType": 3,
+                "label": "Input 4",
+                "icon": "🔘",
+                "moduleName": "DTBS-ES4w",
+                "moduleModel": "DTBS-ES4w",
+                "usage": null,
+                "ref": {
+                  "nodeAddress": 17,
+                  "unitAddress": 3,
                   "moduleInstanceId": "spkdvvk1"
                 }
               },

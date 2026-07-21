@@ -142,19 +142,27 @@ export function showDeviceBindings(device, room) {
       return matches;
     }
     
-    // For regular devices, match by deviceId
-    const matchesDevice = b.from.deviceId === device.id || b.to.deviceId === device.id;
-    if (!matchesDevice) return false;
-    
-    // For multi-button switches, check channelRef
-    if (device.isMultiButtonSwitch) {
-      const currentChannelRef = JSON.stringify(device.channelRef);
-      const fromMatches = b.from.deviceId === device.id && JSON.stringify(b.from.channelRef) === currentChannelRef;
-      const toMatches = b.to.deviceId === device.id && JSON.stringify(b.to.channelRef) === currentChannelRef;
-      return fromMatches || toMatches;
+    // For multi-button switches, match ANY button from this device
+    if (device.isMultiButtonSwitch && device.buttons) {
+      // Check if binding's channelRef matches ANY of this device's buttons
+      const matchesAnyButton = device.buttons.some(btn => {
+        const fromMatches = b.from.deviceId === device.id && 
+                           b.from.channelRef?.nodeAddress === btn.ref.nodeAddress &&
+                           b.from.channelRef?.unitAddress === btn.ref.unitAddress;
+        const toMatches = b.to.deviceId === device.id && 
+                         b.to.channelRef?.nodeAddress === btn.ref.nodeAddress &&
+                         b.to.channelRef?.unitAddress === btn.ref.unitAddress;
+        return fromMatches || toMatches;
+      });
+      if (matchesAnyButton) {
+        console.log('[bindings] Multi-button binding match:', b.id, 'from:', b.from.deviceId, 'to:', b.to.deviceId);
+      }
+      return matchesAnyButton;
     }
     
-    return true;
+    // For regular devices, match by deviceId
+    const matchesDevice = b.from.deviceId === device.id || b.to.deviceId === device.id;
+    return matchesDevice;
   });
   
   console.log('[bindings] Found', deviceBindings.length, 'bindings for', device.name);
@@ -254,19 +262,22 @@ function renderBindingPanel() {
       return fromKey === deviceKey || toKey === deviceKey;
     }
     
-    // For regular devices, match by deviceId
-    const matchesDevice = b.from.deviceId === freshDevice.id || b.to.deviceId === freshDevice.id;
-    if (!matchesDevice) return false;
-    
-    // For multi-button switches, check channelRef
-    if (freshDevice.isMultiButtonSwitch) {
-      const currentChannelRef = JSON.stringify(freshDevice.channelRef);
-      const fromMatches = b.from.deviceId === freshDevice.id && JSON.stringify(b.from.channelRef) === currentChannelRef;
-      const toMatches = b.to.deviceId === freshDevice.id && JSON.stringify(b.to.channelRef) === currentChannelRef;
-      return fromMatches || toMatches;
+    // For multi-button switches, match ANY button from this device
+    if (freshDevice.isMultiButtonSwitch && freshDevice.buttons) {
+      // Check if binding's channelRef matches ANY of this device's buttons
+      return freshDevice.buttons.some(btn => {
+        const fromMatches = b.from.deviceId === freshDevice.id && 
+                           b.from.channelRef?.nodeAddress === btn.ref.nodeAddress &&
+                           b.from.channelRef?.unitAddress === btn.ref.unitAddress;
+        const toMatches = b.to.deviceId === freshDevice.id && 
+                         b.to.channelRef?.nodeAddress === btn.ref.nodeAddress &&
+                         b.to.channelRef?.unitAddress === btn.ref.unitAddress;
+        return fromMatches || toMatches;
+      });
     }
     
-    return true;
+    // For regular devices, match by deviceId
+    return b.from.deviceId === freshDevice.id || b.to.deviceId === freshDevice.id;
   });
   _bindingWires = deviceBindings.map(b => ({ ...b }));
   
