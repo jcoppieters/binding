@@ -311,44 +311,32 @@ export class BindingFileParser {
         eventChar = text[eIndex + 3];
       }
     } else {
-      // Find end of unit address - stop at F (function), S (end), or D (data)
-      const fIndex = text.indexOf('F', uIndex);
-      const sIndex = text.indexOf('S', uIndex);
+      // No E marker - parse output unit format: UxxXXXD[data]S
+      // where xx = 2-digit unit, XXX = 3-digit function code
+      
+      // Unit address is always 2 hex digits after U
+      unitAddress = parseInt(text.substring(uIndex + 1, uIndex + 3), 16);
+      
+      // Check for D marker (data)
       const dIndex = text.indexOf('D', uIndex);
       
-      // Use the first marker found, or end of string
-      let endIndex = text.length;
-      if (fIndex !== -1) endIndex = Math.min(endIndex, fIndex);
-      if (sIndex !== -1) endIndex = Math.min(endIndex, sIndex);
-      if (dIndex !== -1) endIndex = Math.min(endIndex, dIndex);
-      
-      unitAddress = parseInt(text.substring(uIndex + 1, endIndex), 16);
-      
-      // Parse function code if present (for output units)
-      if (fIndex !== -1 && fIndex > uIndex) {
-        const dataIndex = text.indexOf('D', fIndex);
-        if (dataIndex !== -1) {
-          // Function code is between F and D
-          const functionCode = parseInt(text.substring(fIndex + 1, dataIndex), 16);
-          event = functionCode;
-          
-          // Special handling for mood trigger function (0xF9F)
-          // Data format: D02XXYY where XX is the target mood unit
-          if (functionCode === 0xF9F) {
-            const dataStr = text.substring(dataIndex + 1);
-            console.log(`[parser] Found 0xF9F trigger: node=${nodeAddress}, unit=${unitAddress}, data=${dataStr}`);
-            // Extract mood unit from data: D02XXYY -> XX
-            if (dataStr.length >= 6) {
-              targetMoodUnit = parseInt(dataStr.substring(2, 4), 16);
-              console.log(`[parser] Extracted targetMoodUnit: ${targetMoodUnit} (0x${targetMoodUnit.toString(16)})`);
-            } else {
-              console.log(`[parser] WARNING: Data too short, cannot extract mood unit`);
-            }
+      if (dIndex !== -1 && dIndex > uIndex + 3) {
+        // Function code is 3 hex digits between unit and D marker
+        const functionCode = parseInt(text.substring(uIndex + 3, uIndex + 6), 16);
+        event = functionCode;
+        
+        // Special handling for mood trigger function (0xF9F)
+        // Data format: D02XXYY where XX is the target mood unit
+        if (functionCode === 0xF9F) {
+          const dataStr = text.substring(dIndex + 1);
+          console.log(`[parser] Found 0xF9F trigger: node=${nodeAddress}, unit=${unitAddress}, data=${dataStr}`);
+          // Extract mood unit from data: D02XXYY -> XX
+          if (dataStr.length >= 6) {
+            targetMoodUnit = parseInt(dataStr.substring(2, 4), 16);
+            console.log(`[parser] Extracted targetMoodUnit: ${targetMoodUnit} (0x${targetMoodUnit.toString(16)})`);
+          } else {
+            console.log(`[parser] WARNING: Data too short, cannot extract mood unit`);
           }
-        } else {
-          // Function without data - read to end or S marker
-          const endMarker = text.indexOf('S', fIndex);
-          event = parseInt(text.substring(fIndex + 1, endMarker !== -1 ? endMarker : undefined), 16);
         }
       }
     }
