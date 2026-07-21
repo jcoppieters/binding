@@ -563,6 +563,8 @@ function buildButtonSelector(device) {
   const cols = 2;
   const totalButtons = device.buttons ? device.buttons.length : (device.buttonCount || 0);
   
+  console.log('[button-selector] Building selector for', device.name, 'totalButtons:', totalButtons, 'buttons array:', device.buttons?.length, 'buttonCount:', device.buttonCount);
+  
   const grid = document.createElement('div');
   grid.style.cssText = `
     display:grid;
@@ -595,6 +597,7 @@ function buildButtonSelector(device) {
       e.stopPropagation();
       // Update device to use this button
       const buttonUnit = device.buttons[i];
+      console.log('[button-click] Switching to button', i + 1, 'channelRef:', buttonUnit.ref);
       dispatch({
         type: 'UPDATE_DEVICE',
         deviceId: device.id,
@@ -607,6 +610,9 @@ function buildButtonSelector(device) {
       
       // Show toast
       showToast(`Button ${i + 1} geselecteerd`, 'success');
+      
+      // Re-render binding panel after state update settles
+      setTimeout(() => renderBindingPanel(), 50);
     };
     
     btn.onmouseenter = () => {
@@ -651,6 +657,7 @@ function buildButtonSelector(device) {
       e.stopPropagation();
       // Update device to use temperature sensor
       const sensorUnit = device.sensors[0];
+      console.log('[sensor-click] Switching to sensor, channelRef:', sensorUnit.ref);
       dispatch({
         type: 'UPDATE_DEVICE',
         deviceId: device.id,
@@ -662,6 +669,9 @@ function buildButtonSelector(device) {
       
       // Show toast
       showToast(`Temperatuur sensor geselecteerd`, 'success');
+      
+      // Re-render binding panel after state update settles
+      setTimeout(() => renderBindingPanel(), 50);
     };
     
     sensorBtn.onmouseenter = () => {
