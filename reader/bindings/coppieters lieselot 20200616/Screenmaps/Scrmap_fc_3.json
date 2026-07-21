@@ -1,0 +1,14 @@
+[
+  {
+    "nodeaddress": 17,
+    "unitaddress": 4,
+    "name": "Living",
+    "type": 4
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 4,
+    "name": "Verdiep",
+    "type": 4
+  }
+]

@@ -1,0 +1,305 @@
+﻿[
+  {
+    "id": 0,
+    "name": "Kitchen",
+    "nodeaddress": 252,
+    "unitaddress": 100,
+    "destinations": [
+      {
+        "location": 0,
+        "id": 0,
+        "destinationnr": 0,
+        "name": "Kitchen",
+        "nodeaddress": 252,
+        "unitaddress": 100,
+        "maxvolume": 100,
+        "type": 1,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 8,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 1,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 2,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 3,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 4,
+            "sourcenr": 5,
+            "name": "Klara Continuo",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 5,
+            "sourcenr": 9,
+            "name": "B&O Living",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 6,
+            "sourcenr": 6,
+            "name": "Buddha Beach",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 7,
+            "sourcenr": 7,
+            "name": "Costa Del Mar",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          }
+        ]
+      },
+      {
+        "location": 1,
+        "id": 1,
+        "destinationnr": 2,
+        "name": "Living",
+        "nodeaddress": 252,
+        "unitaddress": 100,
+        "maxvolume": 100,
+        "type": 0,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 8,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 1,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 2,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 3,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 4,
+            "sourcenr": 5,
+            "name": "Klara Continuo",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 5,
+            "sourcenr": 9,
+            "name": "B&O Living",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 6,
+            "sourcenr": 6,
+            "name": "Buddha Beach",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 7,
+            "sourcenr": 7,
+            "name": "Costa Del Mar",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Tim Bedroom",
+    "nodeaddress": 252,
+    "unitaddress": 101,
+    "destinations": [
+      {
+        "location": 0,
+        "id": 0,
+        "destinationnr": 1,
+        "name": "Tim Bedroom",
+        "nodeaddress": 252,
+        "unitaddress": 101,
+        "maxvolume": 100,
+        "type": 0,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 1,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 2,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 3,
+            "sourcenr": 8,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 4,
+            "sourcenr": 6,
+            "name": "Buddha Beach",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 5,
+            "sourcenr": 7,
+            "name": "Costa Del Mar",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 6,
+            "sourcenr": 9,
+            "name": "B&O Living",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 7,
+            "sourcenr": 5,
+            "name": "Klara Continuo",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Master Bedroom",
+    "nodeaddress": 252,
+    "unitaddress": 102,
+    "destinations": [
+      {
+        "location": 0,
+        "id": 0,
+        "destinationnr": 3,
+        "name": "Master Bedroom",
+        "nodeaddress": 252,
+        "unitaddress": 102,
+        "maxvolume": 100,
+        "type": 0,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 2,
+            "sourcenr": 2,
+            "name": "MNM",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 3,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 4,
+            "sourcenr": 7,
+            "name": "Costa Del Mar",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 5,
+            "sourcenr": 6,
+            "name": "Buddha Beach",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 6,
+            "sourcenr": 9,
+            "name": "B&O Living",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 7,
+            "sourcenr": 8,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Free",
+    "nodeaddress": 252,
+    "unitaddress": 103,
+    "destinations": []
+  }
+]

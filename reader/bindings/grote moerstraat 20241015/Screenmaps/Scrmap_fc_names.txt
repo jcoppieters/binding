@@ -1,0 +1,12 @@
+SCREENMAP=9;
+Page=0;
+szName=Kitchen;
+Page=1;
+szName=Living;
+Page=2;
+szName=Outside;
+Page=3;
+szName=Upstairs;
+Page=4;
+szName=Verbruik;
+

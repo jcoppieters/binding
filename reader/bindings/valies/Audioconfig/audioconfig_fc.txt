@@ -1,0 +1,25 @@
+;/****************************** CONFIGURATION VIDEO MULTIPLEXER *******************
+VIDEOMUXCONFIG=
+bMuxType=
+bMuxInputs=
+bMuxOutputs=
+bVideoMuxAddress=
+;/****************************** CONFIGURATION VIDEO MULTIPLEXER SOURCES *******************
+;/****************************** CONFIGURATION VIDEO MULTIPLEXER DESTINATIONS *******************
+
+;/****************************** CONFIGURATION VIDEOPHONE *******************
+VIDEOPHONECONFIG=
+bCallTimeout=
+bConnectTimeout=
+bVideoMuxDest=
+bDropVolume=
+;/****************************** CONFIGURATION VIDEOPHONE SPEECHDEVOUTDOOR *******************
+;/****************************** CONFIGURATION VIDEOPHONE SPEECHDEVINDOOR *******************
+
+;/****************************** CONFIGURATION AV MATRIX  *******************
+;/****************************** CONFIGURATION AV MATRIX SOURCES *******************
+;/****************************** CONFIGURATION AV MATRIX DESTINATIONS *******************
+;/****************************** CONFIGURATION AV MATRIX AUDIOROOMS *******************
+
+;/****************************** CONFIGURATION ALARM ZON *******************
+;/*******************************************************************************

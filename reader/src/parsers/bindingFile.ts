@@ -299,6 +299,7 @@ export class BindingFileParser {
     let unitAddress: number;
     let event: number | undefined;
     let eventChar: string | undefined;
+    let targetMoodUnit: number | undefined;
     
     if (eIndex !== -1) {
       unitAddress = parseInt(text.substring(uIndex + 1, eIndex), 16);
@@ -322,14 +323,49 @@ export class BindingFileParser {
       if (dIndex !== -1) endIndex = Math.min(endIndex, dIndex);
       
       unitAddress = parseInt(text.substring(uIndex + 1, endIndex), 16);
+      
+      // Parse function code if present (for output units)
+      if (fIndex !== -1 && fIndex > uIndex) {
+        const dataIndex = text.indexOf('D', fIndex);
+        if (dataIndex !== -1) {
+          // Function code is between F and D
+          const functionCode = parseInt(text.substring(fIndex + 1, dataIndex), 16);
+          event = functionCode;
+          
+          // Special handling for mood trigger function (0xF9F)
+          // Data format: D02XXYY where XX is the target mood unit
+          if (functionCode === 0xF9F) {
+            const dataStr = text.substring(dataIndex + 1);
+            console.log(`[parser] Found 0xF9F trigger: node=${nodeAddress}, unit=${unitAddress}, data=${dataStr}`);
+            // Extract mood unit from data: D02XXYY -> XX
+            if (dataStr.length >= 6) {
+              targetMoodUnit = parseInt(dataStr.substring(2, 4), 16);
+              console.log(`[parser] Extracted targetMoodUnit: ${targetMoodUnit} (0x${targetMoodUnit.toString(16)})`);
+            } else {
+              console.log(`[parser] WARNING: Data too short, cannot extract mood unit`);
+            }
+          }
+        } else {
+          // Function without data - read to end or S marker
+          const endMarker = text.indexOf('S', fIndex);
+          event = parseInt(text.substring(fIndex + 1, endMarker !== -1 ? endMarker : undefined), 16);
+        }
+      }
     }
     
-    return {
+    const ref: UnitReference = {
       nodeAddress,
       unitAddress,
       event,
       eventChar,
     };
+    
+    // Add targetMoodUnit if present
+    if (targetMoodUnit !== undefined) {
+      (ref as any).targetMoodUnit = targetMoodUnit;
+    }
+    
+    return ref;
   }
   
   /**
@@ -385,11 +421,15 @@ export class BindingFileParser {
         // Data format: D02XXYY where XX is the target mood unit
         if (ref.event === 0xF9F) {
           const dataStr = text.substring(dIndex + 1);
+          console.log(`[parser] Found 0xF9F trigger: node=${ref.nodeAddress}, unit=${ref.unitAddress}, data=${dataStr}`);
           // Extract mood unit from data: D02XXYY -> XX
           if (dataStr.length >= 6) {
             const moodUnit = parseInt(dataStr.substring(2, 4), 16);
             // Store the target mood unit in a special property
             (ref as any).targetMoodUnit = moodUnit;
+            console.log(`[parser] Extracted targetMoodUnit: ${moodUnit} (0x${moodUnit.toString(16)})`);
+          } else {
+            console.log(`[parser] WARNING: Data too short, cannot extract mood unit`);
           }
         }
       } else {

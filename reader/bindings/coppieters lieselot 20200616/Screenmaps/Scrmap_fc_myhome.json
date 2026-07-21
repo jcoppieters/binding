@@ -1,0 +1,327 @@
+[
+  {
+    "roomnr": 0,
+    "roomname": "Keuken/eethoek",
+    "startpage": true,
+    "units": [
+      {
+        "nodeaddress": 5,
+        "unitaddress": 0,
+        "name": "Keuken",
+        "type": 1
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 3,
+        "name": "Keuken ledlijn",
+        "type": 2
+      },
+      {
+        "nodeaddress": 5,
+        "unitaddress": 3,
+        "name": "Eetplaats spots",
+        "type": 1
+      },
+      {
+        "nodeaddress": 5,
+        "unitaddress": 2,
+        "name": "Eetplaats tafel",
+        "type": 1
+      },
+      {
+        "nodeaddress": 5,
+        "unitaddress": 1,
+        "name": "Inkom",
+        "type": 1
+      }
+    ]
+  },
+  {
+    "roomnr": 1,
+    "roomname": "Living",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 17,
+      "unitaddress": 4,
+      "name": "Living",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 5,
+        "unitaddress": 5,
+        "name": "Zithoek",
+        "type": 1
+      },
+      {
+        "nodeaddress": 9,
+        "unitaddress": 0,
+        "name": "Living scrn 1",
+        "type": 8
+      },
+      {
+        "nodeaddress": 9,
+        "unitaddress": 1,
+        "name": "Living scrn 2",
+        "type": 8
+      },
+      {
+        "nodeaddress": 9,
+        "unitaddress": 2,
+        "name": "Living scrn 3",
+        "type": 8
+      },
+      {
+        "nodeaddress": 7,
+        "unitaddress": 0,
+        "name": "Living stopc 1",
+        "type": 2
+      },
+      {
+        "nodeaddress": 7,
+        "unitaddress": 1,
+        "name": "Living stopc 2",
+        "type": 2
+      },
+      {
+        "nodeaddress": 7,
+        "unitaddress": 2,
+        "name": "Living stopc 3",
+        "type": 2
+      },
+      {
+        "nodeaddress": 17,
+        "unitaddress": 4,
+        "name": "Living",
+        "type": 4
+      }
+    ]
+  },
+  {
+    "roomnr": 2,
+    "roomname": "Inkom/nachthal",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 5,
+        "unitaddress": 1,
+        "name": "Inkom",
+        "type": 1
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 5,
+        "name": "Inkom kapstok",
+        "type": 2
+      },
+      {
+        "nodeaddress": 5,
+        "unitaddress": 4,
+        "name": "Bureau",
+        "type": 1
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 4,
+        "name": "Toilet inkom",
+        "type": 2
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 8,
+        "name": "Nachthal",
+        "type": 2
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 9,
+        "name": "Nachthal moon",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 8,
+        "name": "Voordeur",
+        "type": 2
+      }
+    ]
+  },
+  {
+    "roomnr": 3,
+    "roomname": "Wasplaats",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 8,
+        "unitaddress": 2,
+        "name": "Wasplaats",
+        "type": 2
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 1,
+        "name": "Kelder",
+        "type": 2
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 0,
+        "name": "Kelder techniek",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 1,
+        "name": "Wand achterdeur",
+        "type": 2
+      }
+    ]
+  },
+  {
+    "roomnr": 4,
+    "roomname": "Buiten",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 10,
+        "unitaddress": 0,
+        "name": "Terras",
+        "type": 1
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 8,
+        "name": "Voordeur",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 2,
+        "name": "Carports spots",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 7,
+        "name": "Groendak",
+        "type": 2
+      }
+    ]
+  },
+  {
+    "roomnr": 5,
+    "roomname": "Slaapkamer 1",
+    "startpage": false,
+    "sensorunit": {
+      "nodeaddress": 16,
+      "unitaddress": 4,
+      "name": "Verdiep",
+      "type": 4
+    },
+    "units": [
+      {
+        "nodeaddress": 10,
+        "unitaddress": 1,
+        "name": "Slaapkamer 1",
+        "type": 1
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 0,
+        "name": "Slpk1 bed L",
+        "type": 2
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 11,
+        "name": "Slpk1 bed R",
+        "type": 2
+      },
+      {
+        "nodeaddress": 9,
+        "unitaddress": 3,
+        "name": "Slaapkamer 1",
+        "type": 8
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 4,
+        "name": "Verdiep",
+        "type": 4
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 7,
+        "name": "Dressing",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 3,
+        "name": "Badk 1 douche",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 4,
+        "name": "Badk 1 meubel",
+        "type": 2
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 10,
+        "name": "Toilet kids",
+        "type": 2
+      }
+    ]
+  },
+  {
+    "roomnr": 6,
+    "roomname": "Slaapkamers kid",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 10,
+        "unitaddress": 2,
+        "name": "Slaapkamer 2",
+        "type": 1
+      },
+      {
+        "nodeaddress": 10,
+        "unitaddress": 3,
+        "name": "Slaapkamer 3",
+        "type": 1
+      },
+      {
+        "nodeaddress": 10,
+        "unitaddress": 4,
+        "name": "Slaapkamer 4",
+        "type": 1
+      },
+      {
+        "nodeaddress": 9,
+        "unitaddress": 4,
+        "name": "Slaapkamer 3",
+        "type": 8
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 5,
+        "name": "Badk 2 douche",
+        "type": 2
+      },
+      {
+        "nodeaddress": 12,
+        "unitaddress": 6,
+        "name": "Badk 2 meubel",
+        "type": 2
+      },
+      {
+        "nodeaddress": 8,
+        "unitaddress": 6,
+        "name": "Toilet ouders",
+        "type": 2
+      }
+    ]
+  }
+]

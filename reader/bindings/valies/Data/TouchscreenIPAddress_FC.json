@@ -1,0 +1,15 @@
+﻿{
+  "EncryptedPassword": null,
+  "Type": "USB",
+  "Connect": "local",
+  "LocalAddress": {
+    "Address": "192.168.0.97",
+    "Port": 8080
+  },
+  "RemoteAddress": {
+    "Address": null,
+    "Port": null
+  },
+  "Cloud": null,
+  "NodeAddress": 252
+}

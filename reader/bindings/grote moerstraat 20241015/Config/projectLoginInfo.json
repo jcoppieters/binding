@@ -1,0 +1,1 @@
+{ "password": "JxoBEgwEGx0=", "type": "TCP", "connect": "local", "localAddress": { "address": "192.168.0.5", "port": 5005 }, "remoteAddress": { "address": "", "port": 0 }, "cloud": { "id": "" } }

@@ -1,0 +1,20 @@
+[
+  {
+    "nodeaddress": 252,
+    "unitaddress": 4,
+    "name": "Na 22u",
+    "type": 7
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 3,
+    "name": "Donker buiten",
+    "type": 7
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 5,
+    "name": "Schemer buiten",
+    "type": 7
+  }
+]

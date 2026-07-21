@@ -1,0 +1,65 @@
+﻿[
+  {
+    "register": 1,
+    "name": "Zonnepanelen",
+    "icon": 24,
+    "measure": "W",
+    "multiplier": 1,
+    "divider": 1,
+    "decimals": 0
+  },
+  {
+    "register": 2,
+    "name": "Verbruik",
+    "icon": 0,
+    "measure": "W",
+    "multiplier": 1,
+    "divider": 1,
+    "decimals": 0
+  },
+  {
+    "register": 3,
+    "name": "Autoladers",
+    "icon": 3,
+    "measure": "W",
+    "multiplier": 1,
+    "divider": 1,
+    "decimals": 0
+  },
+  {
+    "register": 4,
+    "name": "Zwembad",
+    "icon": 53,
+    "measure": "W",
+    "multiplier": 1,
+    "divider": 1,
+    "decimals": 0
+  },
+  {
+    "register": 5,
+    "name": "Syst D + Verw",
+    "icon": 51,
+    "measure": "W",
+    "multiplier": 1,
+    "divider": 1,
+    "decimals": 0
+  },
+  {
+    "register": 6,
+    "name": "Was + Droogkast",
+    "icon": 49,
+    "measure": "W",
+    "multiplier": 1,
+    "divider": 1,
+    "decimals": 0
+  },
+  {
+    "register": 7,
+    "name": "Verlichting",
+    "icon": 28,
+    "measure": "W",
+    "multiplier": 1,
+    "divider": 1,
+    "decimals": 0
+  }
+]

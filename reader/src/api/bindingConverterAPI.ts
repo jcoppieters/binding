@@ -97,9 +97,11 @@ router.post('/convert', async (req, res) => {
         // The output references LCD unit, but targetMoodUnit contains the actual mood
         let actualOutput = output;
         if ((output as any).targetMoodUnit !== undefined) {
+          const targetMood = (output as any).targetMoodUnit;
+          console.log(`[converter] Mood trigger detected: LCD ${output.nodeAddress}-${output.unitAddress} -> actual mood ${output.nodeAddress}-${targetMood}`);
           actualOutput = {
             nodeAddress: output.nodeAddress,
-            unitAddress: (output as any).targetMoodUnit,
+            unitAddress: targetMood,
             event: 0x03, // Use 'puls' event for mood triggers
           };
         }

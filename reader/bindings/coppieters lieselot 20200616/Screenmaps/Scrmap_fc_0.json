@@ -1,0 +1,194 @@
+[
+  {
+    "nodeaddress": 5,
+    "unitaddress": 0,
+    "name": "Keuken",
+    "type": 1
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 3,
+    "name": "Keuken ledlijn",
+    "type": 2
+  },
+  {
+    "nodeaddress": 5,
+    "unitaddress": 3,
+    "name": "Eetplaats spots",
+    "type": 1
+  },
+  {
+    "nodeaddress": 5,
+    "unitaddress": 2,
+    "name": "Eetplaats tafel",
+    "type": 1
+  },
+  {
+    "nodeaddress": 5,
+    "unitaddress": 5,
+    "name": "Zithoek",
+    "type": 1
+  },
+  {
+    "nodeaddress": 5,
+    "unitaddress": 4,
+    "name": "Bureau",
+    "type": 1
+  },
+  {
+    "nodeaddress": 5,
+    "unitaddress": 1,
+    "name": "Inkom",
+    "type": 1
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 5,
+    "name": "Inkom kapstop",
+    "type": 2
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 4,
+    "name": "Toilet inkom",
+    "type": 2
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 2,
+    "name": "Wasplaats",
+    "type": 2
+  },
+  {
+    "nodeaddress": 10,
+    "unitaddress": 0,
+    "name": "Terras",
+    "type": 1
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 8,
+    "name": "Nachthal",
+    "type": 2
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 9,
+    "name": "Moon nachthal",
+    "type": 2
+  },
+  {
+    "nodeaddress": 10,
+    "unitaddress": 1,
+    "name": "Slaapkamer 1",
+    "type": 1
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 11,
+    "name": "Slpk 1 bed rech",
+    "type": 2
+  },
+  {
+    "nodeaddress": 12,
+    "unitaddress": 0,
+    "name": "Slpk1 bed links",
+    "type": 2
+  },
+  {
+    "nodeaddress": 12,
+    "unitaddress": 3,
+    "name": "Badk 1 douche",
+    "type": 2
+  },
+  {
+    "nodeaddress": 12,
+    "unitaddress": 4,
+    "name": "Badk 1 meubel",
+    "type": 2
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 7,
+    "name": "Dressing",
+    "type": 2
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 10,
+    "name": "Toilet ouders",
+    "type": 2
+  },
+  {
+    "nodeaddress": 10,
+    "unitaddress": 2,
+    "name": "Slaapkamer 2",
+    "type": 1
+  },
+  {
+    "nodeaddress": 10,
+    "unitaddress": 3,
+    "name": "Slaapkamer 3",
+    "type": 1
+  },
+  {
+    "nodeaddress": 10,
+    "unitaddress": 4,
+    "name": "Slaapkamer 4",
+    "type": 1
+  },
+  {
+    "nodeaddress": 12,
+    "unitaddress": 5,
+    "name": "Badk 2 douche",
+    "type": 2
+  },
+  {
+    "nodeaddress": 12,
+    "unitaddress": 6,
+    "name": "Badk 2 meubel",
+    "type": 2
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 6,
+    "name": "Toilet kids",
+    "type": 2
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 1,
+    "name": "Kelder",
+    "type": 2
+  },
+  {
+    "nodeaddress": 8,
+    "unitaddress": 0,
+    "name": "Kelder techniek",
+    "type": 2
+  },
+  {
+    "nodeaddress": 12,
+    "unitaddress": 8,
+    "name": "Voordeur",
+    "type": 2
+  },
+  {
+    "nodeaddress": 12,
+    "unitaddress": 1,
+    "name": "Wand achterdeur",
+    "type": 2
+  },
+  {
+    "nodeaddress": 12,
+    "unitaddress": 7,
+    "name": "Groendak",
+    "type": 2
+  },
+  {
+    "nodeaddress": 12,
+    "unitaddress": 2,
+    "name": "Carports spots",
+    "type": 2
+  }
+]

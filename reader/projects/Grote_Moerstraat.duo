@@ -2,7 +2,7 @@
   "meta": {
     "name": "Grote Moerstraat",
     "created": "2026-07-10T07:13:29.622Z",
-    "modified": "2026-07-20T14:12:37.215Z",
+    "modified": "2026-07-21T09:07:28.631Z",
     "version": "1",
     "masterIp": "gm.coppieters.be",
     "masterPassword": "duotecno",
@@ -92,29 +92,6 @@
         "canvasWidth": 200,
         "canvasHeight": 150,
         "devices": [
-          {
-            "id": "i2zrykxj",
-            "name": "Lamp 2",
-            "type": "lamp",
-            "icon": "💡",
-            "color": "#fbbf24",
-            "x": 124,
-            "y": 622.203125
-          },
-          {
-            "id": "waiiy9a8",
-            "type": "dimmer",
-            "name": "Dimmer 1 (Slot 1)",
-            "channelRef": {
-              "nodeAddress": 16,
-              "unitAddress": 27,
-              "moduleInstanceId": "6b3y3zdh"
-            },
-            "x": 95,
-            "y": 509.203125,
-            "icon": "💡",
-            "color": "#fbbf24"
-          },
           {
             "id": "hlm8cyux",
             "type": "input",
@@ -281,14 +258,56 @@
                 }
               }
             ],
-            "activeButton": 0,
+            "activeButton": 1,
             "activeSensor": false,
             "channelRef": {
               "nodeAddress": 17,
-              "unitAddress": 0,
+              "unitAddress": 1,
               "moduleInstanceId": "spkdvvk1"
             },
             "icon": "🔳 🌡️",
+            "color": "#a78bfa"
+          },
+          {
+            "id": "2fgwihtd",
+            "type": "input",
+            "name": "Input 3",
+            "channelRef": {
+              "nodeAddress": 16,
+              "unitAddress": 2,
+              "moduleInstanceId": "6b3y3zdh"
+            },
+            "x": 50,
+            "y": 50,
+            "icon": "🔘",
+            "color": "#a78bfa"
+          },
+          {
+            "id": "ze6t3br9",
+            "type": "input",
+            "name": "Input 4",
+            "channelRef": {
+              "nodeAddress": 16,
+              "unitAddress": 3,
+              "moduleInstanceId": "6b3y3zdh"
+            },
+            "x": 191,
+            "y": 65.203125,
+            "icon": "🔘",
+            "color": "#a78bfa"
+          },
+          {
+            "id": "njc94roj",
+            "type": "input",
+            "name": "Input 5",
+            "channelRef": {
+              "nodeAddress": 16,
+              "unitAddress": 4,
+              "moduleInstanceId": "6b3y3zdh"
+            },
+            "x": 338,
+            "y": 52.203125,
+            "icon": "🔘",
             "color": "#a78bfa"
           }
         ],
@@ -313,24 +332,6 @@
             "color": "#10b981",
             "x": 196,
             "y": 779
-          },
-          {
-            "id": "insnpyth",
-            "name": "wwww",
-            "type": "sensor",
-            "icon": "🌡️",
-            "color": "#f59e0b",
-            "x": 323,
-            "y": 647.203125
-          },
-          {
-            "id": "6vf0ndi8",
-            "name": "Schakelaar 1",
-            "type": "input",
-            "icon": "🔘",
-            "color": "#8b5cf6",
-            "x": 166,
-            "y": 553.203125
           }
         ],
         "width": "714px",
@@ -449,18 +450,6 @@
       "color": "#a855f7"
     },
     {
-      "id": "ihun7jr1",
-      "from": {
-        "deviceId": "hlm8cyux",
-        "portId": "kort"
-      },
-      "to": {
-        "deviceId": "waiiy9a8",
-        "portId": "schakel"
-      },
-      "color": "#3b82f6"
-    },
-    {
       "id": "2ezkb3zk",
       "from": {
         "deviceId": "hlm8cyux",
@@ -490,10 +479,205 @@
       "color": "#3b82f6"
     },
     {
-      "id": "hlc1nr8z",
+      "id": "imported-16-20",
+      "from": {
+        "deviceId": "imported-16-23-1784624360479",
+        "portId": "puls"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 20
+    },
+    {
+      "id": "imported-16-21",
+      "from": {
+        "deviceId": "imported-16-21-1784624360479",
+        "portId": "puls"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 21
+    },
+    {
+      "id": "imported-16-35",
+      "from": {
+        "deviceId": "imported-16-20-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 35
+    },
+    {
+      "id": "imported-16-38",
+      "from": {
+        "deviceId": "imported-16-20-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 38
+    },
+    {
+      "id": "imported-16-23",
+      "from": {
+        "deviceId": "imported-16-22-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 23
+    },
+    {
+      "id": "imported-16-39",
+      "from": {
+        "deviceId": "imported-16-22-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 39
+    },
+    {
+      "id": "imported-16-42",
+      "from": {
+        "deviceId": "waiiy9a8",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "mood-252-0",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 0,
+          "moduleInstanceId": "mood-252-0"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 42
+    },
+    {
+      "id": "imported-16-43",
+      "from": {
+        "deviceId": "imported-16-26-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "mood-252-1",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 1,
+          "moduleInstanceId": "mood-252-1"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 43
+    },
+    {
+      "id": "imported-16-47",
+      "from": {
+        "deviceId": "imported-16-26-1784624360479",
+        "portId": "puls"
+      },
+      "to": {
+        "deviceId": "mood-252-11",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 11,
+          "moduleInstanceId": "mood-252-11"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 47
+    },
+    {
+      "id": "imported-16-48",
+      "from": {
+        "deviceId": "waiiy9a8",
+        "portId": "puls"
+      },
+      "to": {
+        "deviceId": "mood-252-12",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 12,
+          "moduleInstanceId": "mood-252-12"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 48
+    },
+    {
+      "id": "imported-17-24",
       "from": {
         "deviceId": "hlm8cyux",
-        "portId": "kort",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 0,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-9",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 9,
+          "moduleInstanceId": "mood-252-9"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 24
+    },
+    {
+      "id": "imported-17-29",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
         "channelRef": {
           "nodeAddress": 17,
           "unitAddress": 1,
@@ -501,15 +685,728 @@
         }
       },
       "to": {
-        "deviceId": "waiiy9a8",
-        "portId": "schakel",
+        "deviceId": "imported-16-28-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 29
+    },
+    {
+      "id": "imported-17-40",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
         "channelRef": {
-          "nodeAddress": 16,
-          "unitAddress": 27,
-          "moduleInstanceId": "6b3y3zdh"
+          "nodeAddress": 17,
+          "unitAddress": 5,
+          "moduleInstanceId": "spkdvvk1"
         }
       },
-      "color": "#3b82f6"
+      "to": {
+        "deviceId": "mood-252-6",
+        "portId": "aan",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 6,
+          "moduleInstanceId": "mood-252-6"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 40
+    },
+    {
+      "id": "imported-17-44",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 7,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-1",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 1,
+          "moduleInstanceId": "mood-252-1"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 44
+    },
+    {
+      "id": "imported-17-41",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 3,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-0",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 0,
+          "moduleInstanceId": "mood-252-0"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 41
+    },
+    {
+      "id": "imported-17-45",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 3,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-0",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 0,
+          "moduleInstanceId": "mood-252-0"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 45
+    },
+    {
+      "id": "imported-17-46",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 7,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-1",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 1,
+          "moduleInstanceId": "mood-252-1"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 46
+    },
+    {
+      "id": "imported-17-49",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 6,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-12",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 12,
+          "moduleInstanceId": "mood-252-12"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 49
+    },
+    {
+      "id": "imported-17-50",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 4,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-0",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 0,
+          "moduleInstanceId": "mood-252-0"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 50
+    },
+    {
+      "id": "imported-17-51",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 4,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-16",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 16,
+          "moduleInstanceId": "mood-252-16"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 51
+    },
+    {
+      "id": "imported-17-52",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 2,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-10",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 10,
+          "moduleInstanceId": "mood-252-10"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 52
+    },
+    {
+      "id": "imported-17-53",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 0,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-9",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 9,
+          "moduleInstanceId": "mood-252-9"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 53
+    },
+    {
+      "id": "imported-16-20",
+      "from": {
+        "deviceId": "imported-16-23-1784624360479",
+        "portId": "puls"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 20
+    },
+    {
+      "id": "imported-16-21",
+      "from": {
+        "deviceId": "imported-16-21-1784624360479",
+        "portId": "puls"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 21
+    },
+    {
+      "id": "imported-16-35",
+      "from": {
+        "deviceId": "imported-16-20-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 35
+    },
+    {
+      "id": "imported-16-38",
+      "from": {
+        "deviceId": "imported-16-20-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 38
+    },
+    {
+      "id": "imported-16-23",
+      "from": {
+        "deviceId": "imported-16-22-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 23
+    },
+    {
+      "id": "imported-16-39",
+      "from": {
+        "deviceId": "imported-16-22-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "imported-252-100-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 39
+    },
+    {
+      "id": "imported-16-42",
+      "from": {
+        "deviceId": "waiiy9a8",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "mood-252-0",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 0,
+          "moduleInstanceId": "mood-252-0"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 42
+    },
+    {
+      "id": "imported-16-43",
+      "from": {
+        "deviceId": "imported-16-26-1784624360479",
+        "portId": "kort"
+      },
+      "to": {
+        "deviceId": "mood-252-1",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 1,
+          "moduleInstanceId": "mood-252-1"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 43
+    },
+    {
+      "id": "imported-16-47",
+      "from": {
+        "deviceId": "imported-16-26-1784624360479",
+        "portId": "puls"
+      },
+      "to": {
+        "deviceId": "mood-252-11",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 11,
+          "moduleInstanceId": "mood-252-11"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 47
+    },
+    {
+      "id": "imported-16-48",
+      "from": {
+        "deviceId": "waiiy9a8",
+        "portId": "puls"
+      },
+      "to": {
+        "deviceId": "mood-252-12",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 12,
+          "moduleInstanceId": "mood-252-12"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind10.txt",
+      "bindingNumber": 48
+    },
+    {
+      "id": "imported-17-24",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 0,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-9",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 9,
+          "moduleInstanceId": "mood-252-9"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 24
+    },
+    {
+      "id": "imported-17-29",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 1,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "imported-16-28-1784624360479",
+        "portId": "schakel"
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 29
+    },
+    {
+      "id": "imported-17-40",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 5,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-6",
+        "portId": "aan",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 6,
+          "moduleInstanceId": "mood-252-6"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 40
+    },
+    {
+      "id": "imported-17-44",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 7,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-1",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 1,
+          "moduleInstanceId": "mood-252-1"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 44
+    },
+    {
+      "id": "imported-17-41",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 3,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-0",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 0,
+          "moduleInstanceId": "mood-252-0"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 41
+    },
+    {
+      "id": "imported-17-45",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 3,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-0",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 0,
+          "moduleInstanceId": "mood-252-0"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 45
+    },
+    {
+      "id": "imported-17-46",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 7,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-1",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 1,
+          "moduleInstanceId": "mood-252-1"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 46
+    },
+    {
+      "id": "imported-17-49",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 6,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-12",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 12,
+          "moduleInstanceId": "mood-252-12"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 49
+    },
+    {
+      "id": "imported-17-50",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 4,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-0",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 0,
+          "moduleInstanceId": "mood-252-0"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 50
+    },
+    {
+      "id": "imported-17-51",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 4,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-16",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 16,
+          "moduleInstanceId": "mood-252-16"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 51
+    },
+    {
+      "id": "imported-17-52",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "puls",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 2,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-10",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 10,
+          "moduleInstanceId": "mood-252-10"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 52
+    },
+    {
+      "id": "imported-17-53",
+      "from": {
+        "deviceId": "hlm8cyux",
+        "portId": "kort",
+        "channelRef": {
+          "nodeAddress": 17,
+          "unitAddress": 0,
+          "moduleInstanceId": "spkdvvk1"
+        }
+      },
+      "to": {
+        "deviceId": "mood-252-9",
+        "portId": "schakel",
+        "channelRef": {
+          "nodeAddress": 252,
+          "unitAddress": 9,
+          "moduleInstanceId": "mood-252-9"
+        }
+      },
+      "color": "#3b82f6",
+      "imported": true,
+      "sourceFile": "bind11.txt",
+      "bindingNumber": 53
     }
   ],
   "discoveredNodes": [

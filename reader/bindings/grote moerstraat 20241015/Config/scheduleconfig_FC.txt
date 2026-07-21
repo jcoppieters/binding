@@ -1,0 +1,6 @@
+;/******************** SCHEDULECONFIG ********************
+SCHEDULEITEM=0x00;
+bNodeAddress=0x10;
+bUnitAddress=0x00;
+bState=0x01;
+

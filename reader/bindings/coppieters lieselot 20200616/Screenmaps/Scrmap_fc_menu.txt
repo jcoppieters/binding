@@ -1,0 +1,12 @@
+ICON=0;
+Function=8;
+ICON=1;
+Function=0;
+ICON=2;
+Function=1;
+ICON=3;
+Function=2;
+ICON=4;
+Function=12;
+ICON=5;
+Function=3;

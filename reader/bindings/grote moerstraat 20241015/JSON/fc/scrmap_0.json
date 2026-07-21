@@ -1,0 +1,38 @@
+﻿[
+  {
+    "nodeaddress": 16,
+    "unitaddress": 29,
+    "name": "Saloon",
+    "type": 1
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 30,
+    "name": "Uplighters",
+    "type": 1
+  },
+  {
+    "nodeaddress": 16,
+    "unitaddress": 31,
+    "name": "Table",
+    "type": 1
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 111,
+    "name": "Vintage",
+    "type": 1
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 112,
+    "name": "Sticks",
+    "type": 1
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 113,
+    "name": "Trees",
+    "type": 2
+  }
+]

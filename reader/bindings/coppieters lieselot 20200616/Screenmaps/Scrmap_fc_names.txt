@@ -1,0 +1,16 @@
+SCREENMAP=9;
+Page=0;
+szName=Keuken/eethoek;
+Page=1;
+szName=Living;
+Page=2;
+szName=Inkom/nachthal;
+Page=3;
+szName=Wasplaats;
+Page=4;
+szName=Buiten;
+Page=5;
+szName=Slaapkamer 1;
+Page=6;
+szName=Slaapkamers kid;
+

@@ -1,0 +1,32 @@
+[
+  {
+    "nodeaddress": 9,
+    "unitaddress": 0,
+    "name": "Living scrn 1",
+    "type": 8
+  },
+  {
+    "nodeaddress": 9,
+    "unitaddress": 1,
+    "name": "Living scrn 2",
+    "type": 8
+  },
+  {
+    "nodeaddress": 9,
+    "unitaddress": 2,
+    "name": "Living scrn 3",
+    "type": 8
+  },
+  {
+    "nodeaddress": 9,
+    "unitaddress": 3,
+    "name": "Slaapkamer 1",
+    "type": 8
+  },
+  {
+    "nodeaddress": 9,
+    "unitaddress": 4,
+    "name": "Slaapkamer 3",
+    "type": 8
+  }
+]

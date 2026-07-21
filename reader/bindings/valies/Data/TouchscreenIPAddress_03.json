@@ -1,0 +1,15 @@
+﻿{
+  "EncryptedPassword": null,
+  "Type": "OFFLINE",
+  "Connect": "local",
+  "LocalAddress": {
+    "Address": "192.168.0.98",
+    "Port": 8080
+  },
+  "RemoteAddress": {
+    "Address": null,
+    "Port": null
+  },
+  "Cloud": null,
+  "NodeAddress": 3
+}

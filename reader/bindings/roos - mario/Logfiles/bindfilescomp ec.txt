@@ -1,0 +1,3 @@
+Failed to add binding nr 0x002c, name='Inkom on/off'
+Failed to add binding nr 0x002d, name='Tafel on/off'
+Failed to add binding nr 0x002e, name='Keuken on/off'

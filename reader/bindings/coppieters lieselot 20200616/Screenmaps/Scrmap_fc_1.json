@@ -1,0 +1,20 @@
+[
+  {
+    "nodeaddress": 7,
+    "unitaddress": 0,
+    "name": "Living stopc 1",
+    "type": 2
+  },
+  {
+    "nodeaddress": 7,
+    "unitaddress": 1,
+    "name": "Living stopc 2",
+    "type": 2
+  },
+  {
+    "nodeaddress": 7,
+    "unitaddress": 2,
+    "name": "Living stopc 3",
+    "type": 2
+  }
+]

@@ -1,0 +1,7 @@
+SMAPENTRY=0;
+bType=0x00;
+szName=;
+bNodeAddress=0xff;
+bUnitAddress=0xff;
+pageNR=0;
+buttonNR=0;

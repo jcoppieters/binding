@@ -1,0 +1,322 @@
+[
+  {
+    "id": 0,
+    "name": "mood 0",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 13,
+      "name": "Ontbijt",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 14,
+      "name": "Mood 0 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 1,
+    "name": "mood 1",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 15,
+      "name": "Eten",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 16,
+      "name": "Mood 1 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 2,
+    "name": "mood 2",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 17,
+      "name": "Popcorn",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 18,
+      "name": "Mood 2 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 3,
+    "name": "mood 3",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 19,
+      "name": "Haard",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 20,
+      "name": "Mood 3 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 4,
+    "name": "mood 4",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 21,
+      "name": "Muziek",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 22,
+      "name": "Mood 4 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 5,
+    "name": "mood 5",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 23,
+      "name": "Apero",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 24,
+      "name": "Mood 5 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 6,
+    "name": "mood 6",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 25,
+      "name": "Buiten",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 26,
+      "name": "Mood 6 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 7,
+    "name": "mood 7",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 27,
+      "name": "Koken",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 28,
+      "name": "Mood 7 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 8,
+    "name": "mood 8",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 29,
+      "name": "Slapen",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 30,
+      "name": "Mood 8 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 9,
+    "name": "mood 9",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 31,
+      "name": "Deur",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 32,
+      "name": "Mood 9 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 10,
+    "name": "mood 10",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 33,
+      "name": "Mood 10 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 34,
+      "name": "Mood 10 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 11,
+    "name": "mood 11",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 35,
+      "name": "Mood 11 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 36,
+      "name": "Mood 11 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 12,
+    "name": "mood 12",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 37,
+      "name": "Mood 12 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 38,
+      "name": "Mood 12 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 13,
+    "name": "mood 13",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 39,
+      "name": "Mood 13 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 40,
+      "name": "Mood 13 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 14,
+    "name": "mood 14",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 41,
+      "name": "Mood 14 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 42,
+      "name": "Mood 14 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 15,
+    "name": "mood 15",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 43,
+      "name": "Mood 15 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 44,
+      "name": "Mood 15 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 16,
+    "name": "mood 16",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 45,
+      "name": "Mood 16 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 46,
+      "name": "Mood 16 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 17,
+    "name": "mood 17",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 47,
+      "name": "Mood 17 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 48,
+      "name": "Mood 17 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 18,
+    "name": "mood 18",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 49,
+      "name": "Mood 18 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 50,
+      "name": "Mood 18 long",
+      "type": 7
+    }
+  },
+  {
+    "id": 19,
+    "name": "mood 19",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 51,
+      "name": "Mood 19 short",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 52,
+      "name": "Mood 19 long",
+      "type": 7
+    }
+  }
+]
