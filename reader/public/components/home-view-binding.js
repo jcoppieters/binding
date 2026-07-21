@@ -35,11 +35,12 @@ export const DEVICE_PORTS = {
   // Controllers (have outputs on RIGHT side)
   input: {
     // Smartbox/module inputs (input_digital) are controllers
-    // Physical button press → generates output event (kort/lang detection)
+    // Physical button press → generates output event (kort/lang/puls detection)
     inputs: [],
     outputs: [
       { id: 'kort', label: 'Kort', color: '#3b82f6' },  // blue - short press
-      { id: 'lang', label: 'Lang', color: '#a855f7' }   // purple - long press
+      { id: 'lang', label: 'Lang', color: '#a855f7' },  // purple - long press
+      { id: 'puls', label: 'Toggle', color: '#10b981' } // green - toggle/pulse
     ]
   },
   mood: {
@@ -169,16 +170,29 @@ export function showDeviceBindings(device, room) {
   
   // Find all connected devices
   const connectedDeviceIds = new Set();
+  const connectedChannelRefs = new Set(); // Track by channelRef too
+  
   deviceBindings.forEach(b => {
     if (b.from.deviceId !== device.id) connectedDeviceIds.add(b.from.deviceId);
     if (b.to.deviceId !== device.id) connectedDeviceIds.add(b.to.deviceId);
+    
+    // Also track by channelRef
+    if (b.from.channelRef) {
+      connectedChannelRefs.add(`${b.from.channelRef.nodeAddress}-${b.from.channelRef.unitAddress}`);
+    }
+    if (b.to.channelRef) {
+      connectedChannelRefs.add(`${b.to.channelRef.nodeAddress}-${b.to.channelRef.unitAddress}`);
+    }
   });
   
   // Get connected device objects from all rooms
   const connectedDevices = [];
   s.project.homeView.rooms.forEach(r => {
     r.devices.forEach(d => {
-      if (connectedDeviceIds.has(d.id)) {
+      const deviceIdMatch = connectedDeviceIds.has(d.id);
+      const channelRefMatch = d.channelRef && connectedChannelRefs.has(`${d.channelRef.nodeAddress}-${d.channelRef.unitAddress}`);
+      
+      if (deviceIdMatch || channelRefMatch) {
         connectedDevices.push({ ...d, roomName: r.name });
       }
     });
@@ -186,7 +200,11 @@ export function showDeviceBindings(device, room) {
   
   // Also check global moods (not room-based)
   (s.project.homeView.moods || []).forEach(mood => {
-    if (connectedDeviceIds.has(mood.id)) {
+    const deviceIdMatch = connectedDeviceIds.has(mood.id);
+    const channelRefMatch = mood.channelRef && connectedChannelRefs.has(`${mood.channelRef.nodeAddress}-${mood.channelRef.unitAddress}`);
+    
+    if (deviceIdMatch || channelRefMatch) {
+      console.log('[bindings] Adding mood to connectedDevices:', mood.name, 'id:', mood.id, 'channelRef:', mood.channelRef);
       connectedDevices.push({ ...mood, roomName: 'Moods' });
     }
   });
@@ -283,7 +301,7 @@ function renderBindingPanel() {
   
   // Rebuild otherDevices list based on current bindings (important for multi-button switches and moods)
   const connectedDeviceIds = new Set();
-  const connectedChannelRefs = new Set(); // For moods, match by channelRef
+  const connectedChannelRefs = new Set(); // Track by channelRef too
   
   deviceBindings.forEach(b => {
     // Collect device IDs
@@ -298,9 +316,19 @@ function renderBindingPanel() {
         connectedChannelRefs.add(`${b.to.channelRef.nodeAddress}-${b.to.channelRef.unitAddress}`);
       }
     } else {
-      // For regular devices, only collect IDs of OTHER devices
-      if (b.from.deviceId !== freshDevice.id) connectedDeviceIds.add(b.from.deviceId);
-      if (b.to.deviceId !== freshDevice.id) connectedDeviceIds.add(b.to.deviceId);
+      // For regular devices, collect IDs and channelRefs of OTHER devices
+      if (b.from.deviceId !== freshDevice.id) {
+        connectedDeviceIds.add(b.from.deviceId);
+        if (b.from.channelRef) {
+          connectedChannelRefs.add(`${b.from.channelRef.nodeAddress}-${b.from.channelRef.unitAddress}`);
+        }
+      }
+      if (b.to.deviceId !== freshDevice.id) {
+        connectedDeviceIds.add(b.to.deviceId);
+        if (b.to.channelRef) {
+          connectedChannelRefs.add(`${b.to.channelRef.nodeAddress}-${b.to.channelRef.unitAddress}`);
+        }
+      }
     }
   });
   
@@ -359,11 +387,13 @@ function renderBindingPanel() {
   // Also check global moods (not room-based)
   (s.project.homeView.moods || []).forEach(mood => {
     if (connectedDeviceIds.has(mood.id)) {
+      console.log('[renderBindingPanel] Adding mood by deviceId:', mood.name, mood.id);
       connectedDevices.push({ ...mood, roomName: 'Moods' });
     } else if (mood.channelRef) {
       // Also match by channelRef
       const key = `${mood.channelRef.nodeAddress}-${mood.channelRef.unitAddress}`;
       if (connectedChannelRefs.has(key)) {
+        console.log('[renderBindingPanel] Adding mood by channelRef:', mood.name, key);
         connectedDevices.push({ ...mood, roomName: 'Moods' });
       }
     }
