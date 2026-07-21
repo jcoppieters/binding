@@ -43,11 +43,15 @@ export const DEVICE_PORTS = {
     ]
   },
   mood: {
-    // Virtual moods (from master node 0xFC) are controllers
-    // Mood activation → generates output event
-    inputs: [],
+    // Moods can be both controllers AND controllables
+    // They receive triggers from buttons/sensors AND can trigger other devices
+    inputs: [
+      { id: 'aan', label: 'Aan', color: '#10b981' },        // green - activate mood (on)
+      { id: 'uit', label: 'Uit', color: '#ef4444' },        // red - deactivate mood (off)
+      { id: 'schakel', label: 'Trigger', color: '#ec4899' } // pink - toggle/trigger mood
+    ],
     outputs: [
-      { id: 'trigger', label: 'Trigger', color: '#10b981' }  // green
+      { id: 'trigger', label: 'Trigger', color: '#ec4899' } // pink - mood triggers other devices
     ]
   },
   sensor: {
@@ -118,6 +122,8 @@ let _manuallyAddedDevices = new Set(); // Track devices manually added without b
 export function showDeviceBindings(device, room) {
   const s = state.get();
   
+  console.log('[bindings] showDeviceBindings called:', device.name, 'type:', device.type, 'id:', device.id, 'channelRef:', device.channelRef);
+  
   // Load existing bindings for this device
   // For moods and multi-button switches, match by channelRef instead of deviceId
   const deviceBindings = (s.project.bindings || []).filter(b => {
@@ -128,7 +134,11 @@ export function showDeviceBindings(device, room) {
       const fromKey = b.from.channelRef ? `${b.from.channelRef.nodeAddress}-${b.from.channelRef.unitAddress}` : null;
       const toKey = b.to.channelRef ? `${b.to.channelRef.nodeAddress}-${b.to.channelRef.unitAddress}` : null;
       
-      return fromKey === deviceKey || toKey === deviceKey;
+      const matches = fromKey === deviceKey || toKey === deviceKey;
+      if (matches) {
+        console.log('[bindings] Mood binding match:', b.id, 'from:', b.from.deviceId, 'to:', b.to.deviceId);
+      }
+      return matches;
     }
     
     // For regular devices, match by deviceId
@@ -145,6 +155,8 @@ export function showDeviceBindings(device, room) {
     
     return true;
   });
+  
+  console.log('[bindings] Found', deviceBindings.length, 'bindings for', device.name);
   
   // Find all connected devices
   const connectedDeviceIds = new Set();
@@ -837,6 +849,8 @@ function renderBindingWires() {
   
   svg.innerHTML = '';
   
+  console.log('[wires] Rendering', _bindingWires.length, 'wires');
+  
   // Get all devices currently displayed in binding panel (to check their active buttons)
   const allDevicesInPanel = [_currentBindingContext.device, ..._currentBindingContext.otherDevices];
   
@@ -847,7 +861,10 @@ function renderBindingWires() {
     if (fromDevice?.isMultiButtonSwitch) {
       const wireChannelRef = JSON.stringify(wire.from.channelRef);
       const activeChannelRef = JSON.stringify(fromDevice.channelRef);
-      if (wireChannelRef !== activeChannelRef) return; // Skip this wire
+      if (wireChannelRef !== activeChannelRef) {
+        console.log('[wires] Skipping wire (from multi-button mismatch):', wire.id);
+        return; // Skip this wire
+      }
     }
     
     // Check if 'to' device is multi-button switch with different active button
@@ -855,12 +872,17 @@ function renderBindingWires() {
     if (toDevice?.isMultiButtonSwitch) {
       const wireChannelRef = JSON.stringify(wire.to.channelRef);
       const activeChannelRef = JSON.stringify(toDevice.channelRef);
-      if (wireChannelRef !== activeChannelRef) return; // Skip this wire
+      if (wireChannelRef !== activeChannelRef) {
+        console.log('[wires] Skipping wire (to multi-button mismatch):', wire.id);
+        return; // Skip this wire
+      }
     }
     
     // Find port elements
     const fromPort = document.querySelector(`[data-device-id="${wire.from.deviceId}"][data-port-id="${wire.from.portId}"]`);
     const toPort = document.querySelector(`[data-device-id="${wire.to.deviceId}"][data-port-id="${wire.to.portId}"]`);
+    
+    console.log('[wires] Wire', wire.id, 'from:', wire.from.deviceId, wire.from.portId, 'found:', !!fromPort, 'to:', wire.to.deviceId, wire.to.portId, 'found:', !!toPort);
     
     if (!fromPort || !toPort) return;
     
@@ -883,6 +905,7 @@ function renderBindingWires() {
       }
     };
     
+    console.log('[wires] Drew wire:', wire.id);
     svg.appendChild(path);
   });
 }
