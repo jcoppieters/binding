@@ -46,9 +46,10 @@ export const DEVICE_PORTS = {
     // Moods can be both controllers AND controllables
     // They receive triggers from buttons/sensors AND can trigger other devices
     inputs: [
-      { id: 'aan', label: 'Aan', color: '#10b981' },        // green - activate mood (on)
-      { id: 'uit', label: 'Uit', color: '#ef4444' },        // red - deactivate mood (off)
-      { id: 'schakel', label: 'Trigger', color: '#ec4899' } // pink - toggle/trigger mood
+      { id: 'kort', label: 'Kort', color: '#3b82f6' },      // blue - short press
+      { id: 'lang', label: 'Lang', color: '#a855f7' },      // purple - long press
+      { id: 'puls', label: 'Toggle', color: '#ec4899' },    // pink - toggle/trigger mood
+      { id: 'schakel', label: 'Schakel', color: '#10b981' } // green - switch (legacy)
     ],
     outputs: [
       { id: 'trigger', label: 'Trigger', color: '#ec4899' } // pink - mood triggers other devices
@@ -302,15 +303,44 @@ function renderBindingPanel() {
   const connectedDevices = [];
   s.project.homeView.rooms.forEach(r => {
     r.devices.forEach(d => {
+      let deviceToAdd = null;
+      
       // Match by device ID
       if (connectedDeviceIds.has(d.id)) {
-        connectedDevices.push({ ...d, roomName: r.name });
+        deviceToAdd = { ...d, roomName: r.name };
       } else if (d.channelRef) {
         // Also match by channelRef (for devices bound to moods)
         const key = `${d.channelRef.nodeAddress}-${d.channelRef.unitAddress}`;
         if (connectedChannelRefs.has(key)) {
-          connectedDevices.push({ ...d, roomName: r.name });
+          deviceToAdd = { ...d, roomName: r.name };
         }
+      }
+      
+      // For multi-button switches, update activeButton to match the binding's channelRef
+      if (deviceToAdd && deviceToAdd.isMultiButtonSwitch && deviceToAdd.buttons) {
+        // Find which button is actually in the bindings
+        for (const binding of deviceBindings) {
+          const bindingRef = binding.from.deviceId === deviceToAdd.id ? binding.from.channelRef : 
+                            binding.to.deviceId === deviceToAdd.id ? binding.to.channelRef : null;
+          
+          if (bindingRef) {
+            // Find the button index that matches this channelRef
+            const buttonIndex = deviceToAdd.buttons.findIndex(btn => 
+              btn.ref.nodeAddress === bindingRef.nodeAddress &&
+              btn.ref.unitAddress === bindingRef.unitAddress
+            );
+            
+            if (buttonIndex >= 0) {
+              deviceToAdd.activeButton = buttonIndex;
+              deviceToAdd.channelRef = deviceToAdd.buttons[buttonIndex].ref;
+              break; // Use the first matching binding
+            }
+          }
+        }
+      }
+      
+      if (deviceToAdd) {
+        connectedDevices.push(deviceToAdd);
       }
     });
   });
@@ -360,13 +390,50 @@ function renderBindingPanel() {
     return ports && ports.outputs && ports.outputs.length > 0;
   };
   
-  // Combine all devices and sort: controllers first, then controllables
+  // Helper: check if device has output triggers (for ordering moods)
+  const hasOutputTriggers = (dev) => {
+    if (dev.type !== 'mood') return false;
+    // Check if this mood appears as "from" in any bindings
+    return _bindingWires.some(w => {
+      if (w.from.deviceId === dev.id) return true;
+      if (w.from.channelRef && dev.channelRef) {
+        return w.from.channelRef.nodeAddress === dev.channelRef.nodeAddress &&
+               w.from.channelRef.unitAddress === dev.channelRef.unitAddress;
+      }
+      return false;
+    });
+  };
+  
+  // Combine all devices and sort:
+  // 1. Controllers (inputs/buttons) on left
+  // 2. Moods with output triggers (middle-right)
+  // 3. Other moods (right)
+  // 4. Controllables (lamps/dimmers/motors) on right
   const allDevices = [device, ...otherDevices];
   const sortedDevices = allDevices.sort((a, b) => {
     const aIsController = isController(a);
     const bIsController = isController(b);
-    if (aIsController && !bIsController) return -1;  // a first
-    if (!aIsController && bIsController) return 1;   // b first
+    const aIsMood = a.type === 'mood';
+    const bIsMood = b.type === 'mood';
+    const aHasOutputs = hasOutputTriggers(a);
+    const bHasOutputs = hasOutputTriggers(b);
+    
+    // Controllers (non-mood) first
+    if (aIsController && !aIsMood && bIsMood) return -1;
+    if (bIsController && !bIsMood && aIsMood) return 1;
+    if (aIsController && !aIsMood && !bIsController) return -1;
+    if (bIsController && !bIsMood && !aIsController) return 1;
+    
+    // Among moods: those with output triggers first
+    if (aIsMood && bIsMood) {
+      if (aHasOutputs && !bHasOutputs) return -1;
+      if (!aHasOutputs && bHasOutputs) return 1;
+    }
+    
+    // Moods after controllers but before other controllables
+    if (aIsMood && !bIsMood && !bIsController) return -1;
+    if (bIsMood && !aIsMood && !aIsController) return 1;
+    
     return 0;  // keep original order within same type
   });
   
