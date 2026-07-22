@@ -112,16 +112,28 @@ Example from old UI: `Switch Living → Button 8`
 ```
 
 #### For Mood Inputs (Source → Mood)
-When a mood is the **input source**, dropdown shows:
-- "Short Pulse" (E03)
-- "Short Pulse On/Off" (E02)
-- "Long On/Off" (E01)
+When a mood is the **target receiving a trigger**, dropdown shows:
+- **"Short Pulse"** (E03) - Simple pulse/toggle the mood
+- **"Short Pulse On/Off"** (E02) - With state tracking
+- **"Long On/Off"** (E01) - Long press trigger
 
-#### For Mood Outputs (Target → Mood)
-When a mood is the **output target**, dropdown shows:
-- "Event Short Pulse" (E03)
-- "Event Short Pulse + State" (E02)
-- "Event Long" (E01)
+These are the INPUT event types that a mood can receive. Function codes:
+- 0xFA6 = Short Pulse trigger
+- 0xFA2 = Short Pulse On/Off (state-aware)
+- 0xFA4 = Long On/Off (state-aware)
+
+#### For Mood Outputs (Mood → Target Device)
+When a mood is the **source triggering another device**, the mood can send different event types:
+- **"Event Short Pulse"** (E03) - Simple pulse trigger
+- **"Event Short Pulse + State"** (E02) - Pulse with state tracking
+- **"Event Long"** (E01) - Long press equivalent
+
+These appear in the old software dropdown when:
+- Binding from: Mood → Any controllable device
+- Function codes: 0xFA6 (Pulse), 0xFA2 (Pulse+State), 0xFA4 (Long+State)
+- The mood OUTPUT port can generate any of these three event types
+
+Example: `Mood "All On" → Lamp` can trigger with E03 (instant), E02 (with state), or E01 (long equivalent)
 
 ### Common Binding Patterns
 
