@@ -6,6 +6,21 @@ Source files:
 - `src/DTBindingSoftware/src/BindingSoftware.rc` (string resources)
 - `src/DTBindingSoftware/src/app/AppBindings/AppBindingProperty/BindingPropertyStrings.h` (menu definitions)
 - `src/DTBindingSoftware/src/BindingUIElement.h` (device-specific string entries)
+- `src/DTBindingSoftware/src/resource.h` (resource ID numeric values)
+
+---
+
+## Quick Reference: Resource ID Ranges
+
+- Event Codes (IDS_EV_*): 3048-3058, 5100-5103
+- Function Codes - Dimmer (IDS_FC_DIMSET_*): 4000-4018
+- Function Codes - Switch (IDS_FC_SWITCHSET_*): 4024-4031
+- Function Codes - Sensor (IDS_FC_SENSSET_*): 4040-4063
+- Function Codes - Control (IDS_FC_CONTROLSET_*): 4056-4059
+- Function Codes - Virtual/Mood (IDS_FC_VIRTUALSET_*): 4088-4091
+- Function Codes - IR TX (IDS_FC_IRTXSET_*): 4104-4108
+- Function Codes - RC5 RX (IDS_FC_RC5RXSET_*): 4120-4121
+- Function Codes - Motor (IDS_FC_DUOSWITCH_*): 4200-4209
 
 ---
 
@@ -338,3 +353,139 @@ The old software likely shows different option sets based on:
 - **Inc/Dec**: Increment or decrement values
 - **FS** prefix: Function with status/state awareness
 - **Attr** vs **Object/Method**: Attribute setting vs action execution
+
+---
+
+## Appendix: Resource ID Numeric Values
+
+From `src/DTBindingSoftware/src/resource.h` - complete mapping of IDS_* constants to numeric values.
+
+### Event Codes (IDS_EV_*)
+```
+#define IDS_EV_CONTROLTOGGLE            3048    // "Event Long"
+#define IDS_EV_CONTROLPULSTOGGLE        3049    // "Event Short Pulse + State"
+#define IDS_EV_CONTROLPULS              3050    // "Event Short Pulse"
+#define IDS_EV_SELECTOR                 3051    // "Selector Event"
+#define IDS_EV_HEATING_ON               3053    // "Heating On"
+#define IDS_EV_HEATING_OFF              3054    // "Heating Off"
+#define IDS_EV_COOLING_ON               3055    // "Cooling On"
+#define IDS_EV_COOLING_OFF              3056    // "Cooling Off"
+#define IDS_EV_HEATING                  3057    // "Heating"
+#define IDS_EV_COOLING                  3058    // "Cooling"
+#define IDS_EV_SENSUNIV_INC             5100    // "Increment"
+#define IDS_EV_SENSUNIV_DEC             5101    // "Decrement"
+#define IDS_EV_SENSUNIV_INC_PULS        5102    // "Increment puls"
+#define IDS_EV_SENSUNIV_DEC_PULS        5103    // "Decrement puls"
+```
+
+### Function Codes - Dimmer (IDS_FC_DIMSET_*)
+```
+#define IDS_FC_DIMSET_SELECTOR          4000    // "Selector Event"
+#define IDS_FC_DIMSET_SPEED             4001    // "Set Dim speed"
+#define IDS_FC_DIMSET_RANGE             4002    // "Set Dim Range"
+#define IDS_FC_DIMSET_VALUE             4003    // "Set Dim Value"
+#define IDS_FC_DIMSET_ONOFF             4004    // "Dim On/Off"
+#define IDS_FC_DIMSET_UP                4005    // "Dim Up"
+#define IDS_FC_DIMSET_DOWN              4006    // "Dim Down"
+#define IDS_FC_DIMSET_UPDN              4007    // "Dim Up/Down"
+#define IDS_FC_DIMSET_UPDNONOFF         4008    // "Up/Dn/On/Off"
+#define IDS_FC_DIMSET_OFF               4009    // "Set Dim Off"
+#define IDS_FC_DIMSET_ON                4010    // "Set Dim On"
+#define IDS_FC_DIMSET_ONOFFCS           4011    // "On/Off f(Status)"
+#define IDS_FC_DIMSET_VALUEOFF          4012    // "Dim Value/Off"
+#define IDS_FC_DIMSET_CONFIG            4013    // "Config Dimmer"
+#define IDS_FC_DIMSET_INC               4014    // "Inc. Dim Value"
+#define IDS_FC_DIMSET_DEC               4015    // "Dec. Dim Value"
+#define IDS_FC_DIMSET_ONUP              4016    // "Dim On Up"
+#define IDS_FC_DIMSET_ONDN              4017    // "Dim On Down"
+#define IDS_FC_DIMSET_PIR               4018    // "Dim Pir On"
+```
+
+### Function Codes - Switch (IDS_FC_SWITCHSET_*)
+```
+#define IDS_FC_SWITCHSET_SELECTOR       4024    // "Selector Event"
+#define IDS_FC_SWITCHSET_ONOFF          4025    // "Switch On/Off"
+#define IDS_FC_SWITCHSET_OFF            4026    // "Switch Off"
+#define IDS_FC_SWITCHSET_ON             4027    // "Switch On"
+#define IDS_FC_SWITCHSET_ONOFFFS        4028    // "On/Off f(Status)"
+#define IDS_FC_SWITCHSET_CONFIG         4029    // "Config Switch"
+#define IDS_FC_SWITCHSET_PIR            4030    // "Switch Pir On"
+#define IDS_FC_SWITCHSET_TIMERVALUE     4031    // "Timed Value"
+```
+
+### Function Codes - Sensor/HVAC (IDS_FC_SENSSET_*)
+```
+#define IDS_FC_SENSSET_SELECTOR         4040    // "Selector Event"
+#define IDS_FC_SENSSET_SETPOINT         4041    // "Working setpoint"
+#define IDS_FC_SENSSET_HYSTVALUES       4042    // "Hysterisis Value"
+#define IDS_FC_SENSSET_ONOFF            4043    // "Sensor On/Off"
+#define IDS_FC_SENSSET_SETPOINTINCDEC   4044    // "Inc./Dec. setpoint"
+#define IDS_FC_SENSSET_INC              4045    // "Inc. setpoint"
+#define IDS_FC_SENSSET_DEC              4046    // "Dec. Setpoint"
+#define IDS_FC_SENSSET_INTERVAL         4047    // "Sample Interval"
+#define IDS_FC_SENSSET_SET_ONOFF        4048    // "On/Off f(Status)"
+#define IDS_FC_SENSSET_HYSTOFFSET       4049    // "Hysterisis Offset"
+#define IDS_FC_SENSSET_PRESET           4050    // "Set Preset"
+#define IDS_FC_SENSSET_WORKINGMODE      4051    // "Workingmode"
+#define IDS_FC_SENSSET_PIDUNIT          4052    // "PID Control unit"
+#define IDS_FC_SENSSET_PIDPARAMS        4053    // "PID Control params"
+#define IDS_FC_SENSSET_FANSPEED         4061    // "Fanspeed"
+#define IDS_FC_SENSSET_SWINGANGLE       4062    // "Swing Angle"
+#define IDS_FC_SENSSET_SWINGMODE        4063    // "Swing Mode"
+```
+
+### Function Codes - Control (IDS_FC_CONTROLSET_*)
+```
+#define IDS_FC_CONTROLSET_CHECK         4056    // "Check"
+#define IDS_FC_CONTROLSET_PULS          4057    // "Short"
+#define IDS_FC_CONTROLSET_PULS_STATUS   4058    // "Short Status"
+#define IDS_FC_CONTROLSET_LONG          4059    // "Long"
+```
+
+### Function Codes - Virtual/Mood (IDS_FC_VIRTUALSET_*)
+```
+#define IDS_FC_VIRTUALSET_CHECK         4088    // "Check"
+#define IDS_FC_VIRTUALSET_PULS          4089    // "Short Pulse"
+#define IDS_FC_VIRTUALSET_PULSTOGGLE    4090    // "Short Pulse On/Off"
+#define IDS_FC_VIRTUALSET_LONG          4091    // "Long On/Off"
+```
+
+### Function Codes - IR TX (IDS_FC_IRTXSET_*)
+```
+#define IDS_FC_IRTXSET_START            4104    // "Start IRTX"
+#define IDS_FC_IRTXSET_STOP             4105    // "Stop IRTX"
+#define IDS_FC_IRTXSET_PULS             4106    // "Send IR-Code"
+#define IDS_FC_IRTXSET_CONFIG           4107    // "Config"
+#define IDS_FC_IRTXSET_FLUSH            4108    // "Flush Databases"
+```
+
+### Function Codes - RC5 RX (IDS_FC_RC5RXSET_*)
+```
+#define IDS_FC_RC5RXSET_CODE            4120    // "Iniciate Receive Code"
+#define IDS_FC_RC5RXSET_CONFIG          4121    // "Config"
+```
+
+### Function Codes - Motor/Duoswitch (IDS_FC_DUOSWITCH_*)
+```
+#define IDS_FC_DUOSWITCH_SELECTOR       4200    // "Selector Event"
+#define IDS_FC_DUOSWITCH_UPSTOP         4201    // "Up / Stop"
+#define IDS_FC_DUOSWITCH_DNSTOP         4202    // "Down / Stop"
+#define IDS_FC_DUOSWITCH_STOP           4203    // "Stop"
+#define IDS_FC_DUOSWITCH_UP             4204    // "Up"
+#define IDS_FC_DUOSWITCH_DOWN           4205    // "Down"
+#define IDS_FC_DUOSWITCH_UPDN           4206    // "Up / Down"
+#define IDS_FC_DUOSWITCH_CONFIG         4207    // "Config"
+#define IDS_FC_DUOSWITCH_STOPTIMER      4208    // "Config Stop Timer"
+#define IDS_FC_DUOSWITCH_SWITCHTIMER    4209    // "Config switch Timer"
+```
+
+### Usage in Binding Files
+
+When reading bind*.txt files, you'll see hex function codes like:
+- `FA6` = 0xFA6 = Function code for mood/switch toggle
+- `FA2` = 0xFA2 = Function code for mood status/switch on
+- `FA4` = 0xFA4 = Function code for mood long/switch off
+
+These function codes map to different ports depending on the target device type:
+- **Moods**: 0xFA6→kort, 0xFA2→status, 0xFA4→lang (INPUT ports)
+- **Switches/Dimmers**: 0xFA6→schakel, 0xFA2→aan, 0xFA4→uit (actions)

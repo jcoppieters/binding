@@ -11,26 +11,55 @@ const router = Router();
 
 /**
  * Event code to port mapping (for input devices - controllers)
+ * From old software nodemess.h and BindingSoftware.rc:
+ * - 0x01 = EV_UNITCONTROLTOGGLE = "Event Long" (L)
+ * - 0x02 = EV_UNITCONTROLPULSTOGGLE = "Event Short Pulse + State" (for switches/dimmers only)
+ * - 0x03 = EV_UNITCONTROLPULS = "Event Short Pulse" (P)
+ * 
+ * For button inputs (DTBS), only 0x01 (Long) and 0x03 (Short) are used
  */
 const EVENT_TO_PORT: Record<number, string> = {
-  0x01: 'kort',   // Short press
-  0x02: 'lang',   // Long press
-  0x03: 'puls',   // Pulse/toggle (used for simple toggle bindings)
+  0x01: 'lang',   // Event Long (L)
+  0x02: 'status', // Event State (for switches/dimmers - not buttons)
+  0x03: 'kort',   // Event Short Pulse (P) 
   0x04: 'status'  // Status request
 };
 
 /**
  * Function code to port mapping (for output devices - controllables)
  * Based on bindingEditorAPI.ts and hardware specs
+ * 
+ * NOTE: Moods have DIFFERENT mappings - see getFunctionPort() below
  */
 const FUNCTION_TO_PORT: Record<number, string> = {
-  0xFA6: 'schakel',  // Toggle
-  0xFA2: 'aan',      // Turn on
-  0xFA4: 'uit',      // Turn off
+  0xFA6: 'schakel',  // Toggle (switches/dimmers)
+  0xFA2: 'aan',      // Turn on (switches/dimmers)
+  0xFA4: 'uit',      // Turn off (switches/dimmers)
   0xFB6: 'op',       // Motor up / dim up
   0xFB4: 'neer',     // Motor down / dim down
   0xF9F: 'trigger',  // Scene/Mood trigger
 };
+
+/**
+ * Mood function code to INPUT port mapping
+ * When a mood is the target (being triggered), these function codes
+ * map to the mood's INPUT ports on the LEFT side
+ */
+const MOOD_FUNCTION_TO_PORT: Record<number, string> = {
+  0xFA6: 'kort',     // Short Pulse → Kort input (IDS_FC_VIRTUALSET_PULS)
+  0xFA2: 'status',   // Short Pulse On/Off → Status input (IDS_FC_VIRTUALSET_PULSTOGGLE)
+  0xFA4: 'lang',     // Long On/Off → Lang input (IDS_FC_VIRTUALSET_LONG)
+};
+
+/**
+ * Get the correct port ID for a function code based on device type
+ */
+function getFunctionPort(functionCode: number, deviceType: string): string {
+  if (deviceType === 'mood') {
+    return MOOD_FUNCTION_TO_PORT[functionCode] || 'kort';
+  }
+  return FUNCTION_TO_PORT[functionCode] || 'schakel';
+}
 
 /**
  * POST /convert
@@ -158,8 +187,9 @@ router.post('/convert', async (req, res) => {
         const inputPortId = EVENT_TO_PORT[input.event || 0x03] || 'puls';
         
         // Map function code to port (extract from output content)
+        // Use device-type-aware mapping for moods vs switches/dimmers
         const functionCode = extractFunctionCode(actualOutput, binding.content);
-        const outputPortId = FUNCTION_TO_PORT[functionCode] || 'schakel';
+        const outputPortId = getFunctionPort(functionCode, outputDevice.type);
 
         // Build from/to with channelRef for multi-button switches
         const fromBinding: any = {
