@@ -401,6 +401,12 @@ export function dispatch(action) {
       break;
     }
     case 'ADD_BINDING': {
+      // Skip if binding with same ID already exists (prevent duplicates on re-import)
+      const bindingExists = _state.project.bindings.some(b => b.id === action.binding.id);
+      if (bindingExists) {
+        console.warn(`[state] Skipping duplicate binding: ${action.binding.id}`);
+        break;
+      }
       const bindings = [..._state.project.bindings, action.binding];
       _state = { ..._state, dirty: true, project: { ..._state.project, bindings } };
       break;

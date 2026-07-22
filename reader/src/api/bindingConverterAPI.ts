@@ -52,11 +52,25 @@ const MOOD_FUNCTION_TO_PORT: Record<number, string> = {
 };
 
 /**
+ * Motor function code to port mapping
+ * Motor/Duoswitch devices (blinds, curtains, shutters)
+ */
+const MOTOR_FUNCTION_TO_PORT: Record<number, string> = {
+  0xB6D: 'op',       // Up/Down toggle (IDS_FC_DUOSWITCH_UPDN)
+  0xFB6: 'op',       // Up (IDS_FC_DUOSWITCH_UP)
+  0xFB4: 'neer',     // Down (IDS_FC_DUOSWITCH_DOWN)
+  0xFB3: 'stop',     // Stop (IDS_FC_DUOSWITCH_STOP)
+};
+
+/**
  * Get the correct port ID for a function code based on device type
  */
 function getFunctionPort(functionCode: number, deviceType: string): string {
   if (deviceType === 'mood') {
     return MOOD_FUNCTION_TO_PORT[functionCode] || 'kort';
+  }
+  if (deviceType === 'motor') {
+    return MOTOR_FUNCTION_TO_PORT[functionCode] || 'op';
   }
   return FUNCTION_TO_PORT[functionCode] || 'schakel';
 }
@@ -187,7 +201,7 @@ router.post('/convert', async (req, res) => {
         const inputPortId = EVENT_TO_PORT[input.event || 0x03] || 'puls';
         
         // Map function code to port (extract from output content)
-        // Use device-type-aware mapping for moods vs switches/dimmers
+        // Use device-type-aware mapping for moods vs switches/dimmers/motors
         const functionCode = extractFunctionCode(actualOutput, binding.content);
         const outputPortId = getFunctionPort(functionCode, outputDevice.type);
 

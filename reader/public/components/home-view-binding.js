@@ -35,24 +35,28 @@ export const DEVICE_PORTS = {
   // Controllers (have outputs on RIGHT side)
   input: {
     // Smartbox/module inputs (input_digital) are controllers
-    // Physical button press → generates output event (kort/lang/puls detection)
+    // Physical button press → generates output event
+    // Event codes from old software (nodemess.h):
+    // - 0x03 = EV_UNITCONTROLPULS = "Event Short Pulse" (P in old UI)
+    // - 0x01 = EV_UNITCONTROLTOGGLE = "Event Long" (L in old UI)
+    // Note: 0x02 (State) is only for switches/dimmers, not button inputs
     inputs: [],
     outputs: [
-      { id: 'kort', label: 'Kort', color: '#3b82f6' },  // blue - short press
-      { id: 'lang', label: 'Lang', color: '#a855f7' },  // purple - long press
-      { id: 'puls', label: 'Toggle', color: '#10b981' } // green - toggle/pulse
+      { id: 'kort', label: 'Kort', color: '#3b82f6' },  // blue - short pulse (P)
+      { id: 'lang', label: 'Lang', color: '#a855f7' }   // purple - long press (L)
     ]
   },
   mood: {
     // Moods can be both controllers AND controllables
     // They receive triggers from buttons/sensors AND can trigger other devices
+    // From old software dropdown: Short Pulse, Short Pulse On/Off, Long On/Off
     inputs: [
-      { id: 'kort', label: 'Kort', color: '#3b82f6' },      // blue - short press
-      { id: 'lang', label: 'Lang', color: '#a855f7' },      // purple - long press
-      { id: 'puls', label: 'Toggle', color: '#ec4899' },    // pink - toggle/trigger mood
-      { id: 'schakel', label: 'Schakel', color: '#10b981' } // green - switch (legacy)
+      { id: 'kort', label: 'Kort', color: '#3b82f6' },      // blue - short pulse (E03)
+      { id: 'status', label: 'Kort On/Off', color: '#10b981' },  // green - short pulse + state (E02)
+      { id: 'lang', label: 'Lang On/Off', color: '#a855f7' }     // purple - long + state (E01)
     ],
     outputs: [
+      { id: 'schakel', label: 'Schakel', color: '#10b981' }, // green - toggle/switch mood
       { id: 'trigger', label: 'Trigger', color: '#ec4899' } // pink - mood triggers other devices
     ]
   },
@@ -396,6 +400,11 @@ function renderBindingPanel() {
           const moodId = `mood-${node.nodeAddress}-${unit.unitAddress}`;
           const moodKey = `${node.nodeAddress}-${unit.unitAddress}`;
           
+          // Skip if already added from homeView.rooms
+          if (connectedDevices.some(d => d.id === moodId)) {
+            continue;
+          }
+          
           if (connectedDeviceIds.has(moodId) || connectedChannelRefs.has(moodKey)) {
             const mood = {
               id: moodId,
@@ -441,7 +450,11 @@ function renderBindingPanel() {
     }
   });
   
-  _currentBindingContext.otherDevices = connectedDevices;
+  // IMPORTANT: Remove the primary device from connectedDevices to avoid duplicates
+  // when rendering (since the primary device is added separately in renderBindingPanel)
+  const filteredConnectedDevices = connectedDevices.filter(d => d.id !== freshDevice.id);
+  
+  _currentBindingContext.otherDevices = filteredConnectedDevices;
   
   const { device, room, otherDevices } = _currentBindingContext;
   
@@ -992,6 +1005,9 @@ function renderBindingWires() {
   // Get all devices currently displayed in binding panel (to check their active buttons)
   const allDevicesInPanel = [_currentBindingContext.device, ..._currentBindingContext.otherDevices];
   
+  // Group bindings by unique from/to connection to avoid duplicate wires
+  const connectionMap = new Map();
+  
   _bindingWires.forEach(wire => {
     // Filter wires based on active button/sensor of multi-button switches
     // Check if 'from' device is multi-button switch with different active button
@@ -1016,6 +1032,26 @@ function renderBindingWires() {
       }
     }
     
+    // Create a unique key for this connection (include action type since kort/lang are meaningful)
+    // For multi-button switches, include channelRef to distinguish which button
+    const fromKey = wire.from.channelRef 
+      ? `${wire.from.deviceId}-${wire.from.portId}-${JSON.stringify(wire.from.channelRef)}`
+      : `${wire.from.deviceId}-${wire.from.portId}`;
+    const toKey = wire.to.channelRef
+      ? `${wire.to.deviceId}-${wire.to.portId}-${JSON.stringify(wire.to.channelRef)}`
+      : `${wire.to.deviceId}-${wire.to.portId}`;
+    const connectionKey = `${fromKey}::${toKey}`;
+    
+    // Store first occurrence of this connection (avoid only exact duplicate wires)
+    if (!connectionMap.has(connectionKey)) {
+      connectionMap.set(connectionKey, wire);
+    }
+  });
+  
+  console.log('[wires] Drawing', connectionMap.size, 'unique connections from', _bindingWires.length, 'total bindings');
+  
+  // Draw only unique connections (one wire per from/to pair)
+  connectionMap.forEach((wire) => {
     // Find port elements
     const fromPort = document.querySelector(`[data-device-id="${wire.from.deviceId}"][data-port-id="${wire.from.portId}"]`);
     const toPort = document.querySelector(`[data-device-id="${wire.to.deviceId}"][data-port-id="${wire.to.portId}"]`);
