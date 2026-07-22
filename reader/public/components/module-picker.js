@@ -2,16 +2,20 @@
  * Module picker modal — lets the installer choose a module from the database.
  *
  * Used for:
- *   - Adding a DIN module to a rail (cabinetId + railId)
- *   - Adding a woning field device (woningType: 'switch' | 'lcd')
+ *   - Adding a DIN module to a rail (cabinetId)
+ *   - Adding a house field device (houseType: 'switch' | 'lcd')
+ *
+ * A module/device is identified purely by `nodeAddress` (real hardware address,
+ * or a temp planning address allocated by state.js). `context._replaceNodeAddress`
+ * identifies the existing placement being edited (model change or relocation).
  */
 
-import { state, dispatch, makeId } from '../app/state.js';
+import { state, dispatch } from '../app/state.js';
 
 // ─── Open ─────────────────────────────────────────────────────────────────────
 
 /**
- * @param {{ cabinetId?, railId?, woningType? }} context
+ * @param {{ cabinetId?, houseType?, _replaceNodeAddress? }} context
  */
 export function openModulePicker(context) {
   const s = state.get();
@@ -29,9 +33,9 @@ function buildAndShow(modules, context) {
   document.getElementById('module-picker-overlay')?.remove();
 
   // Determine which categories to show
-  const isWoning = !!context.woningType;
-  const targetCategories = isWoning
-    ? (context.woningType === 'switch' ? ['Schakelaar'] : ['LCD/Touchscreen'])
+  const isHouse = !!context.houseType;
+  const targetCategories = isHouse
+    ? (context.houseType === 'switch' ? ['Schakelaar'] : ['LCD/Touchscreen'])
     : ['Dimmer', 'Relais', 'Motor', 'Input', 'DALI', 'DMX', 'Audio', 'Smartbox', 'Infrastructuur'];
 
   // Group modules by uiCategory
@@ -55,9 +59,9 @@ function buildAndShow(modules, context) {
   const hdr = el('div', '');
   hdr.style.cssText = 'display:flex;align-items:center;padding:16px 20px;border-bottom:1px solid #dde3ef;background:#f8f9fd;border-radius:12px 12px 0 0';
   const title = el('h2', ''); title.style.cssText = 'font-size:16px;font-weight:700;color:#1a1f2e;flex:1';
-  title.textContent = isWoning
-    ? (context.woningType === 'switch' ? '＋ Schakelaar toevoegen' : '＋ LCD toevoegen')
-    : (context._replaceModuleId ? '🔄 Module type wijzigen' : '＋ Module toevoegen');
+  title.textContent = isHouse
+    ? (context.houseType === 'switch' ? '＋ Schakelaar toevoegen' : '＋ LCD toevoegen')
+    : (context._replaceNodeAddress != null ? '🔄 Module type wijzigen' : '＋ Module toevoegen');
   const closeBtn = el('button', ''); closeBtn.textContent = '✕';
   closeBtn.style.cssText = 'background:none;border:none;font-size:18px;cursor:pointer;color:#6a7899;padding:4px 8px';
   closeBtn.onclick = () => overlay.remove();
@@ -143,7 +147,7 @@ function buildAndShow(modules, context) {
   cancelBtn.onclick = () => overlay.remove();
 
   const confirmBtn = el('button', '');
-  confirmBtn.textContent = (context._replaceWoningId || context._replaceModuleId) ? 'OK' : 'Toevoegen';
+  confirmBtn.textContent = (context._replaceNodeAddress != null) ? 'OK' : 'Toevoegen';
   confirmBtn.style.cssText = 'padding:7px 18px;border-radius:6px;border:none;background:#e08c00;color:#fff;cursor:pointer;font-size:13px;font-weight:600;opacity:.4';
   confirmBtn.disabled = true;
   confirmBtn.id = 'picker-confirm';
@@ -255,33 +259,29 @@ function buildPickerCard(item, onSelect) {
 // ─── Confirm action ───────────────────────────────────────────────────────────
 
 function onConfirm(context, model, variant) {
-  // Helper: is this model a woning-type (switch/LCD field device)?
+  // Helper: is this model a house-type (switch/LCD field device)?
   const moduleDB = state.get().modules;
   const def = Object.values(moduleDB).find(m => m.model === model || m.functionalModel === model
     || m.variants?.some(v => v.model === model));
-  const isWoningModel = def?.category === 'switch' || def?.category === 'lcd';
+  const isHouseModel = def?.category === 'switch' || def?.category === 'lcd';
 
-  if (context.woningType) {
-    if (context._replaceWoningId) {
-      dispatch({ type: 'UPDATE_WONING_DEVICE', deviceId: context._replaceWoningId, patch: { model } });
+  if (context.houseType) {
+    if (context._replaceNodeAddress != null) {
+      dispatch({ type: 'UPDATE_HOUSE_DEVICE', nodeAddress: context._replaceNodeAddress, patch: { model } });
     } else {
-      dispatch({ type: 'ADD_WONING_DEVICE', device: { id: makeId(), model, name: null, position: 99 } });
+      dispatch({ type: 'ADD_HOUSE_DEVICE', model });
     }
-  } else if (context._replaceModuleId) {
-    if (isWoningModel) {
-      // Selected model is a field device (LCD/switch) — move from cabinet to woning
-      dispatch({ type: 'REMOVE_MODULE', cabinetId: context.cabinetId, moduleId: context._replaceModuleId });
-      dispatch({ type: 'ADD_WONING_DEVICE', device: {
-        id: makeId(), model, name: null, position: 99,
-        nodeAddress: context._keepNodeAddress ?? undefined,
-      }});
+  } else if (context._replaceNodeAddress != null) {
+    if (isHouseModel) {
+      // Selected model is a field device (LCD/switch) — move from cabinet to house,
+      // keeping the same nodeAddress (it's the stable identity, nothing to "keep" separately).
+      dispatch({ type: 'REMOVE_MODULE', cabinetId: context.cabinetId, nodeAddress: context._replaceNodeAddress });
+      dispatch({ type: 'ADD_HOUSE_DEVICE', model, nodeAddress: context._replaceNodeAddress });
     } else {
-      const patch = { model };
-      if (context._keepNodeAddress != null) patch.nodeAddress = context._keepNodeAddress;
-      dispatch({ type: 'UPDATE_MODULE', cabinetId: context.cabinetId, moduleId: context._replaceModuleId, patch });
+      dispatch({ type: 'UPDATE_MODULE', cabinetId: context.cabinetId, nodeAddress: context._replaceNodeAddress, patch: { model } });
     }
   } else {
-    dispatch({ type: 'ADD_MODULE', cabinetId: context.cabinetId, module: { id: makeId(), model, position: 99 } });
+    dispatch({ type: 'ADD_MODULE', cabinetId: context.cabinetId, model });
   }
 }
 

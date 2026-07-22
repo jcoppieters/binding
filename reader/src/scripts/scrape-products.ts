@@ -18,7 +18,7 @@ import { existsSync } from 'fs';
 const _require = createRequire(import.meta.url);
 // pdf-parse v1 exports the parse function directly
 const pdfParse = _require('pdf-parse') as (buf: Buffer) => Promise<{ text: string }>;
-import { writeFile, readFile, mkdir } from 'fs/promises';
+import { writeFile, mkdir } from 'fs/promises';
 import { join, dirname, extname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -170,10 +170,6 @@ function parseProductPage(html: string, url: string, categorySlug: string): Duot
 
   const dinMatch = bodyText.match(/Aantal\s+modules?:\s*(\d+)/i);
   const dinUnits = dinMatch ? parseInt(dinMatch[1]) : undefined;
-
-  // Channels: parse from description / body text heuristics
-  const channelMatch = name.match(/^(\d+)\s*kan\./i);
-  const channels = channelMatch ? parseInt(channelMatch[1]) : undefined;
 
   // Max load per channel (e.g. 500W, 5A, 130W)
   const loadMatch = name.match(/(\d+)\s*W\b/i);
@@ -528,7 +524,7 @@ function deriveProductLine(model: string): string | undefined {
  * Returns product URLs found on a page.
  * Also returns sub-category URLs to recurse into.
  */
-function extractLinksFromPage(html: string, pageUrl: string): { products: string[]; subCategories: string[] } {
+function extractLinksFromPage(html: string): { products: string[]; subCategories: string[] } {
   const root = parse(html);
   const products: string[] = [];
   const subCategories: string[] = [];
@@ -580,7 +576,7 @@ async function collectProductUrls(startUrls: string[]): Promise<Map<string, stri
       continue;
     }
 
-    const { products, subCategories } = extractLinksFromPage(html, url);
+    const { products, subCategories } = extractLinksFromPage(html);
 
     for (const p of products) {
       if (!result.has(p)) result.set(p, catSlug);

@@ -7,6 +7,7 @@ import { initRouter, switchView } from './router.js';
 import { wireButtons as wireRailButtons } from '../components/rail-view.js';
 import { wireButtons as wireHomeButtons } from '../components/home-view.js';
 import { openImportBindingsModal } from '../components/import-bindings-modal.js';
+import { openUploadDataModal } from '../components/upload-data-modal.js';
 
 // ─── Recent Projects (localStorage) ───────────────────────────────────────────
 
@@ -167,6 +168,7 @@ async function init() {
     else if (action === 'save') saveProject();
     else if (action === 'rename') renameProject();
     else if (action === 'import-bindings') openImportBindingsModal();
+    else if (action === 'upload-binding-files') openUploadDataModal();
     else if (action === 'recent') {
       // Load recent project
       const filename = item.dataset.filename;
@@ -258,9 +260,17 @@ function sanitizeProject(project) {
     return { ...room, devices };
   });
   
+  // Ensure nodes array exists
+  if (!project.nodes) {
+    project.nodes = [];
+  }
+  
   // Ensure railView exists
   if (!project.railView) {
-    project.railView = { cabinets: [], woningDevices: [] };
+    project.railView = { cabinets: [], house: [] };
+  }
+  if (!project.railView.house) {
+    project.railView.house = [];
   }
   
   // Ensure bindings array exists
@@ -306,6 +316,7 @@ function newProject() {
 
   const emptyProject = {
     meta: { name: 'Nieuw project', created: new Date().toISOString(), modified: new Date().toISOString(), version: '1' },
+    nodes: [],
     railView: {
       cabinets: [{
         id: 'cabinet-0',
@@ -313,11 +324,10 @@ function newProject() {
         widthUnits: 36,
         modules: [],
       }],
-      woningDevices: [],
+      house: [],
     },
     homeView: { floors: [{ id: 'floor-0', name: 'Gelijkvloers' }], rooms: [] },
     bindings: [],
-    discoveredNodes: [],
   };
 
   dispatch({ type: 'SET_PROJECT', project: emptyProject });
@@ -533,22 +543,26 @@ async function openConnectModal() {
 
       dispatch({ type: 'SET_CONNECTION', connected: true, ip, nodes });
 
-      // Auto-add unmatched discovered nodes to project
-      const projectModules = state.get().project.railView.cabinets.flatMap(c => c.modules).filter(m => m.nodeAddress != null);
-      const projectWoning = state.get().project.railView.woningDevices.filter(d => d.nodeAddress != null);
-      const allProjectNodes = new Set([...projectModules, ...projectWoning].map(m => m.nodeAddress));
+      // Upsert ALL discovered nodes into project.nodes[] (refreshes name/units/type),
+      // and place any genuinely new ones into cabinet/house — state.js's reducer
+      // handles both concerns for the full `nodes` list in one dispatch.
+      const projectRefs = [
+        ...state.get().project.railView.cabinets.flatMap(c => c.modules),
+        ...state.get().project.railView.house,
+      ];
+      const projectAddrs = new Set(projectRefs.map(r => r.nodeAddress));
       const discoveredAddrs = new Set(nodes.map(n => n.nodeAddress));
-      const matched = [...projectModules, ...projectWoning].filter(m => discoveredAddrs.has(m.nodeAddress)).length;
-      const unmatched = [...projectModules, ...projectWoning].filter(m => !discoveredAddrs.has(m.nodeAddress)).length;
-      const extraNodes = nodes.filter(n => !allProjectNodes.has(n.nodeAddress));
+      const matched = projectRefs.filter(r => discoveredAddrs.has(r.nodeAddress)).length;
+      const unmatched = projectRefs.filter(r => !discoveredAddrs.has(r.nodeAddress)).length;
+      const extraCount = nodes.filter(n => !projectAddrs.has(n.nodeAddress)).length;
 
-      if (extraNodes.length > 0) {
-        dispatch({ type: 'ADD_DISCOVERED_NODES', nodes: extraNodes });
+      if (nodes.length > 0) {
+        dispatch({ type: 'ADD_DISCOVERED_NODES', nodes });
       }
 
       overlay.remove();
       showToast(
-        `Verbonden met ${ip}${fullScan ? ' (volledig)' : ' (snel)'} — ${nodes.length} nodes: ${matched} gekoppeld${unmatched ? `, ${unmatched} niet gevonden` : ''}${extraNodes.length ? `, ${extraNodes.length} nieuw` : ''}`,
+        `Verbonden met ${ip}${fullScan ? ' (volledig)' : ' (snel)'} — ${nodes.length} nodes: ${matched} gekoppeld${unmatched ? `, ${unmatched} niet gevonden` : ''}${extraCount ? `, ${extraCount} nieuw` : ''}`,
         'success'
       );
     } catch (err) {
@@ -572,16 +586,11 @@ async function openConnectModal() {
 
 async function saveProject() {
   const s = state.get();
-  // Include discovered nodes in the project file
-  const projectToSave = {
-    ...s.project,
-    discoveredNodes: s.discoveredNodes,
-  };
   try {
     const res = await fetch('/api/project/save', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(projectToSave),
+      body: JSON.stringify(s.project),
     });
     if (res.ok) {
       dispatch({ type: 'SET_DIRTY', dirty: false });

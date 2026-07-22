@@ -8,6 +8,39 @@ const __dirname = dirname(__filename);
 
 const PROJECTS_DIR = join(__dirname, '../../projects');
 
+/** Same sanitization used for the .duo/.img filenames, so the .data folder always matches. */
+function sanitizeName(name: string): string {
+  return name
+    .replace(/[^a-z0-9_\- ]/gi, '_')
+    .replace(/\s+/g, '_')
+    .trim() || 'project';
+}
+
+/** Companion folder holding legacy bind*.txt / MoodConfig / etc. files for a project. */
+function dataDirFor(projectName: string): string {
+  return join(PROJECTS_DIR, `${sanitizeName(projectName)}.data`);
+}
+
+/** Recursively list files under `dir` matching bind*.txt, as paths relative to `dir`. */
+async function listBindFiles(dir: string, relBase = ''): Promise<string[]> {
+  let entries;
+  try {
+    entries = await readdir(join(dir, relBase), { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  const results: string[] = [];
+  for (const entry of entries) {
+    const rel = relBase ? `${relBase}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      results.push(...await listBindFiles(dir, rel));
+    } else if (/^bind[0-9a-f]{2}\.txt$/i.test(entry.name)) {
+      results.push(rel);
+    }
+  }
+  return results;
+}
+
 export function createProjectAPI() {
   const router = Router();
 
@@ -19,11 +52,7 @@ export function createProjectAPI() {
         res.status(400).json({ error: 'Missing project.meta.name' });
         return;
       }
-      // Sanitize filename: keep alphanumeric, space, dash, underscore
-      const safeName = project.meta.name
-        .replace(/[^a-z0-9_\- ]/gi, '_')
-        .replace(/\s+/g, '_')
-        .trim() || 'project';
+      const safeName = sanitizeName(project.meta.name);
       const duoFilename = `${safeName}.duo`;
       const imgFilename = `${safeName}.img`;
 
@@ -113,6 +142,66 @@ export function createProjectAPI() {
       res.json(project);
     } catch (e: any) {
       res.status(404).json({ error: 'Project niet gevonden' });
+    }
+  });
+
+  /**
+   * POST /api/project/data/upload — copy legacy install files (bind*.txt, MoodConfig, ...)
+   * into the project's companion `<name>.data/` folder for later (re)import/upload.
+   * body: { projectName, files: [{ path, contentBase64 }] }
+   */
+  router.post('/project/data/upload', async (req, res) => {
+    try {
+      const { projectName, files } = req.body;
+      if (!projectName || !Array.isArray(files)) {
+        res.status(400).json({ error: 'projectName and files[] required' });
+        return;
+      }
+
+      const dataDir = dataDirFor(projectName);
+      await mkdir(dataDir, { recursive: true });
+
+      let written = 0;
+      for (const file of files) {
+        const relPath = String(file.path || '').replace(/^[/\\]+/, '');
+        if (!relPath || /\.\./.test(relPath)) continue; // path-traversal guard
+        const dest = join(dataDir, relPath);
+        await mkdir(dirname(dest), { recursive: true });
+        await writeFile(dest, Buffer.from(file.contentBase64 || '', 'base64'));
+        written++;
+      }
+
+      res.json({ ok: true, written, folder: `${sanitizeName(projectName)}.data` });
+    } catch (e: any) {
+      console.error('[projectAPI] data upload error:', e);
+      res.status(500).json({ error: e.message });
+    }
+  });
+
+  /** GET /api/project/data/list?projectName=xxx — bind*.txt files already stored for this project */
+  router.get('/project/data/list', async (req, res) => {
+    const projectName = String(req.query.projectName ?? '');
+    if (!projectName) {
+      res.json({ files: [] });
+      return;
+    }
+    const files = await listBindFiles(dataDirFor(projectName));
+    res.json({ files });
+  });
+
+  /** GET /api/project/data/file?projectName=xxx&path=bind10.txt — read one stored file as text */
+  router.get('/project/data/file', async (req, res) => {
+    try {
+      const projectName = String(req.query.projectName ?? '');
+      const relPath = String(req.query.path ?? '');
+      if (!projectName || !relPath || /\.\./.test(relPath)) {
+        res.status(400).json({ error: 'Invalid request' });
+        return;
+      }
+      const content = await readFile(join(dataDirFor(projectName), relPath), 'utf-8');
+      res.json({ content });
+    } catch (e: any) {
+      res.status(404).json({ error: 'File niet gevonden' });
     }
   });
 

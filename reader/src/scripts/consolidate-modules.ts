@@ -13,7 +13,7 @@
  *   npx tsx src/scripts/consolidate-modules.ts
  */
 
-import { readFile, writeFile, unlink, mkdir } from 'fs/promises';
+import { readFile, writeFile, unlink } from 'fs/promises';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { existsSync } from 'fs';

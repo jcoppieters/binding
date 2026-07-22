@@ -136,7 +136,11 @@ function buildDeviceCard(device, room, container) {
     e.dataTransfer.setData('application/json', JSON.stringify({ 
       device: { ...device, roomName: room.name },
       sourceType: 'room',
-      roomId: room.id
+      roomId: room.id,
+      // Where the user grabbed the card, so drop can keep the cursor over
+      // the same spot on the card instead of assuming the exact center.
+      grabOffsetX: e.offsetX,
+      grabOffsetY: e.offsetY
     }));
     deviceCard.style.opacity = '0.5';
   };
@@ -420,8 +424,8 @@ function renderMoodsList(project) {
     }
   });
   
-  // Extract moods from discoveredNodes
-  for (const node of (project.discoveredNodes || [])) {
+  // Extract moods from project.nodes
+  for (const node of (project.nodes || [])) {
     if (node.units) {
       for (const unit of node.units) {
         if (unit.type === 7) { // Type 7 = mood
@@ -436,8 +440,7 @@ function renderMoodsList(project) {
             type: 'mood',
             channelRef: {
               nodeAddress: node.nodeAddress,
-              unitAddress: unit.unitAddress,
-              moduleInstanceId: `mood-${node.nodeAddress}-${unit.unitAddress}`
+              unitAddress: unit.unitAddress
             },
             nodeName: node.name || `Node 0x${node.nodeAddress.toString(16).toUpperCase()}`,
             isUsed
@@ -475,15 +478,16 @@ function renderMoodsList(project) {
     nodeHeader.style.cssText = 'font-size:11px;font-weight:600;color:#6a7899;margin-top:8px;padding:4px 8px;cursor:pointer;border-radius:4px;display:flex;align-items:center;gap:6px';
     nodeHeader.innerHTML = `<span style="color:#4a5568">${nodeData.nodeName}</span> <span style="font-family:monospace;color:#e08c00">(0x${nodeAddr.toString(16).toUpperCase().padStart(2, '0')})</span> <span style="color:#9ca3af;font-size:10px">${nodeData.moods.length}</span>`;
     
-    // Toggle collapse
-    let collapsed = false;
+    // Toggle collapse — start collapsed so the sidebar isn't overwhelmed by
+    // long mood lists; the user expands a node group on demand.
+    let collapsed = true;
     const toggleIcon = el('span', '');
     toggleIcon.textContent = '▼';
-    toggleIcon.style.cssText = 'font-size:8px;color:#9ca3af;transition:transform .2s';
+    toggleIcon.style.cssText = 'font-size:8px;color:#9ca3af;transition:transform .2s;transform:rotate(-90deg)';
     nodeHeader.prepend(toggleIcon);
     
     const moodsContainer = el('div', '');
-    moodsContainer.style.cssText = 'display:block';
+    moodsContainer.style.cssText = 'display:none';
     
     nodeHeader.onclick = () => {
       collapsed = !collapsed;
@@ -1017,11 +1021,16 @@ function buildRoomCard(room) {
     try {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));
       if (data.sourceType === 'room' && data.device) {
+        // Keep the cursor over the same spot on the card it was grabbed at,
+        // instead of assuming the card is always grabbed dead-center.
+        const grabOffsetX = data.grabOffsetX ?? 50;
+        const grabOffsetY = data.grabOffsetY ?? 50;
+
         if (data.roomId === room.id) {
           // Device dropped in its own room - reposition it
           const rect = devicesArea.getBoundingClientRect();
-          const x = e.clientX - rect.left - 50; // Center device (100px / 2)
-          const y = e.clientY - rect.top - 50;
+          const x = e.clientX - rect.left - grabOffsetX;
+          const y = e.clientY - rect.top - grabOffsetY;
           
           // Constrain to container bounds
           const maxX = devicesArea.offsetWidth - 100;
@@ -1039,8 +1048,8 @@ function buildRoomCard(room) {
         } else {
           // Device dropped from another room - move it to drop location
           const rect = devicesArea.getBoundingClientRect();
-          const x = e.clientX - rect.left - 50; // Center device (100px / 2)
-          const y = e.clientY - rect.top - 50;
+          const x = e.clientX - rect.left - grabOffsetX;
+          const y = e.clientY - rect.top - grabOffsetY;
           
           // Constrain to container bounds
           const maxX = devicesArea.offsetWidth - 100;
@@ -1286,138 +1295,6 @@ function promptAddFloorplan(room) {
   document.body.append(fileInput);
   fileInput.click();
 }
-
-// ─── Add Device to Room (DEPRECATED - replaced by unit-picker.js) ────────────
-// TODO: Remove this once unit picker is fully tested and working
-/*
-function promptAddDevice(room) {
-  const overlay = el('div', 'modal-overlay');
-  const dlg = el('div', 'modal-dialog');
-  dlg.style.cssText = 'width:500px;max-width:95vw';
-
-  const hdr = el('div', 'modal-header');
-  hdr.innerHTML = `<strong>Apparaat toevoegen — ${room.name}</strong>`;
-  const closeBtn = el('button', 'modal-close');
-  closeBtn.textContent = '✕';
-  closeBtn.onclick = () => overlay.remove();
-  hdr.append(closeBtn);
-
-  const body = el('div', 'modal-body');
-  
-  // Device types with icons and colors
-  const deviceTypes = [
-    { type: 'lamp', label: 'Lamp', icon: '💡', color: '#fbbf24' },
-    { type: 'relay', label: 'Relais', icon: '⚡', color: '#3b82f6' },
-    { type: 'dimmer', label: 'Dimmer', icon: '🎚️', color: '#8b5cf6' },
-    { type: 'motor', label: 'Motor', icon: '🪟', color: '#06b6d4' },
-    { type: 'sensor', label: 'Sensor', icon: '🌡️', color: '#f59e0b' }
-  ];
-  
-  const typeLabel = el('label', 'modal-label');
-  typeLabel.textContent = 'Type apparaat';
-  
-  const typeGrid = el('div', '');
-  typeGrid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:16px';
-  
-  let selectedType = null;
-  const typeButtons = [];
-  
-  deviceTypes.forEach(dt => {
-    const btn = el('button', '');
-    btn.style.cssText = `
-      padding:12px;
-      border:2px solid #dde3ef;
-      border-radius:8px;
-      background:#fff;
-      cursor:pointer;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:4px;
-      transition:all .15s;
-    `;
-    btn.innerHTML = `
-      <div style="font-size:28px">${dt.icon}</div>
-      <div style="font-size:12px;color:#1a1f2e;font-weight:500">${dt.label}</div>
-    `;
-    btn.onclick = () => {
-      selectedType = dt;
-      typeButtons.forEach(b => {
-        b.style.borderColor = '#dde3ef';
-        b.style.background = '#fff';
-      });
-      btn.style.borderColor = dt.color;
-      btn.style.background = `${dt.color}15`;
-    };
-    btn.onmouseenter = () => {
-      if (selectedType !== dt) {
-        btn.style.borderColor = '#c0c8d8';
-      }
-    };
-    btn.onmouseleave = () => {
-      if (selectedType !== dt) {
-        btn.style.borderColor = '#dde3ef';
-      }
-    };
-    typeButtons.push(btn);
-    typeGrid.append(btn);
-  });
-  
-  const nameLabel = el('label', 'modal-label');
-  nameLabel.textContent = 'Naam apparaat';
-  nameLabel.style.marginTop = '16px';
-  
-  const nameInput = el('input', 'modal-input');
-  nameInput.type = 'text';
-  nameInput.placeholder = 'Bijv. Lamp woonkamer';
-  
-  body.append(typeLabel, typeGrid, nameLabel, nameInput);
-
-  const footer = el('div', 'modal-footer');
-  const cancelBtn = el('button', 'modal-btn');
-  cancelBtn.textContent = 'Annuleren';
-  cancelBtn.onclick = () => overlay.remove();
-  
-  const addBtn = el('button', 'modal-btn-primary');
-  addBtn.textContent = 'Toevoegen';
-  addBtn.onclick = () => {
-    if (!selectedType) {
-      alert('Selecteer een type apparaat');
-      return;
-    }
-    const name = nameInput.value.trim();
-    if (!name) {
-      nameInput.style.borderColor = '#ef4444';
-      return;
-    }
-    
-    // Set initial position at center of room (or near center)
-    // Default room width is ~500px, height ~400px, device is 100x100
-    const initialX = Math.max(0, (room.width || 500) / 2 - 50);
-    const initialY = Math.max(0, (room.height || 400) / 2 - 50);
-    
-    const device = {
-      id: makeId(),
-      name,
-      type: selectedType.type,
-      icon: selectedType.icon,
-      color: selectedType.color,
-      x: initialX,
-      y: initialY
-    };
-    
-    dispatch({ type: 'ADD_DEVICE_TO_ROOM', roomId: room.id, device });
-    overlay.remove();
-  };
-
-  footer.append(cancelBtn, addBtn);
-  dlg.append(hdr, body, footer);
-  overlay.append(dlg);
-  overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
-  document.body.append(overlay);
-  nameInput.focus();
-}
-*/
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

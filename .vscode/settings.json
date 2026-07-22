@@ -1,6 +1,7 @@
 {
   "typescript.tsdk": "reader/node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
+  "javascript.validate.enable": false,
   "search.exclude": {
     "**/node_modules": true,
     "**/dist": true,

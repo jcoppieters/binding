@@ -148,15 +148,15 @@ export function showDeviceBindings(device, room) {
     }
     
     // For multi-button switches, match ANY button from this device
-    if (device.isMultiButtonSwitch && device.buttons) {
+    if (device.isMultiUnit && device.buttons) {
       // Check if binding's channelRef matches ANY of this device's buttons
       const matchesAnyButton = device.buttons.some(btn => {
         const fromMatches = b.from.deviceId === device.id && 
-                           b.from.channelRef?.nodeAddress === btn.ref.nodeAddress &&
-                           b.from.channelRef?.unitAddress === btn.ref.unitAddress;
+                           b.from.channelRef?.nodeAddress === device.nodeAddress &&
+                           b.from.channelRef?.unitAddress === btn.unitAddress;
         const toMatches = b.to.deviceId === device.id && 
-                         b.to.channelRef?.nodeAddress === btn.ref.nodeAddress &&
-                         b.to.channelRef?.unitAddress === btn.ref.unitAddress;
+                         b.to.channelRef?.nodeAddress === device.nodeAddress &&
+                         b.to.channelRef?.unitAddress === btn.unitAddress;
         return fromMatches || toMatches;
       });
       if (matchesAnyButton) {
@@ -202,17 +202,6 @@ export function showDeviceBindings(device, room) {
     });
   });
   
-  // Also check global moods (not room-based)
-  (s.project.homeView.moods || []).forEach(mood => {
-    const deviceIdMatch = connectedDeviceIds.has(mood.id);
-    const channelRefMatch = mood.channelRef && connectedChannelRefs.has(`${mood.channelRef.nodeAddress}-${mood.channelRef.unitAddress}`);
-    
-    if (deviceIdMatch || channelRefMatch) {
-      console.log('[bindings] Adding mood to connectedDevices:', mood.name, 'id:', mood.id, 'channelRef:', mood.channelRef);
-      connectedDevices.push({ ...mood, roomName: 'Moods' });
-    }
-  });
-  
   // Set context
   _currentBindingContext = {
     device,
@@ -250,7 +239,7 @@ function renderBindingPanel() {
   
   // Handle moods (not in rooms) vs regular devices
   if (_currentBindingContext.device.type === 'mood') {
-    // For moods, keep the device as-is (it's always fresh from discoveredNodes)
+    // For moods, keep the device as-is (it's always fresh from project.nodes)
     freshDevice = _currentBindingContext.device;
     freshRoom = _currentBindingContext.room; // Virtual "Moods" room
   } else {
@@ -285,15 +274,15 @@ function renderBindingPanel() {
     }
     
     // For multi-button switches, match ANY button from this device
-    if (freshDevice.isMultiButtonSwitch && freshDevice.buttons) {
+    if (freshDevice.isMultiUnit && freshDevice.buttons) {
       // Check if binding's channelRef matches ANY of this device's buttons
       return freshDevice.buttons.some(btn => {
         const fromMatches = b.from.deviceId === freshDevice.id && 
-                           b.from.channelRef?.nodeAddress === btn.ref.nodeAddress &&
-                           b.from.channelRef?.unitAddress === btn.ref.unitAddress;
+                           b.from.channelRef?.nodeAddress === freshDevice.nodeAddress &&
+                           b.from.channelRef?.unitAddress === btn.unitAddress;
         const toMatches = b.to.deviceId === freshDevice.id && 
-                         b.to.channelRef?.nodeAddress === btn.ref.nodeAddress &&
-                         b.to.channelRef?.unitAddress === btn.ref.unitAddress;
+                         b.to.channelRef?.nodeAddress === freshDevice.nodeAddress &&
+                         b.to.channelRef?.unitAddress === btn.unitAddress;
         return fromMatches || toMatches;
       });
     }
@@ -364,7 +353,7 @@ function renderBindingPanel() {
       }
       
       // For multi-button switches, update activeButton to match the binding's channelRef
-      if (deviceToAdd && deviceToAdd.isMultiButtonSwitch && deviceToAdd.buttons) {
+      if (deviceToAdd && deviceToAdd.isMultiUnit && deviceToAdd.buttons) {
         // Find which button is actually in the bindings
         for (const binding of deviceBindings) {
           const bindingRef = binding.from.deviceId === deviceToAdd.id ? binding.from.channelRef : 
@@ -373,13 +362,13 @@ function renderBindingPanel() {
           if (bindingRef) {
             // Find the button index that matches this channelRef
             const buttonIndex = deviceToAdd.buttons.findIndex(btn => 
-              btn.ref.nodeAddress === bindingRef.nodeAddress &&
-              btn.ref.unitAddress === bindingRef.unitAddress
+              deviceToAdd.nodeAddress === bindingRef.nodeAddress &&
+              btn.unitAddress === bindingRef.unitAddress
             );
             
             if (buttonIndex >= 0) {
               deviceToAdd.activeButton = buttonIndex;
-              deviceToAdd.channelRef = deviceToAdd.buttons[buttonIndex].ref;
+              deviceToAdd.channelRef = { nodeAddress: deviceToAdd.nodeAddress, unitAddress: deviceToAdd.buttons[buttonIndex].unitAddress };
               break; // Use the first matching binding
             }
           }
@@ -392,8 +381,8 @@ function renderBindingPanel() {
     });
   });
   
-  // Also check global moods - extract from discoveredNodes (same as sidebar)
-  for (const node of (s.project.discoveredNodes || [])) {
+  // Also check global moods - extract from project.nodes (same as sidebar)
+  for (const node of (s.project.nodes || [])) {
     if (node.units) {
       for (const unit of node.units) {
         if (unit.type === 7) { // Type 7 = mood
@@ -414,13 +403,12 @@ function renderBindingPanel() {
               type: 'mood',
               channelRef: {
                 nodeAddress: node.nodeAddress,
-                unitAddress: unit.unitAddress,
-                moduleInstanceId: `mood-${node.nodeAddress}-${unit.unitAddress}`
+                unitAddress: unit.unitAddress
               },
               roomName: 'Moods'
             };
             
-            console.log('[renderBindingPanel] Adding mood from discoveredNodes:', mood.name, moodKey);
+            console.log('[renderBindingPanel] Adding mood from project.nodes:', mood.name, moodKey);
             connectedDevices.push(mood);
           }
         }
@@ -440,11 +428,24 @@ function renderBindingPanel() {
           found = true;
         }
       });
-      // Check in moods if not found in rooms
+      // Check moods (derived from project.nodes) if not found in rooms
       if (!found) {
-        const mood = (s.project.homeView.moods || []).find(m => m.id === deviceId);
-        if (mood) {
-          connectedDevices.push({ ...mood, roomName: 'Moods' });
+        const match = deviceId.match(/^mood-(\d+)-(\d+)$/);
+        if (match) {
+          const [, nodeAddress, unitAddress] = match.map(Number);
+          const node = s.project.nodes.find(n => n.nodeAddress === nodeAddress);
+          const unit = node?.units?.find(u => u.unitAddress === unitAddress);
+          if (unit) {
+            connectedDevices.push({
+              id: deviceId,
+              name: unit.name || `Mood ${unitAddress}`,
+              icon: '🎭',
+              color: '#ec4899',
+              type: 'mood',
+              channelRef: { nodeAddress, unitAddress },
+              roomName: 'Moods'
+            });
+          }
         }
       }
     }
@@ -517,7 +518,7 @@ function renderBindingPanel() {
   
   // Build header text with button/sensor info for multi-button switches
   let headerText = `${device.icon} ${device.name}`;
-  if (device.isMultiButtonSwitch) {
+  if (device.isMultiUnit) {
     if (device.activeSensor) {
       headerText += ' <span style="color:#f59e0b;font-weight:600">🌡️ Sensor</span>';
     } else {
@@ -622,7 +623,7 @@ function setupDropZone(container) {
 
 /**
  * Build button selector for multi-button switches
- * @param {object} device - Device with isMultiButtonSwitch, buttons, and sensors
+ * @param {object} device - Device with isMultiUnit, buttons, and sensors
  * @returns {HTMLElement}
  */
 function buildButtonSelector(device) {
@@ -671,14 +672,15 @@ function buildButtonSelector(device) {
       e.stopPropagation();
       // Update device to use this button
       const buttonUnit = device.buttons[i];
-      console.log('[button-click] Switching to button', i + 1, 'channelRef:', buttonUnit.ref);
+      const buttonRef = { nodeAddress: device.nodeAddress, unitAddress: buttonUnit.unitAddress };
+      console.log('[button-click] Switching to button', i + 1, 'channelRef:', buttonRef);
       dispatch({
         type: 'UPDATE_DEVICE',
         deviceId: device.id,
         patch: { 
           activeButton: i,
           activeSensor: false,
-          channelRef: buttonUnit.ref
+          channelRef: buttonRef
         }
       });
       
@@ -731,13 +733,14 @@ function buildButtonSelector(device) {
       e.stopPropagation();
       // Update device to use temperature sensor
       const sensorUnit = device.sensors[0];
-      console.log('[sensor-click] Switching to sensor, channelRef:', sensorUnit.ref);
+      const sensorRef = { nodeAddress: device.nodeAddress, unitAddress: sensorUnit.unitAddress };
+      console.log('[sensor-click] Switching to sensor, channelRef:', sensorRef);
       dispatch({
         type: 'UPDATE_DEVICE',
         deviceId: device.id,
         patch: { 
           activeSensor: true,
-          channelRef: sensorUnit.ref
+          channelRef: sensorRef
         }
       });
       
@@ -802,14 +805,14 @@ function buildBindingDeviceCard(device, isPrimary) {
   card.appendChild(deviceHeader);
   
   // Button/sensor selector for multi-button switches
-  if (device.isMultiButtonSwitch) {
+  if (device.isMultiUnit) {
     const buttonSelector = buildButtonSelector(device);
     card.appendChild(buttonSelector);
   }
   
   // Determine which ports to show
   let deviceType = device.type;
-  if (device.isMultiButtonSwitch && device.activeSensor) {
+  if (device.isMultiUnit && device.activeSensor) {
     // Show sensor ports when temp sensor is selected
     deviceType = 'sensor';
   }
@@ -1012,7 +1015,7 @@ function renderBindingWires() {
     // Filter wires based on active button/sensor of multi-button switches
     // Check if 'from' device is multi-button switch with different active button
     const fromDevice = allDevicesInPanel.find(d => d.id === wire.from.deviceId);
-    if (fromDevice?.isMultiButtonSwitch) {
+    if (fromDevice?.isMultiUnit) {
       const wireChannelRef = JSON.stringify(wire.from.channelRef);
       const activeChannelRef = JSON.stringify(fromDevice.channelRef);
       if (wireChannelRef !== activeChannelRef) {
@@ -1023,7 +1026,7 @@ function renderBindingWires() {
     
     // Check if 'to' device is multi-button switch with different active button
     const toDevice = allDevicesInPanel.find(d => d.id === wire.to.deviceId);
-    if (toDevice?.isMultiButtonSwitch) {
+    if (toDevice?.isMultiUnit) {
       const wireChannelRef = JSON.stringify(wire.to.channelRef);
       const activeChannelRef = JSON.stringify(toDevice.channelRef);
       if (wireChannelRef !== activeChannelRef) {

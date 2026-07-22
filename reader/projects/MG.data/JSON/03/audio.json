@@ -1,0 +1,806 @@
+﻿[
+  {
+    "id": 0,
+    "name": "Kitchen",
+    "nodeaddress": 252,
+    "unitaddress": 100,
+    "destinations": [
+      {
+        "location": 1,
+        "id": 0,
+        "destinationnr": 0,
+        "name": "Kitchen",
+        "nodeaddress": 252,
+        "unitaddress": 100,
+        "maxvolume": 100,
+        "type": 1,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 2,
+            "sourcenr": 7,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 3,
+            "sourcenr": 3,
+            "name": "Radio 2",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 7,
+            "sourcenr": 6,
+            "name": "VRT nieuws",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "Tim Bedroom",
+    "nodeaddress": 252,
+    "unitaddress": 101,
+    "destinations": [
+      {
+        "location": 0,
+        "id": 0,
+        "destinationnr": 1,
+        "name": "Tim Bedroom",
+        "nodeaddress": 252,
+        "unitaddress": 101,
+        "maxvolume": 100,
+        "type": 1,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 2,
+            "sourcenr": 7,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 3,
+            "sourcenr": 3,
+            "name": "Radio 2",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          },
+          {
+            "id": 7,
+            "sourcenr": 6,
+            "name": "VRT nieuws",
+            "nodeaddress": 252,
+            "unitaddress": 101
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Master Bedroom",
+    "nodeaddress": 252,
+    "unitaddress": 102,
+    "destinations": [
+      {
+        "location": 0,
+        "id": 0,
+        "destinationnr": 3,
+        "name": "Master Bedroom",
+        "nodeaddress": 252,
+        "unitaddress": 102,
+        "maxvolume": 100,
+        "type": 1,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 2,
+            "sourcenr": 7,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 3,
+            "sourcenr": 14,
+            "name": "VRT Classics",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          },
+          {
+            "id": 7,
+            "sourcenr": 8,
+            "name": "Pure Unplugged",
+            "nodeaddress": 252,
+            "unitaddress": 102
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Living",
+    "nodeaddress": 252,
+    "unitaddress": 103,
+    "destinations": [
+      {
+        "location": 0,
+        "id": 0,
+        "destinationnr": 2,
+        "name": "Living",
+        "nodeaddress": 252,
+        "unitaddress": 103,
+        "maxvolume": 100,
+        "type": 1,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 2,
+            "sourcenr": 7,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 3,
+            "sourcenr": 3,
+            "name": "Radio 2",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 7,
+            "sourcenr": 5,
+            "name": "Living B&O",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Portable",
+    "nodeaddress": 252,
+    "unitaddress": 104,
+    "destinations": [
+      {
+        "location": 2,
+        "id": 0,
+        "destinationnr": 4,
+        "name": "Portable",
+        "nodeaddress": 252,
+        "unitaddress": 104,
+        "maxvolume": 100,
+        "type": 0,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 2,
+            "sourcenr": 11,
+            "name": "Q music",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 3,
+            "sourcenr": 14,
+            "name": "VRT Classics",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 7,
+            "sourcenr": 8,
+            "name": "Pure Unplugged",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Both",
+    "nodeaddress": 252,
+    "unitaddress": 105,
+    "destinations": [
+      {
+        "location": 0,
+        "id": 0,
+        "destinationnr": 0,
+        "name": "Kitchen",
+        "nodeaddress": 252,
+        "unitaddress": 105,
+        "maxvolume": 100,
+        "type": 1,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 2,
+            "sourcenr": 11,
+            "name": "Q music",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 3,
+            "sourcenr": 2,
+            "name": "MNM",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 7,
+            "sourcenr": 8,
+            "name": "Pure Unplugged",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          }
+        ]
+      },
+      {
+        "location": 1,
+        "id": 1,
+        "destinationnr": 2,
+        "name": "Living",
+        "nodeaddress": 252,
+        "unitaddress": 105,
+        "maxvolume": 100,
+        "type": 1,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 2,
+            "sourcenr": 11,
+            "name": "Q music",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 3,
+            "sourcenr": 2,
+            "name": "MNM",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 7,
+            "sourcenr": 8,
+            "name": "Pure Unplugged",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          }
+        ]
+      },
+      {
+        "location": 2,
+        "id": 2,
+        "destinationnr": 4,
+        "name": "Portable",
+        "nodeaddress": 252,
+        "unitaddress": 105,
+        "maxvolume": 100,
+        "type": 0,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 2,
+            "sourcenr": 11,
+            "name": "Q music",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 3,
+            "sourcenr": 2,
+            "name": "MNM",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          },
+          {
+            "id": 7,
+            "sourcenr": 8,
+            "name": "Pure Unplugged",
+            "nodeaddress": 252,
+            "unitaddress": 105
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 64,
+    "name": "Virtual Test",
+    "nodeaddress": 255,
+    "unitaddress": 0,
+    "destinations": [
+      {
+        "location": 0,
+        "id": 0,
+        "destinationnr": 2,
+        "name": "Living",
+        "nodeaddress": 252,
+        "unitaddress": 103,
+        "maxvolume": 100,
+        "type": 1,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 2,
+            "sourcenr": 7,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 3,
+            "sourcenr": 3,
+            "name": "Radio 2",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          },
+          {
+            "id": 7,
+            "sourcenr": 5,
+            "name": "Living B&O",
+            "nodeaddress": 252,
+            "unitaddress": 103
+          }
+        ]
+      },
+      {
+        "location": 1,
+        "id": 0,
+        "destinationnr": 0,
+        "name": "Kitchen",
+        "nodeaddress": 252,
+        "unitaddress": 100,
+        "maxvolume": 100,
+        "type": 1,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 2,
+            "sourcenr": 7,
+            "name": "Radio 1",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 3,
+            "sourcenr": 3,
+            "name": "Radio 2",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          },
+          {
+            "id": 7,
+            "sourcenr": 6,
+            "name": "VRT nieuws",
+            "nodeaddress": 252,
+            "unitaddress": 100
+          }
+        ]
+      },
+      {
+        "location": 2,
+        "id": 0,
+        "destinationnr": 4,
+        "name": "Portable",
+        "nodeaddress": 252,
+        "unitaddress": 104,
+        "maxvolume": 100,
+        "type": 0,
+        "sources": [
+          {
+            "id": 0,
+            "sourcenr": 0,
+            "name": "Joe",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 1,
+            "sourcenr": 1,
+            "name": "Joe Easy",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 2,
+            "sourcenr": 11,
+            "name": "Q music",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 3,
+            "sourcenr": 14,
+            "name": "VRT Classics",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 4,
+            "sourcenr": 4,
+            "name": "StuBru",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 5,
+            "sourcenr": 12,
+            "name": "Klara continuo",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 6,
+            "sourcenr": 13,
+            "name": "ABC Lounge",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          },
+          {
+            "id": 7,
+            "sourcenr": 8,
+            "name": "Pure Unplugged",
+            "nodeaddress": 252,
+            "unitaddress": 104
+          }
+        ]
+      }
+    ]
+  }
+]

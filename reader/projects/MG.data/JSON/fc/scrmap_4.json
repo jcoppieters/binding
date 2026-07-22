@@ -1,0 +1,38 @@
+﻿[
+  {
+    "nodeaddress": 16,
+    "unitaddress": 28,
+    "name": "Curtains",
+    "type": 8
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 109,
+    "name": "Keuken",
+    "type": 8
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 106,
+    "name": "Salon Boven",
+    "type": 8
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 107,
+    "name": "Tim Links",
+    "type": 8
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 108,
+    "name": "Tim Rechts",
+    "type": 8
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 110,
+    "name": "Zwembad",
+    "type": 8
+  }
+]

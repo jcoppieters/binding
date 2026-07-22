@@ -5,74 +5,41 @@
  */
 
 import { Router } from 'express';
+import { readFile } from 'fs/promises';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { BindingType } from '../models/binding.js';
+import { LEGACY_EVENT_TO_PORT, getLegacyFunctionPort, unitTypeInfo } from '../models/unitTypes.js';
 
 const router = Router();
 
-/**
- * Event code to port mapping (for input devices - controllers)
- * From old software nodemess.h and BindingSoftware.rc:
- * - 0x01 = EV_UNITCONTROLTOGGLE = "Event Long" (L)
- * - 0x02 = EV_UNITCONTROLPULSTOGGLE = "Event Short Pulse + State" (for switches/dimmers only)
- * - 0x03 = EV_UNITCONTROLPULS = "Event Short Pulse" (P)
- * 
- * For button inputs (DTBS), only 0x01 (Long) and 0x03 (Short) are used
- */
-const EVENT_TO_PORT: Record<number, string> = {
-  0x01: 'lang',   // Event Long (L)
-  0x02: 'status', // Event State (for switches/dimmers - not buttons)
-  0x03: 'kort',   // Event Short Pulse (P) 
-  0x04: 'status'  // Status request
-};
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const MODULES_DIR = join(__dirname, '../../modules');
 
 /**
- * Function code to port mapping (for output devices - controllables)
- * Based on bindingEditorAPI.ts and hardware specs
- * 
- * NOTE: Moods have DIFFERENT mappings - see getFunctionPort() below
+ * Models belonging to a field-switch family (module category 'switch', e.g.
+ * DTBS-*) — their buttons/sensor must be grouped into ONE Home View device
+ * per node, not one device per button. Cached after first read.
  */
-const FUNCTION_TO_PORT: Record<number, string> = {
-  0xFA6: 'schakel',  // Toggle (switches/dimmers)
-  0xFA2: 'aan',      // Turn on (switches/dimmers)
-  0xFA4: 'uit',      // Turn off (switches/dimmers)
-  0xFB6: 'op',       // Motor up / dim up
-  0xFB4: 'neer',     // Motor down / dim down
-  0xF9F: 'trigger',  // Scene/Mood trigger
-};
-
-/**
- * Mood function code to INPUT port mapping
- * When a mood is the target (being triggered), these function codes
- * map to the mood's INPUT ports on the LEFT side
- */
-const MOOD_FUNCTION_TO_PORT: Record<number, string> = {
-  0xFA6: 'kort',     // Short Pulse → Kort input (IDS_FC_VIRTUALSET_PULS)
-  0xFA2: 'status',   // Short Pulse On/Off → Status input (IDS_FC_VIRTUALSET_PULSTOGGLE)
-  0xFA4: 'lang',     // Long On/Off → Lang input (IDS_FC_VIRTUALSET_LONG)
-};
-
-/**
- * Motor function code to port mapping
- * Motor/Duoswitch devices (blinds, curtains, shutters)
- */
-const MOTOR_FUNCTION_TO_PORT: Record<number, string> = {
-  0xB6D: 'op',       // Up/Down toggle (IDS_FC_DUOSWITCH_UPDN)
-  0xFB6: 'op',       // Up (IDS_FC_DUOSWITCH_UP)
-  0xFB4: 'neer',     // Down (IDS_FC_DUOSWITCH_DOWN)
-  0xFB3: 'stop',     // Stop (IDS_FC_DUOSWITCH_STOP)
-};
-
-/**
- * Get the correct port ID for a function code based on device type
- */
-function getFunctionPort(functionCode: number, deviceType: string): string {
-  if (deviceType === 'mood') {
-    return MOOD_FUNCTION_TO_PORT[functionCode] || 'kort';
+let _switchModelsCache: Set<string> | null = null;
+async function loadSwitchModels(): Promise<Set<string>> {
+  if (_switchModelsCache) return _switchModelsCache;
+  const models = new Set<string>();
+  try {
+    const raw = await readFile(join(MODULES_DIR, '_index.json'), 'utf-8');
+    for (const family of JSON.parse(raw)) {
+      if (family.category !== 'switch') continue;
+      if (Array.isArray(family.variants)) {
+        for (const v of family.variants) models.add(v.model);
+      } else if (family.model) {
+        models.add(family.model);
+      }
+    }
+  } catch (err) {
+    console.error('[converter] Failed to load module database for switch grouping:', err);
   }
-  if (deviceType === 'motor') {
-    return MOTOR_FUNCTION_TO_PORT[functionCode] || 'op';
-  }
-  return FUNCTION_TO_PORT[functionCode] || 'schakel';
+  _switchModelsCache = models;
+  return models;
 }
 
 /**
@@ -91,29 +58,42 @@ function getFunctionPort(functionCode: number, deviceType: string): string {
  *   warnings: Array<string>
  * }
  */
-router.post('/convert', async (req, res) => {
+router.post('/convert', async (req, res): Promise<void> => {
   try {
     const { bindings, project } = req.body;
 
     if (!bindings || !Array.isArray(bindings)) {
-      return res.status(400).json({ error: 'Invalid request: bindings array required' });
+      res.status(400).json({ error: 'Invalid request: bindings array required' });
+      return;
     }
 
     if (!project) {
-      return res.status(400).json({ error: 'Invalid request: project required' });
+      res.status(400).json({ error: 'Invalid request: project required' });
+      return;
     }
 
-    const visualBindings = [];
-    const devicesToCreate = [];
-    const moodsToCreate = [];
-    const warnings = [];
+    const visualBindings: any[] = [];
+    const devicesToCreate: any[] = [];
+    const moodsToCreate: any[] = [];
+    const warnings: string[] = [];
 
     // Build lookup maps
     const railDeviceMap = buildRailDeviceMap(project);
     const homeDeviceMap = buildHomeDeviceMap(project);
 
+    // Group field-switch (DTBS-*) units by node — one Home View device per
+    // physical switch, not one per button.
+    const switchModels = await loadSwitchModels();
+    const switchNodeUnits = new Map<number, any[]>();
+    for (const railUnit of railDeviceMap.values()) {
+      if (!switchModels.has(railUnit.model)) continue;
+      if (!switchNodeUnits.has(railUnit.nodeAddress)) switchNodeUnits.set(railUnit.nodeAddress, []);
+      switchNodeUnits.get(railUnit.nodeAddress)!.push(railUnit);
+    }
+    const switchDeviceCache = new Map<number, any>();
+
     console.log(`[converter] Converting ${bindings.length} bindings...`);
-    console.log(`[converter] Rail devices: ${railDeviceMap.size}, Home devices: ${homeDeviceMap.size}`);
+    console.log(`[converter] Rail devices: ${railDeviceMap.size}, Home devices: ${homeDeviceMap.size}, Switch nodes: ${switchNodeUnits.size}`);
 
     // Convert each simple binding
     for (const binding of bindings) {
@@ -151,88 +131,41 @@ router.post('/convert', async (req, res) => {
 
         // Find or create input device (controller)
         const inputKey = `${input.nodeAddress}-${input.unitAddress}`;
-        let inputDevice = homeDeviceMap.get(inputKey);
-        
-        if (!inputDevice) {
-          const railDevice = railDeviceMap.get(inputKey);
-          if (!railDevice) {
-            warnings.push(`Binding ${binding.bindingNumber}: Input device not found (node 0x${input.nodeAddress.toString(16)}, unit ${input.unitAddress})`);
-            continue;
-          }
-          
-          // Create Home View device for this input
-          inputDevice = createDeviceFromRail(railDevice, 'input');
-          
-          // Separate moods from regular devices
-          if (inputDevice.type === 'mood') {
-            moodsToCreate.push(inputDevice);
-          } else {
-            devicesToCreate.push(inputDevice);
-          }
-          
-          homeDeviceMap.set(inputKey, inputDevice);
-        }
+        const inputDevice = resolveOrCreateDevice(
+          inputKey, input.nodeAddress, 'input', binding, warnings,
+          homeDeviceMap, railDeviceMap, switchNodeUnits, switchDeviceCache, devicesToCreate, moodsToCreate
+        );
+        if (!inputDevice) continue;
 
         // Find or create output device (controllable)
         const outputKey = `${actualOutput.nodeAddress}-${actualOutput.unitAddress}`;
-        let outputDevice = homeDeviceMap.get(outputKey);
-        
-        if (!outputDevice) {
-          const railDevice = railDeviceMap.get(outputKey);
-          if (!railDevice) {
-            warnings.push(`Binding ${binding.bindingNumber}: Output device not found (node 0x${actualOutput.nodeAddress.toString(16)}, unit ${actualOutput.unitAddress})`);
-            continue;
-          }
-          
-          // Create Home View device for this output
-          outputDevice = createDeviceFromRail(railDevice, 'output');
-          
-          // Separate moods from regular devices
-          if (outputDevice.type === 'mood') {
-            moodsToCreate.push(outputDevice);
-          } else {
-            devicesToCreate.push(outputDevice);
-          }
-          
-          homeDeviceMap.set(outputKey, outputDevice);
-        }
+        const outputDevice = resolveOrCreateDevice(
+          outputKey, actualOutput.nodeAddress, 'output', binding, warnings,
+          homeDeviceMap, railDeviceMap, switchNodeUnits, switchDeviceCache, devicesToCreate, moodsToCreate
+        );
+        if (!outputDevice) continue;
 
         // Map event code to port
-        const inputPortId = EVENT_TO_PORT[input.event || 0x03] || 'puls';
-        
-        // Map function code to port (extract from output content)
-        // Use device-type-aware mapping for moods vs switches/dimmers/motors
-        const functionCode = extractFunctionCode(actualOutput, binding.content);
-        const outputPortId = getFunctionPort(functionCode, outputDevice.type);
+        const inputPortId = LEGACY_EVENT_TO_PORT[input.event || 0x03] || 'kort';
 
-        // Build from/to with channelRef for multi-button switches
-        const fromBinding: any = {
+        // Map function code to port (extract from output content)
+        // Use device-category-aware mapping for moods vs switches/dimmers/motors
+        const functionCode = extractFunctionCode(binding.content);
+        const outputPortId = getLegacyFunctionPort(functionCode, outputDevice.type);
+
+        // from/to are always addressed by channelRef (nodeAddress+unitAddress) —
+        // deviceId is just a cache of which RoomDevice currently represents it.
+        const fromBinding = {
+          channelRef: { nodeAddress: input.nodeAddress, unitAddress: input.unitAddress },
+          portId: inputPortId,
           deviceId: inputDevice.id,
-          portId: inputPortId
         };
-        
-        // If input device is a multi-button switch, add channelRef to specify which button
-        if (inputDevice.matchedButton || inputDevice.matchedSensor) {
-          fromBinding.channelRef = {
-            nodeAddress: input.nodeAddress,
-            unitAddress: input.unitAddress,
-            moduleInstanceId: inputDevice.channelRef?.moduleInstanceId || inputDevice.id
-          };
-        }
-        
-        const toBinding: any = {
+
+        const toBinding = {
+          channelRef: { nodeAddress: actualOutput.nodeAddress, unitAddress: actualOutput.unitAddress },
+          portId: outputPortId,
           deviceId: outputDevice.id,
-          portId: outputPortId
         };
-        
-        // If output device is multi-channel or mood, add channelRef
-        if (outputDevice.matchedButton || outputDevice.matchedSensor || outputDevice.type === 'mood') {
-          toBinding.channelRef = {
-            nodeAddress: actualOutput.nodeAddress,
-            unitAddress: actualOutput.unitAddress,
-            moduleInstanceId: outputDevice.channelRef?.moduleInstanceId || outputDevice.id
-          };
-        }
 
         // Create visual binding
         const visualBinding = {
@@ -270,85 +203,24 @@ router.post('/convert', async (req, res) => {
 });
 
 /**
- * Build a map of Rail View devices by node-unit key
+ * Build a map of hardware channels by node-unit key, sourced entirely from
+ * project.nodes[] (the single source of truth for node/unit data).
  */
 function buildRailDeviceMap(project: any): Map<string, any> {
   const map = new Map();
 
-  // Add cabinet modules
-  for (const cabinet of (project.railView?.cabinets || [])) {
-    for (const module of (cabinet.modules || [])) {
-      if (module.nodeAddress != null && module.channelGroups) {
-        // For each channel group, create entries for individual units
-        for (const group of module.channelGroups) {
-          const count = group.count || 1;
-          for (let i = 0; i < count; i++) {
-            const unitAddress = (group.startUnit || 0) + i;
-            const key = `${module.nodeAddress}-${unitAddress}`;
-            map.set(key, {
-              ...module,
-              cabinetId: cabinet.id,
-              channelType: group.type,
-              channelIndex: i,
-              unitAddress,
-              location: 'cabinet'
-            });
-          }
-        }
-      }
-    }
-  }
-
-  // Add woning devices
-  for (const device of (project.railView?.woningDevices || [])) {
-    if (device.nodeAddress != null && device.channelGroups) {
-      for (const group of device.channelGroups) {
-        const count = group.count || 1;
-        for (let i = 0; i < count; i++) {
-          const unitAddress = (group.startUnit || 0) + i;
-          const key = `${device.nodeAddress}-${unitAddress}`;
-          map.set(key, {
-            ...device,
-            channelType: group.type,
-            channelIndex: i,
-            unitAddress,
-            location: 'woning'
-          });
-        }
-      }
-    }
-  }
-
-  // Fallback: Use discoveredNodes if channelGroups not yet configured
-  // This happens when modules exist in Rail View but channels aren't defined yet
-  for (const node of (project.discoveredNodes || [])) {
-    if (node.units) {
-      for (const unit of node.units) {
-        const key = `${node.nodeAddress}-${unit.unitAddress}`;
-        // Only add if not already in map (channelGroups take precedence)
-        if (!map.has(key)) {
-          // Map unit type to channel type
-          // Type 3 = input_digital, Type 1/2 = relay/dimmer, Type 7 = mood, Type 8 = motor, Type 4 = temperature
-          let channelType = 'unknown';
-          if (unit.type === 3) channelType = 'input_digital';
-          else if (unit.type === 1) channelType = 'dimmer_1ch';
-          else if (unit.type === 2) channelType = 'relay_16a';
-          else if (unit.type === 7) channelType = 'mood';
-          else if (unit.type === 8) channelType = 'motor_updown';
-          else if (unit.type === 4) channelType = 'temperature';
-          
-          map.set(key, {
-            id: `discovered-${node.nodeAddress}-${unit.unitAddress}`,
-            model: node.name || 'UNKNOWN',
-            nodeAddress: node.nodeAddress,
-            unitAddress: unit.unitAddress,
-            name: unit.name || `Unit ${unit.unitAddress}`,
-            channelType,
-            unitType: unit.type,
-            location: 'discovered'
-          });
-        }
-      }
+  for (const node of (project.nodes || [])) {
+    for (const unit of (node.units || [])) {
+      const key = `${node.nodeAddress}-${unit.unitAddress}`;
+      const info = unitTypeInfo(unit.type);
+      map.set(key, {
+        nodeAddress: node.nodeAddress,
+        unitAddress: unit.unitAddress,
+        name: unit.name || node.name,
+        model: node.model,
+        unitType: unit.type,
+        category: info.category, // 'dimmer' | 'relay' | 'motor' | 'input' | 'sensor' | 'audio' | 'mood' | null
+      });
     }
   }
 
@@ -363,75 +235,38 @@ function buildHomeDeviceMap(project: any): Map<string, any> {
 
   for (const room of (project.homeView?.rooms || [])) {
     for (const device of (room.devices || [])) {
-      // Check primary channelRef
       if (device.channelRef) {
         const key = `${device.channelRef.nodeAddress}-${device.channelRef.unitAddress}`;
         map.set(key, device);
       }
-      
-      // Check multi-button switches (buttons array)
-      if (device.buttons && Array.isArray(device.buttons)) {
-        for (const button of device.buttons) {
-          if (button.ref || button.channelRef) {
-            const ref = button.ref || button.channelRef;
-            const key = `${ref.nodeAddress}-${ref.unitAddress}`;
-            // Store the device, but also store which button was matched
-            map.set(key, {
-              ...device,
-              matchedButton: button,
-              matchedButtonIndex: device.buttons.indexOf(button)
-            });
-          }
-        }
+
+      // Multi-unit devices: each button/sensor shares the device's nodeAddress
+      for (const button of (device.buttons || [])) {
+        const key = `${device.nodeAddress}-${button.unitAddress}`;
+        map.set(key, { ...device, matchedButton: button });
       }
-      
-      // Check sensors array (for multi-button switches with temp sensors)
-      if (device.sensors && Array.isArray(device.sensors)) {
-        for (const sensor of device.sensors) {
-          if (sensor.ref || sensor.channelRef) {
-            const ref = sensor.ref || sensor.channelRef;
-            const key = `${ref.nodeAddress}-${ref.unitAddress}`;
-            map.set(key, {
-              ...device,
-              matchedSensor: sensor
-            });
-          }
-        }
+      for (const sensor of (device.sensors || [])) {
+        const key = `${device.nodeAddress}-${sensor.unitAddress}`;
+        map.set(key, { ...device, matchedSensor: sensor });
       }
     }
   }
-  
-  // Also check moods from homeView.moods array (imported moods)
-  for (const mood of (project.homeView?.moods || [])) {
-    if (mood.channelRef) {
-      const key = `${mood.channelRef.nodeAddress}-${mood.channelRef.unitAddress}`;
-      map.set(key, mood);
-    }
-  }
-  
-  // Also check ALL moods from discoveredNodes (Type 7 units) - for creating new bindings
-  for (const node of (project.discoveredNodes || [])) {
-    if (node.units) {
-      for (const unit of node.units) {
-        if (unit.type === 7) { // Type 7 = mood
-          const key = `${node.nodeAddress}-${unit.unitAddress}`;
-          // Only add if not already in map (imported moods take precedence)
-          if (!map.has(key)) {
-            map.set(key, {
-              id: `mood-${node.nodeAddress}-${unit.unitAddress}`,
-              name: unit.name || `Mood ${unit.unitAddress}`,
-              icon: '🎭',
-              color: '#ec4899',
-              type: 'mood',
-              channelRef: {
-                nodeAddress: node.nodeAddress,
-                unitAddress: unit.unitAddress,
-                moduleInstanceId: `mood-${node.nodeAddress}-${unit.unitAddress}`
-              }
-            });
-          }
-        }
-      }
+
+  // All moods (unit type 7) are available as binding targets even before
+  // being placed in a room — sourced directly from project.nodes[].
+  for (const node of (project.nodes || [])) {
+    for (const unit of (node.units || [])) {
+      if (unitTypeInfo(unit.type).category !== 'mood') continue;
+      const key = `${node.nodeAddress}-${unit.unitAddress}`;
+      if (map.has(key)) continue; // room-placed mood takes precedence
+      map.set(key, {
+        id: `mood-${node.nodeAddress}-${unit.unitAddress}`,
+        name: unit.name || `Mood ${unit.unitAddress}`,
+        icon: '🎭',
+        color: '#ec4899',
+        type: 'mood',
+        channelRef: { nodeAddress: node.nodeAddress, unitAddress: unit.unitAddress },
+      });
     }
   }
 
@@ -439,43 +274,106 @@ function buildHomeDeviceMap(project: any): Map<string, any> {
 }
 
 /**
- * Create a Home View device definition from a Rail View device
+ * Resolve the Home View device for a node-unit key, creating it if needed.
+ * Field-switch units (DTBS-* family) are grouped into ONE multi-button
+ * device per node instead of one device per button/sensor.
  */
-function createDeviceFromRail(railDevice: any, role: 'input' | 'output'): any {
-  const deviceId = `imported-${railDevice.nodeAddress}-${railDevice.unitAddress}-${Date.now()}`;
-  
-  // Determine device type based on channel type and role
-  let deviceType = 'lamp';
-  let icon = '💡';
-  let color = '#fbbf24';
-  
-  if (railDevice.channelType === 'input_digital') {
-    deviceType = 'input';
-    icon = '🔘';
-    color = '#a78bfa';
-  } else if (railDevice.channelType === 'input_analog' || railDevice.channelType === 'temperature') {
-    deviceType = 'sensor';
-    icon = '🌡️';
-    color = '#f59e0b';
-  } else if (railDevice.channelType?.startsWith('dimmer_')) {
-    deviceType = 'dimmer';
-    icon = '💡';
-    color = '#fbbf24';
-  } else if (railDevice.channelType?.startsWith('relay_')) {
-    deviceType = 'relay';
-    icon = '⚡';
-    color = '#60a5fa';
-  } else if (railDevice.channelType === 'motor_updown' || railDevice.channelType === 'motor_polar') {
-    deviceType = 'motor';
-    icon = '🪟';
-    color = '#34d399';
-  } else if (railDevice.channelType === 'mood') {
-    deviceType = 'mood';
-    icon = '🎭';
-    color = '#ec4899';
+function resolveOrCreateDevice(
+  key: string,
+  nodeAddress: number,
+  role: 'input' | 'output',
+  binding: any,
+  warnings: string[],
+  homeDeviceMap: Map<string, any>,
+  railDeviceMap: Map<string, any>,
+  switchNodeUnits: Map<number, any[]>,
+  switchDeviceCache: Map<number, any>,
+  devicesToCreate: any[],
+  moodsToCreate: any[]
+): any | null {
+  const existing = homeDeviceMap.get(key);
+  if (existing) return existing;
+
+  const switchUnits = switchNodeUnits.get(nodeAddress);
+  if (switchUnits) {
+    let switchDevice = switchDeviceCache.get(nodeAddress);
+    if (!switchDevice) {
+      switchDevice = createSwitchDeviceFromUnits(nodeAddress, switchUnits);
+      switchDeviceCache.set(nodeAddress, switchDevice);
+      devicesToCreate.push(switchDevice);
+      // Register this one device for every unit key of the node so later
+      // bindings referencing other buttons/sensors reuse the same device.
+      for (const u of switchUnits) {
+        homeDeviceMap.set(`${nodeAddress}-${u.unitAddress}`, switchDevice);
+      }
+    }
+    return switchDevice;
   }
 
-  // For discoveredNodes, use the unit name; otherwise use model + unit
+  const railDevice = railDeviceMap.get(key);
+  if (!railDevice) {
+    const unitAddress = key.split('-')[1];
+    warnings.push(`Binding ${binding.bindingNumber}: ${role === 'input' ? 'Input' : 'Output'} device not found (node 0x${nodeAddress.toString(16)}, unit ${unitAddress})`);
+    return null;
+  }
+
+  const device = createDeviceFromRail(railDevice);
+  if (device.type === 'mood') {
+    moodsToCreate.push(device);
+  } else {
+    devicesToCreate.push(device);
+  }
+  homeDeviceMap.set(key, device);
+  return device;
+}
+
+/**
+ * Create a grouped multi-button Home View device from all units of one
+ * field-switch node (buttons + optional temp sensor).
+ */
+function createSwitchDeviceFromUnits(nodeAddress: number, units: any[]): any {
+  const buttons = units.filter(u => u.category === 'input').map(u => ({ unitAddress: u.unitAddress, label: u.name }));
+  const sensors = units.filter(u => u.category === 'sensor').map(u => ({ unitAddress: u.unitAddress, label: u.name }));
+
+  return {
+    id: `imported-switch-${nodeAddress}-${Date.now()}`,
+    type: 'input',
+    name: units[0]?.model || `Node 0x${nodeAddress.toString(16).toUpperCase()}`,
+    isMultiUnit: true,
+    nodeAddress,
+    buttonCount: buttons.length,
+    hasTempSensor: sensors.length > 0,
+    buttons,
+    sensors,
+    activeButton: 0,
+    activeSensor: false,
+    icon: sensors.length ? '🔳 🌡️' : '🔳',
+    color: '#a78bfa',
+    x: 0,
+    y: 0,
+    imported: true,
+  };
+}
+
+/**
+ * Create a Home View device definition from a hardware channel (project.nodes[] entry)
+ */
+function createDeviceFromRail(railDevice: any): any {
+  const deviceId = `imported-${railDevice.nodeAddress}-${railDevice.unitAddress}-${Date.now()}`;
+
+  const category = railDevice.category ?? 'relay';
+  const ICONS: Record<string, string> = {
+    dimmer: '💡', relay: '⚡', motor: '🪟', input: '🔘',
+    sensor: '🌡️', audio: '🔊', mood: '🎭',
+  };
+  const COLORS: Record<string, string> = {
+    dimmer: '#fbbf24', relay: '#60a5fa', motor: '#34d399', input: '#a78bfa',
+    sensor: '#f59e0b', audio: '#06b6d4', mood: '#ec4899',
+  };
+  const deviceType = category;
+  const icon = ICONS[category] || '💡';
+  const color = COLORS[category] || '#fbbf24';
+
   const deviceName = railDevice.name || `${railDevice.model || 'Device'} U${railDevice.unitAddress}`;
 
   return {
@@ -486,12 +384,7 @@ function createDeviceFromRail(railDevice: any, role: 'input' | 'output'): any {
     color,
     x: 0, // Will be positioned by frontend
     y: 0,
-    channelRef: {
-      nodeAddress: railDevice.nodeAddress,
-      unitAddress: railDevice.unitAddress,
-      moduleInstanceId: railDevice.id,
-      channelIndex: railDevice.channelIndex
-    },
+    channelRef: { nodeAddress: railDevice.nodeAddress, unitAddress: railDevice.unitAddress },
     imported: true
   };
 }
@@ -500,7 +393,7 @@ function createDeviceFromRail(railDevice: any, role: 'input' | 'output'): any {
  * Extract function code from output unit
  * Format: A0000XXUxxFxxxDxxxxS where Fxxx is the function code
  */
-function extractFunctionCode(output: any, content: string): number {
+function extractFunctionCode(content: string): number {
   // Try to parse from content string
   const match = content.match(/F([0-9A-F]{2,3})/i);
   if (match) {

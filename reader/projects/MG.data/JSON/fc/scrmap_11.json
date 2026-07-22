@@ -1,0 +1,44 @@
+﻿[
+  {
+    "nodeaddress": 255,
+    "unitaddress": 2,
+    "name": "Verbruik",
+    "type": 255
+  },
+  {
+    "nodeaddress": 255,
+    "unitaddress": 1,
+    "name": "Zonnepanelen",
+    "type": 255
+  },
+  {
+    "nodeaddress": 255,
+    "unitaddress": 3,
+    "name": "Autoladers",
+    "type": 255
+  },
+  {
+    "nodeaddress": 255,
+    "unitaddress": 4,
+    "name": "Zwembad",
+    "type": 255
+  },
+  {
+    "nodeaddress": 255,
+    "unitaddress": 6,
+    "name": "Was + Droogkast",
+    "type": 255
+  },
+  {
+    "nodeaddress": 255,
+    "unitaddress": 7,
+    "name": "Verlichting",
+    "type": 255
+  },
+  {
+    "nodeaddress": 255,
+    "unitaddress": 5,
+    "name": "Syst D + Verw",
+    "type": 255
+  }
+]

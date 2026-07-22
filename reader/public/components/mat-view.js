@@ -7,8 +7,6 @@
 import { state } from '../app/state.js';
 
 /**
- * @typedef {import('../app/state.js').ModuleInstance} ModuleInstance
- * @typedef {import('../app/state.js').WoningDevice} WoningDevice
  * @typedef {import('../app/state.js').ModuleDef} ModuleDef
  */
 
@@ -64,10 +62,12 @@ function exportToPDF() {
  * @returns {{ rows: Array, totals: Object }}
  */
 function collectMaterialsData(project, modules) {
-  const allInstances = [
+  const nodesByAddress = new Map(project.nodes.map(n => [n.nodeAddress, n]));
+  const allRefs = [
     ...project.railView.cabinets.flatMap(c => c.modules),
-    ...project.railView.woningDevices
+    ...project.railView.house,
   ];
+  const allInstances = allRefs.map(ref => ({ model: nodesByAddress.get(ref.nodeAddress)?.model ?? 'UNKNOWN' }));
 
   const modelCounts = new Map();
   

@@ -1,0 +1,259 @@
+﻿[
+  {
+    "roomnr": 0,
+    "roomname": "Kitchen",
+    "startpage": true,
+    "units": [
+      {
+        "nodeaddress": 252,
+        "unitaddress": 100,
+        "name": "Kitchen",
+        "type": 5
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 109,
+        "name": "Keuken",
+        "type": 8
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 31,
+        "name": "Table",
+        "type": 1
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 36,
+        "name": "Cook",
+        "type": 2
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 34,
+        "name": "Work",
+        "type": 2
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 112,
+        "name": "Sticks",
+        "type": 1
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 38,
+        "name": "LED",
+        "type": 2
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 0,
+        "name": "All off",
+        "type": 7
+      }
+    ]
+  },
+  {
+    "roomnr": 1,
+    "roomname": "Living",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 16,
+        "unitaddress": 28,
+        "name": "Curtains",
+        "type": 8
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 106,
+        "name": "Salon Boven",
+        "type": 8
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 103,
+        "name": "Living",
+        "type": 5
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 29,
+        "name": "Saloon",
+        "type": 1
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 30,
+        "name": "Uplighters",
+        "type": 1
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 111,
+        "name": "Vintage",
+        "type": 1
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 33,
+        "name": "Wall",
+        "type": 2
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 38,
+        "name": "LED",
+        "type": 2
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 115,
+        "name": "Plug 1",
+        "type": 2
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 0,
+        "name": "All off",
+        "type": 7
+      }
+    ]
+  },
+  {
+    "roomnr": 2,
+    "roomname": "Outside",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 252,
+        "unitaddress": 104,
+        "name": "Portable",
+        "type": 5
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 110,
+        "name": "Zwembad",
+        "type": 8
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 114,
+        "name": "Driveway",
+        "type": 2
+      },
+      {
+        "nodeaddress": 16,
+        "unitaddress": 37,
+        "name": "Outside",
+        "type": 2
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 117,
+        "name": "Swimmingpool",
+        "type": 2
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 118,
+        "name": "Poolhouse",
+        "type": 2
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 113,
+        "name": "Trees",
+        "type": 2
+      }
+    ]
+  },
+  {
+    "roomnr": 3,
+    "roomname": "Upstairs",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 252,
+        "unitaddress": 107,
+        "name": "Tim Links",
+        "type": 8
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 108,
+        "name": "Tim Rechts",
+        "type": 8
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 101,
+        "name": "Tim Bedroom",
+        "type": 5
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 102,
+        "name": "Master Bedroom",
+        "type": 5
+      },
+      {
+        "nodeaddress": 252,
+        "unitaddress": 0,
+        "name": "All off",
+        "type": 7
+      }
+    ]
+  },
+  {
+    "roomnr": 4,
+    "roomname": "Verbruik",
+    "startpage": false,
+    "units": [
+      {
+        "nodeaddress": 255,
+        "unitaddress": 2,
+        "name": "Verbruik",
+        "type": 255
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 1,
+        "name": "Zonnepanelen",
+        "type": 255
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 3,
+        "name": "Autoladers",
+        "type": 255
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 4,
+        "name": "Zwembad",
+        "type": 255
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 6,
+        "name": "Was + Droogkast",
+        "type": 255
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 5,
+        "name": "Syst D + Verw",
+        "type": 255
+      },
+      {
+        "nodeaddress": 255,
+        "unitaddress": 7,
+        "name": "Verlichting",
+        "type": 255
+      }
+    ]
+  }
+]

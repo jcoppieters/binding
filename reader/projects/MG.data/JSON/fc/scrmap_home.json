@@ -1,0 +1,108 @@
+﻿[
+  {
+    "id": 0,
+    "name": "mood 0",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 10,
+      "name": "Breakfast",
+      "type": 7
+    }
+  },
+  {
+    "id": 1,
+    "name": "mood 1",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 13,
+      "name": "Eating",
+      "type": 7
+    }
+  },
+  {
+    "id": 2,
+    "name": "mood 2",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 1,
+      "name": "All On",
+      "type": 7
+    }
+  },
+  {
+    "id": 3,
+    "name": "mood 3",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 14,
+      "name": "TV",
+      "type": 7
+    }
+  },
+  {
+    "id": 4,
+    "name": "mood 4",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 14,
+      "name": "TV",
+      "type": 7
+    }
+  },
+  {
+    "id": 5,
+    "name": "mood 5",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 12,
+      "name": "Saloon",
+      "type": 7
+    }
+  },
+  {
+    "id": 6,
+    "name": "mood 6",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 15,
+      "name": "Outside On",
+      "type": 7
+    },
+    "unitlong": {
+      "nodeaddress": 252,
+      "unitaddress": 16,
+      "name": "Outside Off",
+      "type": 7
+    }
+  },
+  {
+    "id": 7,
+    "name": "mood 7",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 11,
+      "name": "Cooking",
+      "type": 7
+    }
+  },
+  {
+    "id": 8,
+    "name": "mood 8",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 0,
+      "name": "All off",
+      "type": 7
+    }
+  },
+  {
+    "id": 9,
+    "name": "mood 9",
+    "unitshort": {
+      "nodeaddress": 252,
+      "unitaddress": 9,
+      "name": "Poort openen",
+      "type": 7
+    }
+  }
+]

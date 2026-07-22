@@ -5,8 +5,8 @@
  * Replaces the device type picker with actual hardware selection.
  */
 
-import { state, dispatch } from '../app/state.js';
-import { getAllUnitsWithUsage, getAvailableUnits, createChannelRef, groupUnitsIntoDevices } from '../app/unit-helpers.js';
+import { state, dispatch, makeId } from '../app/state.js';
+import { getAllUnitsWithUsage, createChannelRef, groupUnitsIntoDevices } from '../app/unit-helpers.js';
 
 let _currentRoomId = null;
 let _allDeviceGroups = [];
@@ -35,11 +35,11 @@ export function openUnitPicker(roomId) {
   // Generate all units with usage tracking
   const allUnits = getAllUnitsWithUsage(s.project, modules);
   
-  // Get only available (unused) units
-  const availableUnits = allUnits.filter(u => !u.usage);
-  
-  // Group units into device groups (multi-button switches grouped together)
-  _allDeviceGroups = groupUnitsIntoDevices(availableUnits, modules);
+  // Group units into device groups (multi-button switches grouped together).
+  // Usage filtering happens inside groupUnitsIntoDevices — a multi-button
+  // switch must be checked as a whole node, not per-button, otherwise a
+  // partially-used switch would show up with some of its buttons missing.
+  _allDeviceGroups = groupUnitsIntoDevices(allUnits, modules);
   _filteredDeviceGroups = _allDeviceGroups;
   _filterType = 'all';
   _searchQuery = '';
@@ -208,13 +208,10 @@ function renderUnitsList(container) {
   // Group by cabinet/module
   const grouped = {};
   for (const deviceGroup of _filteredDeviceGroups) {
-    const key = deviceGroup.type === 'multi-button-switch' 
-      ? (deviceGroup.moduleInstanceId || deviceGroup.woningDeviceId || deviceGroup.moduleModel)
-      : (deviceGroup.unit.moduleInstanceId || deviceGroup.unit.woningDeviceId || deviceGroup.unit.moduleModel);
-      
     const moduleName = deviceGroup.type === 'multi-button-switch' ? deviceGroup.moduleName : deviceGroup.unit.moduleName;
     const cabinetName = deviceGroup.type === 'multi-button-switch' ? deviceGroup.cabinetName : deviceGroup.unit.cabinetName;
     const nodeAddress = deviceGroup.type === 'multi-button-switch' ? deviceGroup.nodeAddress : deviceGroup.unit.nodeAddress;
+    const key = nodeAddress;
     
     if (!grouped[key]) {
       grouped[key] = {
@@ -312,26 +309,25 @@ function selectDeviceGroup(deviceGroup) {
   let device;
   
   if (deviceGroup.type === 'multi-button-switch') {
-    // Multi-button switch: store all units and default to first button
+    // Multi-button switch: store only unitAddress + label per button/sensor —
+    // everything else (icon, channelType, ...) is looked up live via nodeAddress.
     device = {
       id: makeId(),
       type: 'input',
       name: customName,
       x,
       y,
-      
+
       // Multi-button switch specific data
-      isMultiButtonSwitch: true,
+      isMultiUnit: true,
+      nodeAddress: deviceGroup.nodeAddress,
       buttonCount: deviceGroup.buttonCount,
       hasTempSensor: deviceGroup.hasTempSensor,
-      buttons: deviceGroup.buttons.map(u => ({...u, ref: createChannelRef(u)})),
-      sensors: deviceGroup.sensors.map(u => ({...u, ref: createChannelRef(u)})),
+      buttons: deviceGroup.buttons.map(u => ({ unitAddress: u.unitAddress, label: u.label })),
+      sensors: deviceGroup.sensors.map(u => ({ unitAddress: u.unitAddress, label: u.label })),
       activeButton: 0, // Default to first button
       activeSensor: false, // false = button mode, true = sensor mode
-      
-      // Current channel ref (first button by default)
-      channelRef: createChannelRef(deviceGroup.buttons[0]),
-      
+
       // Display properties
       icon: deviceGroup.hasTempSensor ? '🔳 🌡️' : '🔳',
       color: getColorForChannelType('input_digital'),
@@ -367,10 +363,6 @@ function selectDeviceGroup(deviceGroup) {
   if (s2.showToast) {
     s2.showToast(`${device.icon} ${device.name} toegevoegd`, 'success');
   }
-}
-
-function makeId() {
-  return Math.random().toString(36).slice(2, 10);
 }
 
 /**

@@ -1,0 +1,16 @@
+ICON=0;
+Function=0;
+ICON=1;
+Function=1;
+ICON=2;
+Function=2;
+ICON=3;
+Function=3;
+ICON=4;
+Function=18;
+ICON=5;
+Function=4;
+ICON=6;
+Function=20;
+ICON=7;
+Function=12;

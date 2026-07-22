@@ -47,7 +47,7 @@ export function activate() {
 // ─── Render ───────────────────────────────────────────────────────────────────
 
 function render(s) {
-  const { railView } = s.project;
+  const { railView, nodes } = s.project;
   const canvas = document.getElementById('rail-canvas');
   const emptyState = document.getElementById('rail-empty');
   if (!canvas) return;
@@ -60,30 +60,51 @@ function render(s) {
 
   // Render each cabinet
   railView.cabinets.forEach(cabinet => {
-    canvas.appendChild(buildCabinetCard(cabinet, s.modules));
+    canvas.appendChild(buildCabinetCard(cabinet, s.modules, nodes));
   });
 
-  // Render woning panel (field devices)
-  if (railView.woningDevices.length > 0 || hasCabinets) {
-    canvas.appendChild(buildWoningPanel(railView.woningDevices, s.modules));
+  // Render house panel (field devices)
+  if (railView.house.length > 0 || hasCabinets) {
+    const houseDevices = railView.house.map(ref => resolveDevice(ref, nodes));
+    canvas.appendChild(buildHousePanel(houseDevices, s.modules));
   }
 
   // Update sidebar badge counts
-  updateSidebarCounts(railView, s.modules);
+  updateSidebarCounts(railView, s.modules, nodes);
 
   // Redraw CAN SVG
   setTimeout(() => drawCANBus(canvas), 80);
 }
 
+// ─── Node resolution ──────────────────────────────────────────────────────────
+
+/**
+ * Merge a thin placement ref ({nodeAddress, position, slots?}) with its hardware
+ * record from project.nodes[] into a single display-friendly device object.
+ */
+function resolveDevice(ref, nodes) {
+  const node = nodes.find(n => n.nodeAddress === ref.nodeAddress);
+  return {
+    nodeAddress: ref.nodeAddress,
+    position: ref.position,
+    slots: ref.slots,
+    model: node?.model ?? 'UNKNOWN',
+    name: node?.name ?? null,
+    physicalAddress: node?.physicalAddress,
+    type: node?.type,
+  };
+}
+
 // ─── Cabinet card ─────────────────────────────────────────────────────────────
 
-function buildCabinetCard(cabinet, modules) {
-  const rails = reflowToRails(cabinet, modules);
+function buildCabinetCard(cabinet, modules, nodes) {
+  const resolvedModules = cabinet.modules.map(ref => resolveDevice(ref, nodes));
+  const rails = reflowToRails(cabinet.id, resolvedModules, modules, cabinet.widthUnits ?? 12);
 
-  const totalW = cabinet.modules
+  const totalW = resolvedModules
     .reduce((s, m) => s + (lookupModule(m.model, modules)?.powerW ?? 0), 0);
   const psusNeeded = Math.ceil(totalW / 60);
-  const usedM = cabinet.modules
+  const usedM = resolvedModules
     .reduce((s, m) => s + (lookupModule(m.model, modules)?.dinUnits ?? 9), 0);
 
   const card = el('div', 'cabinet-card');
@@ -133,16 +154,15 @@ function buildCabinetCard(cabinet, modules) {
 
 // ─── Reflow modules into virtual rails ────────────────────────────────────────
 
-function reflowToRails(cabinet, moduleDefs) {
-  const maxM = cabinet.widthUnits ?? 12;
+function reflowToRails(cabinetId, resolvedModules, moduleDefs, maxM = 12) {
   const rails = [];
   let rail = null;
   let used = 0;
 
-  for (const m of cabinet.modules) {
+  for (const m of resolvedModules) {
     const w = lookupModule(m.model, moduleDefs)?.dinUnits ?? 9; // unknown modules assumed 9M (default rendering size)
     if (!rail || used + w > maxM) {
-      rail = { id: `${cabinet.id}-r${rails.length}`, label: `Rail ${rails.length + 1}`, modules: [] };
+      rail = { id: `${cabinetId}-r${rails.length}`, label: `Rail ${rails.length + 1}`, modules: [] };
       rails.push(rail);
       used = 0;
     }
@@ -152,7 +172,7 @@ function reflowToRails(cabinet, moduleDefs) {
 
   // Always at least one rail (for the + button)
   if (rails.length === 0) {
-    rails.push({ id: `${cabinet.id}-r0`, label: 'Rail 1', modules: [] });
+    rails.push({ id: `${cabinetId}-r0`, label: 'Rail 1', modules: [] });
   }
 
   return rails;
@@ -263,7 +283,7 @@ function buildRailRow(cabinetId, rail, railIdx, isLastRail, modules) {
 function buildModuleSlot(cabinetId, moduleInstance, idx, modules) {
   const def = lookupModule(moduleInstance.model, modules);
   const slot = el('div', 'module-slot');
-  slot.dataset.moduleId = moduleInstance.id;
+  slot.dataset.nodeAddress = moduleInstance.nodeAddress;
 
   const cdl = el('div', 'cdl'); slot.append(cdl);
 
@@ -775,7 +795,7 @@ function buildSmartboxSlotsSection(device, def, context) {
       // Get current slots from state (not closure variable) to avoid overwriting previous changes
       const s = state.get();
       const cabinet = s.project.railView.cabinets.find(c => c.id === context.cabinetId);
-      const module = cabinet?.modules.find(m => m.id === device.id);
+      const module = cabinet?.modules.find(m => m.nodeAddress === device.nodeAddress);
       const existingSlots = module?.slots ?? [];
       
       const newSlots = [...existingSlots];
@@ -785,7 +805,7 @@ function buildSmartboxSlotsSection(device, def, context) {
       dispatch({
         type: 'UPDATE_MODULE_SLOTS',
         cabinetId: context.cabinetId,
-        moduleId: device.id,
+        nodeAddress: device.nodeAddress,
         slots: newSlots
       });
       
@@ -805,21 +825,21 @@ function buildSmartboxSlotsSection(device, def, context) {
 }
 
 /**
- * Unified device detail modal (works for both cabinet modules and woning devices)
+ * Unified device detail modal (works for both cabinet modules and house devices)
  */
 function openDeviceDetailModal(device, context) {
-  // context: { type: 'module', cabinetId } or { type: 'woning' }
+  // context: { type: 'module', cabinetId } or { type: 'house' }
   document.getElementById('device-detail-overlay')?.remove();
   
   const s = state.get();
   const def = lookupModule(device.model, s.modules);
-  const isWoning = context.type === 'woning';
+  const isHouse = context.type === 'house';
   const isUnknown = device.model === 'UNKNOWN';
   
-  // Get device list and index
-  const devices = isWoning ? s.project.railView.woningDevices 
+  // Get device list (raw refs) and index — matched by nodeAddress, the stable identity
+  const devices = isHouse ? s.project.railView.house
     : s.project.railView.cabinets.find(c => c.id === context.cabinetId)?.modules ?? [];
-  const idx = devices.findIndex(d => d.id === device.id);
+  const idx = devices.findIndex(d => d.nodeAddress === device.nodeAddress);
   
   const overlay = el('div', 'modal-overlay');
   overlay.id = 'device-detail-overlay';
@@ -868,14 +888,14 @@ function openDeviceDetailModal(device, context) {
   right.style.cssText = 'flex:1;display:flex;flex-direction:column;gap:12px';
   
   if (isUnknown) {
-    const capSect = buildCapabilitiesSection(device, isWoning);
+    const capSect = buildCapabilitiesSection(device, isHouse);
     if (capSect) right.append(capSect);
   } else {
     const chSect = buildChannelGroupsSection(def);
     if (chSect) right.append(chSect);
     
     // Smartbox slots configuration
-    if (def?.isSmartboxBase && !isWoning) {
+    if (def?.isSmartboxBase && !isHouse) {
       const slotsSect = buildSmartboxSlotsSection(device, def, context);
       if (slotsSect) right.append(slotsSect);
     }
@@ -916,9 +936,9 @@ function openDeviceDetailModal(device, context) {
   moveLeftBtn.innerHTML = '← Links';
   moveLeftBtn.disabled = idx <= 0;
   moveLeftBtn.onclick = () => {
-    const action = isWoning 
-      ? { type: 'MOVE_WONING_DEVICE', deviceId: device.id, direction: -1 }
-      : { type: 'MOVE_MODULE', cabinetId: context.cabinetId, moduleId: device.id, direction: -1 };
+    const action = isHouse
+      ? { type: 'MOVE_HOUSE_DEVICE', nodeAddress: device.nodeAddress, direction: -1 }
+      : { type: 'MOVE_MODULE', cabinetId: context.cabinetId, nodeAddress: device.nodeAddress, direction: -1 };
     dispatch(action);
     overlay.remove();
   };
@@ -927,9 +947,9 @@ function openDeviceDetailModal(device, context) {
   moveRightBtn.innerHTML = 'Rechts →';
   moveRightBtn.disabled = idx < 0 || idx >= devices.length - 1;
   moveRightBtn.onclick = () => {
-    const action = isWoning
-      ? { type: 'MOVE_WONING_DEVICE', deviceId: device.id, direction: +1 }
-      : { type: 'MOVE_MODULE', cabinetId: context.cabinetId, moduleId: device.id, direction: +1 };
+    const action = isHouse
+      ? { type: 'MOVE_HOUSE_DEVICE', nodeAddress: device.nodeAddress, direction: +1 }
+      : { type: 'MOVE_MODULE', cabinetId: context.cabinetId, nodeAddress: device.nodeAddress, direction: +1 };
     dispatch(action);
     overlay.remove();
   };
@@ -939,9 +959,9 @@ function openDeviceDetailModal(device, context) {
   deleteBtn.style.cssText += 'color:#ef4444;border-color:#fca5a5';
   deleteBtn.onclick = () => {
     if (confirm(`Verwijder ${device.model}?`)) {
-      const action = isWoning
-        ? { type: 'REMOVE_WONING_DEVICE', deviceId: device.id }
-        : { type: 'REMOVE_MODULE', cabinetId: context.cabinetId, moduleId: device.id };
+      const action = isHouse
+        ? { type: 'REMOVE_HOUSE_DEVICE', nodeAddress: device.nodeAddress }
+        : { type: 'REMOVE_MODULE', cabinetId: context.cabinetId, nodeAddress: device.nodeAddress };
       dispatch(action);
       overlay.remove();
     }
@@ -957,7 +977,7 @@ function openDeviceDetailModal(device, context) {
   typeBtn.textContent = isUnknown ? '🔍 Wijs toe' : '🔄 Wijzig type';
   typeBtn.onclick = () => {
     overlay.remove();
-    if (isWoning) {
+    if (isHouse) {
       const dn = device.nodeAddress != null ? s.discoveredNodes.find(n => n.nodeAddress === device.nodeAddress) : null;
       const types = (dn?.units ?? []).map(u => u.type);
       const hasTemp = types.some(t => t === UnitType.kTemperature);
@@ -970,28 +990,27 @@ function openDeviceDetailModal(device, context) {
       const pickerType = existingDef?.category === 'lcd' ? 'lcd'
         : (existingIsOledSwitch || hasTemp || existingDef?.category === 'switch') ? 'switch'
         : (lcdScore > ctrlScore ? 'lcd' : 'switch');
-      openModulePicker({ woningType: pickerType, _replaceWoningId: device.id });
+      openModulePicker({ houseType: pickerType, _replaceNodeAddress: device.nodeAddress });
     } else {
-      openModulePicker({ cabinetId: context.cabinetId, _replaceModuleId: device.id, _keepNodeAddress: device.nodeAddress });
+      openModulePicker({ cabinetId: context.cabinetId, _replaceNodeAddress: device.nodeAddress });
     }
   };
   
-  // "Move to cabinet" button (only for UNKNOWN woning devices)
-  if (isWoning && isUnknown) {
+  // "Move to cabinet" button (only for UNKNOWN house devices)
+  if (isHouse && isUnknown) {
     const moveToCabinetBtn = el('button', 'modal-btn');
     moveToCabinetBtn.textContent = '🗄 Naar kast';
     moveToCabinetBtn.title = 'Verplaats dit toestel naar de kast';
     moveToCabinetBtn.onclick = () => {
       if (!confirm('Verplaatsen naar de kast?')) return;
-      const dn = device.nodeAddress != null ? s.discoveredNodes.find(n => n.nodeAddress === device.nodeAddress) : null;
-      dispatch({ type: 'REMOVE_WONING_DEVICE', deviceId: device.id });
+      dispatch({ type: 'REMOVE_HOUSE_DEVICE', nodeAddress: device.nodeAddress });
       const cabinets = s.project.railView.cabinets;
       const lastCab = cabinets[cabinets.length - 1];
       if (lastCab) {
-        dispatch({ type: 'ADD_MODULE', cabinetId: lastCab.id, module: { id: device.id, model: 'UNKNOWN', nodeAddress: device.nodeAddress, physicalAddress: dn?.physicalAddress, name: device.name, position: 99 } });
+        dispatch({ type: 'ADD_MODULE', cabinetId: lastCab.id, model: device.model, nodeAddress: device.nodeAddress });
       }
       overlay.remove();
-      openModulePicker({ cabinetId: lastCab?.id, _replaceModuleId: device.id, _keepNodeAddress: device.nodeAddress });
+      openModulePicker({ cabinetId: lastCab?.id, _replaceNodeAddress: device.nodeAddress });
     };
     rightBtns.append(typeBtn, moveToCabinetBtn);
   } else {
@@ -1008,13 +1027,15 @@ function openDeviceDetailModal(device, context) {
   saveBtn.onclick = () => {
     const name = nameInput.value.trim() || null;
     const addrStr = addrInput.value.trim();
-    const nodeAddress = addrStr ? parseInt(addrStr, 16) : undefined;
+    const newNodeAddress = addrStr ? parseInt(addrStr, 16) : undefined;
     const patch = { name };
-    if (nodeAddress != null && !isNaN(nodeAddress)) patch.nodeAddress = nodeAddress;
+    if (newNodeAddress != null && !isNaN(newNodeAddress) && newNodeAddress !== device.nodeAddress) {
+      patch.newNodeAddress = newNodeAddress;
+    }
     
-    const action = isWoning
-      ? { type: 'UPDATE_WONING_DEVICE', deviceId: device.id, patch }
-      : { type: 'UPDATE_MODULE', cabinetId: context.cabinetId, moduleId: device.id, patch };
+    const action = isHouse
+      ? { type: 'UPDATE_HOUSE_DEVICE', nodeAddress: device.nodeAddress, patch }
+      : { type: 'UPDATE_MODULE', cabinetId: context.cabinetId, nodeAddress: device.nodeAddress, patch };
     dispatch(action);
     overlay.remove();
   };
@@ -1034,15 +1055,15 @@ function openModuleDetail(moduleInstance, cabinetId) {
   openDeviceDetailModal(moduleInstance, { type: 'module', cabinetId });
 }
 
-function openWoningDeviceDetail(wd, modules) {
-  openDeviceDetailModal(wd, { type: 'woning' });
+function openHouseDeviceDetail(wd, modules) {
+  openDeviceDetailModal(wd, { type: 'house' });
 }
 
 
 
-const WONING_MAX_PER_ROW = 4;
+const HOUSE_MAX_PER_ROW = 4;
 
-function buildWoningPanel(woningDevices, modules) {
+function buildHousePanel(houseDevices, modules) {
   const panel = el('div', 'woning-panel');
   panel.id = 'woning-panel';
 
@@ -1060,8 +1081,8 @@ function buildWoningPanel(woningDevices, modules) {
 
   // Build device-only rows
   const deviceRows = [];
-  for (let i = 0; i < woningDevices.length; i += maxPerRow) {
-    deviceRows.push(woningDevices.slice(i, i + maxPerRow));
+  for (let i = 0; i < houseDevices.length; i += maxPerRow) {
+    deviceRows.push(houseDevices.slice(i, i + maxPerRow));
   }
 
   // Buttons row always follows all device rows
@@ -1092,12 +1113,12 @@ function buildWoningPanel(woningDevices, modules) {
   const addSwBtn = el('div', 'add-fd-btn');
   addSwBtn.innerHTML = '<span style="font-size:10px">＋ SW</span>';
   addSwBtn.title = 'Schakelaar toevoegen';
-  addSwBtn.onclick = () => openModulePicker({ woningType: 'switch' });
+  addSwBtn.onclick = () => openModulePicker({ houseType: 'switch' });
 
   const addLcdBtn = el('div', 'add-fd-btn');
   addLcdBtn.innerHTML = '<span style="font-size:10px">＋ LCD</span>';
   addLcdBtn.title = 'LCD toevoegen';
-  addLcdBtn.onclick = () => openModulePicker({ woningType: 'lcd' });
+  addLcdBtn.onclick = () => openModulePicker({ houseType: 'lcd' });
 
   const termR = buildTerminator('SEG1');
   termR.id = 'woning-term-r';
@@ -1120,13 +1141,13 @@ function buildWoningPanel(woningDevices, modules) {
 
 function buildFieldDevice(wd, modules) {
   const def = lookupModule(wd.model, modules);
-  const isLcd = def?.category === 'lcd';
+  const isLcd = def?.category === 'lcd' || (!def && wd.type === NodeType.kGUINode);
 
   const fd = el('div', 'field-device');
-  fd.dataset.deviceId = wd.id;
+  fd.dataset.nodeAddress = wd.nodeAddress;
   fd.style.cursor = 'pointer';
   fd.title = 'Klik voor details';
-  fd.onclick = (e) => { e.stopPropagation(); openWoningDeviceDetail(wd, modules); };
+  fd.onclick = (e) => { e.stopPropagation(); openHouseDeviceDetail(wd, modules); };
   fd.append(el('div', 'cdl'));
 
   // Device card — try to show actual product image
@@ -1329,23 +1350,25 @@ const CH_LABELS = {
   ir_tx: 'IR Zender', video: 'Video', camera: 'Camera',
 };
 
-function computeChannelTotals(railView, modules) {
+function computeChannelTotals(railView, modules, nodes) {
   const totals = {};
+  const nodesByAddress = new Map(nodes.map(n => [n.nodeAddress, n]));
+  const modelFor = nodeAddress => nodesByAddress.get(nodeAddress)?.model;
   const addGroups = groups => {
     for (const g of groups ?? []) totals[g.type] = (totals[g.type] ?? 0) + g.count;
   };
   // Count from module catalog definitions
   for (const c of railView.cabinets) {
-    for (const m of c.modules) addGroups(lookupModule(m.model, modules)?.channelGroups);
+    for (const m of c.modules) addGroups(lookupModule(modelFor(m.nodeAddress), modules)?.channelGroups);
   }
-  for (const w of railView.woningDevices) addGroups(lookupModule(w.model, modules)?.channelGroups);
+  for (const w of railView.house) addGroups(lookupModule(modelFor(w.nodeAddress), modules)?.channelGroups);
   
   // Also count from discovered units (for nodes with unknown models or virtual units like moods)
   const s = state.get();
   if (s.connected && s.discoveredNodes.length > 0) {
     const allProjectNodeAddrs = new Set([
       ...railView.cabinets.flatMap(c => c.modules).map(m => m.nodeAddress),
-      ...railView.woningDevices.map(w => w.nodeAddress)
+      ...railView.house.map(w => w.nodeAddress)
     ].filter(a => a != null));
     
     for (const node of s.discoveredNodes) {
@@ -1379,25 +1402,26 @@ function computeChannelTotals(railView, modules) {
   return totals;
 }
 
-function updateSidebarCounts(railView, modules) {
+function updateSidebarCounts(railView, modules, nodes) {
   const cabinetsEl = document.getElementById('cabinets-list');
   if (cabinetsEl) {
     cabinetsEl.innerHTML = railView.cabinets.map(c => {
-      const rails = reflowToRails(c, modules);
+      const resolvedModules = c.modules.map(ref => resolveDevice(ref, nodes));
+      const rails = reflowToRails(c.id, resolvedModules, modules, c.widthUnits ?? 12);
       return `<div class="sidebar-item active"><span class="icon">🗄️</span> ${c.name} <span class="badge">${rails.length} rails, ${c.widthUnits}M</span></div>`;
     }).join('');
   }
   const seg1 = document.getElementById('seg1-count');
   const seg2 = document.getElementById('seg2-count');
   if (seg1) seg1.textContent = String(railView.cabinets.reduce((s, c) => s + c.modules.length, 0));
-  if (seg2) seg2.textContent = String(railView.woningDevices.length);
+  if (seg2) seg2.textContent = String(railView.house.length);
 
   // Resources panel
   const resSection = document.getElementById('resources-section');
   const resList = document.getElementById('resources-list');
   if (!resSection || !resList) return;
 
-  const totals = computeChannelTotals(railView, modules);
+  const totals = computeChannelTotals(railView, modules, nodes);
   const types = Object.keys(totals).filter(t => totals[t] > 0);
 
   if (!types.length) {
@@ -1448,8 +1472,8 @@ export function wireButtons() {
     if (!c) { alert('Voeg eerst een kast toe.'); return; }
     openModulePicker({ cabinetId: c.id });
   });
-  btnSwitch?.addEventListener('click', () => openModulePicker({ woningType: 'switch' }));
-  btnLcd?.addEventListener('click', () => openModulePicker({ woningType: 'lcd' }));
+  btnSwitch?.addEventListener('click', () => openModulePicker({ houseType: 'switch' }));
+  btnLcd?.addEventListener('click', () => openModulePicker({ houseType: 'lcd' }));
 }
 
 function promptAddCabinet() {

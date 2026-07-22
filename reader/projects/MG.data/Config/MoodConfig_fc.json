@@ -1,0 +1,1214 @@
+[
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A2020400",
+        "nodeAddress": 16,
+        "unitAddress": 29
+      },
+      {
+        "delay": 0,
+        "msg": "A2020400",
+        "nodeAddress": 252,
+        "unitAddress": 112
+      },
+      {
+        "delay": 0,
+        "msg": "A2020400",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A2020400",
+        "nodeAddress": 16,
+        "unitAddress": 30
+      },
+      {
+        "delay": 0,
+        "msg": "A2020400",
+        "nodeAddress": 252,
+        "unitAddress": 111
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 36
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 252,
+        "unitAddress": 114
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 38
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 37
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 252,
+        "unitAddress": 115
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 252,
+        "unitAddress": 116
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 252,
+        "unitAddress": 118
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 252,
+        "unitAddress": 117
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 252,
+        "unitAddress": 113
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 33
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 34
+      },
+      {
+        "delay": 0,
+        "msg": "9F020500",
+        "nodeAddress": 252,
+        "unitAddress": 100
+      },
+      {
+        "delay": 0,
+        "msg": "9F020500",
+        "nodeAddress": 252,
+        "unitAddress": 101
+      },
+      {
+        "delay": 0,
+        "msg": "9F020500",
+        "nodeAddress": 252,
+        "unitAddress": 102
+      },
+      {
+        "delay": 0,
+        "msg": "9F020500",
+        "nodeAddress": 252,
+        "unitAddress": 103
+      },
+      {
+        "delay": 0,
+        "msg": "9F020500",
+        "nodeAddress": 252,
+        "unitAddress": 104
+      }
+    ],
+    "empty": false,
+    "id": 0,
+    "name": "All off",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 29
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 30
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 36
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 38
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 37
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 33
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 34
+      }
+    ],
+    "empty": false,
+    "id": 1,
+    "name": "All On",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 38
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 33
+      }
+    ],
+    "description": "lichten uit",
+    "empty": false,
+    "id": 2,
+    "name": "Night off",
+    "userAdjustable": true
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 252,
+        "unitAddress": 118
+      }
+    ],
+    "empty": false,
+    "id": 3,
+    "name": "Dark outside",
+    "userAdjustable": true
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 4,
+    "name": "After 22h",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 5,
+    "name": "Help out",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [],
+    "empty": true,
+    "id": 6,
+    "name": "Deur Trigger",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [],
+    "empty": true,
+    "id": 7,
+    "name": "Mood Free",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [],
+    "empty": true,
+    "id": 8,
+    "name": "Hulp statuss",
+    "userAdjustable": true
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A6020301",
+        "nodeAddress": 252,
+        "unitAddress": 6
+      },
+      {
+        "delay": 33,
+        "msg": "A6020300",
+        "nodeAddress": 252,
+        "unitAddress": 6
+      }
+    ],
+    "empty": false,
+    "id": 9,
+    "name": "Poort openen",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A2020400",
+        "nodeAddress": 16,
+        "unitAddress": 29
+      },
+      {
+        "delay": 0,
+        "msg": "A202034F",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A2020332",
+        "nodeAddress": 16,
+        "unitAddress": 30
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 30
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 36
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 38
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 37
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 33
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 34
+      },
+      {
+        "delay": 0,
+        "msg": "9F03010000",
+        "nodeAddress": 252,
+        "unitAddress": 100
+      },
+      {
+        "delay": 0,
+        "msg": "9F030C0006",
+        "nodeAddress": 252,
+        "unitAddress": 100
+      }
+    ],
+    "empty": false,
+    "id": 10,
+    "name": "Breakfast",
+    "userAdjustable": true
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A2020346",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 36
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 34
+      }
+    ],
+    "empty": false,
+    "id": 11,
+    "name": "Cooking",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 38
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 33
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 30
+      },
+      {
+        "delay": 0,
+        "msg": "A202034B",
+        "nodeAddress": 16,
+        "unitAddress": 30
+      }
+    ],
+    "empty": false,
+    "id": 12,
+    "name": "Saloon",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A2020355",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 36
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 38
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 34
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 30
+      },
+      {
+        "delay": 0,
+        "msg": "A202031E",
+        "nodeAddress": 16,
+        "unitAddress": 29
+      }
+    ],
+    "empty": false,
+    "id": 13,
+    "name": "Eating",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A2020400",
+        "nodeAddress": 16,
+        "unitAddress": 31
+      },
+      {
+        "delay": 0,
+        "msg": "A2020400",
+        "nodeAddress": 16,
+        "unitAddress": 29
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 16,
+        "unitAddress": 30
+      },
+      {
+        "delay": 0,
+        "msg": "A202034B",
+        "nodeAddress": 16,
+        "unitAddress": 30
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 36
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 33
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 34
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 38
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 252,
+        "unitAddress": 112
+      },
+      {
+        "delay": 0,
+        "msg": "A202031E",
+        "nodeAddress": 252,
+        "unitAddress": 112
+      },
+      {
+        "delay": 0,
+        "msg": "A2020401",
+        "nodeAddress": 252,
+        "unitAddress": 111
+      },
+      {
+        "delay": 0,
+        "msg": "A202032D",
+        "nodeAddress": 252,
+        "unitAddress": 111
+      }
+    ],
+    "empty": false,
+    "id": 14,
+    "name": "TV",
+    "userAdjustable": true
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 37
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 252,
+        "unitAddress": 118
+      }
+    ],
+    "empty": false,
+    "id": 15,
+    "name": "Outside On",
+    "userAdjustable": true
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 16,
+        "unitAddress": 37
+      },
+      {
+        "delay": 0,
+        "msg": "A3020100",
+        "nodeAddress": 252,
+        "unitAddress": 118
+      }
+    ],
+    "empty": false,
+    "id": 16,
+    "name": "Outside Off",
+    "userAdjustable": true
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 17,
+    "name": "Testing",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 18,
+    "name": "Mood 2 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 19,
+    "name": "Mood 3 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 20,
+    "name": "Mood 3 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 21,
+    "name": "Mood 4 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 22,
+    "name": "Mood 4 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 23,
+    "name": "Mood 5 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 24,
+    "name": "Mood 5 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 25,
+    "name": "Mood 6 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 26,
+    "name": "Mood 6 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 27,
+    "name": "Mood 7 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 28,
+    "name": "Mood 7 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 29,
+    "name": "Mood 8 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 30,
+    "name": "Mood 8 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 31,
+    "name": "Mood 9 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 32,
+    "name": "Mood 9 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 33,
+    "name": "Mood 10 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 34,
+    "name": "Mood 10 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 35,
+    "name": "Mood 11 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 36,
+    "name": "Mood 11 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 37,
+    "name": "Mood 12 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 38,
+    "name": "Mood 12 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 39,
+    "name": "Mood 13 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 40,
+    "name": "Mood 13 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 41,
+    "name": "Mood 14 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 42,
+    "name": "Mood 14 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 43,
+    "name": "Mood 15 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 44,
+    "name": "Mood 15 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 45,
+    "name": "Mood 16 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 46,
+    "name": "Mood 16 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 47,
+    "name": "Mood 17 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 48,
+    "name": "Mood 17 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 49,
+    "name": "Mood 18 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 50,
+    "name": "Mood 18 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 51,
+    "name": "Mood 19 short",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 52,
+    "name": "Mood 19 long",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 38
+      },
+      {
+        "delay": 0,
+        "msg": "A3020101",
+        "nodeAddress": 16,
+        "unitAddress": 33
+      }
+    ],
+    "description": "lichten aan",
+    "empty": false,
+    "id": 53,
+    "name": "Night on",
+    "userAdjustable": true
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 54,
+    "name": "U36 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 55,
+    "name": "U37 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 56,
+    "name": "U38 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 57,
+    "name": "U39 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 58,
+    "name": "U3a A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 59,
+    "name": "U3b A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 60,
+    "name": "U3c A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 61,
+    "name": "U3d A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 62,
+    "name": "U3e A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 63,
+    "name": "U3f A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 64,
+    "name": "U40 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 65,
+    "name": "U41 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 66,
+    "name": "U42 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 67,
+    "name": "U43 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 68,
+    "name": "U44 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 69,
+    "name": "U45 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 70,
+    "name": "U46 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 71,
+    "name": "U47 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 72,
+    "name": "U48 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 73,
+    "name": "U49 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 74,
+    "name": "U4a A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 75,
+    "name": "U4b A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 76,
+    "name": "U4c A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 77,
+    "name": "U4d A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 78,
+    "name": "U4e A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 79,
+    "name": "U4f A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 80,
+    "name": "U50 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 81,
+    "name": "U51 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 82,
+    "name": "U52 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 83,
+    "name": "U53 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 84,
+    "name": "U54 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 85,
+    "name": "U55 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 86,
+    "name": "U56 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 87,
+    "name": "U57 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 88,
+    "name": "U58 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 89,
+    "name": "U59 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 90,
+    "name": "U5a A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 91,
+    "name": "U5b A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 92,
+    "name": "U5c A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 93,
+    "name": "U5d A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 94,
+    "name": "U5e A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 95,
+    "name": "U5f A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 96,
+    "name": "U60 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 97,
+    "name": "U61 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": true,
+    "data": [],
+    "empty": true,
+    "id": 98,
+    "name": "U62 A0C6264",
+    "userAdjustable": false
+  },
+  {
+    "assigned": false,
+    "empty": false,
+    "id": 99,
+    "name": "U63 A0C6264",
+    "userAdjustable": false
+  }
+]

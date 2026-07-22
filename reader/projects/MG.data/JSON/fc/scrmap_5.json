@@ -1,0 +1,32 @@
+﻿[
+  {
+    "nodeaddress": 252,
+    "unitaddress": 100,
+    "name": "Kitchen",
+    "type": 5
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 103,
+    "name": "Living",
+    "type": 5
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 101,
+    "name": "Tim Bedroom",
+    "type": 5
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 102,
+    "name": "Master Bedroom",
+    "type": 5
+  },
+  {
+    "nodeaddress": 252,
+    "unitaddress": 104,
+    "name": "Portable",
+    "type": 5
+  }
+]

@@ -26,25 +26,50 @@ export interface ProjectMeta {
   masterPassword?: string; // last used master password (stored for installer convenience)
 }
 
-// ─── Rail View ───────────────────────────────────────────────────────────────
+// ─── Nodes — single source of truth for hardware ──────────────────────────────
 
 /**
- * A single hardware module placed on a DIN rail.
- * `model` references the product database (reader/modules/).
+ * Temporary node addresses (for modules/house devices added before hardware
+ * exists / before discovery) start here. Real hardware addresses are always
+ * <= 255 (1 byte on the CAN bus), so this range can never collide.
  */
-export interface ModuleInstance {
-  id: LocalId;
-  model: string;              // e.g. "DT05-06TE" or 'UNKNOWN'
-  nodeAddress?: number;       // IP node address (hex), assigned after discovery
-  physicalAddress?: number;   // Physical hardware address from discovery (hex)
-  name?: string;              // optional label shown in config modal
-  position: number;           // slot index within the rail (0-indexed)
+export const TEMP_NODE_ADDRESS_START = 1024;
 
+/** A single channel on a node. */
+export interface NodeUnit {
+  unitAddress: number;
+  type: number;    // UnitType enum value (see models/unitTypes.ts)
+  name?: string;   // discovered or user-given name
+}
+
+/**
+ * A physical (or planned) hardware node — module, field device, or master.
+ * Keyed by `nodeAddress`, which is the single primary key used everywhere
+ * else in the project (cabinets, house, channelRef, bindings).
+ *
+ * Discovery is the source of truth for `units`/`name`/`type`/`physicalAddress`:
+ * on connect, nodes are upserted here by `nodeAddress` (added if new, blank
+ * fields filled in — never overwriting a user-given name).
+ */
+export interface DuoNode {
+  nodeAddress: number;        // real (<=255) or temp planning address (>= TEMP_NODE_ADDRESS_START)
+  physicalAddress?: number;   // physical hardware address, filled in by discovery
+  model?: string;             // product code, once known
+  name?: string;
+  type?: number;               // NodeType enum value
+  units: NodeUnit[];
+}
+
+// ─── Rail View ─────────────────────────────────────────────────────────────────
+// Cabinets/house are thin position lists — all node/unit data lives in `nodes[]`.
+
+/** A module placed on a DIN rail — just a position + reference to its node. */
+export interface RailModuleRef {
+  nodeAddress: number;         // key into DuoProject.nodes
+  position: number;            // slot index within the rail (0-indexed)
   /**
-   * Smartbox slot configuration — only present when model is a Smartbox base.
-   * Array length equals the base's slotCount.
-   * Each entry is a plugin model code or null (empty slot).
-   * e.g. ["DT0B-TE", "DT0B-R", "DT0B-LE", null]
+   * Smartbox slot configuration — only present when the node's model is a
+   * Smartbox base. Each entry is a plugin model code or null (empty slot).
    */
   slots?: (string | null)[];
 }
@@ -55,36 +80,26 @@ export interface Cabinet {
   name: string;               // e.g. "Hoofdkast"
   location?: string;          // free text, e.g. "Technische ruimte"
   widthUnits: number;         // cabinet width in DIN M-units (1M ≈ 18mm), default 12
-  modules: ModuleInstance[];  // ordered flat list — reflowed into rails at render time
+  modules: RailModuleRef[];   // ordered flat list — reflowed into rails at render time
 }
 
-/**
- * Woning/field device on CAN Segment 2 (switches, LCD panels, sensors).
- * `model` is the specific variant code (e.g. "DTBS-B4FA" — includes finish).
- */
-export interface WoningDevice {
-  id: LocalId;
-  model: string;              // specific variant code (with finish)
-  nodeAddress?: number;
-  name?: string;
-  position: number;           // order in woning panel (left → right)
+/** House/field device on CAN Segment 2 (switches, LCD panels, sensors) — position only. */
+export interface HouseDeviceRef {
+  nodeAddress: number;        // key into DuoProject.nodes
+  position: number;           // order in house panel (left → right)
 }
 
 export interface RailView {
   cabinets: Cabinet[];
-  woningDevices: WoningDevice[];
+  house: HouseDeviceRef[];
 }
 
 // ─── Channel reference ────────────────────────────────────────────────────────
 
-/**
- * Points to a specific channel on a specific hardware node.
- * Used to link a logical device (room device) to a physical channel (module).
- */
+/** Points to a specific channel on a specific hardware node. */
 export interface ChannelRef {
-  nodeAddress: number;        // node address (hex)
+  nodeAddress: number;        // key into DuoProject.nodes
   unitAddress: number;        // unit/channel address on that node
-  moduleInstanceId: LocalId;  // back-reference to the ModuleInstance in railView
 }
 
 // ─── Home View ────────────────────────────────────────────────────────────────
@@ -97,14 +112,40 @@ export type DeviceType =
   | 'input'         // button/switch input
   | 'sensor'        // sensor (PIR, temp, ...)
   | 'audio'         // audio zone
+  | 'mood'          // virtual mood/scene channel
   | 'dali_group';   // DALI group
 
-/** A logical device placed in a room — linked to a physical channel. */
+/**
+ * One button/sensor on a multi-unit room device (e.g. an 8-button DTBS switch).
+ * Only what can't be derived from `nodes[]` is stored: the unit address and an
+ * optional user label. Icon/channelType/etc. are looked up live via `nodeAddress`
+ * (inherited from the parent RoomDevice) + `unitAddress`.
+ */
+export interface RoomDeviceUnit {
+  unitAddress: number;
+  label?: string;    // user override; falls back to the node unit's own name
+}
+
+/**
+ * A logical device placed in a room — linked to a physical channel.
+ * Single-unit devices (lamp, relay, motor, sensor) use `channelRef`.
+ * Multi-unit devices (a switch with several buttons ± a temp sensor) use
+ * `buttons`/`sensors` instead — each entry shares this device's `nodeAddress`.
+ */
 export interface RoomDevice {
   id: LocalId;
   type: DeviceType;
   name: string;
   channelRef?: ChannelRef;    // set once assigned to a physical channel
+
+  /** Set when this device represents multiple units on one node (e.g. a button switch). */
+  isMultiUnit?: boolean;
+  nodeAddress?: number;       // shared node for buttons/sensors below (multi-unit only)
+  buttons?: RoomDeviceUnit[];
+  sensors?: RoomDeviceUnit[];
+  activeButton?: number;      // index into buttons[] currently shown in the binding panel
+  activeSensor?: boolean;     // true = showing sensors[0] instead of buttons[activeButton]
+
   canvasX?: number;           // position within room canvas (optional, for future visual placement)
   canvasY?: number;
 }
@@ -149,26 +190,41 @@ export interface TimerBlock {
 }
 
 /**
+ * One end of a binding wire. `channelRef` is the source of truth (nodeAddress +
+ * unitAddress + port); `deviceId` is an optional cache of which RoomDevice.id
+ * currently represents that channel, kept only for fast UI lookups.
+ */
+export interface BindingEndpoint {
+  channelRef: ChannelRef;
+  portId: string;             // e.g. "kort", "lang", "schakel", "op"
+  deviceId?: LocalId;         // RoomDevice.id, if placed in a room
+}
+
+/**
  * One wire in the wiring diagram.
  * Connects an output port on a source device to an input port on a target device.
  * Serialised to one or more binding strings at upload time.
  */
 export interface BindingWire {
   id: LocalId;
-  sourceDeviceId: LocalId;    // RoomDevice.id
-  sourcePort: string;         // e.g. "short_press", "long_press"
-  targetDeviceId: LocalId;    // RoomDevice.id
-  targetPort: string;         // e.g. "toggle", "on", "dim_up"
+  from: BindingEndpoint;
+  to: BindingEndpoint;
+  color?: string;
   logicBlock?: LogicBlock;
   timerBlock?: TimerBlock;
   /** Raw binding strings for wires that couldn't be reconstructed visually (legacy import). */
   legacyRaw?: string[];
+  imported?: boolean;
+  sourceFile?: string;
+  bindingNumber?: number;
 }
 
 // ─── Top-level project ────────────────────────────────────────────────────────
 
 export interface DuoProject {
   meta: ProjectMeta;
+  /** Single source of truth for all hardware — nodes and their units. */
+  nodes: DuoNode[];
   railView: RailView;
   homeView: HomeView;
   /** All wiring connections. Each wire → one or more binding strings at upload. */
@@ -181,13 +237,22 @@ export function createEmptyProject(name: string): DuoProject {
   const now = new Date().toISOString();
   return {
     meta: { name, created: now, modified: now, version: '1' },
-    railView: { cabinets: [], woningDevices: [] },
+    nodes: [],
+    railView: { cabinets: [{ id: makeId(), name: 'Hoofdkast', widthUnits: 36, modules: [] }], house: [] },
     homeView: {
       floors: [{ id: 'floor-0', name: 'Gelijkvloers' }],
       rooms: [],
     },
     bindings: [],
   };
+}
+
+/** Allocate the next temporary node address (>= TEMP_NODE_ADDRESS_START) not already used in `nodes`. */
+export function allocateTempNodeAddress(nodes: DuoNode[]): number {
+  const used = new Set(nodes.map(n => n.nodeAddress));
+  let addr = TEMP_NODE_ADDRESS_START;
+  while (used.has(addr)) addr++;
+  return addr;
 }
 
 export function makeId(): LocalId {

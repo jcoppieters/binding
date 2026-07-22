@@ -1,0 +1,41 @@
+﻿{
+  "triggers": [
+    {
+      "id": "0",
+      "type": "http_trigger",
+      "value": {}
+    }
+  ],
+  "actions": [
+    {
+      "id": "0",
+      "name": "Zwembad Toe",
+      "type": "http_get",
+      "value": {
+        "url": "http://192.168.0.12/rpc/Switch.Set?id=0&on=true",
+        "headers": [],
+        "macros": []
+      }
+    },
+    {
+      "id": "1",
+      "name": "Zwembad Open",
+      "type": "http_get",
+      "value": {
+        "url": "http://192.168.0.12/rpc/Switch.Set?id=1&on=true",
+        "headers": [],
+        "macros": []
+      }
+    },
+    {
+      "id": "2",
+      "name": "Zwembad Licht",
+      "type": "http_get",
+      "value": {
+        "url": "http://192.168.0.12/rpc/Switch.Toggle?id=2",
+        "headers": [],
+        "macros": []
+      }
+    }
+  ]
+}

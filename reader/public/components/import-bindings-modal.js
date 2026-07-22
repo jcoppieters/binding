@@ -1,12 +1,13 @@
 /**
  * Import Bindings Modal
  * 
- * Allows user to select a Config folder containing bind*.txt files,
- * parse them, and import simple bindings (Type I/N) into the project.
+ * Imports bind*.txt binding files already uploaded to the project's data
+ * folder (via "Opladen config...") and converts them into visual bindings.
  */
 
 import { state, dispatch } from '../app/state.js';
 import { showToast } from '../app/main.js';
+import { openUploadDataModal } from './upload-data-modal.js';
 
 export function openImportBindingsModal() {
   // Check if modal already exists
@@ -36,7 +37,7 @@ export function openImportBindingsModal() {
   body.innerHTML = `
     <div style="margin-bottom:20px">
       <p style="font-size:13px;color:#6a7899;line-height:1.6;margin-bottom:12px">
-        Selecteer een <strong>Config folder</strong> met bind*.txt bestanden om bestaande bindings te importeren.
+        Importeert bind*.txt bestanden die eerder via <strong>"Opladen config..."</strong> naar dit project zijn geüpload.
       </p>
       <p style="font-size:12px;color:#a0aaba;line-height:1.5">
         <strong>Let op:</strong> Alleen eenvoudige bindings (Type I/N) worden gevisualiseerd. 
@@ -44,39 +45,16 @@ export function openImportBindingsModal() {
       </p>
     </div>
 
-    <div style="margin-bottom:20px">
-      <label style="display:block;font-size:12px;font-weight:600;color:#4a5568;margin-bottom:8px">
-        Config folder
-      </label>
-      <div style="display:flex;gap:8px">
-        <input 
-          type="text" 
-          id="import-folder-path" 
-          readonly 
-          placeholder="Geen folder geselecteerd..." 
-          style="flex:1;padding:8px 12px;border:1px solid #dde3ef;border-radius:6px;font-size:13px;background:#f9fafb;color:#4a5568"
-        />
-        <button 
-          id="import-select-folder" 
-          style="padding:8px 16px;border:1px solid #dde3ef;border-radius:6px;background:#fff;color:#4a5568;font-size:13px;cursor:pointer;font-weight:500"
-        >
-          Selecteer folder
-        </button>
-      </div>
-      <input 
-        type="file" 
-        id="import-folder-input" 
-        webkitdirectory 
-        directory 
-        multiple 
-        accept=".txt"
-        style="display:none"
-      />
+    <div id="import-empty-state" style="display:none;margin-bottom:20px;padding:16px;border:1px solid #dde3ef;border-radius:6px;background:#f9fafb;text-align:center">
+      <div id="import-empty-message" style="font-size:13px;color:#6a7899;margin-bottom:12px"></div>
+      <button id="import-open-upload" style="padding:8px 16px;border:none;border-radius:6px;background:#3b82f6;color:#fff;font-size:13px;cursor:pointer;font-weight:500">
+        📤 Opladen config...
+      </button>
     </div>
 
     <div id="import-files-list" style="display:none;margin-bottom:20px">
       <div style="font-size:12px;font-weight:600;color:#4a5568;margin-bottom:8px">
-        Gevonden bind*.txt bestanden (<span id="import-file-count">0</span>)
+        Binding-bestanden in dit project (<span id="import-file-count">0</span>)
       </div>
       <div 
         id="import-files-container" 
@@ -93,7 +71,7 @@ export function openImportBindingsModal() {
   footer.style.cssText = 'display:flex;align-items:center;gap:8px;padding:16px 20px;border-top:1px solid #eef1f8;background:#f8f9fd';
   footer.innerHTML = `
     <div style="flex:1;font-size:12px;color:#a0aaba" id="import-info">
-      Selecteer een Config folder om te starten
+      Bestanden laden...
     </div>
     <button id="import-cancel" style="padding:8px 20px;border:1px solid #dde3ef;border-radius:6px;background:#fff;color:#6a7899;font-size:13px;cursor:pointer">
       Annuleer
@@ -113,8 +91,6 @@ export function openImportBindingsModal() {
   // Wire up events
   const closeBtn = document.getElementById('import-close');
   const cancelBtn = document.getElementById('import-cancel');
-  const selectFolderBtn = document.getElementById('import-select-folder');
-  const folderInput = document.getElementById('import-folder-input');
   const submitBtn = document.getElementById('import-submit');
 
   closeBtn?.addEventListener('click', () => overlay.remove());
@@ -123,45 +99,35 @@ export function openImportBindingsModal() {
     if (e.target === overlay) overlay.remove();
   });
 
-  // Folder selection
-  selectFolderBtn?.addEventListener('click', () => {
-    folderInput?.click();
+  document.getElementById('import-open-upload')?.addEventListener('click', () => {
+    overlay.remove();
+    openUploadDataModal();
   });
 
-  folderInput?.addEventListener('change', async (e) => {
-    const files = Array.from(e.target.files);
-    
-    // Filter for bind*.txt files
-    const bindFiles = files.filter(f => 
-      f.name.match(/^bind[0-9a-fA-F]{2}\.txt$/i)
-    );
+  function showEmptyState(message) {
+    document.getElementById('import-empty-message').textContent = message;
+    document.getElementById('import-empty-state').style.display = 'block';
+    const infoText = document.getElementById('import-info');
+    if (infoText) infoText.textContent = 'Geen bestanden om te importeren';
+  }
 
-    if (bindFiles.length === 0) {
-      showToast('Geen bind*.txt bestanden gevonden in deze folder', 'error');
-      return;
-    }
-
+  // Updates the file list UI + enables submit once binding files are loaded
+  // from the project's data folder.
+  function applySelectedFiles(bindFiles) {
     selectedFiles = bindFiles;
 
-    // Update UI
-    const folderPath = document.getElementById('import-folder-path');
     const filesList = document.getElementById('import-files-list');
     const filesContainer = document.getElementById('import-files-container');
     const fileCount = document.getElementById('import-file-count');
     const infoText = document.getElementById('import-info');
 
-    // Get folder name from first file's path
-    const folderName = bindFiles[0].webkitRelativePath.split('/').slice(0, -1).join('/') || 'Config';
-    
-    if (folderPath) folderPath.value = `${folderName} (${bindFiles.length} bestanden)`;
     if (fileCount) fileCount.textContent = bindFiles.length;
     if (filesList) filesList.style.display = 'block';
     if (infoText) infoText.textContent = `${bindFiles.length} bind*.txt bestanden gevonden`;
 
-    // List files
     if (filesContainer) {
       filesContainer.innerHTML = bindFiles
-        .sort((a, b) => a.name.localeCompare(b.name))
+        .slice().sort((a, b) => a.name.localeCompare(b.name))
         .map(f => {
           const nodeAddr = f.name.match(/bind([0-9a-fA-F]{2})\.txt/i)?.[1]?.toUpperCase() || '??';
           return `
@@ -175,13 +141,35 @@ export function openImportBindingsModal() {
         .join('');
     }
 
-    // Enable submit button
     if (submitBtn) {
       submitBtn.disabled = false;
       submitBtn.style.cursor = 'pointer';
       submitBtn.style.opacity = '1';
     }
-  });
+  }
+
+  // Load binding files already stored on the server for this project (uploaded
+  // earlier via "Opladen config...") — this is now the only source for import.
+  const projectName = state.get().project?.meta?.name;
+  if (!projectName) {
+    showEmptyState('Sla het project eerst op, upload dan de config via "Opladen config..." om bindings te kunnen importeren.');
+  } else {
+    fetch(`/api/project/data/list?projectName=${encodeURIComponent(projectName)}`)
+      .then(res => res.json())
+      .then(async ({ files }) => {
+        if (!files || files.length === 0) {
+          showEmptyState('Dit project heeft nog geen binding-bestanden. Upload eerst de config.');
+          return;
+        }
+        const loaded = await Promise.all(files.map(async (path) => {
+          const res = await fetch(`/api/project/data/file?projectName=${encodeURIComponent(projectName)}&path=${encodeURIComponent(path)}`);
+          const { content } = await res.json();
+          return { name: path.split('/').pop(), size: content.length, _preloadedContent: content };
+        }));
+        applySelectedFiles(loaded);
+      })
+      .catch(() => showEmptyState('Dit project heeft nog geen binding-bestanden. Upload eerst de config.'));
+  }
 
   // Submit import
   submitBtn?.addEventListener('click', async () => {
@@ -191,22 +179,9 @@ export function openImportBindingsModal() {
       submitBtn.disabled = true;
       submitBtn.textContent = 'Importeren...';
 
-      console.log('[import] Reading', selectedFiles.length, 'files...');
-
-      // Read all files
-      const fileContents = await Promise.all(
-        selectedFiles.map(async (file, i) => {
-          const content = await readFileAsText(file);
-          console.log(`[import] Read ${file.name}: ${content.length} chars, ${content.split('\n').length} lines`);
-          return content;
-        })
-      );
-
-      console.log('[import] All files read successfully');
-
-      const filesToImport = selectedFiles.map((file, i) => ({
+      const filesToImport = selectedFiles.map((file) => ({
         fileName: file.name,
-        content: fileContents[i]
+        content: file._preloadedContent
       }));
 
       console.log('[import] Sending request with', filesToImport.length, 'files');
@@ -255,17 +230,8 @@ export function openImportBindingsModal() {
       console.log('[import] Converted:', converted);
 
       // Add converted bindings and devices to project
-      if (converted.devicesToCreate.length > 0 || converted.moodsToCreate.length > 0 || converted.visualBindings.length > 0) {
-        // Add moods to global moods array
-        for (const mood of (converted.moodsToCreate || [])) {
-          console.log(`[import] Adding mood: ${mood.name} (node 0x${mood.channelRef.nodeAddress.toString(16)})`);
-          
-          dispatch({
-            type: 'ADD_MOOD',
-            mood
-          });
-        }
-        
+      // Note: moods need no creation step — they're derived live from project.nodes (Type 7 units)
+      if (converted.devicesToCreate.length > 0 || converted.visualBindings.length > 0) {
         // Create "Imported" room if it doesn't exist (for non-mood devices)
         if (converted.devicesToCreate.length > 0) {
           let importedRoom = currentProject.homeView.rooms.find(r => r.name === 'Geïmporteerd');
@@ -318,7 +284,6 @@ export function openImportBindingsModal() {
           ``,
           `🔄 Conversie:`,
           `➕ ${converted.devicesToCreate.length} apparaten aangemaakt`,
-          `🎭 ${(converted.moodsToCreate || []).length} moods aangemaakt`,
           `🔗 ${converted.visualBindings.length} bindings toegevoegd`,
         ];
         if (converted.warnings && converted.warnings.length > 0) {
@@ -393,15 +358,5 @@ export function openImportBindingsModal() {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Importeer bindings';
     }
-  });
-}
-
-// Helper to read file as text
-function readFileAsText(file) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = () => reject(new Error(`Failed to read ${file.name}`));
-    reader.readAsText(file);
   });
 }

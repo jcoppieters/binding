@@ -1,126 +1,79 @@
 /**
  * Unit management helpers
- * 
- * Generates virtual "units" (channels) from module definitions and tracks their usage.
- * Each unit represents a single controllable/controller channel (relay, dimmer, input, etc.).
+ *
+ * Derives the list of "units" (channels) for each hardware node and tracks
+ * their usage in the home view. `project.nodes[]` is the source of truth:
+ * a node's `units[]` (filled in by discovery) always wins. Before discovery
+ * has run, channels are instead derived from the module database
+ * (channelGroups) so bindings can be planned ahead of real hardware.
  */
 
-import { UnitType } from './unit-types.js';
+import { UnitType, unitTypeInfo } from './unit-types.js';
 
 /**
- * Generate all units from a module's channelGroups
- * @param {object} moduleInstance - ModuleInstance from project.railView.cabinets[].modules[]
- * @param {object} moduleDef - Module definition from modules database
- * @param {object} cabinet - Cabinet containing this module
+ * List of channels for one node: discovered units if present, otherwise a
+ * planned list derived from the module definition's channelGroups.
+ * @param {object} node - DuoNode from project.nodes[]
+ * @param {object} moduleDef - Module definition from the modules database (by node.model)
+ * @param {Array<string|null>} slots - Smartbox+ plugin slots (cabinet placement only)
  * @param {object} modules - Full modules database (needed for Smartbox plugins)
- * @returns {Array} Array of unit objects
  */
-export function generateUnitsForModule(moduleInstance, moduleDef, cabinet, modules) {
+function unitsForNode(node, moduleDef, slots, modules) {
+  if (node.units && node.units.length > 0) {
+    // Moods (virtual channels) are never placeable as a room device — they're
+    // surfaced directly from project.nodes[] in the binding panel instead.
+    return node.units.filter(u => u.type !== UnitType.kMood).map(u => ({
+      unitAddress: u.unitAddress,
+      nodeAddress: node.nodeAddress,
+      channelType: unitTypeToChannelType(u.type),
+      unitType: u.type,
+      label: u.name || generateDefaultLabel(unitTypeToChannelType(u.type), u.unitAddress + 1),
+      icon: unitTypeInfo(u.type).icon,
+    }));
+  }
+
   if (!moduleDef?.channelGroups) return [];
-  
+
   const units = [];
-  let unitAddress = 0; // Unit address increments across all channel groups
-  
-  // Base channel groups from module definition
+  let unitAddress = 0;
   for (const group of moduleDef.channelGroups) {
     for (let i = 0; i < group.count; i++) {
-      const unit = {
-        // Identity
+      units.push({
         unitAddress,
-        moduleInstanceId: moduleInstance.id,
-        cabinetId: cabinet.id,
-        
-        // Hardware reference
-        nodeAddress: moduleInstance.nodeAddress,
-        
-        // Type and capabilities
-        channelType: group.type, // e.g. 'dimmer_te', 'relay_no', 'motor_updown'
+        nodeAddress: node.nodeAddress,
+        channelType: group.type,
         unitType: channelTypeToUnitType(group.type),
-        
-        // Display
         label: generateDefaultLabel(group.type, i + 1),
         icon: getIconForChannelType(group.type),
-        
-        // Module context (for display in picker)
-        moduleName: moduleDef.name || moduleDef.model,
-        moduleModel: moduleDef.model,
-        cabinetName: cabinet.name,
-        
-        // Usage tracking (filled in by analyzeUnitUsage)
-        usage: null, // null = unused, or { roomId, floorId, deviceId, deviceName }
-      };
-      
-      units.push(unit);
+      });
       unitAddress++;
     }
   }
-  
+
   // Smartbox+ plugin slots: each slot adds its own channel groups
-  if (moduleDef.isSmartboxBase && moduleInstance.slots && modules) {
-    for (let slotIdx = 0; slotIdx < moduleInstance.slots.length; slotIdx++) {
-      const pluginModel = moduleInstance.slots[slotIdx];
+  if (moduleDef.isSmartboxBase && slots && modules) {
+    for (let slotIdx = 0; slotIdx < slots.length; slotIdx++) {
+      const pluginModel = slots[slotIdx];
       if (!pluginModel) continue; // Empty slot
-      
       const pluginDef = modules[pluginModel];
       if (!pluginDef?.channelGroups) continue;
-      
-      // Add units from this plugin
+
       for (const group of pluginDef.channelGroups) {
         for (let i = 0; i < group.count; i++) {
-          const unit = {
+          units.push({
             unitAddress,
-            moduleInstanceId: moduleInstance.id,
-            cabinetId: cabinet.id,
-            nodeAddress: moduleInstance.nodeAddress,
+            nodeAddress: node.nodeAddress,
             channelType: group.type,
             unitType: channelTypeToUnitType(group.type),
             label: `${generateDefaultLabel(group.type, slotIdx + 1)} (Slot ${slotIdx + 1})`,
             icon: getIconForChannelType(group.type),
-            moduleName: `${moduleDef.name} + ${pluginDef.name}`,
-            moduleModel: `${moduleDef.model} (${pluginModel})`,
-            cabinetName: cabinet.name,
-            usage: null,
-          };
-          
-          units.push(unit);
+          });
           unitAddress++;
         }
       }
     }
   }
-  
-  return units;
-}
 
-/**
- * Generate units for woning devices (switches, LCD panels)
- */
-export function generateUnitsForWoningDevice(device, deviceDef) {
-  if (!deviceDef?.channelGroups) return [];
-  
-  const units = [];
-  let unitAddress = 0;
-  
-  for (const group of deviceDef.channelGroups) {
-    for (let i = 0; i < group.count; i++) {
-      const unit = {
-        unitAddress,
-        woningDeviceId: device.id,
-        nodeAddress: device.nodeAddress,
-        channelType: group.type,
-        unitType: channelTypeToUnitType(group.type),
-        label: generateDefaultLabel(group.type, i + 1),
-        icon: getIconForChannelType(group.type),
-        moduleName: deviceDef.name || deviceDef.model,
-        moduleModel: deviceDef.model,
-        usage: null,
-      };
-      
-      units.push(unit);
-      unitAddress++;
-    }
-  }
-  
   return units;
 }
 
@@ -132,109 +85,39 @@ export function generateUnitsForWoningDevice(device, deviceDef) {
  */
 export function getAllUnitsWithUsage(project, modules) {
   const allUnits = [];
-  
-  // Generate units from cabinets
+  const nodesByAddress = new Map(project.nodes.map(n => [n.nodeAddress, n]));
+
   for (const cabinet of project.railView.cabinets) {
-    for (const module of cabinet.modules) {
-      const moduleDef = modules[module.model];
-      if (!moduleDef) continue;
-      
-      const units = generateUnitsForModule(module, moduleDef, cabinet, modules);
+    for (const ref of cabinet.modules) {
+      const node = nodesByAddress.get(ref.nodeAddress);
+      if (!node) continue;
+      const moduleDef = modules[node.model];
+      const units = unitsForNode(node, moduleDef, ref.slots, modules).map(u => ({
+        ...u,
+        usage: null,
+        moduleName: moduleDef?.name || node.model || node.name,
+        moduleModel: node.model,
+        cabinetName: cabinet.name,
+      }));
       allUnits.push(...units);
     }
   }
-  
-  // Generate units from woning devices
-  for (const device of project.railView.woningDevices) {
-    const deviceDef = modules[device.model];
-    if (!deviceDef) continue;
-    
-    const units = generateUnitsForWoningDevice(device, deviceDef);
+
+  for (const ref of project.railView.house) {
+    const node = nodesByAddress.get(ref.nodeAddress);
+    if (!node) continue;
+    const deviceDef = modules[node.model];
+    const units = unitsForNode(node, deviceDef, null, modules).map(u => ({
+      ...u,
+      usage: null,
+      moduleName: deviceDef?.name || node.model || node.name,
+      moduleModel: node.model,
+    }));
     allUnits.push(...units);
   }
-  
-  // Patch generated units with discovery data (override channelType from actual hardware)
-  // This fixes cases where module definitions are generic but hardware reports specific types
-  // (e.g., DT0B Smartbox has generic "input_analog" but hardware reports "temperature" sensors)
-  if (project.discoveredNodes) {
-    for (const node of project.discoveredNodes) {
-      if (!node.units || node.units.length === 0) continue;
-      
-      for (const discoveredUnit of node.units) {
-        // Find matching generated unit
-        const existingUnit = allUnits.find(u => 
-          u.nodeAddress === discoveredUnit.nodeAddress && 
-          u.unitAddress === discoveredUnit.unitAddress
-        );
-        
-        if (existingUnit) {
-          // Patch with discovered type if different
-          const discoveredChannelType = unitTypeToChannelType(discoveredUnit.type);
-          if (discoveredChannelType && discoveredChannelType !== existingUnit.channelType) {
-            existingUnit.channelType = discoveredChannelType;
-            existingUnit.unitType = discoveredUnit.type;
-            existingUnit.icon = getIconForChannelType(discoveredChannelType);
-            // Update label from discovery if available
-            if (discoveredUnit.name) {
-              existingUnit.label = discoveredUnit.name;
-            }
-          }
-        } else {
-          // Unit doesn't exist in module definition - add it from discovery
-          const channelType = unitTypeToChannelType(discoveredUnit.type);
-          if (!channelType) continue; // Skip unknown types
-          
-          // Find module/woning device for this node
-          let moduleContext = null;
-          for (const cabinet of project.railView.cabinets) {
-            const module = cabinet.modules.find(m => m.nodeAddress === node.nodeAddress);
-            if (module) {
-              const moduleDef = modules[module.model];
-              moduleContext = {
-                moduleInstanceId: module.id,
-                cabinetId: cabinet.id,
-                moduleName: moduleDef?.name || module.name || node.name,
-                moduleModel: module.model,
-                cabinetName: cabinet.name,
-              };
-              break;
-            }
-          }
-          
-          if (!moduleContext) {
-            // Check woning devices
-            const device = project.railView.woningDevices.find(d => d.nodeAddress === node.nodeAddress);
-            if (device) {
-              const deviceDef = modules[device.model];
-              moduleContext = {
-                woningDeviceId: device.id,
-                moduleName: deviceDef?.name || device.name || node.name,
-                moduleModel: device.model,
-              };
-            }
-          }
-          
-          // Create unit from discovered data
-          const unit = {
-            unitAddress: discoveredUnit.unitAddress,
-            nodeAddress: discoveredUnit.nodeAddress,
-            channelType,
-            unitType: discoveredUnit.type,
-            label: discoveredUnit.name || `Unit ${discoveredUnit.unitAddress}`,
-            icon: getIconForChannelType(channelType),
-            usage: null,
-            ...(moduleContext || {}),
-          };
-          
-          allUnits.push(unit);
-        }
-      }
-    }
-  }
-  
-  // Analyze usage from homeView rooms
+
   analyzeUnitUsage(allUnits, project);
-  
+
   return allUnits;
 }
 
@@ -244,43 +127,35 @@ export function getAllUnitsWithUsage(project, modules) {
  * @param {object} project - DuoProject
  */
 function analyzeUnitUsage(units, project) {
-  // Build lookup maps for faster matching
   const unitsByRef = new Map();
   for (const unit of units) {
-    const key = makeRefKey(unit);
-    if (key) unitsByRef.set(key, unit);
+    unitsByRef.set(`${unit.nodeAddress}:${unit.unitAddress}`, unit);
   }
-  
-  // Scan all room devices
+
   for (const room of project.homeView.rooms) {
     const floor = project.homeView.floors.find(f => f.id === room.floorId);
-    
+
     for (const device of room.devices) {
-      if (!device.channelRef) continue; // Not linked to hardware
-      
-      const key = `${device.channelRef.nodeAddress}:${device.channelRef.unitAddress}`;
-      const unit = unitsByRef.get(key);
-      
-      if (unit) {
-        unit.usage = {
-          roomId: room.id,
-          roomName: room.name,
-          floorId: room.floorId,
-          floorName: floor?.name || 'Onbekend',
-          deviceId: device.id,
-          deviceName: device.name,
-        };
+      // Single-unit device: channelRef. Multi-unit device: buttons[]/sensors[] share device.nodeAddress.
+      const refs = device.channelRef
+        ? [device.channelRef]
+        : [...(device.buttons || []), ...(device.sensors || [])].map(u => ({ nodeAddress: device.nodeAddress, unitAddress: u.unitAddress }));
+
+      for (const ref of refs) {
+        const unit = unitsByRef.get(`${ref.nodeAddress}:${ref.unitAddress}`);
+        if (unit) {
+          unit.usage = {
+            roomId: room.id,
+            roomName: room.name,
+            floorId: room.floorId,
+            floorName: floor?.name || 'Onbekend',
+            deviceId: device.id,
+            deviceName: device.name,
+          };
+        }
       }
     }
   }
-}
-
-/**
- * Create a lookup key for a unit's hardware reference
- */
-function makeRefKey(unit) {
-  if (!unit.nodeAddress) return null;
-  return `${unit.nodeAddress}:${unit.unitAddress}`;
 }
 
 /**
@@ -408,16 +283,13 @@ export function getAvailableUnits(allUnits, filterType = null) {
  * Create a ChannelRef from a unit
  */
 export function createChannelRef(unit) {
-  return {
-    nodeAddress: unit.nodeAddress,
-    unitAddress: unit.unitAddress,
-    moduleInstanceId: unit.moduleInstanceId || unit.woningDeviceId,
-  };
+  return { nodeAddress: unit.nodeAddress, unitAddress: unit.unitAddress };
 }
 
 /**
- * Group units into device groups for multi-button switches
- * Returns array of device groups where each group represents a physical device (switch)
+ * Group units into device groups for multi-button switches.
+ * Returns array of device groups where each group represents a physical device (switch).
+ * A node is always exactly one physical device, so `nodeAddress` alone identifies the group.
  * @param {Array} units - Array of units
  * @param {object} modules - Module database
  * @returns {Array} Device groups
@@ -425,86 +297,60 @@ export function createChannelRef(unit) {
 export function groupUnitsIntoDevices(units, modules) {
   const deviceGroups = [];
   const processedUnits = new Set();
-  
+
   for (const unit of units) {
     if (processedUnits.has(unit)) continue;
-    
-    // Check if this is a multi-button switch (2+ input_digital from same module/device)
-    const moduleDef = modules?.[unit.moduleModel];
-    if (!moduleDef) {
-      // Not a known module, add as single unit
-      deviceGroups.push({
-        type: 'single',
-        unit,
-        units: [unit],
-      });
-      processedUnits.add(unit);
-      continue;
-    }
-    
-    // Only group specific multi-button switch models (Essence & Serenity)
-    // Models: DTBS-ES1/2/4 (Essence), DTBS-B1/2/4/8 (Serenity)
-    const isMultiButtonSwitch = /^DTBS-(ES|B)[1248]/.test(unit.moduleModel);
-    
+
+    // Group any field switch (module category 'switch', e.g. DTBS-* family) into
+    // a single physical device — a node is always exactly one such device, whether
+    // it has 1 button (DTBS-ES1) or 8 + a temp sensor (DTBS-8/DTBS-ES4/...).
+    const isMultiButtonSwitch = modules?.[unit.moduleModel]?.category === 'switch';
+
     if (isMultiButtonSwitch) {
-      // Count input_digital channels in this module
-      const inputGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_digital') || [];
-      const totalButtons = inputGroups.reduce((sum, g) => sum + g.count, 0);
-      
-      // Check for temperature sensor
-      const tempGroups = moduleDef.channelGroups?.filter(g => g.type === 'input_analog' || g.type === 'temperature') || [];
-      const hasTempSensor = tempGroups.length > 0;
-      
-      // Find all units from this module instance
-      const moduleUnits = units.filter(u => 
-        u.moduleInstanceId === unit.moduleInstanceId &&
-        u.woningDeviceId === unit.woningDeviceId &&
-        u.nodeAddress === unit.nodeAddress &&
-        !processedUnits.has(u)
-      );
-      
-      // Separate buttons and sensors
-      const buttons = moduleUnits.filter(u => u.channelType === 'input_digital');
-      const sensors = moduleUnits.filter(u => u.channelType === 'temperature' || u.channelType === 'input_analog');
-      
-      // Check if any units from this group are already used
-      const anyUsed = moduleUnits.some(u => u.usage);
-      
-      if (anyUsed) {
-        // Skip if any unit is used
-        moduleUnits.forEach(u => processedUnits.add(u));
+      // Find all units from this node (a node is always one physical device) —
+      // sourced from the FULL unit list so a partially-used device is still
+      // recognised as one node and can be skipped as a whole below, rather
+      // than showing up with only the still-unused buttons.
+      const nodeUnits = units.filter(u => u.nodeAddress === unit.nodeAddress && !processedUnits.has(u));
+
+      const buttons = nodeUnits.filter(u => u.channelType === 'input_digital');
+      const sensors = nodeUnits.filter(u => u.channelType === 'temperature' || u.channelType === 'input_analog');
+
+      // Skip the whole group if any of its units are already used
+      if (nodeUnits.some(u => u.usage)) {
+        nodeUnits.forEach(u => processedUnits.add(u));
         continue;
       }
-      
+
       deviceGroups.push({
         type: 'multi-button-switch',
         moduleModel: unit.moduleModel,
         moduleName: unit.moduleName,
-        moduleInstanceId: unit.moduleInstanceId,
-        woningDeviceId: unit.woningDeviceId,
         nodeAddress: unit.nodeAddress,
         cabinetName: unit.cabinetName,
         buttonCount: buttons.length,
-        hasTempSensor,
+        hasTempSensor: sensors.length > 0,
         buttons,
         sensors,
-        units: moduleUnits,
+        units: nodeUnits,
         // Display properties
-        label: `${unit.moduleName} (${buttons.length} knoppen${hasTempSensor ? ' + sensor' : ''})`,
+        label: `${unit.moduleName} (${buttons.length} knoppen${sensors.length ? ' + sensor' : ''})`,
         icon: '🔳',
       });
-      
-      moduleUnits.forEach(u => processedUnits.add(u));
+
+      nodeUnits.forEach(u => processedUnits.add(u));
     } else {
+      processedUnits.add(unit);
+      if (unit.usage) continue; // Already placed in a room
+
       // Single button or other type - add as individual unit
       deviceGroups.push({
         type: 'single',
         unit,
         units: [unit],
       });
-      processedUnits.add(unit);
     }
   }
-  
+
   return deviceGroups;
 }

@@ -31,7 +31,7 @@ const router = Router();
  *   errors: Array<{ fileName: string, error: string }>
  * }
  */
-router.post('/bindings', async (req, res) => {
+router.post('/bindings', async (req, res): Promise<void> => {
   try {
     console.log('[import] Request received');
     console.log('[import] Body type:', typeof req.body);
@@ -42,7 +42,8 @@ router.post('/bindings', async (req, res) => {
 
     if (!files || !Array.isArray(files)) {
       console.error('[import] Invalid request - files is not an array:', files);
-      return res.status(400).json({ error: 'Invalid request: files array required' });
+      res.status(400).json({ error: 'Invalid request: files array required' });
+      return;
     }
 
     const allBindings = [];
@@ -138,16 +139,18 @@ router.post('/bindings', async (req, res) => {
  *   unmatched: Array<UnmatchedBinding>
  * }
  */
-router.post('/match', async (req, res) => {
+router.post('/match', async (req, res): Promise<void> => {
   try {
     const { bindings, project } = req.body;
 
     if (!bindings || !Array.isArray(bindings)) {
-      return res.status(400).json({ error: 'Invalid request: bindings array required' });
+      res.status(400).json({ error: 'Invalid request: bindings array required' });
+      return;
     }
 
     if (!project) {
-      return res.status(400).json({ error: 'Invalid request: project required' });
+      res.status(400).json({ error: 'Invalid request: project required' });
+      return;
     }
 
     const matched = [];
@@ -156,15 +159,18 @@ router.post('/match', async (req, res) => {
     // Build a lookup map for modules by node address
     const modulesByNodeAddress = new Map();
     
-    // Add cabinet modules
+    // Add cabinet modules — module shape now lives in project.nodes[],
+    // cabinet.modules just holds the placement (nodeAddress + position).
     for (const cabinet of (project.railView?.cabinets || [])) {
-      for (const module of (cabinet.modules || [])) {
-        if (module.nodeAddress != null) {
-          if (!modulesByNodeAddress.has(module.nodeAddress)) {
-            modulesByNodeAddress.set(module.nodeAddress, []);
+      for (const moduleRef of (cabinet.modules || [])) {
+        if (moduleRef.nodeAddress != null) {
+          const node = (project.nodes || []).find((n: any) => n.nodeAddress === moduleRef.nodeAddress);
+          if (!modulesByNodeAddress.has(moduleRef.nodeAddress)) {
+            modulesByNodeAddress.set(moduleRef.nodeAddress, []);
           }
-          modulesByNodeAddress.get(module.nodeAddress).push({
-            ...module,
+          modulesByNodeAddress.get(moduleRef.nodeAddress).push({
+            nodeAddress: moduleRef.nodeAddress,
+            model: node?.model,
             location: 'cabinet',
             cabinetId: cabinet.id
           });
@@ -172,15 +178,18 @@ router.post('/match', async (req, res) => {
       }
     }
 
-    // Add woning devices
-    for (const device of (project.railView?.woningDevices || [])) {
-      if (device.nodeAddress != null) {
-        if (!modulesByNodeAddress.has(device.nodeAddress)) {
-          modulesByNodeAddress.set(device.nodeAddress, []);
+    // Add house devices — module/device shape now lives in project.nodes[],
+    // railView.house just holds the placement (nodeAddress + position).
+    for (const houseRef of (project.railView?.house || [])) {
+      const node = (project.nodes || []).find((n: any) => n.nodeAddress === houseRef.nodeAddress);
+      if (houseRef.nodeAddress != null) {
+        if (!modulesByNodeAddress.has(houseRef.nodeAddress)) {
+          modulesByNodeAddress.set(houseRef.nodeAddress, []);
         }
-        modulesByNodeAddress.get(device.nodeAddress).push({
-          ...device,
-          location: 'woning'
+        modulesByNodeAddress.get(houseRef.nodeAddress).push({
+          nodeAddress: houseRef.nodeAddress,
+          model: node?.model,
+          location: 'house'
         });
       }
     }
@@ -233,14 +242,12 @@ router.post('/match', async (req, res) => {
       matched.push({
         ...binding,
         inputModule: {
-          moduleInstanceId: inputModule.id,
           nodeAddress: inputNodeAddr,
           unitAddress: inputUnitAddr,
           model: inputModule.model,
           location: inputModule.location
         },
         outputModule: {
-          moduleInstanceId: outputModule.id,
           nodeAddress: outputNodeAddr,
           unitAddress: outputUnitAddr,
           model: outputModule.model,
