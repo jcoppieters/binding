@@ -71,6 +71,86 @@ Each line represents **one binding entry** connecting inputs to outputs.
 
 ---
 
+## Event Codes Reference
+
+### Overview
+
+Event codes (E codes) define the **trigger type** for input units in bindings. The old Duotecno binding software used specific terminology that maps to these codes.
+
+### Core Event Code Definitions
+
+From old software source code (`src/DTBindingSoftware/src/nodemess.h`):
+
+```c
+#define EV_UNITCONTROLTOGGLE      0x01  // "Event Long"
+#define EV_UNITCONTROLPULSTOGGLE  0x02  // "Event Short Pulse + State"  
+#define EV_UNITCONTROLPULS        0x03  // "Event Short Pulse"
+#define EV_UNITCONTROLSTATUS      0x04  // Status request
+```
+
+### Device Type Support Matrix
+
+Different device types support different combinations of event codes:
+
+| Device Type | E01 (Lang) | E02 (Kort On/Off) | E03 (Kort) | Notes |
+|-------------|------------|-------------------|------------|-------|
+| **Button Inputs** (DTBS, physical switches) | ✅ **L** | ❌ | ✅ **P** | Only short (P) and long (L) |
+| **Mood Units** (virtual/LCD) | ✅ Lang On/Off | ✅ Kort On/Off | ✅ Kort | All three types supported |
+| **Switches/Dimmers** (state tracking) | ❌ | ✅ State | ❌ | Only E02 for state in conditionals |
+
+### Old Software Interface Labels
+
+#### For Button Inputs (Source → DTBS button)
+- **P** = Short Pulse (E03 / 0x03) = "Kort"
+- **L** = Long (E01 / 0x01) = "Lang"
+
+Example from old UI: `Switch Living → Button 8`
+```
+├─ 🔘 boven links
+   ├── P  Poort openen P    (E03 = Short Pulse)
+   └── L  All off L         (E01 = Long)
+```
+
+#### For Mood Inputs (Source → Mood)
+When a mood is the **input source**, dropdown shows:
+- "Short Pulse" (E03)
+- "Short Pulse On/Off" (E02)
+- "Long On/Off" (E01)
+
+#### For Mood Outputs (Target → Mood)
+When a mood is the **output target**, dropdown shows:
+- "Event Short Pulse" (E03)
+- "Event Short Pulse + State" (E02)
+- "Event Long" (E01)
+
+### Common Binding Patterns
+
+#### UX Redundancy Pattern
+Many installations duplicate bindings with both Kort (E03) and Lang (E01) to the same target. This handles users who press buttons too long:
+
+```
+000011_80_0044_IU07E03>A0000FCU01FA6D0102S   # Short press
+000011_80_0046_IU07E01>A0000FCU01FA6D0102S   # Long press
+                  ^^                ^^
+                  Same button         Same target mood
+```
+
+Both trigger the same action - improves UX by not requiring precise press duration.
+
+#### State Tracking (E02)
+Code 0x02 is used when state synchronization is needed:
+- In conditional bindings checking switch/dimmer state
+- For mood triggers that need On/Off state
+- NOT used for simple button inputs
+
+```
+0000FC_80_000B_BU03E02>A0000FCU05S
+                  ^^
+                  E02 = State tracking enabled
+```
+
+---
+
 ## Binding Types
 
 The character at position 15 indicates the binding type.
@@ -143,15 +223,70 @@ A000025U03E01
 
 ## Event Codes (Input Units)
 
-Common event codes for CONTROL units:
+Event codes define the trigger type for input units. The available events depend on the device type.
 
-| Code | Name | Description |
-|------|------|-------------|
-| 0x01 | EV_UNITCONTROLTOGGLE | Button toggle |
-| 0x02 | EV_UNITCONTROLLONG | Long press |
-| 0x03 | EV_UNITCONTROLPULS | Short pulse |
-| 0x04 | EV_UNITCONTROLDOUBLE | Double click |
-| 0x05 | EV_UNITCONTROLTRIPLE | Triple click |
+### Core Event Codes
+
+From the old binding software source code (`nodemess.h` and `BindingSoftware.rc`):
+
+| Code | Constant | Old UI Label | Description |
+|------|----------|--------------|-------------|
+| 0x01 | EV_UNITCONTROLTOGGLE | "Event Long" | Long press / Long On/Off |
+| 0x02 | EV_UNITCONTROLPULSTOGGLE | "Event Short Pulse + State" | Short press with state tracking |
+| 0x03 | EV_UNITCONTROLPULS | "Event Short Pulse" | Short press / pulse trigger |
+| 0x04 | EV_UNITCONTROLSTATUS | - | Status request |
+
+### Device-Specific Event Support
+
+Different device types support different event codes:
+
+#### Button Inputs (DTBS, Physical Switches)
+
+Button inputs support **only 2 event types**:
+
+| Code | Label | Old UI | Description |
+|------|-------|--------|-------------|
+| 0x03 | Kort | **P** | Short pulse - immediate trigger |
+| 0x01 | Lang | **L** | Long press - held down |
+
+**Note:** Code 0x02 (Short Pulse + State) is **not used** for button inputs. Many installations use both Kort (0x03) and Lang (0x01) to the same target to handle users who press too long (UX redundancy).
+
+#### Mood Inputs (Virtual Units)
+
+Mood units support **all 3 event types**:
+
+| Code | Label | Old UI Label | Description |
+|------|-------|--------------|-------------|
+| 0x03 | Kort | "Short Pulse" | Instant trigger |
+| 0x02 | Kort On/Off | "Short Pulse On/Off" | Trigger with state |
+| 0x01 | Lang On/Off | "Long On/Off" | Long trigger with state |
+
+#### Switch/Dimmer Inputs (State Tracking)
+
+State-tracking devices (switches, dimmers) use event code **0x02** for state management in conditional bindings.
+
+### Event Codes in Action
+
+**Button to Light (Short press):**
+```
+000011_80_001A_IU07E03>A000010U03FA6D0102S
+                  ^^
+                  E03 = Short Pulse (Kort)
+```
+
+**Button to Light (Long press):**
+```
+000011_80_0020_IU04E01>A000010U0AFA6D0102S
+                  ^^
+                  E01 = Long Press (Lang)
+```
+
+**Mood to Mood (Short with state):**
+```
+0000FC_80_000B_BU03E02>A0000FCU05S
+                  ^^
+                  E02 = Short Pulse + State
+```
 
 ---
 
@@ -298,7 +433,9 @@ C((A000003U01E01*A000003U02E01)+(A000003U03E01))=U05F0400S
 
 ## Function Codes (Output Actions)
 
-Common function codes for outputs:
+Function codes define the action to perform on output devices. Different device types support different function codes.
+
+### Common Function Codes
 
 | Code | Name | Units | Description |
 |------|------|-------|-------------|
@@ -309,6 +446,54 @@ Common function codes for outputs:
 | 0x04 | MOTOR_UP | DUOSWITCH | Move up |
 | 0x05 | MOTOR_DOWN | DUOSWITCH | Move down |
 | 0x03 | MOTOR_STOP | DUOSWITCH | Stop motor |
+
+### Mood Output Actions
+
+When a mood is the **output** (target) of a binding, the old software interface shows three trigger options:
+
+| Event Code | Old UI Label | Description |
+|------------|--------------|-------------|
+| 0x03 | "Event Short Pulse" | Instant trigger - pulse the mood |
+| 0x02 | "Event Short Pulse + State" | Trigger with state tracking |
+| 0x01 | "Event Long" | Long press trigger |
+
+**Example - Button triggers mood:**
+```
+000011_80_0018_IU00E03>A0000FCU09FA6D0102S
+                          ^^^^
+                          FC = Node 252 (moods node)
+                             U09 = Mood #9
+```
+
+### Function Code Details
+
+**0xFA6:** Toggle/Schakel - Switch device state
+```
+U02FA6D0102S
+   ^^^
+   Function 0xFA6 = Toggle
+```
+
+**0xFA2:** Aan - Turn on
+```
+U02FA2D0102S
+   ^^^
+   Function 0xFA2 = On
+```
+
+**0xFA4:** Uit - Turn off
+```
+U02FA4D0102S
+   ^^^
+   Function 0xFA4 = Off
+```
+
+**0xFB6:** Dimmer/Motor Up
+```
+U02FB6D0103S
+   ^^^
+   Function 0xFB6 = Up/Dim Up
+```
 
 ---
 
