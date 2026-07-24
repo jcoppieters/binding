@@ -8,6 +8,7 @@ import { wireButtons as wireRailButtons } from '../components/rail-view.js';
 import { wireButtons as wireHomeButtons } from '../components/home-view.js';
 import { openImportBindingsModal } from '../components/import-bindings-modal.js';
 import { openUploadDataModal } from '../components/upload-data-modal.js';
+import { connectLive, disconnectLive } from '../app/live.js';
 
 // ─── Recent Projects (localStorage) ───────────────────────────────────────────
 
@@ -483,6 +484,7 @@ async function openConnectModal() {
   disconnectBtn.style.opacity = s.connected ? '1' : '.4';
   disconnectBtn.onclick = async () => {
     await fetch('/api/master/disconnect', { method: 'POST' });
+    disconnectLive();
     dispatch({ type: 'SET_CONNECTION', connected: false, ip: null, nodes: [] });
     overlay.remove();
     showToast('Verbinding verbroken', '');
@@ -553,6 +555,7 @@ async function openConnectModal() {
       }
 
       dispatch({ type: 'SET_CONNECTION', connected: true, ip, nodes });
+      connectLive();
 
       // Upsert ALL discovered nodes into project.nodes[] (refreshes name/units/type),
       // and place any genuinely new ones into cabinet/house — state.js's reducer

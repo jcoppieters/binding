@@ -25,6 +25,7 @@ import { createStatsAPI } from './api/statsAPI.js';
 import { createModulesAPI } from './api/modulesAPI.js';
 import { createProjectAPI } from './api/projectAPI.js';
 import { createMoodsHttpAPI } from './api/moodsHttpAPI.js';
+import { attachLiveWebSocket } from './api/liveWs.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -171,7 +172,11 @@ process.on('unhandledRejection', (reason, promise) => {
 // Note: the legacy installation/bindings config (configPath, only used by the
 // old standalone viewer at /viewer-legacy.html) is intentionally NOT pre-loaded
 // here — it's loaded lazily on first request to /api/installation or /api/reload.
-app.listen(PORT, () => {
+const httpServer = app.listen(PORT, () => {
   console.log(`\n🌐 Duotecno Configuration Server`);
-  console.log(`   http://localhost:${PORT}\n`);
+  console.log(`   http://localhost:${PORT}`);
+  console.log(`   🔌 Live updates: ws://localhost:${PORT}/ws/live\n`);
 });
+
+// Live status push (Home View) — see reader/TODO.md "Live hardware view"
+attachLiveWebSocket(httpServer, masterService);

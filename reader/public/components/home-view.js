@@ -8,6 +8,9 @@ import { state, dispatch, makeId } from '../app/state.js';
 import { showDeviceBindings } from './home-view-binding.js';
 import { openUnitPicker } from './unit-picker.js';
 import { showCropModal } from './crop-modal.js';
+import { unitTypeInfo } from '../app/unit-types.js';
+import { getLiveUnit, onLiveUpdate, sendRaw } from '../app/live.js';
+import { buildSetSwitch, buildSetDimmer, buildSetMotor, buildMoodTrigger, buildSensorIncDec } from '../app/protocol.js';
 
 /**
  * Create a reusable dropdown menu positioned near an anchor element
@@ -82,6 +85,105 @@ function createDropdownMenu(items, anchorElement, menuId) {
   return menu;
 }
 
+/**
+ * Resolve whether a room device maps to a live-controllable unit (dimmer,
+ * relay/lamp, or motor) — sourced from project.nodes[], the source of truth.
+ * Returns null for input/sensor/multi-unit devices, which aren't outputs.
+ */
+function getControllableUnit(device) {
+  if (!device.channelRef) return null;
+  const { nodeAddress, unitAddress } = device.channelRef;
+  const node = state.get().project.nodes.find(n => n.nodeAddress === nodeAddress);
+  const unit = node?.units?.find(u => u.unitAddress === unitAddress);
+  if (!unit) return null;
+  const category = unitTypeInfo(unit.type).category;
+  if (!['dimmer', 'relay', 'motor', 'mood', 'sensor'].includes(category)) return null;
+  return { nodeAddress, unitAddress, category };
+}
+
+/** Build the small live-status/control widget for a controllable device card. */
+function buildLiveControl(info) {
+  if (info.category === 'motor') {
+    const wrap = el('div', 'device-live-btn device-live-motor');
+    const up = el('button', '');
+    up.type = 'button';
+    up.textContent = '▲';
+    up.title = 'Omhoog';
+    up.onclick = (e) => {
+      e.stopPropagation();
+      sendRaw(buildSetMotor(info.nodeAddress, info.unitAddress, 4)); // 4 = up
+    };
+    const down = el('button', '');
+    down.type = 'button';
+    down.textContent = '▼';
+    down.title = 'Omlaag';
+    down.onclick = (e) => {
+      e.stopPropagation();
+      sendRaw(buildSetMotor(info.nodeAddress, info.unitAddress, 5)); // 5 = down
+    };
+    wrap.append(up, down);
+    return wrap;
+  }
+
+  if (info.category === 'sensor') {
+    const wrap = el('div', 'device-live-btn device-live-motor');
+    const up = el('button', '');
+    up.type = 'button';
+    up.textContent = '+';
+    up.title = 'Temperatuur omhoog';
+    up.onclick = (e) => {
+      e.stopPropagation();
+      sendRaw(buildSensorIncDec(info.nodeAddress, info.unitAddress, true));
+    };
+    const down = el('button', '');
+    down.type = 'button';
+    down.textContent = '−';
+    down.title = 'Temperatuur omlaag';
+    down.onclick = (e) => {
+      e.stopPropagation();
+      sendRaw(buildSensorIncDec(info.nodeAddress, info.unitAddress, false));
+    };
+    wrap.append(down, up);
+    return wrap;
+  }
+
+  if (info.category === 'mood') {
+    const btn = el('button', 'device-live-btn');
+    btn.type = 'button';
+    btn.textContent = '▶';
+    btn.title = 'Mood uitvoeren';
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      sendRaw(buildMoodTrigger(info.nodeAddress, info.unitAddress));
+    };
+    return btn;
+  }
+
+  const btn = el('button', 'device-live-btn');
+  btn.type = 'button';
+  const live = getLiveUnit(info.nodeAddress, info.unitAddress);
+  if (!live) {
+    btn.textContent = '…';
+    btn.className = 'device-live-btn unknown';
+    btn.title = 'Status onbekend (nog geen live-update ontvangen)';
+  } else {
+    const on = live.status > 0;
+    btn.textContent = (info.category === 'dimmer' && on) ? `${live.value ?? 100}%` : (on ? 'AAN' : 'UIT');
+    btn.className = `device-live-btn${on ? ' on' : ''}`;
+    btn.title = on ? 'Klik om uit te schakelen' : 'Klik om in te schakelen';
+  }
+  btn.onclick = (e) => {
+    e.stopPropagation();
+    const on = getLiveUnit(info.nodeAddress, info.unitAddress)?.status > 0;
+    if (info.category === 'dimmer') {
+      sendRaw(buildSetDimmer(info.nodeAddress, info.unitAddress, on ? 0 : -1));
+    } else {
+      sendRaw(buildSetSwitch(info.nodeAddress, info.unitAddress, !on));
+    }
+  };
+  return btn;
+}
+
 // Helper to build a device card with drag-and-drop and menu
 function buildDeviceCard(device, room, container) {
   const deviceCard = el('div', '');
@@ -116,6 +218,14 @@ function buildDeviceCard(device, room, container) {
   };
   
   deviceCard.append(icon, name, menuBtn);
+
+  // Live status/control button (dimmer/relay/motor only) — see live.js.
+  // Home View is fully rebuilt from scratch on every live update (see
+  // activate() below), so this always reflects the latest known state.
+  const controllable = getControllableUnit(device);
+  if (controllable) {
+    deviceCard.append(buildLiveControl(controllable));
+  }
   
   // Show menu button on hover
   deviceCard.onmouseenter = () => { 
@@ -301,6 +411,7 @@ function openRoomSelector(device, fromRoom, targetRooms) {
 }
 
 let _unsubscribe = null;
+let _liveUnsubscribe = null;
 
 /** Called when the home view tab is activated */
 export function activate() {
@@ -319,6 +430,23 @@ export function activate() {
         renderMoodsList(s.project);
         renderHomeCanvas(s.project.homeView);
       }
+    });
+  }
+
+  // Live hardware status (lamp on/off, dimmer %, motor state) — re-render the
+  // canvas whenever a unit's live state changes, coalesced to one rebuild per
+  // frame so a burst of status updates doesn't trigger a rebuild storm.
+  if (!_liveUnsubscribe) {
+    let pending = false;
+    _liveUnsubscribe = onLiveUpdate(() => {
+      if (pending || state.get().activeView !== 'home') return;
+      pending = true;
+      requestAnimationFrame(() => {
+        pending = false;
+        if (state.get().activeView === 'home') {
+          renderHomeCanvas(state.get().project.homeView);
+        }
+      });
     });
   }
 }

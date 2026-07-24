@@ -46,13 +46,32 @@
   - why inline style, when it can be done with a class.
   - Style definitions in .html files, but also in .css files
 
-- connection from the html/public part of the project, the UI to hardware
-  - use a from the UI a WebSocket to server
-  - Servert connects to the master probably like now, normal TCP socket
-  - Live view in all devices of the "Home View", I mean lamp on/off, motor open/closed, dimmer on/off/percentage, etc... 
-  - and then buttons: clickable -> sending commands over the websocket.
-
-  for how to, etc... look into the /Users/johan/Development/duotecno/duotecnopro (probably ../duotecnopro)
+- [x] DONE — connection from the html/public part of the project, the UI to hardware
+  - Implemented as a **pure relay**, no translation on either side: `reader/src/api/liveWs.ts`
+    attaches a `ws` `WebSocketServer` at `/ws/live` to the same HTTP server (`server.ts`).
+    Every message `MasterConnectionService` receives from the IP socket (`'message'` event —
+    status updates, but also heartbeats/register/time-date/etc.) is forwarded to all
+    connected browsers verbatim; whatever a browser sends (a raw protocol message, e.g.
+    `[163,3,16,2]`) is forwarded straight into the IP socket via `sendRawMessage()`. The
+    server does not filter or interpret — the browser gets "the answers too" even to
+    messages it didn't ask for, and is free to ignore what it doesn't need.
+  - Client side: `reader/public/app/protocol.js` is a small client-side mirror of
+    `DuotecnoProtocol.ts` (just the 3 outgoing builders currently needed — switch/dimmer/
+    motor — plus `decodeStatus()` for incoming status records, same byte offsets as
+    `MasterConnectionService.handleStatusUpdate()`). `reader/public/app/live.js` is "the
+    listener on the websocket": decodes each incoming record, and for status messages
+    updates a small cache + notifies subscribers via `onLiveUpdate()` (the event emitter).
+  - `reader/public/components/home-view.js` device cards now show a live status/control
+    button (relay: AAN/UIT, dimmer: %/UIT, motor: ▲/▼) — each reads only the fields it
+    needs from the decoded status. One module-level `onLiveUpdate()` subscription
+    (coalesced via `requestAnimationFrame`) re-renders the canvas on change, following the
+    same single-subscription pattern already used for `state.subscribe()`.
+  - Not done / demo caveats: no reconnect backoff beyond a fixed 2s retry; no initial
+    snapshot — a freshly opened tab shows "…" (unknown) until the next real status message
+    happens to arrive (could wire up an automatic "Ververs alles" call on connect, not done
+    yet); no per-device "pending command" optimistic UI (relies on the real hardware echo);
+    motor buttons always send up(4)/down(5) with no stop button; only dimmer/relay/motor are
+    wired up (sensors have a much richer status payload, not decoded client-side yet).
 
 
 - clean up of files
