@@ -613,10 +613,6 @@ function promptAddRoom() {
         name,
         icon: iconPicker.getValue() || undefined,
         floorId: floorSelect.value,
-        canvasX: 50,
-        canvasY: 50,
-        canvasWidth: 200,
-        canvasHeight: 150,
         devices: []
       }
     });
@@ -709,10 +705,6 @@ function promptAddRoomToFloor(floor) {
         name,
         icon: iconPicker.getValue() || undefined,
         floorId: floor.id,
-        canvasX: 50,
-        canvasY: 50,
-        canvasWidth: 200,
-        canvasHeight: 150,
         devices: []
       }
     });

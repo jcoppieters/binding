@@ -1117,6 +1117,7 @@ main {
   background: linear-gradient(90deg, #e2e8f0 0%, var(--primary-color) 100%);
   outline: none;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 .dimmer-slider::-webkit-slider-thumb {

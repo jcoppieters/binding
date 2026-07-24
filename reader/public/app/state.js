@@ -106,6 +106,14 @@ export function dispatch(action) {
       const meta = { ..._state.project.meta, masterIp: action.masterIp };
       if (action.masterPassword !== undefined) meta.masterPassword = action.masterPassword;
       if (action.masterPort !== undefined) meta.masterPort = action.masterPort;
+      if (action.masterApiPort !== undefined) meta.masterApiPort = action.masterApiPort;
+      _state = { ..._state, dirty: true, project: { ..._state.project, meta } };
+      break;
+    }
+    case 'SET_MOODS_API_CREDENTIALS': {
+      // Persist the moods-HTTP-API client so we reuse it (refresh) instead of
+      // creating a new client every connect — the device only allows a few.
+      const meta = { ..._state.project.meta, moodsApiClientId: action.clientId, moodsApiRefreshToken: action.refreshToken };
       _state = { ..._state, dirty: true, project: { ..._state.project, meta } };
       break;
     }
@@ -119,7 +127,11 @@ export function dispatch(action) {
           physicalAddress: dn.physicalAddress,
           type: dn.type,
           name: existing?.name ?? dn.name,
-          units: dn.units ?? [],
+          // A quick scan ("Verbinden") returns nodes without unit details to
+          // stay fast — never let that wipe out units we already know about;
+          // only replace them once we actually receive a non-empty list
+          // (full scan, or a per-node "Fetch units" refresh).
+          units: (dn.units && dn.units.length > 0) ? dn.units : (existing?.units ?? []),
         });
       }
 
@@ -356,7 +368,7 @@ export function dispatch(action) {
             ...r,
             devices: r.devices.map(d =>
               d.id === action.deviceId
-                ? { ...d, x: action.x, y: action.y }
+                ? { ...d, x: Math.round(action.x), y: Math.round(action.y) }
                 : d
             )
           };
@@ -404,9 +416,9 @@ export function dispatch(action) {
           const device = r.devices.find(d => d.id === action.deviceId);
           if (device) {
             // Use provided x,y or default to center of target room
-            const initialX = action.x !== undefined ? action.x : Math.max(0, (targetRoom?.width || 500) / 2 - 50);
-            const initialY = action.y !== undefined ? action.y : Math.max(0, (targetRoom?.height || 400) / 2 - 50);
-            deviceToMove = { ...device, x: initialX, y: initialY };
+            const initialX = action.x !== undefined ? action.x : Math.max(0, (parseInt(targetRoom?.width) || 500) / 2 - 50);
+            const initialY = action.y !== undefined ? action.y : Math.max(0, (parseInt(targetRoom?.height) || 400) / 2 - 50);
+            deviceToMove = { ...device, x: Math.round(initialX), y: Math.round(initialY) };
           }
           return { ...r, devices: r.devices.filter(d => d.id !== action.deviceId) };
         }
@@ -483,6 +495,27 @@ export function dispatch(action) {
         !(sameEnd(b.from, action.binding.from) && sameEnd(b.to, action.binding.to))
       );
       _state = { ..._state, dirty: true, project: { ..._state.project, bindings } };
+      break;
+    }
+    case 'ADD_LEGACY_BINDINGS': {
+      // Complex (C/G/P/Timer) bindings preserved verbatim on import — not
+      // rendered as wires, not touched by any upload path (see TODO.md).
+      const existing = _state.project.legacyBindings || [];
+      const known = new Set(existing.map(b => `${b.nodeAddress}-${b.bindingNumber}`));
+      const additions = action.legacyBindings.filter(b => !known.has(`${b.nodeAddress}-${b.bindingNumber}`));
+      const legacyBindings = [...existing, ...additions];
+      _state = { ..._state, dirty: true, project: { ..._state.project, legacyBindings } };
+      break;
+    }
+    case 'UPDATE_MOOD': {
+      // Find-or-create the MoodDefinition for this mood channel, then merge `patch` in.
+      const sameChannel = (c) =>
+        c.nodeAddress === action.channelRef.nodeAddress && c.unitAddress === action.channelRef.unitAddress;
+      const moods = _state.project.moods || [];
+      const existing = moods.find(m => sameChannel(m.channelRef));
+      const updated = { ...(existing || { channelRef: action.channelRef, name: '', userAdjustable: true, actions: [] }), ...action.patch };
+      const nextMoods = existing ? moods.map(m => (m === existing ? updated : m)) : [...moods, updated];
+      _state = { ..._state, dirty: true, project: { ..._state.project, moods: nextMoods } };
       break;
     }
   }

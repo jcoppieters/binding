@@ -10,6 +10,7 @@ import { InstallationReader } from './readers/installation.js';
 import { BindingFileReader } from './readers/BindingFileReader.js';
 import { BindingManager } from './services/BindingManager.js';
 import { MasterConnectionService } from './services/MasterConnectionService.js';
+import { MoodHttpService } from './services/MoodHttpService.js';
 
 // Import API modules
 import bindingEditorAPI from './api/bindingEditorAPI.js';
@@ -23,6 +24,7 @@ import { createUnitsAPI } from './api/unitsAPI.js';
 import { createStatsAPI } from './api/statsAPI.js';
 import { createModulesAPI } from './api/modulesAPI.js';
 import { createProjectAPI } from './api/projectAPI.js';
+import { createMoodsHttpAPI } from './api/moodsHttpAPI.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -118,6 +120,10 @@ app.use('/api', createMasterAPI({
   masterService
 }));
 
+app.use('/api', createMoodsHttpAPI({
+  moodHttpService: new MoodHttpService()
+}));
+
 app.use('/api', createUnitsAPI({
   masterService
 }));
@@ -162,19 +168,10 @@ process.on('unhandledRejection', (reason, promise) => {
 });
 
 // Start server
-const server = app.listen(PORT, () => {
+// Note: the legacy installation/bindings config (configPath, only used by the
+// old standalone viewer at /viewer-legacy.html) is intentionally NOT pre-loaded
+// here — it's loaded lazily on first request to /api/installation or /api/reload.
+app.listen(PORT, () => {
   console.log(`\n🌐 Duotecno Configuration Server`);
-  console.log(`   http://localhost:${PORT}`);
-  console.log(`   Config: ${configPath}\n`);
-});
-
-// Pre-load installation and bindings after server starts
-server.on('listening', async () => {
-  try {
-    await loadInstallation();
-    await loadBindingFiles();
-    console.log('\n✅ Server ready and listening for requests\n');
-  } catch (error) {
-    console.error('❌ Error during startup:', error);
-  }
+  console.log(`   http://localhost:${PORT}\n`);
 });

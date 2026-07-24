@@ -89,6 +89,9 @@ export interface BindingEntry {
   bindingNumber: number;   // Binding number (4 hex chars)
   bindingType: BindingType; // Type of binding
   content: string;         // Raw content after type indicator
+  raw?: string;            // The exact, untouched source line — kept so complex
+                           // bindings (C/G/P/Timer) can be reconstructed byte-for-byte
+                           // for a future hardware re-upload, without re-deriving/guessing the format.
   
   // Parsed content (depends on binding type)
   inputUnits?: UnitReference[];

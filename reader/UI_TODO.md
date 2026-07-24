@@ -16,6 +16,7 @@
 
 Analysed sources: `UI.md`, `specs/new-binding-software-ui.md`, `specs/binding-files-format.md`, `specs/api - Authorization API - v1.05.pdf`, `specs/api - moodscfg - v1.15.pdf`, `specs/api - schedulingcfg - v1.12.pdf`, `specs/udp - config protocol v3.01.pdf`, `public/demo1–5.html`, `src/api/`, `src/services/`, `src/communication/`, `src/models/`, `duotecnopro/` mobile app.
 
+
 ---
 
 ## Protocol summary (four distinct channels)
@@ -327,7 +328,6 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - State subscription for real-time updates
 - [x] **P3-7** Delete wire (click + confirm) — **DONE** ✅
 - [ ] **P3-8** Logic blocks (NOT/AND/OR/XOR) as visual elements on wires
-- [ ] **P3-9** Device controls + live state in binding panel (reuse unit-control.js)
 - [ ] **P3-10** Timer blocks on wires (Td/Tf/Tr binding types)
     * Output port on RIGHT side (colored dot)
     * Label shows logic type name ("NOT", "AND", "OR", "XOR")
@@ -391,18 +391,19 @@ UDP discovery: broadcast `[184,0,0]` to port 5002. Response per device: name, MA
   - **Priority**: P3 (after basic logic blocks working) — defer to later phase
 - [ ] **P3-7** Serialize wiring diagram → structured bindings in project file
 - [ ] **P3-8** Deserialize structured bindings → wiring diagram (for existing `.duo` files)
-- [ ] **P3-9** Show current state (when connected) of all output-devices (dimmers, relais, motor, ...): make the labels of the dots of output binding triggers clickable and send this action to the real hardware unit (when connected) + Reflect the state of lamps, motors and relays thought the icon or the background of the icon.
-- [ ] **P3-10** Allow controlling the possibility of the inputs (generate short, long press, ...)
+- [ ] **P3-9** live state in binding panel (reuse unit-control.js) + Show current state (when connected) of all output-devices (dimmers, relais, motor, ...), reflect the state of lamps, motors and relays thought the icon or the background of the icon.
+- [ ] **P3-10** Device controls: Allow controlling the possibility of the inputs (generate short, long press, ...) -> make the labels of the dots of output binding triggers clickable and send this action to the real hardware unit (when connected)
 
 ### Phase 4 — Moods editor
 
-- [ ] **P4-1** Auth client: `HTTPS :8081/auth/create|refresh` → store client_id + tokens; auto-refresh before expiry
-  - Note: devices use self-signed certs → `rejectUnauthorized: false` may be needed *(see Q-2)*
-- [ ] **P4-2** Mood list modal per LCD node: `GET :8080/moodscfg/info`
-- [ ] **P4-3** Edit mood: name, description, userAdjustable; entries `{nodeAddress, unitAddress, msg, delay}`
-  - `msg` format = data message string (see appendix in `api - moodscfg` spec, per unit type)
-- [ ] **P4-4** Store moods in project file (dirty flag)
-- [ ] **P4-5** Upload moods: `POST :8080/config/upload/moods.json` (triggered by Upload to hardware)
+- [x] **P4-1** Auth client: `HTTPS :masterApiPort/auth/create|refresh` → store client_id + tokens; auto-refresh before expiry — **DONE** (`src/services/MoodHttpService.ts`; `rejectUnauthorized: false` for self-signed certs; refresh token persisted in `project.meta.moodsApiClientId/moodsApiRefreshToken` so the client is reused across sessions)
+- [ ] **P4-2** Mood list modal per LCD node: `GET :8080/moodscfg/info` — backend call exists (`getMoodsInfo()` / `POST /api/moods-http/info`), no list UI yet (only per-mood fetch from the mood editor)
+- [x] **P4-3** Edit mood: name, description, userAdjustable; entries `{nodeAddress, unitAddress, msg, delay}` — **DONE** (existing editor UI, unchanged)
+- [x] **P4-4** Store moods in project file (dirty flag) — **DONE** (existing `UPDATE_MOOD` reducer, unchanged)
+- [ ] **P4-5** Upload moods: `POST :8080/config/upload/moods.json` (triggered by Upload to hardware) — only single-mood send implemented so far (**"📤 Versturen"** button in mood editor → `POST :8080/moodscfg/`); bulk upload of all moods as part of "Upload to hardware" still to do
+- [x] **P4-6** (new) "📥 Ophalen" button in mood editor — reads the live mood straight from hardware (`GET :8080/moodscfg/[id]`) and overwrites the editor's working copy, so installers can pull in whatever is already configured on the device before editing
+- Connect dialog now has a second "API poort" field (default 8081, stored as `project.meta.masterApiPort`) — on TCP connect it also best-effort authenticates with the moods HTTPS API on the same host; failure is silent (older firmware / no moods configured) and never blocks the TCP connect
+- "Opslaan" (existing) still only ever writes to the local `.duo` project file — no hardware required, per the "not every installation has hardware" requirement
 
 ### Phase 5 — Scheduling editor
 

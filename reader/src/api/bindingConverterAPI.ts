@@ -75,6 +75,7 @@ router.post('/convert', async (req, res): Promise<void> => {
     const visualBindings: any[] = [];
     const devicesToCreate: any[] = [];
     const moodsToCreate: any[] = [];
+    const legacyBindings: any[] = [];
     const warnings: string[] = [];
 
     // Build lookup maps
@@ -98,9 +99,22 @@ router.post('/convert', async (req, res): Promise<void> => {
     // Convert each simple binding
     for (const binding of bindings) {
       try {
-        // Only process Type I (Immediate) and Type N (Normal)
+        // Only Type I (Immediate) and Type N (Normal) are visually converted.
+        // Everything else (C/G/P/Timer) is preserved verbatim — not yet safely
+        // reconstructable/re-uploadable, see TODO.md "Writing bindings to hardware".
         if (binding.bindingType !== BindingType.IMMEDIATE && binding.bindingType !== BindingType.NORMAL) {
-          continue; // Skip complex bindings
+          if (binding.raw) {
+            legacyBindings.push({
+              nodeAddress: binding.nodeAddress,
+              bindingNumber: binding.bindingNumber,
+              bindingType: binding.bindingType,
+              raw: binding.raw,
+              sourceFile: binding.fileName,
+            });
+          } else {
+            warnings.push(`Binding ${binding.bindingNumber}: complex binding without raw source line, could not preserve`);
+          }
+          continue;
         }
 
         if (!binding.inputUnits || binding.inputUnits.length === 0) {
@@ -186,12 +200,13 @@ router.post('/convert', async (req, res): Promise<void> => {
       }
     }
 
-    console.log(`[converter] Converted ${visualBindings.length} bindings, ${devicesToCreate.length} devices to create, ${moodsToCreate.length} moods to create, ${warnings.length} warnings`);
+    console.log(`[converter] Converted ${visualBindings.length} bindings, ${legacyBindings.length} preserved as legacy, ${devicesToCreate.length} devices to create, ${moodsToCreate.length} moods to create, ${warnings.length} warnings`);
 
     res.json({
       visualBindings,
       devicesToCreate,
       moodsToCreate,
+      legacyBindings,
       warnings
     });
 

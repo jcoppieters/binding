@@ -24,6 +24,16 @@ export interface ProjectMeta {
   version: '1';
   masterIp?: string;       // last used master IP address
   masterPassword?: string; // last used master password (stored for installer convenience)
+  masterPort?: number;     // TCP binding-protocol port, default 5001
+  masterApiPort?: number;  // HTTPS auth-API port for moods/scheduling, default 8081
+  /**
+   * Auth client credentials for the HTTPS :masterApiPort auth API (see
+   * `MoodHttpService`). Stored so the app reuses the same client + refresh
+   * token across sessions instead of creating a new client every time
+   * (the server only allows a limited number of clients).
+   */
+  moodsApiClientId?: string;
+  moodsApiRefreshToken?: string;
 }
 
 // ─── Nodes — single source of truth for hardware ──────────────────────────────
@@ -219,6 +229,49 @@ export interface BindingWire {
   bindingNumber?: number;
 }
 
+/**
+ * A complex legacy binding (Conditional/Group/Property/Timer types) that we
+ * can parse enough to categorize, but not yet safely reconstruct/re-upload
+ * (the C/G/P/Timer wire formats — and their function-code data payloads —
+ * aren't fully mapped out yet, see TODO.md "Writing bindings to hardware").
+ * Kept verbatim (byte-for-byte) so nothing is lost on import; NOT rendered
+ * as a wire in the binding panel and NOT touched by any upload path.
+ */
+export interface LegacyBinding {
+  nodeAddress: number;
+  bindingNumber: number;
+  bindingType: string;    // 'C' | 'G' | 'P' | 'Te' | 'Ti' | 'To' | 'Td' | 'Tf' | 'Tr'
+  raw: string;             // exact original line from bind*.txt
+  sourceFile?: string;
+}
+
+// ─── Moods (virtual scene channels) ────────────────────────────────────────────
+
+/**
+ * One step of a mood: send `msg` to a channel, optionally after waiting `delay`
+ * seconds. `msg` is the hex-encoded action (see `mood-types.js`/`toMsg()`),
+ * mirroring the format used by the Master HTTP API (`/moodscfg/`,
+ * `/config/download|upload/moods.json`) and legacy `MoodConfig_XX.json` files.
+ */
+export interface MoodAction {
+  channelRef: ChannelRef;
+  msg: string;
+  delay?: number;
+}
+
+/**
+ * A mood/scene definition — the content of one Type-7 "mood" channel.
+ * `channelRef` points at the mood's own virtual channel (its existence as a
+ * device is derived live from `nodes[]`; this is where its *actions* live).
+ */
+export interface MoodDefinition {
+  channelRef: ChannelRef;
+  name: string;
+  description?: string;
+  userAdjustable: boolean;   // whether the end-user's own App may adjust this mood
+  actions: MoodAction[];
+}
+
 // ─── Top-level project ────────────────────────────────────────────────────────
 
 export interface DuoProject {
@@ -229,6 +282,10 @@ export interface DuoProject {
   homeView: HomeView;
   /** All wiring connections. Each wire → one or more binding strings at upload. */
   bindings: BindingWire[];
+  /** Complex legacy bindings preserved verbatim on import — see LegacyBinding. */
+  legacyBindings?: LegacyBinding[];
+  /** Mood/scene action lists, keyed by the mood's own channelRef. */
+  moods?: MoodDefinition[];
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────

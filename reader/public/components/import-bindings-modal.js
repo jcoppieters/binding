@@ -217,7 +217,7 @@ export function openImportBindingsModal() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          bindings: result.bindings.simple,
+          bindings: [...result.bindings.simple, ...result.bindings.complex],
           project: currentProject
         })
       });
@@ -274,13 +274,19 @@ export function openImportBindingsModal() {
         }
       }
 
+      // Preserve complex bindings verbatim (not rendered, kept for a future
+      // hardware re-upload once the C/G/P/Timer serialisation is verified).
+      if (converted.legacyBindings && converted.legacyBindings.length > 0) {
+        dispatch({ type: 'ADD_LEGACY_BINDINGS', legacyBindings: converted.legacyBindings });
+      }
+
       if (statusDiv) {
         const msg = [
           `✅ Import voltooid!`,
           `📁 ${result.filesParsed} files parsed`,
           `📊 ${result.totalBindings} total bindings`,
           `✅ ${result.simpleBindings} simple (Type I/N)`,
-          `⏳ ${result.complexBindings} complex (opgeslagen als legacy)`,
+          `⏳ ${converted.legacyBindings?.length ?? 0} complex (opgeslagen als legacy, nog niet upload-baar)`,
           ``,
           `🔄 Conversie:`,
           `➕ ${converted.devicesToCreate.length} apparaten aangemaakt`,

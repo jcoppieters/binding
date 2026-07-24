@@ -4,6 +4,28 @@
  */
 
 import { state, dispatch, makeId } from '../app/state.js';
+import { openMoodEditor } from './mood-editor-modal.js';
+import { UNIT_TYPE_INFO } from '../app/unit-types.js';
+
+/**
+ * Build a display device for a node/unit that has no Home View placement.
+ * `project.nodes[]` is the source of truth for hardware — a unit not placed
+ * in a room still exists and must be able to appear in the binding panel
+ * (moods never live in rooms at all; other units simply may not be placed yet).
+ */
+function deviceFromChannel(node, unit) {
+  const isMood = unit.type === 7;
+  const info = UNIT_TYPE_INFO[unit.type];
+  return {
+    id: isMood ? `mood-${node.nodeAddress}-${unit.unitAddress}` : `unit-${node.nodeAddress}-${unit.unitAddress}`,
+    name: unit.name || (isMood ? `Mood ${unit.unitAddress}` : `Unit ${unit.unitAddress}`),
+    icon: isMood ? '🎭' : (info?.icon || '📟'),
+    color: isMood ? '#ec4899' : '#6a7899',
+    type: isMood ? 'mood' : (info?.category || 'relay'),
+    channelRef: { nodeAddress: node.nodeAddress, unitAddress: unit.unitAddress },
+    roomName: isMood ? 'Moods' : 'Niet geplaatst',
+  };
+}
 
 // Simple toast notification (avoids circular dependency on main.js)
 function showToast(msg, type = '') {
@@ -381,37 +403,23 @@ function renderBindingPanel() {
     });
   });
   
-  // Also check global moods - extract from project.nodes (same as sidebar)
+  // Also check global channels not placed in any room — project.nodes[] is
+  // the source of truth for hardware, so an unplaced unit still counts.
+  // Dedup by channelRef (not `.id`): room devices get a random `makeId()` id,
+  // never the synthetic `unit-<node>-<unit>`/`mood-<node>-<unit>` id, so an
+  // id-only check here always missed them and pushed a duplicate "unplaced" card.
+  const coveredChannelRefs = new Set(
+    connectedDevices.filter(d => d.channelRef).map(d => `${d.channelRef.nodeAddress}-${d.channelRef.unitAddress}`)
+  );
   for (const node of (s.project.nodes || [])) {
-    if (node.units) {
-      for (const unit of node.units) {
-        if (unit.type === 7) { // Type 7 = mood
-          const moodId = `mood-${node.nodeAddress}-${unit.unitAddress}`;
-          const moodKey = `${node.nodeAddress}-${unit.unitAddress}`;
-          
-          // Skip if already added from homeView.rooms
-          if (connectedDevices.some(d => d.id === moodId)) {
-            continue;
-          }
-          
-          if (connectedDeviceIds.has(moodId) || connectedChannelRefs.has(moodKey)) {
-            const mood = {
-              id: moodId,
-              name: unit.name || `Mood ${unit.unitAddress}`,
-              icon: '🎭',
-              color: '#ec4899',
-              type: 'mood',
-              channelRef: {
-                nodeAddress: node.nodeAddress,
-                unitAddress: unit.unitAddress
-              },
-              roomName: 'Moods'
-            };
-            
-            console.log('[renderBindingPanel] Adding mood from project.nodes:', mood.name, moodKey);
-            connectedDevices.push(mood);
-          }
-        }
+    for (const unit of (node.units || [])) {
+      const id = unit.type === 7 ? `mood-${node.nodeAddress}-${unit.unitAddress}` : `unit-${node.nodeAddress}-${unit.unitAddress}`;
+      const key = `${node.nodeAddress}-${unit.unitAddress}`;
+
+      if (coveredChannelRefs.has(key)) continue; // already added from a room
+
+      if (connectedDeviceIds.has(id) || connectedChannelRefs.has(key)) {
+        connectedDevices.push(deviceFromChannel(node, unit));
       }
     }
   }
@@ -428,24 +436,14 @@ function renderBindingPanel() {
           found = true;
         }
       });
-      // Check moods (derived from project.nodes) if not found in rooms
+      // Check global channels (derived from project.nodes) if not found in rooms
       if (!found) {
-        const match = deviceId.match(/^mood-(\d+)-(\d+)$/);
+        const match = deviceId.match(/^(?:mood|unit)-(\d+)-(\d+)$/);
         if (match) {
-          const [, nodeAddress, unitAddress] = match.map(Number);
+          const [, nodeAddress, unitAddress] = match.slice(1).map(Number);
           const node = s.project.nodes.find(n => n.nodeAddress === nodeAddress);
           const unit = node?.units?.find(u => u.unitAddress === unitAddress);
-          if (unit) {
-            connectedDevices.push({
-              id: deviceId,
-              name: unit.name || `Mood ${unitAddress}`,
-              icon: '🎭',
-              color: '#ec4899',
-              type: 'mood',
-              channelRef: { nodeAddress, unitAddress },
-              roomName: 'Moods'
-            });
-          }
+          if (unit) connectedDevices.push(deviceFromChannel(node, unit));
         }
       }
     }
@@ -792,7 +790,22 @@ function buildBindingDeviceCard(device, isPrimary) {
     z-index:2;
   `;
   card.dataset.deviceId = device.id;
-  
+
+  // Mood devices get a "⋯" button (top-right) to open the Mood Editor.
+  if (device.type === 'mood') {
+    const menuBtn = document.createElement('button');
+    menuBtn.textContent = '⋯';
+    menuBtn.title = 'Mood bewerken';
+    menuBtn.style.cssText = 'position:absolute;top:6px;right:6px;background:none;border:none;font-size:16px;color:#6a7899;cursor:pointer;line-height:1;padding:2px 6px;border-radius:4px';
+    menuBtn.onmouseenter = () => { menuBtn.style.background = '#f0f4fc'; };
+    menuBtn.onmouseleave = () => { menuBtn.style.background = 'none'; };
+    menuBtn.onclick = (e) => {
+      e.stopPropagation();
+      openMoodEditor(device);
+    };
+    card.appendChild(menuBtn);
+  }
+
   // Device header
   const deviceHeader = document.createElement('div');
   deviceHeader.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:4px';

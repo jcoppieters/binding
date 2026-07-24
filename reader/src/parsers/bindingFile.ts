@@ -120,6 +120,7 @@ export class BindingFileParser {
       bindingNumber,
       bindingType,
       content,
+      raw: line,
     };
     
     // Parse content based on type

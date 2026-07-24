@@ -404,6 +404,7 @@ async function openConnectModal() {
   const savedIp = s.project.meta.masterIp ?? '';
   const savedPw = s.project.meta.masterPassword ?? '';
   const savedPort = s.project.meta.masterPort ?? 5001;
+  const savedApiPort = s.project.meta.masterApiPort ?? 8081;
 
   const overlay = document.createElement('div');
   overlay.id = 'connect-overlay';
@@ -426,7 +427,7 @@ async function openConnectModal() {
 
   const note = document.createElement('p');
   note.style.cssText = 'font-size:12px;color:#6a7899;margin:0';
-  note.textContent = 'Verbind met de Duotecno master via TCP (poort 5001). Na verbinding worden alle nodes ontdekt en vergeleken met het project.';
+  note.textContent = 'Verbind met de Duotecno master via TCP (poort 5001). Na verbinding worden alle nodes ontdekt en vergeleken met het project. De API poort wordt gebruikt om moods rechtstreeks te lezen/versturen (optioneel, werkt enkel als het toestel deze API ondersteunt).';
   body.append(note);
 
   const ipLabel = document.createElement('label');
@@ -456,7 +457,16 @@ async function openConnectModal() {
   portInput.value = savedPort;
   portInput.style.cssText = 'width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #dde3ef;border-radius:6px;font-size:14px;margin-top:3px';
 
-  body.append(ipLabel, ipInput, pwLabel, pwInput, portLabel, portInput);
+  const apiPortLabel = document.createElement('label');
+  apiPortLabel.style.cssText = 'font-size:11px;font-weight:600;color:#6a7899;display:block';
+  apiPortLabel.textContent = 'API poort (moods/scheduling, HTTPS)';
+  const apiPortInput = document.createElement('input');
+  apiPortInput.type = 'number';
+  apiPortInput.placeholder = '8081';
+  apiPortInput.value = savedApiPort;
+  apiPortInput.style.cssText = 'width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #dde3ef;border-radius:6px;font-size:14px;margin-top:3px';
+
+  body.append(ipLabel, ipInput, pwLabel, pwInput, portLabel, portInput, apiPortLabel, apiPortInput);
 
   // Status area
   const statusDiv = document.createElement('div');
@@ -493,6 +503,7 @@ async function openConnectModal() {
     const ip = ipInput.value.trim();
     const pw = pwInput.value;
     const port = parseInt(portInput.value) || 5001;
+    const apiPort = parseInt(apiPortInput.value) || 8081;
     if (!ip) { ipInput.style.borderColor = '#ef4444'; return; }
 
     connectBtn.disabled = true;
@@ -501,7 +512,7 @@ async function openConnectModal() {
     statusDiv.textContent = 'TCP verbinding opzetten…';
 
     try {
-      dispatch({ type: 'SET_MASTER_CONFIG', masterIp: ip, masterPassword: pw, masterPort: port });
+      dispatch({ type: 'SET_MASTER_CONFIG', masterIp: ip, masterPassword: pw, masterPort: port, masterApiPort: apiPort });
 
       const res = await fetch('/api/master/connect', {
         method: 'POST',
@@ -560,9 +571,35 @@ async function openConnectModal() {
         dispatch({ type: 'ADD_DISCOVERED_NODES', nodes });
       }
 
+      // Best-effort: also authenticate with the moods/scheduling HTTPS API on
+      // the same host. Not every node supports it (older firmware) or has
+      // moods configured — a failure here must never block the TCP connect,
+      // but it must be visible (not silent) so installers know why the
+      // "Versturen"/"Ophalen" buttons stay disabled.
+      let moodsApiNote = '';
+      try {
+        const meta = state.get().project.meta;
+        const authRes = await fetch('/api/moods-http/connect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            host: ip, apiPort, password: pw,
+            clientId: meta.moodsApiClientId, refreshToken: meta.moodsApiRefreshToken,
+          }),
+        });
+        const authData = await authRes.json();
+        if (authRes.ok && authData.clientId) {
+          dispatch({ type: 'SET_MOODS_API_CREDENTIALS', clientId: authData.clientId, refreshToken: authData.refreshToken });
+        } else {
+          moodsApiNote = ` — Moods API mislukt: ${authData.error ?? `HTTP ${authRes.status}`}`;
+        }
+      } catch (err) {
+        moodsApiNote = ` — Moods API onbereikbaar: ${err.message}`;
+      }
+
       overlay.remove();
       showToast(
-        `Verbonden met ${ip}${fullScan ? ' (volledig)' : ' (snel)'} — ${nodes.length} nodes: ${matched} gekoppeld${unmatched ? `, ${unmatched} niet gevonden` : ''}${extraCount ? `, ${extraCount} nieuw` : ''}`,
+        `Verbonden met ${ip}${fullScan ? ' (volledig)' : ' (snel)'} — ${nodes.length} nodes: ${matched} gekoppeld${unmatched ? `, ${unmatched} niet gevonden` : ''}${extraCount ? `, ${extraCount} nieuw` : ''}${moodsApiNote}`,
         'success'
       );
     } catch (err) {

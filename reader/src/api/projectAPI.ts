@@ -21,6 +21,22 @@ function dataDirFor(projectName: string): string {
   return join(PROJECTS_DIR, `${sanitizeName(projectName)}.data`);
 }
 
+/**
+ * Room device canvas coordinates are always integer pixels — round away any
+ * fractional values (e.g. from getBoundingClientRect() during drag/drop)
+ * before they're accepted or persisted.
+ */
+function roundDeviceCoords(rooms: any[]): any[] {
+  return rooms.map(room => ({
+    ...room,
+    devices: (room.devices || []).map((device: any) => ({
+      ...device,
+      ...(typeof device.x === 'number' ? { x: Math.round(device.x) } : {}),
+      ...(typeof device.y === 'number' ? { y: Math.round(device.y) } : {}),
+    })),
+  }));
+}
+
 /** Recursively list files under `dir` matching bind*.txt, as paths relative to `dir`. */
 async function listBindFiles(dir: string, relBase = ''): Promise<string[]> {
   let entries;
@@ -35,6 +51,26 @@ async function listBindFiles(dir: string, relBase = ''): Promise<string[]> {
     if (entry.isDirectory()) {
       results.push(...await listBindFiles(dir, rel));
     } else if (/^bind[0-9a-f]{2}\.txt$/i.test(entry.name)) {
+      results.push(rel);
+    }
+  }
+  return results;
+}
+
+/** Recursively list MoodConfig_XX.json files under `dir`, as paths relative to `dir`. */
+async function listMoodConfigFiles(dir: string, relBase = ''): Promise<string[]> {
+  let entries;
+  try {
+    entries = await readdir(join(dir, relBase), { withFileTypes: true });
+  } catch {
+    return [];
+  }
+  const results: string[] = [];
+  for (const entry of entries) {
+    const rel = relBase ? `${relBase}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      results.push(...await listMoodConfigFiles(dir, rel));
+    } else if (/^MoodConfig_[0-9a-f]{2}\.json$/i.test(entry.name)) {
       results.push(rel);
     }
   }
@@ -64,7 +100,7 @@ export function createProjectAPI() {
       
       // Extract room background images
       if (cleanProject.homeView?.rooms) {
-        cleanProject.homeView.rooms = cleanProject.homeView.rooms.map((room: any) => {
+        cleanProject.homeView.rooms = roundDeviceCoords(cleanProject.homeView.rooms).map((room: any) => {
           if (room.backgroundImage && room.backgroundImage.startsWith('data:')) {
             images[`room-${room.id}`] = room.backgroundImage;
             return { ...room, backgroundImageRef: `room-${room.id}`, backgroundImage: undefined };
@@ -118,6 +154,9 @@ export function createProjectAPI() {
       }
       const raw = await readFile(join(PROJECTS_DIR, filename), 'utf-8');
       const project = JSON.parse(raw);
+      if (project.homeView?.rooms) {
+        project.homeView.rooms = roundDeviceCoords(project.homeView.rooms);
+      }
       
       // Try to load companion .img file
       const imgFilename = filename.replace('.duo', '.img');
@@ -186,6 +225,17 @@ export function createProjectAPI() {
       return;
     }
     const files = await listBindFiles(dataDirFor(projectName));
+    res.json({ files });
+  });
+
+  /** GET /api/project/data/moods?projectName=xxx — MoodConfig_XX.json files already stored for this project */
+  router.get('/project/data/moods', async (req, res) => {
+    const projectName = String(req.query.projectName ?? '');
+    if (!projectName) {
+      res.json({ files: [] });
+      return;
+    }
+    const files = await listMoodConfigFiles(dataDirFor(projectName));
     res.json({ files });
   });
 

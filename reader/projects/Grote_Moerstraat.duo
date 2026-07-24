@@ -87,10 +87,6 @@
         "id": "0qmolyy6",
         "name": "beneden",
         "floorId": "floor-0",
-        "canvasX": 50,
-        "canvasY": 50,
-        "canvasWidth": 200,
-        "canvasHeight": 150,
         "devices": [
           {
             "id": "7s37wsj5",
@@ -307,10 +303,6 @@
         "id": "8ynd4pbd",
         "name": "boven",
         "floorId": "floor-0",
-        "canvasX": 50,
-        "canvasY": 50,
-        "canvasWidth": 200,
-        "canvasHeight": 150,
         "devices": [
           {
             "id": "ig1l0i7q",
